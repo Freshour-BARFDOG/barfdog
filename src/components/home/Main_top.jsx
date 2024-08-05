@@ -10,8 +10,8 @@ export function Main_top() {
     <section className={s.intro_top_wrapper}>
       <div className={s.inner}>
         <div className={s.video_wrapper}>
-          <video poster="영상썸네일" muted autoPlay loop playsInline>
-            <source src="/videos/main-video.mp4" type="video/mp4" />
+          <video poster="영상썸네일" muted autoPlay loop playsInline preload>
+            <source src="/videos/main-video.mp4#t=0.001" type="video/mp4" />
           </video>
 
           <div className={s.text_box}>

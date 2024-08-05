@@ -29,11 +29,6 @@ $bottom-menu-list-height: rem(140);
   &.non-member {
     // width: 75vw;
   }
-  @media (max-width: rem(300)) {
-    &.non-member {
-      // width: 100vw;
-    }
-  }
 }
 
 .block_sidebar {
@@ -46,7 +41,6 @@ $bottom-menu-list-height: rem(140);
   background-color: #fff;
 }
 
-// background-color
 #sidr {
   background-color: #fff;
 
@@ -62,7 +56,7 @@ $bottom-menu-list-height: rem(140);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: calc(100vh - #{$main-padding}* 1 - #{$closeButtonSectionHeight});
+    // height: calc(100vh - #{$main-padding}* 1 - #{$closeButtonSectionHeight});
     box-sizing: border-box;
     // padding-bottom: $bottom-menu-list-height; // rem(140);
     padding-bottom: rem(130);
@@ -91,7 +85,6 @@ $bottom-menu-list-height: rem(140);
 // layout
 #sidr {
   .close-btn-section {
-    // background-color: #cb1010;
     padding-top: $main-padding;
     margin: 0 rem(20);
     height: rem(80);
@@ -571,7 +564,6 @@ $bottom-menu-list-height: rem(140);
 }
 
 .sns_container {
-  // background-color: #d9d9d943;
   padding: rem(20) rem(30);
   height: rem(110);
 
@@ -630,9 +622,6 @@ $bottom-menu-list-height: rem(140);
     z-index: 1;
   }
 }
-// .shop_wrap:hover {
-//   background-color: #ff00001f;
-// }
 
 @keyframes upAndDown {
   0%,
@@ -646,28 +635,12 @@ $bottom-menu-list-height: rem(140);
   }
 }
 
-@media (max-width: rem(600)) {
-  // #sidr {
-  .scroll-container {
-    height: calc(200vh - #{$main-padding}* 1 - #{$closeButtonSectionHeight});
-    // padding-bottom: $bottom-menu-list-height; // rem(140);
-    padding-bottom: rem(130);
-  }
-  // }
-}
-
-// @media (max-width: rem(410)) {
-//   .contact_container {
-//     .contact_bottom {
-//       width: rem(300);
-//     }
-//   }
+// // @media (max-width: rem(600)) {
+// // #sidr {
+// .scroll-container {
+//   // height: calc(200vh - #{$main-padding}* 1 - #{$closeButtonSectionHeight});
+//   // padding-bottom: $bottom-menu-list-height; // rem(140);
+//   padding-bottom: rem(130);
 // }
-
-// @media (max-width: rem(290)) {
-//   .contact_container {
-//     .contact_bottom {
-//       width: rem(250);
-//     }
-//   }
-// }
+// // }
+// // }
