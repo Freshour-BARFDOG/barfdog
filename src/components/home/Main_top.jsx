@@ -19,7 +19,18 @@ export function Main_top() {
             preload="metadata"
           >
             <source src="/videos/main-video.mp4#t=0.001" type="video/mp4" />
+            <Image
+              src="/public/img/survey/spinner.gif"
+              alt="loading"
+              width={30}
+              height={30}
+            ></Image>
+            <p>.</p>
           </video>
+
+          {/* [if lte IE8]>
+         <p>브라우저 버전이 낮다</p>
+<![   ndif] */}
 
           <div className={s.text_box}>
             <h1>
