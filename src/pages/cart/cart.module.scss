@@ -1,6 +1,9 @@
 @import '/styles/global/guide';
 @import '/styles/global/rem';
 
+.wrapper_cart {
+  margin: 0 rem(20);
+}
 section.title {
   padding: rem(60) 0 rem(20);
 }

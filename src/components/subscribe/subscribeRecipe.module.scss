@@ -221,23 +221,23 @@
 //   }
 // }
 
-// .btn_box {
-//   display: flex;
-//   justify-content: center;
-//   padding-top: rem(40);
+.btn_box {
+  display: flex;
+  justify-content: center;
+  // padding-top: rem(40);
 
-//   .btn {
-//     width: 100%;
-//     max-width: rem(300);
-//     background-color: var(--color-main);
-//     border-radius: rem(4);
-//     color: #fff;
+  .btn {
+    width: 100%;
+    max-width: rem(300);
+    background-color: var(--color-main);
+    border-radius: rem(4);
+    color: #fff;
 
-//     @include char(l15);
-//     padding: rem(14) 0;
-//     cursor: pointer;
-//   }
-// }
+    @include char(l15);
+    padding: rem(14) 0;
+    cursor: pointer;
+  }
+}
 
 // @media (max-width: rem(1200)) {
 //   .swiper_recipes {

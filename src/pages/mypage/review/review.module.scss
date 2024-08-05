@@ -4,6 +4,10 @@ $browser-context: 16; // html font-size
 }
 @import '../../../../styles/global/guide';
 
+.wrapper_review {
+  margin: 0 rem(20);
+}
+
 section.title {
   padding: rem(8) 0 rem(30);
 }
@@ -15,7 +19,7 @@ section.title {
 }
 
 .prev_btn {
-  margin: 0 rem(20);
+  margin: rem(30) 0 0 rem(30);
 }
 
 .content_title {

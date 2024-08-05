@@ -145,117 +145,118 @@ export default function ShopPage() {
       <MetaTitle title="샵" />
       <LayoutWithoutFooter>
         <Wrapper>
-          <section className={s.top}>
-            <div className={s.inner}>
-              <div className={s.title}>SHOP</div>
-            </div>
-          </section>
-          <section className={s.mid}>
-            <div className={s.inner}>
-              <div className={s.menu_box}>
-                <ul className={s.menu}>
-                  <li
-                    className={
-                      searchValues.itemType === general_itemType.ALL
-                        ? s.active
-                        : ''
-                    }
-                  >
-                    <button
-                      type={'button'}
-                      onClick={onChagneItemType}
-                      data-item-type={general_itemType.ALL}
+          <div className={s.shop_wrapper}>
+            <section className={s.top}>
+              <div className={s.inner}>
+                <div className={s.title}>SHOP</div>
+              </div>
+            </section>
+            <section className={s.mid}>
+              <div className={s.inner}>
+                <div className={s.menu_box}>
+                  <ul className={s.menu}>
+                    <li
+                      className={
+                        searchValues.itemType === general_itemType.ALL
+                          ? s.active
+                          : ''
+                      }
                     >
-                      {general_itemType.KOR.ALL}
-                    </button>
-                  </li>
-                  <li>
+                      <button
+                        type={'button'}
+                        onClick={onChagneItemType}
+                        data-item-type={general_itemType.ALL}
+                      >
+                        {general_itemType.KOR.ALL}
+                      </button>
+                    </li>
+                    <li>
+                      <hr />
+                    </li>
+                    <li
+                      className={
+                        searchValues.itemType === general_itemType.RAW
+                          ? s.active
+                          : ''
+                      }
+                    >
+                      <button
+                        type={'button'}
+                        onClick={onChagneItemType}
+                        data-item-type={general_itemType.RAW}
+                      >
+                        {general_itemType.KOR.RAW}
+                      </button>
+                    </li>
+                    <li>
+                      <hr />
+                    </li>
+                    <li
+                      className={
+                        searchValues.itemType === general_itemType.TOPPING
+                          ? s.active
+                          : ''
+                      }
+                    >
+                      <button
+                        type={'button'}
+                        onClick={onChagneItemType}
+                        data-item-type={general_itemType.TOPPING}
+                      >
+                        {general_itemType.KOR.TOPPING}
+                      </button>
+                    </li>
+                    <li>
+                      <hr />
+                    </li>
+                    <li
+                      className={
+                        searchValues.itemType === general_itemType.SNACK
+                          ? s.active
+                          : ''
+                      }
+                    >
+                      <button
+                        type={'button'}
+                        onClick={onChagneItemType}
+                        data-item-type={general_itemType.SNACK}
+                      >
+                        {general_itemType.KOR.SNACK}
+                      </button>
+                    </li>
                     <hr />
-                  </li>
-                  <li
-                    className={
-                      searchValues.itemType === general_itemType.RAW
-                        ? s.active
-                        : ''
-                    }
-                  >
-                    <button
-                      type={'button'}
-                      onClick={onChagneItemType}
-                      data-item-type={general_itemType.RAW}
+                    <li
+                      className={
+                        searchValues.itemType === general_itemType.GOODS
+                          ? s.active
+                          : ''
+                      }
                     >
-                      {general_itemType.KOR.RAW}
-                    </button>
-                  </li>
-                  <li>
-                    <hr />
-                  </li>
-                  <li
-                    className={
-                      searchValues.itemType === general_itemType.TOPPING
-                        ? s.active
-                        : ''
-                    }
-                  >
-                    <button
-                      type={'button'}
-                      onClick={onChagneItemType}
-                      data-item-type={general_itemType.TOPPING}
+                      <button
+                        type={'button'}
+                        onClick={onChagneItemType}
+                        data-item-type={general_itemType.GOODS}
+                      >
+                        {general_itemType.KOR.GOODS}
+                      </button>
+                    </li>
+                  </ul>
+                  <div className={s['select-box']}>
+                    <select
+                      id="sortBy"
+                      onChange={onChangeSorting}
+                      value={searchValues.sortBy}
                     >
-                      {general_itemType.KOR.TOPPING}
-                    </button>
-                  </li>
-                  <li>
-                    <hr />
-                  </li>
-                  <li
-                    className={
-                      searchValues.itemType === general_itemType.SNACK
-                        ? s.active
-                        : ''
-                    }
-                  >
-                    <button
-                      type={'button'}
-                      onClick={onChagneItemType}
-                      data-item-type={general_itemType.SNACK}
-                    >
-                      {general_itemType.KOR.SNACK}
-                    </button>
-                  </li>
-                  <hr />
-                  <li
-                    className={
-                      searchValues.itemType === general_itemType.GOODS
-                        ? s.active
-                        : ''
-                    }
-                  >
-                    <button
-                      type={'button'}
-                      onClick={onChagneItemType}
-                      data-item-type={general_itemType.GOODS}
-                    >
-                      {general_itemType.KOR.GOODS}
-                    </button>
-                  </li>
-                </ul>
-                <div className={s['select-box']}>
-                  <select
-                    id="sortBy"
-                    onChange={onChangeSorting}
-                    value={searchValues.sortBy}
-                  >
-                    <option value={itemSortQueryType.RECENT}>
-                      {itemSortQueryType.KOR.RECENT}
-                    </option>
-                    <option value={itemSortQueryType.REGISTRATION}>
-                      {itemSortQueryType.KOR.REGISTRATION}
-                    </option>
-                    <option value={itemSortQueryType.SALEAMOUNT}>
-                      {itemSortQueryType.KOR.SALEAMOUNT}
-                    </option>
-                    {/* <option value={itemSortQueryType.LOWPRICE}>
+                      <option value={itemSortQueryType.RECENT}>
+                        {itemSortQueryType.KOR.RECENT}
+                      </option>
+                      <option value={itemSortQueryType.REGISTRATION}>
+                        {itemSortQueryType.KOR.REGISTRATION}
+                      </option>
+                      <option value={itemSortQueryType.SALEAMOUNT}>
+                        {itemSortQueryType.KOR.SALEAMOUNT}
+                      </option>
+                      {/* <option value={itemSortQueryType.LOWPRICE}>
                       {itemSortQueryType.KOR.LOWPRICE}
                     </option>
                     <option value={itemSortQueryType.HIGHPRICE}>
@@ -267,30 +268,30 @@ export default function ShopPage() {
                     <option value={itemSortQueryType.SCORE}>
                       {itemSortQueryType.KOR.SCORE}
                     </option> */}
-                  </select>
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
-          </section>
-          <section className={s.bot}>
-            {!itemList ? (
-              <Spinner />
-            ) : itemList.length === 0 ? (
-              <EmptyContMessage message={'등록된 상품이 없습니다.'} />
-            ) : (
-              <ul className={s.inner}>
-                {itemList.map((item, index) => (
-                  <li
-                    className={`${s.shop_list} animation-show`}
-                    key={`item-${item.id}-${index}`}
-                  >
-                    <Link href={`/shop/item/${item.id}`} passHref>
-                      <a
-                        onClick={(e) => onClickItem(e, item.name)}
-                        data-stock={item.inStock}
-                      >
-                        <figure className={s.shop_image}>
-                          {/* {item.itemIcons &&
+            </section>
+            <section className={s.bot}>
+              {!itemList ? (
+                <Spinner />
+              ) : itemList.length === 0 ? (
+                <EmptyContMessage message={'등록된 상품이 없습니다.'} />
+              ) : (
+                <ul className={s.inner}>
+                  {itemList.map((item, index) => (
+                    <li
+                      className={`${s.shop_list} animation-show`}
+                      key={`item-${item.id}-${index}`}
+                    >
+                      <Link href={`/shop/item/${item.id}`} passHref>
+                        <a
+                          onClick={(e) => onClickItem(e, item.name)}
+                          data-stock={item.inStock}
+                        >
+                          <figure className={s.shop_image}>
+                            {/* {item.itemIcons &&
                             (item.itemIcons?.indexOf(',') >= 0 ? (
                               item.itemIcons
                                 .split(',')
@@ -307,106 +308,107 @@ export default function ShopPage() {
                                 className={item.itemIcons === 'NEW' ? s.new : s.best}
                               />
                             ))} */}
-                          {/* 일반상품 BEST, NEW label 각 개체의 최대 표시수 1개 */}
-                          {item.itemIcons &&
-                            item.itemIcons
-                              .split(',')
-                              .filter(
-                                (label, index, self) =>
-                                  (label === 'NEW' &&
-                                    self.indexOf(label) === index) ||
-                                  (label === 'BEST' &&
-                                    self.indexOf(label) === index),
-                              )
-                              .map((label, index) => (
-                                <Icon_Itemlabel
-                                  label={label}
-                                  key={`${label}-${index}`}
-                                  className={label === 'NEW' ? s.new : s.best}
-                                />
-                              ))}
-                          <div className={`${s['img-wrap']} img-wrap`}>
-                            <ImageWithLoadingSpinner
-                              src={item.thumbnailUrl}
-                              objectFit="cover"
-                              layout="fill"
-                              alt={`상품 ${item.name}`}
-                            />
-                          </div>
-                        </figure>
-                        <figcaption className={s.text_box}>
-                          <p className={s.title}>{item.name}</p>
-                          <div className={s.price_box}>
-                            <span className={s.price}>
-                              {transformLocalCurrency(
-                                item.salePrice || item.originalPrice,
-                              )}
-                              <span className={s.won}>&nbsp;원</span>
+                            {/* 일반상품 BEST, NEW label 각 개체의 최대 표시수 1개 */}
+                            {item.itemIcons &&
+                              item.itemIcons
+                                .split(',')
+                                .filter(
+                                  (label, index, self) =>
+                                    (label === 'NEW' &&
+                                      self.indexOf(label) === index) ||
+                                    (label === 'BEST' &&
+                                      self.indexOf(label) === index),
+                                )
+                                .map((label, index) => (
+                                  <Icon_Itemlabel
+                                    label={label}
+                                    key={`${label}-${index}`}
+                                    className={label === 'NEW' ? s.new : s.best}
+                                  />
+                                ))}
+                            <div className={`${s['img-wrap']} img-wrap`}>
+                              <ImageWithLoadingSpinner
+                                src={item.thumbnailUrl}
+                                objectFit="cover"
+                                layout="fill"
+                                alt={`상품 ${item.name}`}
+                              />
+                            </div>
+                          </figure>
+                          <figcaption className={s.text_box}>
+                            <p className={s.title}>{item.name}</p>
+                            <div className={s.price_box}>
+                              <span className={s.price}>
+                                {transformLocalCurrency(
+                                  item.salePrice || item.originalPrice,
+                                )}
+                                <span className={s.won}>&nbsp;원</span>
 
-                              <span className={s.position_mid}>
-                                {item.name.includes('N스토어')
-                                  ? ''
-                                  : !item.inStock && (
-                                      <span className={s.out_of_stock}>
-                                        품절
-                                      </span>
-                                    )}
+                                <span className={s.position_mid}>
+                                  {item.name.includes('N스토어')
+                                    ? ''
+                                    : !item.inStock && (
+                                        <span className={s.out_of_stock}>
+                                          품절
+                                        </span>
+                                      )}
+                                </span>
                               </span>
-                            </span>
-                            {item.originalPrice !== item.salePrice &&
-                              item.salePrice !== 0 && (
-                                <>
-                                  <div className={s.discount_box}>
-                                    <span className={s.originPrice}>
-                                      {transformLocalCurrency(
-                                        item.originalPrice,
-                                      )}
-                                      원
-                                    </span>
-                                    <span className={s.discount}>
-                                      {Math.ceil(
-                                        (
-                                          (1 -
-                                            item.salePrice /
-                                              item.originalPrice) *
-                                          100
-                                        ).toFixed(2),
-                                      )}
-                                      %
-                                    </span>
-                                  </div>
-                                </>
-                              )}
+                              {item.originalPrice !== item.salePrice &&
+                                item.salePrice !== 0 && (
+                                  <>
+                                    <div className={s.discount_box}>
+                                      <span className={s.originPrice}>
+                                        {transformLocalCurrency(
+                                          item.originalPrice,
+                                        )}
+                                        원
+                                      </span>
+                                      <span className={s.discount}>
+                                        {Math.ceil(
+                                          (
+                                            (1 -
+                                              item.salePrice /
+                                                item.originalPrice) *
+                                            100
+                                          ).toFixed(2),
+                                        )}
+                                        %
+                                      </span>
+                                    </div>
+                                  </>
+                                )}
+                            </div>
+                          </figcaption>
+                          <div className={s.grade_box}>
+                            <div className={s.star_box}>
+                              <RatingStars count={item.star} margin={4} />
+                            </div>
+                            <p className={s.avg_score}>
+                              {item.star.toFixed(1).toString()}
+                            </p>
+                            <p className={s.nuber_comment}>
+                              ({item.reviewCount})
+                            </p>
                           </div>
-                        </figcaption>
-                        <div className={s.grade_box}>
-                          <div className={s.star_box}>
-                            <RatingStars count={item.star} margin={4} />
-                          </div>
-                          <p className={s.avg_score}>
-                            {item.star.toFixed(1).toString()}
-                          </p>
-                          <p className={s.nuber_comment}>
-                            ({item.reviewCount})
-                          </p>
-                        </div>
-                      </a>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-          <section className={s['pagination-section']}>
-            <PaginationWithAPI
-              apiURL={getListApiUrl}
-              size={searchPageSize}
-              setItemList={setItemList}
-              queryItemList={apiDataQueryString}
-              urlQuery={searchQuery}
-              pageInterceptor={pageInterCeptor}
-            />
-          </section>
+                        </a>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+            <section className={s['pagination-section']}>
+              <PaginationWithAPI
+                apiURL={getListApiUrl}
+                size={searchPageSize}
+                setItemList={setItemList}
+                queryItemList={apiDataQueryString}
+                urlQuery={searchQuery}
+                pageInterceptor={pageInterCeptor}
+              />
+            </section>
+          </div>
         </Wrapper>
       </LayoutWithoutFooter>
     </>

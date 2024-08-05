@@ -185,9 +185,12 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       return setActiveConfirmModal(false);
     }
 
+    console.log('___subscribeInfo', subscribeInfo);
+
     const body = {
       plan: selectedPlanName,
-      nextPaymentPrice: subscribeInfo.price[selectedPlanName].salePrice, // 선택된 플랜의 판매가격
+      nextPaymentPrice:
+        subscribeInfo.price[selectedPlanName].avgPrice.salePrice, // 선택된 플랜의 판매가격
       recipeIdList: subscribeInfo.recipe.idList,
     };
 
@@ -415,7 +418,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
         </div>
       </div>
 
-      {/* <div className={s.recipe_btn_box}>
+      <div className={s.recipe_btn_box}>
         <button
           type={'button'}
           className={s.btn}
@@ -427,7 +430,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
             '변경 플랜 적용하기'
           )}
         </button>
-      </div> */}
+      </div>
       {activeConfirmModal && (
         <Modal_confirm
           text={`${subscribePlanType[selectedPlanName].KOR}으로 플랜을 변경하시겠습니까?`}
