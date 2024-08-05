@@ -93,7 +93,6 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       recipeNameList: subscribeInfo.recipe.nameList.map((recipe) => recipe),
     });
 
-    console.log('avgPrice___', avgPrice);
     setForm((prevState) => ({
       ...prevState,
       nextAmount,
@@ -125,6 +124,8 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     // validation: Incorrect paymentPrice
     if (!body.totalPrice)
       return mct.alertShow('결제금액 계산오류가 발생하였습니다.');
+
+    console.log('body___', body);
 
     try {
       setIsLoading(true);

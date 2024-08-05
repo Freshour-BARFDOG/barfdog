@@ -78,8 +78,6 @@ export default function SubscribeInfoPage({ data }) {
     }
   };
 
-  const onApplyHandler = () => {};
-
   const onSubscirbeCancelModalHandler = () => {};
 
   const initializeModalState = () => {
@@ -168,7 +166,7 @@ export default function SubscribeInfoPage({ data }) {
               </div>
             )}
 
-            <button
+            {/* <button
               // className={`${
               // form.plan && form.recipeIdList.length > 0 ? s.activated : ''
               // } ${s.payment_btn}`}
@@ -177,7 +175,7 @@ export default function SubscribeInfoPage({ data }) {
               // disabled={!(form.plan && form.recipeIdList.length > 0)}
             >
               적용하기
-            </button>
+            </button> */}
           </MypageWrapper>
         </Wrapper>
       </LayoutWithoutFooter>

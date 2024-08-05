@@ -270,28 +270,3 @@ button.naverLogin-btn > div > div:nth-child(2) .auto__login__check {
     margin-right: rem(20);
   }
 }
-
-@media (max-width: rem(400)) {
-  .flex__container {
-    margin: rem(35) auto;
-    width: 100%;
-  }
-
-  .inputbox {
-    margin-bottom: 0;
-  }
-
-  .btnbox {
-    margin-bottom: rem(20);
-  }
-
-  .input__box {
-    .input__title {
-      display: none;
-    }
-  }
-
-  .auto__login__check {
-    margin-top: 0;
-  }
-}

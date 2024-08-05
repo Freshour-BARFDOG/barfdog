@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import s from './cart.module.scss';
-import Layout from '/src/components/common/Layout';
+import LayoutWithoutFooter from '/src/components/common/LayoutWithoutFooter';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
@@ -453,268 +453,266 @@ export default function CartPage({ data, error, isMember }) {
   //   return;
   // }
 
-  console.log(data);
-  console.log(DATA);
+  // console.log(data);
+  // console.log(DATA);
 
   return (
     <>
       {/* storedItem : 비로그인 시 장바구니에 담은 아이템 있을 경우, loading.. 표시 */}
       {(isLoading.delete || storedItem) && <FullScreenLoading opacity={0.3} />}
       <MetaTitle title="장바구니" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
-          <section className={s.title}>
-            <h1 className={s.text}>장바구니</h1>
-          </section>
-          {/* 배송지 변경 기능 */}
-          {/* <section className={s.delivery_container}>
-            <div>
-              {deliveryInfo.city}
-              {deliveryInfo.street}
-              {deliveryInfo.detailAddress}({deliveryInfo.zipcode})
-            </div>
-          </section> */}
-          <section className={s.cart_btn}>
-            <div className={s.content_box}>
-              <span className={s.check_box}>
-                <PureCheckbox
-                  className={s.inner}
-                  eventHandler={onSelectAllItems}
-                  value={valid_isTheSameArray(
-                    allBasketIdList,
-                    selectedItemBasketIds,
-                  )}
-                >
-                  전체 선택
-                </PureCheckbox>
-              </span>
-              <p className={s.btn} onClick={onDeleteSelectedItem}>
-                선택삭제
-              </p>
-            </div>
-          </section>
-          <section className={s.product_list}>
-            <ul className={'animation-show-all-child'}>
-              {!isMember || DATA.basketDtoList?.length === 0 ? (
-                <EmptyCart />
-              ) : (
-                DATA.basketDtoList?.map((item, index) => (
-                  <li
-                    key={`cart-item-${item.basketId}-${index}`}
-                    className={`${s.flex_box} ${s.itemList}`}
-                  >
-                    <span className={s.check_box}>
-                      <PureCheckbox
-                        id={item.basketId}
-                        className={s.inner}
-                        onClick={onSelectedItem}
-                        value={
-                          selectedItemBasketIds.indexOf(item.basketId) >= 0 ||
-                          ''
-                        }
-                        // setValue={setForm}
-                      ></PureCheckbox>
-                    </span>
-                    <figure className={`${s.image}`}>
-                      <Image
-                        priority
-                        src={item.thumbnailUrl}
-                        objectFit="cover"
-                        layout="fill"
-                        alt={`${item.name} 상품 이미지`}
-                      />
-                    </figure>
-                    <figcaption className={s.list_text}>
-                      <a
-                        href={`/shop/item/${item.itemId}`}
-                        className={s.name}
-                        rel={'noreferrer'}
-                        target={'_blank'}
-                      >
-                        {item.name}
-                      </a>
-                      {/*<div className={s.name}>{item.name}</div>*/}
-                      <div className={s['item-row']}>
-                        <span className={s.salePrice}>
-                          {transformLocalCurrency(item.salePrice)}원
-                        </span>
-                        {item.subtractedPrice > 0 && (
-                          <span className={s.originalPrice}>
-                            {transformLocalCurrency(item.originalPrice)}원
-                          </span>
-                        )}
-                      </div>
-                      <div className={s['option-row']}>
-                        {item.options?.length > 0 &&
-                          item.options.map((option) => (
-                            <p key={`${item.name}-option-${option.id}`}>
-                              <span className={s.optionName}>
-                                {option.name}
-                              </span>
-                              <span className={s.optionPrice}>
-                                ({transformLocalCurrency(option.optionPrice)}원)
-                                /
-                              </span>
-                              <span className={s.amount}>
-                                {option.amount}개 /
-                              </span>
-                              <span className={s.amount}>
-                                {transformLocalCurrency(
-                                  option.optionPrice * option.amount,
-                                )}
-                                원
-                              </span>
-                            </p>
-                          ))}
-                      </div>
-                    </figcaption>
-
-                    <span className={s.grid_box}>
-                      <em className={s.count_box}>
-                        <button
-                          className={s.minus}
-                          type={'button'}
-                          data-id={item.basketId}
-                          data-button-type={'decrease'}
-                          onClick={onChangeItemAmount}
-                          disabled={
-                            isLoading[item.basketId] || item.amount <= 1
-                          }
-                        >
-                          -
-                        </button>
-                        <i className={s.mid_box}>
-                          {isLoading[item.basketId] ? <Spinner /> : item.amount}
-                        </i>
-                        <button
-                          className={s.plus}
-                          type={'button'}
-                          data-id={item.basketId}
-                          data-button-type={'increase'}
-                          onClick={onChangeItemAmount}
-                        >
-                          +
-                        </button>
-                      </em>
-                      <span className={s.price}>
-                        {transformLocalCurrency(item.totalPrice)}원
-                      </span>
-                    </span>
-                    <CloseButton
-                      onClick={onDeleteItem}
-                      data-id={item.basketId}
-                      lineColor={'var(--color-line-02)'}
-                    />
-                    {/*<div className={s.delete_btn}>*/}
-                    {/*  <div className={`${s.image} img-wrap`}>*/}
-                    {/*    <Image*/}
-                    {/*      priority*/}
-                    {/*      src={require('/public/img/cart/cart_x_btn.png')}*/}
-                    {/*      objectFit="cover"*/}
-                    {/*      layout="fill"*/}
-                    {/*      alt="카드 이미지"*/}
-                    {/*    />*/}
-                    {/*  </div>*/}
-                    {/*</div>*/}
-                  </li>
-                ))
-              )}
-            </ul>
-          </section>
-          <section className={s.total_price}>
-            <div className={s.flex_box}>
-              <div className={s.amount}>
-                <p className={s.up_text}>상품 금액</p>
-                <p className={s.down_text}>
-                  {transformLocalCurrency(DATA.total?.originPrice)}원
-                </p>
-              </div>
-
-              <i className={s.math}>
-                <figure className={`${s.image} img-wrap`}>
-                  <Image
-                    priority
-                    src={require('/public/img/cart/cart_minus.png')}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="- 아이콘"
-                  />
-                </figure>
-              </i>
-
-              <div className={s.discount}>
-                <p className={s.up_text}>할인</p>
-                <p className={s.down_text}>
-                  {transformLocalCurrency(DATA.total?.subtractedPrice)}원
-                </p>
-              </div>
-
-              <i className={s.math}>
-                <figure className={`${s.image} img-wrap`}>
-                  <Image
-                    priority
-                    src={require('/public/img/cart/cart_plus.png')}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="+ 아이콘"
-                  />
-                </figure>
-              </i>
-              <div className={s.shipping}>
-                <p className={s.up_text}>배송비</p>
-                <p className={s.down_text}>
-                  {transformLocalCurrency(DATA.total?.deliveryPrice)}원
-                </p>
-              </div>
-              {/* ! [추후수정] 무료배송 안내문구 */}
-              {/* 1) 일반 : 무료 배송기준 추가 */}
-              <span className={s.delivery_price_text}>
-                {DATA.total?.deliveryPrice > 0 && (
-                  <>
-                    {transformLocalCurrency(
-                      deliveryConstant.freeCondition - DATA.total?.finalPrice,
+          <div className={s.wrapper_cart}>
+            <section className={s.title}>
+              <h1 className={s.text}>장바구니</h1>
+            </section>
+            <section className={s.cart_btn}>
+              <div className={s.content_box}>
+                <span className={s.check_box}>
+                  <PureCheckbox
+                    className={s.inner}
+                    eventHandler={onSelectAllItems}
+                    value={valid_isTheSameArray(
+                      allBasketIdList,
+                      selectedItemBasketIds,
                     )}
-                    원 추가 시 <strong>무료배송</strong>
-                  </>
-                )}
-              </span>
-              {/* 2) 구독 : 묶음배송 시, 무료배송 */}
-
-              <div className={s.flex_text_box}>
-                <div className={s.total}>총 주문 금액</div>
-                <p>
-                  {selectedItemBasketIds.length > 0
-                    ? transformLocalCurrency(DATA.total?.finalPrice)
-                    : 0}
-                  원
+                  >
+                    전체 선택
+                  </PureCheckbox>
+                </span>
+                <p className={s.btn} onClick={onDeleteSelectedItem}>
+                  선택삭제
                 </p>
               </div>
-              <span className={s.info_text}>
-                쿠폰/적립금은 주문서에서 사용 가능합니다.
-              </span>
-            </div>
-          </section>
+            </section>
+            <section className={s.product_list}>
+              <ul className={'animation-show-all-child'}>
+                {!isMember || DATA.basketDtoList?.length === 0 ? (
+                  <EmptyCart />
+                ) : (
+                  DATA.basketDtoList?.map((item, index) => (
+                    <li
+                      key={`cart-item-${item.basketId}-${index}`}
+                      className={`${s.flex_box} ${s.itemList}`}
+                    >
+                      <span className={s.check_box}>
+                        <PureCheckbox
+                          id={item.basketId}
+                          className={s.inner}
+                          onClick={onSelectedItem}
+                          value={
+                            selectedItemBasketIds.indexOf(item.basketId) >= 0 ||
+                            ''
+                          }
+                          // setValue={setForm}
+                        ></PureCheckbox>
+                      </span>
+                      <figure className={`${s.image}`}>
+                        <Image
+                          priority
+                          src={item.thumbnailUrl}
+                          objectFit="cover"
+                          layout="fill"
+                          alt={`${item.name} 상품 이미지`}
+                        />
+                      </figure>
+                      <figcaption className={s.list_text}>
+                        <a
+                          href={`/shop/item/${item.itemId}`}
+                          className={s.name}
+                          rel={'noreferrer'}
+                          target={'_blank'}
+                        >
+                          {item.name}
+                        </a>
+                        {/*<div className={s.name}>{item.name}</div>*/}
+                        <div className={s['item-row']}>
+                          <span className={s.salePrice}>
+                            {transformLocalCurrency(item.salePrice)}원
+                          </span>
+                          {item.subtractedPrice > 0 && (
+                            <span className={s.originalPrice}>
+                              {transformLocalCurrency(item.originalPrice)}원
+                            </span>
+                          )}
+                        </div>
+                        <div className={s['option-row']}>
+                          {item.options?.length > 0 &&
+                            item.options.map((option) => (
+                              <p key={`${item.name}-option-${option.id}`}>
+                                <span className={s.optionName}>
+                                  {option.name}
+                                </span>
+                                <span className={s.optionPrice}>
+                                  ({transformLocalCurrency(option.optionPrice)}
+                                  원) /
+                                </span>
+                                <span className={s.amount}>
+                                  {option.amount}개 /
+                                </span>
+                                <span className={s.amount}>
+                                  {transformLocalCurrency(
+                                    option.optionPrice * option.amount,
+                                  )}
+                                  원
+                                </span>
+                              </p>
+                            ))}
+                        </div>
+                      </figcaption>
 
-          <section className={s.btn_box}>
-            <button
-              disabled={DATA.basketDtoList?.length === 0}
-              onClick={onClickOrderButton}
-              type={'button'}
-              className={`${s.btn_box} ${
-                DATA.basketDtoList?.length === 0
-                  ? 'custom_btn solid disabled'
-                  : ''
-              }`}
-            >
-              {isLoading.buy ? (
-                <Spinner style={{ color: '#fff' }} />
-              ) : (
-                `총 ${selectedItemBasketIds.length}건 주문하기`
-              )}
-            </button>
-          </section>
+                      <span className={s.grid_box}>
+                        <em className={s.count_box}>
+                          <button
+                            className={s.minus}
+                            type={'button'}
+                            data-id={item.basketId}
+                            data-button-type={'decrease'}
+                            onClick={onChangeItemAmount}
+                            disabled={
+                              isLoading[item.basketId] || item.amount <= 1
+                            }
+                          >
+                            -
+                          </button>
+                          <i className={s.mid_box}>
+                            {isLoading[item.basketId] ? (
+                              <Spinner />
+                            ) : (
+                              item.amount
+                            )}
+                          </i>
+                          <button
+                            className={s.plus}
+                            type={'button'}
+                            data-id={item.basketId}
+                            data-button-type={'increase'}
+                            onClick={onChangeItemAmount}
+                          >
+                            +
+                          </button>
+                        </em>
+                        <span className={s.price}>
+                          {transformLocalCurrency(item.totalPrice)}원
+                        </span>
+                      </span>
+                      <CloseButton
+                        onClick={onDeleteItem}
+                        data-id={item.basketId}
+                        lineColor={'var(--color-line-02)'}
+                      />
+                      {/*<div className={s.delete_btn}>*/}
+                      {/*  <div className={`${s.image} img-wrap`}>*/}
+                      {/*    <Image*/}
+                      {/*      priority*/}
+                      {/*      src={require('/public/img/cart/cart_x_btn.png')}*/}
+                      {/*      objectFit="cover"*/}
+                      {/*      layout="fill"*/}
+                      {/*      alt="카드 이미지"*/}
+                      {/*    />*/}
+                      {/*  </div>*/}
+                      {/*</div>*/}
+                    </li>
+                  ))
+                )}
+              </ul>
+            </section>
+            <section className={s.total_price}>
+              <div className={s.flex_box}>
+                <div className={s.amount}>
+                  <p className={s.up_text}>상품 금액</p>
+                  <p className={s.down_text}>
+                    {transformLocalCurrency(DATA.total?.originPrice)}원
+                  </p>
+                </div>
+
+                <i className={s.math}>
+                  <figure className={`${s.image} img-wrap`}>
+                    <Image
+                      priority
+                      src={require('/public/img/cart/cart_minus.png')}
+                      objectFit="cover"
+                      layout="fill"
+                      alt="- 아이콘"
+                    />
+                  </figure>
+                </i>
+
+                <div className={s.discount}>
+                  <p className={s.up_text}>할인</p>
+                  <p className={s.down_text}>
+                    {transformLocalCurrency(DATA.total?.subtractedPrice)}원
+                  </p>
+                </div>
+
+                <i className={s.math}>
+                  <figure className={`${s.image} img-wrap`}>
+                    <Image
+                      priority
+                      src={require('/public/img/cart/cart_plus.png')}
+                      objectFit="cover"
+                      layout="fill"
+                      alt="+ 아이콘"
+                    />
+                  </figure>
+                </i>
+                <div className={s.shipping}>
+                  <p className={s.up_text}>배송비</p>
+                  <p className={s.down_text}>
+                    {transformLocalCurrency(DATA.total?.deliveryPrice)}원
+                  </p>
+                </div>
+                {/* ! [추후수정] 무료배송 안내문구 */}
+                {/* 1) 일반 : 무료 배송기준 추가 */}
+                <span className={s.delivery_price_text}>
+                  {DATA.total?.deliveryPrice > 0 && (
+                    <>
+                      {transformLocalCurrency(
+                        deliveryConstant.freeCondition - DATA.total?.finalPrice,
+                      )}
+                      원 추가 시 <strong>무료배송</strong>
+                    </>
+                  )}
+                </span>
+                {/* 2) 구독 : 묶음배송 시, 무료배송 */}
+
+                <div className={s.flex_text_box}>
+                  <div className={s.total}>총 주문 금액</div>
+                  <p>
+                    {selectedItemBasketIds.length > 0
+                      ? transformLocalCurrency(DATA.total?.finalPrice)
+                      : 0}
+                    원
+                  </p>
+                </div>
+                <span className={s.info_text}>
+                  쿠폰/적립금은 주문서에서 사용 가능합니다.
+                </span>
+              </div>
+            </section>
+
+            <section className={s.btn_box}>
+              <button
+                disabled={DATA.basketDtoList?.length === 0}
+                onClick={onClickOrderButton}
+                type={'button'}
+                className={`${s.btn_box} ${
+                  DATA.basketDtoList?.length === 0
+                    ? 'custom_btn solid disabled'
+                    : ''
+                }`}
+              >
+                {isLoading.buy ? (
+                  <Spinner style={{ color: '#fff' }} />
+                ) : (
+                  `총 ${selectedItemBasketIds.length}건 주문하기`
+                )}
+              </button>
+            </section>
+          </div>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
     </>
   );
 }

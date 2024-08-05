@@ -25,7 +25,7 @@ section.pageline {
 }
 
 .prev_btn {
-  margin: 0 rem(20);
+  margin: rem(30) 0 0 rem(30);
 }
 
 .text {
@@ -44,7 +44,7 @@ section.pageline {
 
 .referral_code {
   // display: flex;
-
+  margin: 0 rem(20);
   .referral_code_row1 {
     color: var(--color-font-sub);
     @include char(l16);

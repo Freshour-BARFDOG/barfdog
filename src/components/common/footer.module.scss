@@ -143,11 +143,11 @@ $browser-context: 16;
   margin-bottom: 0 !important;
 }
 .sub_footer_area {
-  padding: rem(20) rem(40) 0 rem(30);
+  padding: rem(20) rem(40) rem(70) rem(30);
   color: #fff;
   display: flex;
   flex-direction: column;
-  margin-bottom: rem(70);
+  // margin-bottom: rem(70);
 
   .sub_footer_top {
     display: flex;

@@ -20,52 +20,48 @@ import { FullScreenLoading } from '../atoms/FullScreenLoading';
 import { useSubscribeRecipeInfo } from '/util/hook/useSubscribeRecipeInfo';
 import { calcSubscribePrice } from '/util/func/subscribe/calcSubscribePrices';
 import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
-import ArrowLeft_s from '@public/img/icon/swiper-arrow-small-l.svg';
-import ArrowRight_s from '@public/img/icon/swiper-arrow-small-r.svg';
+// import ArrowLeft_s from '@public/img/icon/swiper-arrow-small-l.svg';
+// import ArrowRight_s from '@public/img/icon/swiper-arrow-small-r.svg';
 import { originSubscribeIdList } from '/util/func/subscribe/originSubscribeIdList';
 import { SurveyRecipeInput } from '../survey/result/SurveyRecipeInput';
-import {
-  concernsRecipeMap,
-  inedibleFoodRecipeMap,
-} from '../../../store/TYPE/recipeIdWithConcernsInedibleFood';
 
-const swiperSettings = {
-  className: `${s.swiper_recipes} ${s.inMypage}`,
-  slidesPerView: 'auto',
-  spaceBetween: 20,
-  loop: false, // ! Important : loop사용 시, checkbox복수 선택 불가함 (loop에 사용되는 dummy slider로 인함)
-  autoplay: false,
-  modules: [Navigation],
-  breakpoints: {
-    300: {
-      slidesPerView: 1,
-      spaceBetween: 0,
-    },
-    651: {
-      //601 이상일 경우
-      slidesPerView: 2, //레이아웃 2열
-      spaceBetween: 20,
-    },
-    1001: {
-      slidesPerView: 3,
-      spaceBetween: 20,
-    },
-    1201: {
-      slidesPerView: 4,
-      spaceBetween: 20,
-    },
-  },
-};
+// const swiperSettings = {
+//   className: `${s.swiper_recipes} ${s.inMypage}`,
+//   slidesPerView: 'auto',
+//   spaceBetween: 20,
+//   loop: false, // ! Important : loop사용 시, checkbox복수 선택 불가함 (loop에 사용되는 dummy slider로 인함)
+//   autoplay: false,
+//   modules: [Navigation],
+//   breakpoints: {
+//     300: {
+//       slidesPerView: 1,
+//       spaceBetween: 0,
+//     },
+//     651: {
+//       //601 이상일 경우
+//       slidesPerView: 2, //레이아웃 2열
+//       spaceBetween: 20,
+//     },
+//     1001: {
+//       slidesPerView: 3,
+//       spaceBetween: 20,
+//     },
+//     1201: {
+//       slidesPerView: 4,
+//       spaceBetween: 20,
+//     },
+//   },
+// };
 
 export const SubscribeRecipe = ({ subscribeInfo }) => {
-  const navPrevRef = useRef(null);
-  const navNextRef = useRef(null);
+  // const navPrevRef = useRef(null);
+  // const navNextRef = useRef(null);
   const mct = useModalContext();
   const tbContext = useContext(ToggleBoxContext);
-  const initialInputType =
-    subscribeInfo.info.planName === subscribePlanType.FULL.NAME
-      ? 'checkbox'
-      : 'radio';
+  // const initialInputType =
+  //   subscribeInfo.info.planName === subscribePlanType.FULL.NAME
+  //     ? 'checkbox'
+  //     : 'radio';
   const curIngredient = subscribeInfo.recipe.ingredients;
   const recipeInfo = useSubscribeRecipeInfo();
   const [initialize, setInitialize] = useState(false);
@@ -219,14 +215,17 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
         const initialValueList = recipeInfoList
           .filter((info) => subscribeInfo.recipe.idList.indexOf(info.id) >= 0)
           .map((info) => `${info.name}-${info.id}`);
+
+        console.log('initialValueList___', initialValueList);
         const initRadioVal = initialValueList[0];
         let initCheckboxObjVal = {};
         for (const val of initialValueList) {
           initCheckboxObjVal[val] = true;
         }
-        initialInputType === 'radio'
-          ? setSelectedRadio(initRadioVal)
-          : setSelectedCheckbox(initCheckboxObjVal);
+        // initialInputType === 'radio'
+        //   ? setSelectedRadio(initRadioVal)
+        //   : setSelectedCheckbox(initCheckboxObjVal);
+        setSelectedCheckbox(initCheckboxObjVal);
       } catch (err) {
         console.error(err);
       }
@@ -279,11 +278,12 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     const href = e.currentTarget.href;
     popupWindow(href, { width: 1000, height: 716 });
   };
-
+  // console.log('____selected', selectedRadio);
+  console.log('selectedCheckbox', selectedCheckbox);
   // console.log('subscribeInfo.recipe.idList', subscribeInfo.recipe.idList);
   // console.log('subscribeInfo.recipe', subscribeInfo.recipe);
   // console.log('isOriginSubscriber>>>>', isOriginSubscriber);
-  // console.log(subscribeInfo);
+  console.log(subscribeInfo);
 
   const onActiveConfirmModal = () => {
     // // console.log(selectedIdList)
@@ -319,10 +319,10 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
       recipeNameList: currentRecipeInfos.map((recipe) => recipe.name),
     });
 
-    // console.log('result.salePrice>>>', result.salePrice);
+    console.log('result.salePrice>>>', result);
     // console.log('currentRecipeInfos:::', currentRecipeInfos);
 
-    return result.salePrice;
+    return result.avgPrice.salePrice;
   };
 
   const onChangeRecipe = async (confirm) => {

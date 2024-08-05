@@ -15,6 +15,7 @@ import Link from 'next/link';
 // test
 import { itemSortQueryType } from '/store/TYPE/itemSortQueryType';
 import { general_itemType } from '/store/TYPE/itemType';
+import LayoutWithoutFooter from '../../components/common/LayoutWithoutFooter';
 
 const getListApiUrl = '/api/items';
 const apiDataQueryString = 'queryItemsDtoList';
@@ -52,79 +53,80 @@ export default function ReviewPage({ bestReviewList }) {
   return (
     <>
       <MetaTitle title="리뷰" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
-          <section className={s.review_title}>
-            <div>BEST REVIEW</div>
-          </section>
+          <div className={s.wrapper_review}>
+            <section className={s.review_title}>
+              <div>BEST REVIEW</div>
+            </section>
 
-          <section className={s.swiper_box}>
-            {bestReviewList.length > 0 && (
-              <Swiper_bestReview
-                items={bestReviewList}
-                onClickReviewItemHandler={onClickReviewItemHandler}
-                selectedItemId={selectedItemId}
-                isActiveModal={isActiveModal}
-                setIsActiveModal={setIsActiveModal}
-              />
-            )}
-          </section>
+            <section className={s.swiper_box}>
+              {bestReviewList.length > 0 && (
+                <Swiper_bestReview
+                  items={bestReviewList}
+                  onClickReviewItemHandler={onClickReviewItemHandler}
+                  selectedItemId={selectedItemId}
+                  isActiveModal={isActiveModal}
+                  setIsActiveModal={setIsActiveModal}
+                />
+              )}
+            </section>
 
-          <section className={s.review_write_ad}>
-            <Link href={'/mypage/review'} passHref>
-              <a>
-                <div className={s.red_box}>
-                  <div className={s.content_box}>
-                    <div className={`${s.image_left} img-wrap`}>
-                      <Image
-                        src={require('/public/img/pages/review/review_redbox_left.png')}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="카드 이미지"
-                      />
-                    </div>
+            <section className={s.review_write_ad}>
+              <Link href={'/mypage/review'} passHref>
+                <a>
+                  <div className={s.red_box}>
+                    <div className={s.content_box}>
+                      <div className={`${s.image_left} img-wrap`}>
+                        <Image
+                          src={require('/public/img/pages/review/review_redbox_left.png')}
+                          objectFit="cover"
+                          layout="fill"
+                          alt="카드 이미지"
+                        />
+                      </div>
 
-                    <div className={s.text_box}>
-                      <p className={s.top_text}>
-                        리뷰 작성 시 적립금 <span>+3000원!</span>
-                      </p>
-                      {/* <p className={s.bot_text}>
+                      <div className={s.text_box}>
+                        <p className={s.top_text}>
+                          리뷰 작성 시 적립금 <span>+3000원!</span>
+                        </p>
+                        {/* <p className={s.bot_text}>
                         지금 리뷰 작성하고 적립금 받기!
                       </p> */}
-                    </div>
-                    <div className={`${s.image_right} img-wrap`}>
-                      <Image
-                        src={require('/public/img/pages/review/review_redbox_right.png')}
-                        objectFit="contain"
-                        layout="fill"
-                        alt="카드 이미지"
-                      />
+                      </div>
+                      <div className={`${s.image_right} img-wrap`}>
+                        <Image
+                          src={require('/public/img/pages/review/review_redbox_right.png')}
+                          objectFit="contain"
+                          layout="fill"
+                          alt="카드 이미지"
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </a>
-            </Link>
-          </section>
+                </a>
+              </Link>
+            </section>
 
-          <section className={s.notice_text}>
-            <div className={s.notice}>
-              <h1>리뷰</h1>
-              <div className={s['select-box']}>
-                <select
-                  id="sortBy"
-                  onChange={onChangeSorting}
-                  value={searchValues.sortBy}
-                >
-                  <option value={itemSortQueryType.RECENT}>
-                    {itemSortQueryType.KOR.RECENT}
-                  </option>
-                  <option value={itemSortQueryType.REGISTRATION}>
-                    {itemSortQueryType.KOR.REGISTRATION}
-                  </option>
-                  <option value={itemSortQueryType.SALEAMOUNT}>
-                    {itemSortQueryType.KOR.SALEAMOUNT}
-                  </option>
-                  {/* <option value={itemSortQueryType.LOWPRICE}>
+            <section className={s.notice_text}>
+              <div className={s.notice}>
+                <h1>리뷰</h1>
+                <div className={s['select-box']}>
+                  <select
+                    id="sortBy"
+                    onChange={onChangeSorting}
+                    value={searchValues.sortBy}
+                  >
+                    <option value={itemSortQueryType.RECENT}>
+                      {itemSortQueryType.KOR.RECENT}
+                    </option>
+                    <option value={itemSortQueryType.REGISTRATION}>
+                      {itemSortQueryType.KOR.REGISTRATION}
+                    </option>
+                    <option value={itemSortQueryType.SALEAMOUNT}>
+                      {itemSortQueryType.KOR.SALEAMOUNT}
+                    </option>
+                    {/* <option value={itemSortQueryType.LOWPRICE}>
                       {itemSortQueryType.KOR.LOWPRICE}
                     </option>
                     <option value={itemSortQueryType.HIGHPRICE}>
@@ -136,22 +138,23 @@ export default function ReviewPage({ bestReviewList }) {
                     <option value={itemSortQueryType.SCORE}>
                       {itemSortQueryType.KOR.SCORE}
                     </option> */}
-                </select>
-              </div>
-              {/* <span></span> 상품에 대한 후기를 남기는 공간입니다.{' '}
+                  </select>
+                </div>
+                {/* <span></span> 상품에 대한 후기를 남기는 공간입니다.{' '}
               <br className={s.notice_br} /> 해당 게시판의 성격과 다른 글은
               사전동의 없이 담당 게시판으로 이동될 수 있습니다.
               <br />
               <span></span> 배송관련, 주문(취소/교환/환불)관련 문의 및
               요청사항은 (모바일)마이페이지 내 1:1 문의, (PC) 우측 상단
               고객센터에 남겨주시면 빠른 상담이 가능합니다. */}
-            </div>
-          </section>
-          <section className={s.review_box}>
-            <ReviewBox />
-          </section>
+              </div>
+            </section>
+            <section className={s.review_box}>
+              <ReviewBox />
+            </section>
+          </div>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
     </>
   );
 }
