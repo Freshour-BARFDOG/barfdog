@@ -1,5 +1,5 @@
 import s from '../../pages/order/ordersheet/ordersheet.module.scss';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import ErrorMessage from '../atoms/ErrorMessage';
@@ -55,7 +55,7 @@ export const OrdersheetReward = ({
       [id]: error,
     }));
     // // console.log("* rewardDiscount: ", form[id], "\n* availableMaxReward: ",availableMaxReward, "\nhasRewardValue: ", hasRewardValue) ;
-  }, [form[id]]);
+  }, [form[id], form.subscriptionMonth]);
 
   const onChangeRewardHandler = (e) => {
     const { value } = e.currentTarget;

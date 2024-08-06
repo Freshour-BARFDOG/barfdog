@@ -48,10 +48,15 @@ export default function OrdersheetSubscriptionMonth({
     setForm((prevForm) => ({
       ...prevForm,
       subscriptionMonth: form.subscriptionMonth,
-      //! [리뉴얼 수정] orderPrice = nextPaymentPrice * 배송횟수
+      //! [리뉴얼 수정] orderPrice(원가) = originPrice * 배송횟수 --> 플랜 할인율은 적용됨!
       orderPrice:
-        info.subscribeDto?.nextPaymentPrice *
-        getDeliveryCount(subscriptionMonthType[subscriptionMonthTypeKey]),
+        info.subscribeDto?.originPrice *
+          getDeliveryCount(subscriptionMonthType[subscriptionMonthTypeKey]) -
+        Math.floor(
+          info.subscribeDto.originPrice *
+            getDeliveryCount(subscriptionMonthType[subscriptionMonthTypeKey]) *
+            (info.subscribeDto.discountPlan / 100),
+        ),
       //! [리뉴얼 수정] paymentPrice = nextPaymentPrice * 배송횟수
       paymentPrice:
         info.subscribeDto?.originPrice *
@@ -150,8 +155,14 @@ export default function OrdersheetSubscriptionMonth({
       setForm((prevForm) => ({
         ...prevForm,
         subscriptionMonth: item.value,
-        //! [리뉴얼 수정] orderPrice(원가) = nextPaymentPrice * 배송횟수
-        orderPrice: info.subscribeDto?.nextPaymentPrice * deliveryCount,
+        //! [리뉴얼 수정] orderPrice(원가) = originPrice * 배송횟수 --> 플랜 할인율은 적용됨!
+        orderPrice:
+          info.subscribeDto?.originPrice * deliveryCount -
+          Math.floor(
+            info.subscribeDto.originPrice *
+              deliveryCount *
+              (info.subscribeDto.discountPlan / 100),
+          ),
       }));
     }
   };

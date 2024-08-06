@@ -192,7 +192,7 @@ export function Payment({
               request: form.deliveryDto.request, // 배송 요청사항
             },
             orderPrice: form.orderPrice, //  ! 주문 상품 원가 = nextPaymentPrice (등급 할인 적용x / 플랜변경, 레시피, 레시피 그램 등이 반영된 "제품원가"에 해당함)
-            //! [리뉴얼 수정] orderPrice = nextPaymentPrice * 배송횟수 --> 플랜 할인율은 적용됨!
+            //! [리뉴얼 수정] orderPrice = originPrice * 배송횟수 --> 플랜 할인율은 적용됨!
             // 주문 상품 원가 (등급 할인 적용x)
             deliveryPrice: form.deliveryPrice, // 배송비
             discountTotal: discountTotal, // 총 할인 합계    ! 쿠폰할인금 적용
