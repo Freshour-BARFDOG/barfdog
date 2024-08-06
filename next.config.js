@@ -1,6 +1,7 @@
-// const withVideos = require('next-videos');
+/** @type {import('next').NextConfig} */
+const { withNextVideo } = require('next-video/process');
 
-module.exports = {
+module.exports = withNextVideo({
   // distDir: "build",
   crossOrigin: 'anonymous',
   pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
@@ -95,4 +96,4 @@ module.exports = {
       },
     ];
   },
-};
+});
