@@ -3,6 +3,7 @@ import React from 'react';
 import s from 'src/pages/mainPage.module.scss';
 import LogoMain from '/public/img/logo_main.png';
 import Image from 'next/image';
+import BackgroundVideo from 'next-video/background-video';
 
 export function Main_top() {
   // 1. 영상 소개
@@ -10,7 +11,7 @@ export function Main_top() {
     <section className={s.intro_top_wrapper}>
       <div className={s.inner}>
         <div className={s.video_wrapper}>
-          <video
+          {/* <video
             poster="영상썸네일"
             muted
             autoPlay
@@ -20,18 +21,25 @@ export function Main_top() {
           >
             <source src="/videos/main-video.mp4#t=0.001" type="video/mp4" />
             <Image
-              src="/public/img/survey/spinner.gif"
+              src="/img/survey/spinner.gif"
               alt="loading"
               width={30}
               height={30}
             ></Image>
             <p>.</p>
-          </video>
+          </video> */}
 
           {/* [if lte IE8]>
          <p>브라우저 버전이 낮다</p>
 <![   ndif] */}
 
+          <BackgroundVideo
+            src={'/videos/main-video.mp4'}
+            muted
+            autoPlay
+            loop
+            playsInline
+          />
           <div className={s.text_box}>
             <h1>
               우리는 사료가 아닌
