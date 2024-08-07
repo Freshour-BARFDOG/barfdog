@@ -80,8 +80,6 @@ export default function SurveyStep5({
     });
   };
 
-  console.log(formValues);
-
   return (
     <section id="surveyPage" className={s.step4Page}>
       {errorInfo.errorMessage && (

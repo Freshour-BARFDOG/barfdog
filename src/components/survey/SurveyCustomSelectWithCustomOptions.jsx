@@ -24,13 +24,9 @@ export const SurveyCustomSelectWithCustomOptions = ({
   // const initialSelectedOption = value || options[0].value;
   const initialSelectedOption = value || options[0]?.value || '';
 
-  console.log(initialSelectedOption);
-
   const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
   const [isActive, setIsActive] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState(initialSelectedOption);
-
-  console.log(selectedOption, selectedLabel);
 
   const optionBoxRef = useRef(null);
   const inputRef = useRef(null);

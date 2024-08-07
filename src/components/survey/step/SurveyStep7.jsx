@@ -27,6 +27,20 @@ export default function SurveyStep7({
     }
   }, [formValues]);
 
+  useEffect(() => {
+    if (
+      formValues[0].specificDogStatus.includes('PREGNANT') &&
+      !formValues[0].expectedPregnancyDay
+    ) {
+      setIsActiveNextBtn(false);
+    } else if (
+      formValues[0].specificDogStatus.includes('PREGNANT') &&
+      formValues[0].expectedPregnancyDay
+    ) {
+      setIsActiveNextBtn(true);
+    }
+  }, [formValues]);
+
   return (
     <section id="surveyPage" className={s.step6Page}>
       {formValues?.map((dog, index) => (

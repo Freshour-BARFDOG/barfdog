@@ -67,6 +67,11 @@ export default function SubscribeBenefitPage({ subscribeId }) {
                 benefit.benefitName === 'DIAGNOSTIC_DEVICE' &&
                 benefit.benefitStatus === 'REQUESTED',
             )[0]?.benefitId || null;
+          const usedDiagnosticDeviceLength = benefitData.filter(
+            (benefit) =>
+              benefit.benefitName === 'DIAGNOSTIC_DEVICE' &&
+              benefit.benefitStatus === 'USED',
+          ).length;
 
           const availableTopperLength = benefitData.filter(
             (benefit) =>
@@ -87,6 +92,11 @@ export default function SubscribeBenefitPage({ subscribeId }) {
                 benefit.benefitName === 'TOPPER_RANDOM' &&
                 benefit.benefitStatus === 'REQUESTED',
             )[0]?.benefitId || null;
+          const usedTopperLength = benefitData.filter(
+            (benefit) =>
+              benefit.benefitName === 'TOPPER_RANDOM' &&
+              benefit.benefitStatus === 'USED',
+          ).length;
 
           setBenefitInfo(benefitData);
 
@@ -99,6 +109,8 @@ export default function SubscribeBenefitPage({ subscribeId }) {
             totalTopperLength,
             requestedTopperLength,
             requestedTopperId,
+            usedDiagnosticDeviceLength,
+            usedTopperLength,
           });
 
           const items = [];
@@ -256,6 +268,14 @@ export default function SubscribeBenefitPage({ subscribeId }) {
                       </button>
                     )}
                   </div>
+                  <br />
+
+                  <strong>신청 완료</strong>
+                  <div>
+                    진단기기 : {benefitData.usedDiagnosticDeviceLength || '0'}{' '}
+                    회
+                  </div>
+                  <div>토퍼 : {benefitData.usedTopperLength || '0'} 회</div>
                 </div>
 
                 {checkBoxItems.length === 0 ? (

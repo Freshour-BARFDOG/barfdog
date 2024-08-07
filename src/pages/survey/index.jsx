@@ -744,7 +744,7 @@ export default function Survey() {
 
   // console.log('errorInfo>>>', errorInfo);
 
-  console.log('formValues>>>', formValues);
+  // console.log('formValues>>>', formValues);
 
   return (
     <>
@@ -761,12 +761,7 @@ export default function Survey() {
         isActiveNextBtn={isActiveNextBtn}
         onSubmitHandler={onSubmitHandler}
       >
-        <Wrapper
-        // fullWidth={true}
-        // bgColor="#fffafa"
-        // minHeight="90vh"
-        // alignItems="flex-start"
-        >
+        <Wrapper overflow={'auto'}>
           <div className={s['survey-page']} ref={surveyPageRef}>
             <SurveyActiveStep curStep={curStep} isValidPage={isValidPage} />
             <Swiper

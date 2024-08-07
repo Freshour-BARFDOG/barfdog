@@ -239,10 +239,10 @@
   font-weight: bold;
 }
 
-.birth_text_wrapper {
-  position: relative;
-  height: rem(300);
-}
+// .birth_text_wrapper {
+//   position: relative;
+//   height: rem(300);
+// }
 
 .birth_text {
   background-color: rgba(242, 242, 242, 0.6);
@@ -303,29 +303,32 @@
 .input_status_box {
   .inputRadio-wrap {
     display: grid;
-    grid-template-columns: repeat(2, 190px);
-    grid-template-rows: repeat(2, 170px);
-    column-gap: rem(20);
-    row-gap: rem(16);
-    margin-bottom: rem(20);
+    grid-template-columns: repeat(2, 155px);
+    grid-template-rows: repeat(2, 160px);
+    // column-gap: rem(20);
+    // row-gap: rem(16);
+    // margin-bottom: rem(20);
+    label {
+      max-width: rem(155);
+    }
   }
   .inputRadio {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: rem(15);
+    // padding: rem(15);
     gap: rem(15);
   }
 }
 
 .specific_status_container {
   width: rem(400);
-  margin: rem(20) 0;
+  margin: rem(14) 0 rem(20) 0;
   font-size: rem(18);
 
   .sepcific_title {
-    margin: rem(20) 0;
+    margin: rem(10) 0;
     span {
       font-size: rem(16);
       color: rgb(96, 96, 96);
@@ -386,14 +389,14 @@
     width: rem(330);
     display: flex;
     flex-wrap: wrap;
-    gap: rem(14);
+    gap: rem(15);
     label {
       width: rem(155);
-      height: rem(138);
-      padding: rem(10) 0;
+      height: rem(158);
+      padding: rem(20) 0;
       display: flex;
       justify-content: space-between;
-      gap: rem(12);
+      gap: rem(20);
     }
   }
 }
