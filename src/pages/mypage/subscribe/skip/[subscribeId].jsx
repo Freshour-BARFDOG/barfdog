@@ -26,10 +26,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
 export default function SubscribeSkipPage({ subscribeId }) {
+  const mct = useModalContext();
+  const tbContext = useContext(ToggleBoxContext);
   const router = useRouter();
   const [subscribeInfo, setSubscribeInfo] = useState();
   const [dogName, setDogName] = useState('');
   const [selectedDate, setSelectedDate] = useState(dayjs());
+  const hasAlert = mct.hasAlert;
 
   useEffect(() => {
     (async () => {
@@ -57,10 +60,7 @@ export default function SubscribeSkipPage({ subscribeId }) {
     })();
   }, []);
 
-  console.log(subscribeInfo);
-
-  const mct = useModalContext();
-  const tbContext = useContext(ToggleBoxContext);
+  // console.log(subscribeInfo);
 
   const curPlan = subscribeInfo?.subscribeDto.plan;
   const curPlanWeeklyPaymentCycle =
@@ -211,8 +211,9 @@ export default function SubscribeSkipPage({ subscribeId }) {
     }
   }, []);
 
-  console.log(selectedDate);
-  console.log('isActive___', isActive);
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
 
   return (
     <>
@@ -241,18 +242,14 @@ export default function SubscribeSkipPage({ subscribeId }) {
               <div className={`${s.content_inner_box4}`}>
                 <div className={s.text}>
                   생산 예정일:{' '}
-                  {
-                    formattedProductionAndReceivingDate(
-                      subscribeInfo?.subscribeDto.nextDeliveryDate,
-                    ).formattedProductionDate
-                  }
+                  {formattedProductionAndReceivingDate(
+                    subscribeInfo?.subscribeDto.nextDeliveryDate,
+                  ).formattedProductionDate || '-'}
                   <br />
                   수령 예정일:{' '}
-                  {
-                    formattedProductionAndReceivingDate(
-                      subscribeInfo?.subscribeDto.nextDeliveryDate,
-                    ).formattedReceivingDate
-                  }
+                  {formattedProductionAndReceivingDate(
+                    subscribeInfo?.subscribeDto.nextDeliveryDate,
+                  ).formattedReceivingDate || '-'}
                 </div>
 
                 {/* <div className={s.radio_box}>
@@ -284,7 +281,7 @@ export default function SubscribeSkipPage({ subscribeId }) {
                             subscribeInfo?.subscribeDto.nextDeliveryDate,
                           ).formattedProductionDate,
                           7,
-                        )}
+                        ) || '-'}
                       </div>
                       <div>
                         수령 예정일 <br />
@@ -293,7 +290,7 @@ export default function SubscribeSkipPage({ subscribeId }) {
                             subscribeInfo?.subscribeDto.nextDeliveryDate,
                           ).formattedReceivingDate,
                           7,
-                        )}
+                        ) || '-'}
                       </div>
                     </div>
                   </div>
@@ -313,7 +310,7 @@ export default function SubscribeSkipPage({ subscribeId }) {
                             subscribeInfo?.subscribeDto.nextDeliveryDate,
                           ).formattedProductionDate,
                           7 * curPlanWeeklyPaymentCycle, // 7days * 2or4wks
-                        )}
+                        ) || '-'}
                       </div>
                       <div>
                         수령 예정일 <br />
@@ -322,7 +319,7 @@ export default function SubscribeSkipPage({ subscribeId }) {
                             subscribeInfo?.subscribeDto.nextDeliveryDate,
                           ).formattedReceivingDate,
                           7 * curPlanWeeklyPaymentCycle,
-                        )}
+                        ) || '-'}
                       </div>
                     </div>
                   </div>
@@ -369,7 +366,7 @@ export default function SubscribeSkipPage({ subscribeId }) {
                       </button>
                     ) : (
                       <span className={'pointColor'}>
-                        건너뛰기는 다음 결제 5일 전부터 가능합니다.
+                        건너뛰기는 구독 생산 예정일 이전에 가능합니다.
                       </span>
                     )}
                   </div>
@@ -377,7 +374,6 @@ export default function SubscribeSkipPage({ subscribeId }) {
                   <div className={s.btn_box}>
                     {/* 2. 다음 결제일(nextPaymentDate)이 없는 경우
                         -> 패키지 && 배송횟수 1 이상 */}
-
                     <button
                       type={'button'}
                       className={s.btn}
@@ -452,6 +448,8 @@ export default function SubscribeSkipPage({ subscribeId }) {
           option={{ wordBreak: true }}
         />
       )}
+
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} />}
     </>
   );
 }

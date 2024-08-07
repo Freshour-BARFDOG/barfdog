@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import s from "../updateSurvey.module.scss";
+import React, { useState } from 'react';
+import s from '../updateSurvey.module.scss';
 
 const SurveyInputRadio = ({
   surveyValues,
@@ -33,7 +33,7 @@ const SurveyInputRadio = ({
 
   return (
     <>
-      <ul className={`${className} ${s["inputRadio-wrap"]}`}>
+      <ul className={`${className} ${s['inputRadio-wrap']}`}>
         {idList.map((id, index) => {
           return (
             <li key={`radio-${name}-${index}`}>

@@ -464,10 +464,23 @@ section.title_delivery_skip_content {
 .no_package {
   color: #be1a21;
   font-weight: bold;
+  margin-bottom: rem(140);
 }
 
 .calendar_label {
   // font-weight: bold;
   margin: rem(50) 0 rem(10) 0;
   font-size: rem(20);
+}
+
+@media (max-width: rem(600)) {
+  .skip_list_wrapper {
+    gap: rem(20);
+
+    .skip_box {
+      h4 {
+        padding: rem(10);
+      }
+    }
+  }
 }

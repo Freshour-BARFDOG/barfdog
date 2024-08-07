@@ -25,7 +25,8 @@ const LayoutSurvey = ({
       style={{
         position: 'relative',
         // width: '600px',
-        height: '100vh',
+        minHeight: '100vh',
+        height: '100%',
         overflow: 'hidden',
         backgroundColor: '#fffafa',
       }}
