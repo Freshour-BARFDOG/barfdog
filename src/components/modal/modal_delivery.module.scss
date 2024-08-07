@@ -150,3 +150,82 @@
     transition: 0.3s all;
   }
 }
+
+@media (max-width: rem(600)) {
+  .modal-container {
+    padding: rem(20) rem(20) !important;
+    max-width: rem(300);
+    max-height: rem(500);
+  }
+
+  .main {
+    max-width: rem(1200);
+    display: flex;
+    flex-direction: column;
+    h1 {
+      font-size: rem(20);
+    }
+
+    h3 {
+      font-size: rem(16);
+      margin: rem(10) 0 rem(20) 0;
+    }
+
+    .address_list {
+      margin: rem(20) 0;
+      .add_btn {
+        padding: rem(10) rem(20);
+        font-size: rem(14);
+        border-radius: rem(5);
+        width: 100%;
+        margin-top: rem(30);
+      }
+      ul {
+        display: flex;
+        flex-direction: column;
+        gap: rem(20);
+        align-items: center;
+        .address_none {
+          font-size: rem(20);
+        }
+
+        li {
+          padding: rem(20);
+          width: rem(260);
+          display: flex;
+          align-items: center;
+          gap: rem(10);
+          flex-direction: column;
+
+          .check_btn {
+            width: rem(20);
+            height: rem(20);
+          }
+
+          .address_info {
+            display: flex;
+            flex-direction: column;
+            font-size: rem(14);
+            width: 100%;
+
+            .address_detail {
+              font-size: rem(16);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .save_btn_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    .save_btn {
+      width: 70%;
+      font-size: rem(16);
+      height: rem(36);
+    }
+  }
+}
