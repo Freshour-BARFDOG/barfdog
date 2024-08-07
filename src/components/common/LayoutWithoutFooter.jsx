@@ -1,13 +1,14 @@
 import React from 'react';
 import Header from '../header/Header';
 import TopLineBanner from '/src/components/atoms/TopLineBanner';
+import s from './layout.module.scss';
 
 const LayoutWithoutFooter = ({ id, className, ...props }) => {
   return (
     <main
       id={id}
-      className={className}
-      style={{ position: 'relative', width: '600px', overflow: 'hidden' }}
+      className={`${className} ${s.main_wrapper}`}
+      style={{ position: 'relative', overflow: 'hidden' }}
     >
       <TopLineBanner />
       <Header deadLine={false} footer={false} />
@@ -15,16 +16,5 @@ const LayoutWithoutFooter = ({ id, className, ...props }) => {
     </main>
   );
 };
-
-// const Layout = ({ children, ...props})=> {
-//   return (
-//     <main id={props.id} className={props.className}>
-//       <TopLineBanner />
-//       <Header />
-//       {children}
-//       <Footer />
-//     </main>
-//   );
-// }
 
 export default LayoutWithoutFooter;
