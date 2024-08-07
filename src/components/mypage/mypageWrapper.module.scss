@@ -5,8 +5,7 @@ $browser-context: 16;
 }
 
 .mypageWrapper {
-  // background-color: rgb(190, 224, 190);
-  padding-top: rem(50);
+  // padding-top: rem(50);
   // padding-bottom: rem(21);
   width: rem(600);
   .dashboard {
@@ -25,5 +24,11 @@ $browser-context: 16;
       padding-left: rem(40);
       box-sizing: border-box;
     }
+  }
+}
+
+@media (max-width: rem(600)) {
+  .mypageWrapper {
+    width: 100vw;
   }
 }

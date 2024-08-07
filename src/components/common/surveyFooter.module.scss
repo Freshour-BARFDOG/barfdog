@@ -157,6 +157,12 @@ $browser-context: 16;
 }
 
 // //**------- RESONSIVE -------**//
+@media (max-width: rem(600)) {
+  .swiper-navigation-container {
+    width: rem(400);
+  }
+}
+
 // @media (max-width: rem(1350)) {
 //   .main_footer_area {
 //     padding: rem(70) rem(60) rem(60) rem(30);

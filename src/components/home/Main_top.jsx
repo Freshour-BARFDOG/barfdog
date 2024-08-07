@@ -14,8 +14,10 @@ export function Main_top() {
           <Image
             src="/img/main.jpg"
             alt="main"
-            width={1500}
-            height={1966}
+            // objectFit="cover"
+            layout="fill"
+            // width={1500}
+            // height={1966}
           ></Image>
           {/* <video
             poster="영상썸네일"

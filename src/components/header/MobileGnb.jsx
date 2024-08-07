@@ -27,6 +27,7 @@ export default function MobileGnb({ deadLine, footer, mode }) {
   const [isWideMode, setIsWideMode] = useState(false);
   const [isSidrOpen, setIsSidrOpen] = useState(false);
   const deviceWidth = deviceState.deviceWidth;
+  const isMobile = deviceState.isMobile;
 
   const router = useRouter();
   const curPath = router.asPath;
@@ -138,7 +139,7 @@ export default function MobileGnb({ deadLine, footer, mode }) {
         <section
           className={`${s['mobile-menu-wrap']} mobile-menu-wrap ${
             deviceWidth < 300 ? s['scroll-container'] : ''
-          }`}
+          }  ${isMobile ? s.isMobile : ''}`}
         >
           <ul className={`${s['mobile-menu']} `}>
             <li>

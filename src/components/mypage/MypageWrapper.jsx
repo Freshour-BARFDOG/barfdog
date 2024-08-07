@@ -11,19 +11,19 @@ function MypageWapper({ children }) {
 
   return (
     <>
-      {isMobile ? (
-        <>{children}</>
-      ) : (
-        <div className={s.mypageWrapper}>
-          <section className={`${s.contents} clearfix`}>{children}</section>
+      {/* {isMobile ? ( */}
+      {/* <>{children}</> */}
+      {/* ) : ( */}
+      <div className={s.mypageWrapper}>
+        <section className={`${s.contents} clearfix`}>{children}</section>
 
-          {/* ! [삭제예정] */}
-          {/* <div className={`${s.contents_wrap} clearfix`}>
+        {/* ! [삭제예정] */}
+        {/* <div className={`${s.contents_wrap} clearfix`}>
             <Menu className={s.menu} />
             <section className={`${s.contents} clearfix`}>{children}</section>
           </div> */}
-        </div>
-      )}
+      </div>
+      {/* )} */}
     </>
   );
 }

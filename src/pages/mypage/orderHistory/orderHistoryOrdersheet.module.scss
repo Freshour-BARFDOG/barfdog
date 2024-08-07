@@ -16,17 +16,27 @@
     border-bottom: rem(1) solid var(--color-line-04);
   }
 
-  .orderStatus{
-    &:nth-child(2){
+  .orderStatus {
+    &:nth-child(2) {
       font-size: rem(12);
       color: var(--color-font-sub2);
       font-weight: 400;
     }
   }
 }
-
-.btn_section{
+header.header {
+  display: flex;
+  align-items: center;
+  margin: rem(30) 0 0 rem(30);
+  gap: rem(30);
+}
+section.title {
+  text-align: center;
+  margin-bottom: rem(30);
+}
+.btn_section {
   padding-bottom: rem(100);
+  margin: 0 rem(20);
 }
 
 // 취소신청, 반품신청, 교환신청 버튼이 존재하는 controller
@@ -51,9 +61,6 @@ button.btn {
   }
 }
 
-section.title {
-  padding: 0 0 rem(30);
-}
 section.content_title {
   padding: 0 0 rem(31);
 }
@@ -217,117 +224,116 @@ section.content_title {
   }
 }
 
-
-.additional-info-section{
+.additional-info-section {
   .itemNameList {
     display: flex;
     flex-direction: column;
-    gap:rem(8);
-  }
-
-}
-
-
-@media (max-width: rem(900)) {
-  //.flex_box {
-  //  .btn {
-  //    cursor: pointer;
-  //  }
-  //}
-
-  //.body_content_4 {
-  .generalItemInfoBox {
-    .grid_title {
-      display: none;
-    }
-
-    //.grid_box2 {
-    .item {
-      grid-template-columns: rem(80) minmax(rem(30), auto) 1fr;
-      text-align: left;
-      column-gap: rem(10);
-      row-gap: rem(12);
-
-      .col_1 {
-        grid-column: 1 / span 3;
-      }
-      .count {
-        grid-column: 2 / span 1;
-      }
-      .discountAmount {
-        grid-column: 1 / span 1;
-        position: relative;
-        transform: translateX(rem(160));
-
-        &::after {
-          content: "쿠폰할인";
-          color: #7a7a7a;
-          position: absolute;
-          top: 0;
-          left: rem(-70);
-        }
-      }
-      .orderStatus {
-        grid-column: 2 / span 2;
-        grid-row: 4 / span 1;
-        row-gap: rem(12);
-      }
-
-      .orderStatus {
-        > * {
-          width: 100%;
-        }
-        .text {
-          font-weight: 600;
-        }
-        > button {
-          padding: rem(13) 0;
-        }
-      }
-      //.col_5,
-      //.col_7,
-      //.col_8,
-      //.col_9 {
-      //  padding-left: rem(80);
-      //}
-      //.col_5 {
-      //  font-weight: bold;
-      //}
-      //.col_6 {
-      //  padding: rem(10) 0 rem(10) rem(0);
-      //}
-      //.col_9 {
-      //  display: flex;
-      //}
-    }
-  }
-
-  //.line1{
-  //  display: none;
-  //}
-}
-
-
-@media (max-width: rem(750)) {
-
-  .body_title {
-    display: grid;
-    grid-template-columns: 1fr;
-    row-gap: rem(10);
-
-    .order-button-controller {
-      justify-content: flex-end;
-    }
+    gap: rem(8);
   }
 }
 
+// @media (max-width: rem(900)) {
+//.flex_box {
+//  .btn {
+//    cursor: pointer;
+//  }
+//}
 
-@media (max-width: rem(600)) {
-  .title {
+//.body_content_4 {
+.generalItemInfoBox {
+  .grid_title {
     display: none;
   }
 
-  .body_title {
-    padding-top: rem(40);
+  //.grid_box2 {
+  .item {
+    grid-template-columns: rem(80) minmax(rem(30), auto) 1fr;
+    text-align: left;
+    column-gap: rem(10);
+    row-gap: rem(12);
+
+    .col_1 {
+      grid-column: 1 / span 3;
+    }
+    .count {
+      grid-column: 2 / span 1;
+    }
+    .discountAmount {
+      grid-column: 1 / span 1;
+      position: relative;
+      transform: translateX(rem(160));
+
+      &::after {
+        content: '쿠폰할인';
+        color: #7a7a7a;
+        position: absolute;
+        top: 0;
+        left: rem(-70);
+      }
+    }
+    .orderStatus {
+      grid-column: 2 / span 2;
+      grid-row: 4 / span 1;
+      row-gap: rem(12);
+    }
+
+    .orderStatus {
+      > * {
+        width: 100%;
+      }
+      .text {
+        font-weight: 600;
+      }
+      > button {
+        padding: rem(13) 0;
+      }
+    }
+    //.col_5,
+    //.col_7,
+    //.col_8,
+    //.col_9 {
+    //  padding-left: rem(80);
+    //}
+    //.col_5 {
+    //  font-weight: bold;
+    //}
+    //.col_6 {
+    //  padding: rem(10) 0 rem(10) rem(0);
+    //}
+    //.col_9 {
+    //  display: flex;
+    //}
   }
+}
+
+//.line1{
+//  display: none;
+//}
+// }
+
+// @media (max-width: rem(750)) {
+.body_title {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: rem(10);
+
+  .order-button-controller {
+    justify-content: flex-end;
+  }
+}
+// }
+
+// @media (max-width: rem(600)) {
+// .title {
+//   display: none;
+// }
+
+// .body_title {
+//   padding-top: rem(40);
+// }
+// }
+
+.side_empty,
+.body {
+  margin: 0 rem(20);
 }

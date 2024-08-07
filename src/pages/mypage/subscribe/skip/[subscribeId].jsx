@@ -81,6 +81,7 @@ export default function SubscribeSkipPage({ subscribeId }) {
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(false);
 
   // useEffect(() => {
   //   // const periodInWeeks = Number(skipCount.split('-')[1]);
@@ -139,7 +140,7 @@ export default function SubscribeSkipPage({ subscribeId }) {
       setSubmitted(true);
       const url = `/api/subscribes/${subscribeId}/skip/week`;
       const res = await postObjData(url, body);
-      // console.log(res);
+      console.log(res);
       if (res.isDone) {
         mct.alertShow(
           '구독 건너뛰기가 적용되었습니다.',
@@ -174,7 +175,7 @@ export default function SubscribeSkipPage({ subscribeId }) {
         formattedProductionAndReceivingDate(
           subscribeInfo?.subscribeDto.nextDeliveryDate,
         ).formattedReceivingDate,
-        7, // 7days * 2or4wks
+        7, // 7days * 2 or 4wks
       );
       setSelectedDate(formatDateToDash(delayedDate));
     } else if (item === 'once') {
@@ -196,6 +197,19 @@ export default function SubscribeSkipPage({ subscribeId }) {
 
     setActiveConfirmModal(true);
   };
+
+  useEffect(() => {
+    const today = new Date();
+    const nextDay = new Date(
+      formattedProductionAndReceivingDate(
+        subscribeInfo?.subscribeDto.nextDeliveryDate,
+      ).formattedProductionDate,
+    );
+
+    if (nextDay >= today) {
+      setIsAvailable(true);
+    }
+  }, []);
 
   console.log(selectedDate);
   console.log('isActive___', isActive);
@@ -223,7 +237,7 @@ export default function SubscribeSkipPage({ subscribeId }) {
                 <span>{dogName}(이)의 현재 생산·배송 일정</span>
               </div>
             </section>
-            <section>
+            <section className={s.title_delivery_skip_content}>
               <div className={`${s.content_inner_box4}`}>
                 <div className={s.text}>
                   생산 예정일:{' '}
@@ -335,8 +349,8 @@ export default function SubscribeSkipPage({ subscribeId }) {
                 {/* 1. 다음 배송일(nextDeliveryDate)이 있는 경우 : 배송미루기 탭으로 이동 가능
                         -> 1) 정기구독 (다음 배송일 O, 다음 결제일 O)
                               - 다음 결제일(nextPaymentDate)이 있는 경우 
-                              - 오늘과 다음 결제예정일 비교 ==> 5일 이내일 경우 구독 버튼 나타남 
                         -> 2) 패키지 && 배송횟수 1 이상 (다음 배송일 O, 다음 결제일 X) */}
+
                 {/* 2. 다음 배송일(nextDeliveryDate)이 없는 경우,
                        패키지이고, 남은 배송횟수 0
                       -> 마이페이지 스와이퍼에서 아예 배송미루기 버튼 없어, 페이지 이동 불가  */}
@@ -344,10 +358,8 @@ export default function SubscribeSkipPage({ subscribeId }) {
                 {subscribeInfo?.subscribeDto.nextPaymentDate ? (
                   <div className={s.btn_box}>
                     {/* 1. 다음 결제일(nextPaymentDate)이 있다면 */}
-                    {/* 1) 오늘과 다음 결제예정일 비교 ==> 5일 이내일 경우 '건너뛰기' 버튼 나타남 */}
-                    {isAvailableSubscribeSkipping(
-                      subscribeInfo?.subscribeDto.nextPaymentDate,
-                    ) ? (
+                    {/* 해당 구독 생산 예정일 전(주문마감일) => '건너뛰기' 버튼 나타남 */}
+                    {isAvailable ? (
                       <button
                         type={'button'}
                         className={s.btn}
@@ -357,7 +369,6 @@ export default function SubscribeSkipPage({ subscribeId }) {
                       </button>
                     ) : (
                       <span className={'pointColor'}>
-                        {/* 2) 오늘과 다음 결제예정일 비교 ==> 차이가 5일 초과일 경우 불가 */}
                         건너뛰기는 다음 결제 5일 전부터 가능합니다.
                       </span>
                     )}

@@ -2,16 +2,15 @@ import React from 'react';
 import Header from '../header/Header';
 import Footer from './Footer';
 import TopLineBanner from '/src/components/atoms/TopLineBanner';
+import s from './layout.module.scss';
 
 const LayoutMypage = ({ id, className, ...props }) => {
   return (
     <main
       id={id}
-      className={className}
+      className={`${className} ${s.main_wrapper}`}
       style={{
         position: 'relative',
-        width: '600px',
-        minHeight: '100dvh',
         overflow: 'hidden',
         backgroundColor: 'rgba(249, 249, 249, 1)',
       }}

@@ -2,6 +2,11 @@
 @import '../../../styles/module/zIndex.module';
 
 $mobileMenuHeight: rem(48);
+
+.isMobile {
+  width: 100vw;
+}
+
 .mobileNav {
   position: fixed;
   z-index: $mobileNav;

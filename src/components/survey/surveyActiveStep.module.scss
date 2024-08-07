@@ -55,4 +55,8 @@
 }
 
 @media (max-width: rem(600)) {
+  .step_container {
+    width: rem(380);
+    gap: rem(30);
+  }
 }

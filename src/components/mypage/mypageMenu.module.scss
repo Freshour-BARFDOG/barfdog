@@ -45,3 +45,18 @@ $menuPadding: 20;
     width: rem(214);
   }
 }
+
+@media (max-width: rem(600)) {
+  .menu {
+    gap: rem(30);
+  }
+
+  .sub_menu {
+    display: flex;
+    padding: rem(30) rem(40) rem(110) rem(40);
+
+    li {
+      width: rem(148);
+    }
+  }
+}

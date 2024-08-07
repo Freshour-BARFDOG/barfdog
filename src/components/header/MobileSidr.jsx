@@ -110,7 +110,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
           isLogin ? s.member : s['non-member']
         }`}
       >
-        <main className={s.main}>
+        <main className={`${s.main} ${isMobile ? s.isMobile : ''}`}>
           <section className={s['close-btn-section']}>
             <div className={s.row}>
               <div className={s.logo_img}>

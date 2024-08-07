@@ -43,28 +43,26 @@ const Dealine_timer = ({ className, setIsBottomBannerVisible }) => {
   };
 
   return (
-    <>
+    <div className={s.deadline_banner_wrapper}>
       <Wrap
         onClick={onHideHandler}
         id="deadline_timer"
         className={`${
           zIndex['gnb-subscribe-timer']
-        } ${'scroll-container'} flex-wrap ${className ? className : ''}`}
+        } ${'scroll-container'} flex-wrap ${className ? className : ''} ${
+          isMobile ? s.isMobile : ''
+        }`}
       >
-        {/* <IconWrap>
-            <Favicon />
-          </IconWrap> */}
-        <Text>AI 추천 맞춤 식단 정기 구독</Text>
+        <Text>AI추천 맞춤식단 정기구독</Text>
         <Timer id="deadline">{message}</Timer>
-        <NormalText> 이후 주문 마감!</NormalText>
-        {/* <Rect className="rect" /> */}
+        <NormalText>이후 주문 마감!</NormalText>
         <CloseButton
           onClick={onHideHandler}
           className={s.bottom_close_button}
           lineColor={'#fff'}
         />
       </Wrap>
-    </>
+    </div>
   );
 };
 
@@ -90,9 +88,11 @@ const Text = styled.b`
 `;
 
 const NormalText = styled.span`
-  font-size: ${rem(16)};
+  font-size: ${rem(14)};
   color: #000;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
 `;
 
 const Timer = styled.span`
@@ -136,7 +136,7 @@ const Wrap = styled.div`
   background-color: rgba(0, 0, 0, 0.85);
   border-radius: 0;
   height: ${rem(40)};
-  font-size: ${rem(16)};
+  font-size: ${rem(14)};
   color: #fff;
   &.scroll-container {
     ${'' /* justify-content: flex-start !important; */}

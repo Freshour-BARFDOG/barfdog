@@ -61,10 +61,19 @@
 
 html,
 body {
-  width: rem(600);
+  width: 100%;
   // width: 100vw;
+  // width: rem(600);
   overflow-x: hidden;
+  // overflow: auto;
   margin: auto;
+  // position: fixed;
+  // left: 0;
+  // top: 0;
+  // right: 0;
+  // width: 100%;
+  // height: 100%;
+  // position: relative;
 }
 
 label {
@@ -210,10 +219,27 @@ button.disabled {
   display: block !important;
 }
 
-@media (max-width: rem(1200)) {
+.mobileWidth {
+  width: 100vw;
 }
 
+// @media (max-width: rem(500)) {
+//   body {
+//     // width: 120vw;
+
+//     // width: rem(600);
+//     // overflow-x: hidden;
+//     // margin: auto;
+//     margin: 0;
+//   }
+// }
+
 @media (max-width: rem(600)) {
+  body {
+    // width: 10vw;
+    overflow-x: hidden;
+    margin: auto;
+  }
   #__next .mobile {
     display: block !important;
   }

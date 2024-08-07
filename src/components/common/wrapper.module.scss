@@ -9,14 +9,16 @@ $browser-context: 16; // html font-size:
   // align-items: center;
   width: rem(600);
   // padding: 0 rem(10);
+  // width: 100vw; //width: 100%; 을 수정
 
   .container {
-    max-width: rem(600);
-    width: rem(600);
-
+    // max-width: rem(600);
+    // width: rem(600);
+    // width: 100vw;
+    width: 100%;
     &.fullWidth {
       // width: 100vw; //width: 100%; 을 수정
-      width: rem(600);
+      // width: rem(600);
     }
     .row {
       position: relative;
@@ -46,16 +48,17 @@ $browser-context: 16; // html font-size:
 // @media (max-width: rem(768)) {
 // }
 
-// @media (max-width: rem(600)) {
-//   .container_outer {
-//     display: block;
-//     .container {
-//       .row {
-//         // padding: 0 rem(20);
-//       }
-//     }
-//   }
-// }
+@media (max-width: rem(600)) {
+  .container_outer {
+    width: 100vw;
+    //     display: block;
+    //     .container {
+    //       .row {
+    //         // padding: 0 rem(20);
+    //       }
+    //     }
+  }
+}
 
 // @media (max-width: 320px) {
 // }
