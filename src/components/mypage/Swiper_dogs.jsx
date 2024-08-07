@@ -308,7 +308,7 @@ const ItemList = ({
               />
             )}
           </div>
-          <div>
+          <div className={s.dog_name}>
             <h5 className={s.dog_name}>
               {data.name}
               {/* {data.name} ( {dogAge} / {gender} ) */}
@@ -340,7 +340,7 @@ const ItemList = ({
                 .formattedProductionDate
             }
           </p>
-          <p>|</p>
+          <p className={s.divider}></p>
           <p>
             수령 예정일:{' '}
             {
@@ -462,14 +462,14 @@ const ItemList = ({
                 </Link>
               */}
 
-              {/* {data.nextDeliveryDate && ( */}
-              <Link
-                href={`/mypage/subscribe/skip/${data.subscribeId}`}
-                passHref
-              >
-                <a>배송 미루기</a>
-              </Link>
-              {/* )} */}
+              {data.nextDeliveryDate && (
+                <Link
+                  href={`/mypage/subscribe/skip/${data.subscribeId}`}
+                  passHref
+                >
+                  <a>배송 미루기</a>
+                </Link>
+              )}
 
               <Link
                 href={`/mypage/subscribe/delivery/${data.subscribeId}`}

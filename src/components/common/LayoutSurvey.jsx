@@ -2,6 +2,7 @@ import React from 'react';
 import SurveyHeader from '../header/SurveyHeader';
 import SurveyFooter from './SurveyFooter';
 import SurveyResultFooter from './SurveyResultFooter';
+import s from './layout.module.scss';
 
 const LayoutSurvey = ({
   id,
@@ -20,10 +21,10 @@ const LayoutSurvey = ({
   return (
     <main
       id={id}
-      className={className}
+      className={`${className} ${s.main_wrapper}`}
       style={{
         position: 'relative',
-        width: '600px',
+        // width: '600px',
         height: '100vh',
         overflow: 'hidden',
         backgroundColor: '#fffafa',

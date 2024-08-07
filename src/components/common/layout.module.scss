@@ -1,0 +1,16 @@
+$browser-context: 16; // html font-size:
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+main.main_wrapper {
+  width: rem(600);
+  // width: 100vw; //width: 100%; 을 수정
+  margin: 0 auto;
+}
+
+@media (max-width: rem(600)) {
+  main.main_wrapper {
+    width: 100vw;
+  }
+}

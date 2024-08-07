@@ -8,7 +8,7 @@ $bannerHeight: rem(40);
   transition-property: height, top;
   transition-timing-function: ease-out;
   transition-duration: 0.3s;
-
+  // width: 100vw;
   &.invisible {
     animation: moveToTop 0.3s ease-in-out 1s forwards;
     height: 0;
@@ -45,11 +45,15 @@ $bannerHeight: rem(40);
 .bottom_close_button {
   position: absolute;
   transition: right 0.3s ease;
-  left: 13%;
+  left: rem(100);
   // top: 40%;
   // transform: translateY(-50%);
   // transform: translateX(200%);
-  width: rem(20) !important;
+  width: rem(16) !important;
+}
+
+.isMobile {
+  width: 100vw !important;
 }
 
 @keyframes moveToTop {
@@ -61,18 +65,19 @@ $bannerHeight: rem(40);
   }
 }
 
-// @media (max-width: rem(1200)) {
-//   .topLineBanner .close-button {
-//     right: rem(20);
-//   }
-// }
+@media (max-width: rem(600)) {
+  .bottom_close_button {
+    left: rem(20);
+  }
 
-// @media (max-width: rem(600)) {
-//   .topLineBanner a {
-//     font-size: rem(14);
-//   }
-//   .topLineBanner .close-button {
-//     width: rem(16);
-//     height: rem(16);
-//   }
-// }
+  // }
+
+  // @media (max-width: rem(600)) {
+  //   .topLineBanner a {
+  //     font-size: rem(14);
+  //   }
+  //   .topLineBanner .close-button {
+  //     width: rem(16);
+  //     height: rem(16);
+  //   }
+}

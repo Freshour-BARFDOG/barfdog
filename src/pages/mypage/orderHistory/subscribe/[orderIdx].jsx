@@ -109,9 +109,20 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
       <Layout>
         <Wrapper>
           <MypageWrapper>
+            <header className={s.header}>
+              <div className={s.prev_btn} style={{ cursor: 'pointer' }}>
+                <Image
+                  src={'/img/order/left_arrow.svg'}
+                  alt="left_arrow"
+                  width={24}
+                  height={24}
+                  onClick={onPrevPage}
+                />
+              </div>
+            </header>
             <section className={s.title}>주문상세정보</section>
 
-            <section>
+            <section className={s.side_empty}>
               <h1 className={s.body_title}>
                 <p>주문상품</p>
                 <div className={s['order-button-controller']}>

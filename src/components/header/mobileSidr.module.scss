@@ -9,19 +9,31 @@ $bottom-menu-list-height: rem(140);
   // position: fixed;
   position: absolute;
   // right: -100vw;
-  right: -100%;
+  // right: -100%;
+  // left: 19%;
   height: 100%;
   // height: 100vh;
-  width: rem(600);
+  margin: 0 auto;
+  width: rem(610);
+  // width: 100vw;
+  // width: 100%;
   top: 0;
   transition: right 0.6s ease;
   z-index: 50;
   // z-index: $mobileSidr;
-
+  // visibility: hidden;
+  display: none;
+  opacity: 0; /* 초기 투명도 */
+  visibility: hidden; /* 초기 가시성 */
+  animation: slideOut 0.3s forwards;
   &.open {
-    right: 0;
-    // transition: right 0.3s ease;
+    right: 0; /* 메뉴를 화면 안쪽으로 이동 */
+    opacity: 1; /* 메뉴가 보이도록 함 */
+    visibility: visible; /* 메뉴가 보이도록 함 */
+    animation: slideIn 0.3s forwards; /* 애니메이션 적용 */
+    display: block;
   }
+
   &.member {
     // width: 100vw;
     // width: 75vw;
@@ -31,11 +43,24 @@ $bottom-menu-list-height: rem(140);
   }
 }
 
+@keyframes slideIn {
+  from {
+    left: 50%; /* 시작 위치 */
+    opacity: 0; /* 시작 투명도 */
+  }
+  to {
+    left: 0; /* 끝 위치 */
+    opacity: 1; /* 끝 투명도 */
+  }
+}
+
 .block_sidebar {
   position: absolute;
   left: 100%;
   top: 0;
-  width: rem(600);
+  // width: rem(600);
+  // width: 100vw;
+
   height: 100vh;
   z-index: 50;
   background-color: #fff;
@@ -56,11 +81,10 @@ $bottom-menu-list-height: rem(140);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    // height: calc(100vh - #{$main-padding}* 1 - #{$closeButtonSectionHeight});
+    height: calc(100vh - #{$main-padding}* 1 - #{$closeButtonSectionHeight});
     box-sizing: border-box;
     // padding-bottom: $bottom-menu-list-height; // rem(140);
     padding-bottom: rem(130);
-
     overflow-x: hidden;
   }
 }
@@ -172,12 +196,21 @@ $bottom-menu-list-height: rem(140);
 
 .main {
   // [수정] 모바일 맞춤
-  height: 140vh;
+  // height: 140vh;
+  min-height: 140vh;
+  @supports (-webkit-appearance: none) and (stroke-color: transparent) {
+    min-height: -webkit-fill-available;
+  }
+  // width: 40vw;
   // height: 100%;
   box-sizing: border-box;
   // .row {
   //   // padding: 0 rem(20);
   // }
+}
+
+main.isMobile {
+  width: 100vw;
 }
 
 .close-btn-section {
@@ -635,12 +668,14 @@ $bottom-menu-list-height: rem(140);
   }
 }
 
-// // @media (max-width: rem(600)) {
-// // #sidr {
-// .scroll-container {
-//   // height: calc(200vh - #{$main-padding}* 1 - #{$closeButtonSectionHeight});
-//   // padding-bottom: $bottom-menu-list-height; // rem(140);
-//   padding-bottom: rem(130);
-// }
-// // }
-// // }
+@media (max-width: rem(600)) {
+  #sidr {
+    width: 100vw;
+    left: 0%;
+    // .scroll-container {
+    //   // height: calc(200vh - #{$main-padding}* 1 - #{$closeButtonSectionHeight});
+    //   // padding-bottom: $bottom-menu-list-height; // rem(140);
+    //   padding-bottom: rem(130);
+    // }
+  }
+}

@@ -124,9 +124,21 @@ section.body {
       margin-bottom: rem(6);
       cursor: default;
       word-break: keep-all;
+
+      p {
+        font-weight: normal;
+        font-size: rem(18);
+        word-break: keep-all;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: rem(320);
+      }
     }
     .start_date {
       color: #777777;
+      font-weight: normal;
+      font-size: rem(18);
     }
 
     .image {
@@ -204,6 +216,11 @@ section.body {
     display: flex;
     gap: rem(20);
     padding: rem(4) rem(30);
+    .divider {
+      width: 1px;
+      height: rem(20);
+      background-color: var(--color-line-02);
+    }
   }
 
   .select_box {
@@ -408,3 +425,84 @@ section.body {
 //     }
 //   }
 // }
+
+@media (max-width: rem(600)) {
+  .dogInfo_wrap {
+    width: rem(360);
+  }
+
+  .swiper_review_outerWrap {
+    width: rem(360);
+    //   background-color: #6f6ac9;
+  }
+
+  .left_box {
+    .image {
+      display: none;
+    }
+  }
+
+  .image_close {
+    top: 0 !important;
+  }
+
+  .tags {
+    margin: rem(20) rem(20) 0 rem(20) !important;
+  }
+
+  .dog_name {
+    p,
+    span {
+      font-size: rem(14) !important;
+    }
+  }
+
+  .date_wrapper {
+    gap: rem(20);
+    width: rem(300);
+    font-size: rem(14);
+    margin: rem(10) auto !important;
+
+    .divider {
+      width: 1px;
+      margin: auto;
+      height: rem(35) !important;
+      background-color: var(--color-line-02);
+    }
+    p {
+      text-align: center;
+    }
+  }
+  .select_box {
+    .btn-section,
+    .subscribe_will_cancel_wrapper {
+      margin: rem(10) !important;
+      // gap: rem(5) !important;
+      a {
+        padding: rem(10) !important;
+        height: rem(30) !important;
+      }
+      .reactive {
+        width: rem(100) !important;
+      }
+    }
+    button {
+      font-size: rem(14);
+      height: rem(30) !important;
+    }
+  }
+
+  .btn_wrapper {
+    display: flex;
+    gap: rem(10);
+    button {
+      font-size: rem(14);
+      height: rem(30) !important;
+    }
+    a {
+      padding: rem(10) !important;
+      height: rem(30) !important;
+      font-size: rem(14);
+    }
+  }
+}

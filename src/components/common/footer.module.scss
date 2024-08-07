@@ -293,20 +293,24 @@ $browser-context: 16;
 //   }
 // }
 
-// @media (max-width: rem(600)) {
-//   .companyInfo_area {
-//     ul {
-//       li {
-//         &:nth-child(5),
-//         &:last-child {
-//           .info_cont {
-//             display: none;
-//           }
-//         }
-//         .info_cont_mobile {
-//           display: block;
-//         }
-//       }
-//     }
-//   }
-// }
+@media (max-width: rem(600)) {
+  .sub_footer_top {
+    font-size: rem(14) !important;
+  }
+  .companyInfo_area {
+    ul {
+      font-size: rem(11);
+      // li {
+      //   &:nth-child(5),
+      //   &:last-child {
+      //     .info_cont {
+      //       display: none;
+      //     }
+      //   }
+      //   .info_cont_mobile {
+      //     display: block;
+      //   }
+      // }
+    }
+  }
+}

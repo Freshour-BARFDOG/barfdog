@@ -1345,3 +1345,14 @@
   background-color: #be1a21;
   transition: 0.3s all;
 }
+
+// //**------- RESONSIVE -------**//
+@media (max-width: rem(600)) {
+  .input_name_wrapper {
+    display: flex;
+    justify-content: center;
+    .input_name {
+      width: rem(300);
+    }
+  }
+}
