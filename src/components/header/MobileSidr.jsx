@@ -129,9 +129,15 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                     data-link={'/mypage'}
                     onClick={(e) => onMovePage(e, '/mypage')}
                   >
-                    <div className={s.mypage_wrap}>
+                    <Image
+                      src={'/img/icon/mypage_header.svg'}
+                      alt="mypage_header"
+                      width={22}
+                      height={22}
+                    />
+                    {/* <div className={s.mypage_wrap}>
                       <Icon_mypage />
-                    </div>
+                    </div> */}
                   </button>
                 </li>
                 <li>

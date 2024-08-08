@@ -7,6 +7,7 @@ import Icon_cart from '../../../public/img/icon/cart.svg';
 import Icon_mypage from '../../../public/img/icon/mypage.svg';
 import DeadlineTimer from '../atoms/DeadlineTimer';
 import React from 'react';
+import Image from 'next/image';
 
 export const Gnb_my = ({ isMobile, setSidrOpen, authData, isMyPage }) => {
   const userInfo = authData?.userInfo;
@@ -41,8 +42,15 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData, isMyPage }) => {
                 type={'button'}
                 data-link={'/mypage'}
                 onClick={(e) => onMovePage(e, '/mypage')}
+                style={{ display: 'flex' }}
               >
-                <div className={s.mypage_wrap}>{/* <Icon_mypage/> */}</div>
+                <Image
+                  src={'/img/icon/mypage_header.svg'}
+                  alt="mypage_header"
+                  width={26}
+                  height={26}
+                />
+                {/* <div className={s.mypage_wrap}><Icon_mypage/></div> */}
               </button>
             </li>
           )}

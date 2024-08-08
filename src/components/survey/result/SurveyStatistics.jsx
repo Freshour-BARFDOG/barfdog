@@ -69,6 +69,8 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     next: [],
   });
 
+  const [toppingPerPackPriceList, setToppingPerPackPriceList] = useState([]);
+
   const [mypageSubscribeId, setMypageSubscribeId] = useState(null);
 
   // 하단 버튼 '마이페이지로 돌아가기'
@@ -140,7 +142,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
             : `/api/surveyReports/${id}`;
 
         const res = await getData(apiUrl);
-        console.log('/api/surveyReports/>>>', res);
+        // console.log('/api/surveyReports/>>>', res);
         setSurveyInfo(res.data);
 
         //* 문구 설명
@@ -351,6 +353,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         pricePerGrams,
         isOriginSubscriber,
         recipeNameList: currentRecipeInfos,
+        toppingPerPackPriceList,
       });
 
       return {
@@ -393,6 +396,8 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     const nextPaymentPrice = calcSubscribePlanPaymentPrice(form.plan).avgPrice
       .salePrice;
 
+    // console.log(nextPaymentPrice);
+
     //! 서버에 전송할 데이터
     const body = {
       plan: form.plan,
@@ -404,7 +409,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
       subscribeItemList: null, // 일반 구독상품은 추후 추가 예정
     };
 
-    console.log('body>>>', body);
+    // console.log('body>>>', body);
 
     const errObj = validate(body);
     const isPassed = valid_hasFormErrors(errObj);
@@ -432,7 +437,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
       const apiUrl = `/api/subscribes/${subscribeId}`;
 
       const res = await putObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         await dispatch(
           cartAction.setSubscribeOrder({
@@ -639,6 +644,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
                     calcPrice={calcSubscribePlanPaymentPrice}
                     pricePerPack={pricePerPack}
                     setPricePerPack={setPricePerPack}
+                    setToppingPerPackPriceList={setToppingPerPackPriceList}
                   />
 
                   {/* 5. 챙겨줄 제품 - Swiper */}
