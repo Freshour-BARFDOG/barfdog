@@ -29,7 +29,7 @@ $container-maxWidth: rem(960);
   }
   // ! 마이페이지
   &.mypage {
-    margin-bottom: rem(180);
+    margin: rem(50) 0 rem(180) 0;
     .link {
       padding-top: rem(42);
       display: flex;
@@ -71,6 +71,7 @@ $container-maxWidth: rem(960);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   padding: rem(30) 0;
   gap: rem(20);
 

@@ -17,6 +17,7 @@ export default function SurveyResultPlan({
   calcPrice,
   pricePerPack,
   setPricePerPack,
+  setToppingPerPackPriceList,
 }) {
   const subscribePlanInfo = useSubscribePlanInfo();
   const initialPlan = form.plan || null;
@@ -26,7 +27,9 @@ export default function SurveyResultPlan({
   const [recipeNameList, setRecipeNameList] = useState([]);
 
   const [toppingAmount, setToppingAmount] = useState('');
-  // const [isLowToppingAmountGram, setIsLowToppingAmountGram] = useState(false);
+  const [isLowToppingAmountGram, setIsLowToppingAmountGram] = useState(false);
+
+  const [toppingOptions, setToppingOptions] = useState();
 
   useEffect(() => {
     const names = form.recipeIdList
@@ -37,7 +40,74 @@ export default function SurveyResultPlan({
       .filter((name) => name !== null);
 
     setRecipeNameList(names);
-  }, [recipeInfo, form]);
+
+    //* 토핑 옵션 계산
+    if (selectedPlan?.includes('TOPPING')) {
+      let toppingOptions = [
+        { label: '선택', value: '' },
+        { label: '20%', value: 20 },
+        { label: '40%', value: 40 },
+        { label: '60%', value: 60 },
+        { label: '80%', value: 80 },
+      ];
+
+      const mealGramsWithToppings = calcOneMealGramsWithRecipeInfo({
+        selectedRecipeIds: selectedRecipeIds,
+        allRecipeInfos: recipeInfo.map((recipe) => ({
+          id: recipe.id,
+          kcalPerGram: recipe.gramPerKcal,
+          name: recipe.name,
+        })),
+        oneDayRecommendKcal: surveyInfo.foodAnalysis.oneDayRecommendKcal,
+      });
+
+      // 토핑용량조절(toppingOptions)의 각 옵션에 대한 toppingAmountGram 값 계산
+      const newToppingOptions = [];
+      const maxToppingOption = toppingOptions[toppingOptions.length - 1]; // '토핑용량조절' 항목 옵션의 마지막 요소가 가장 높은 비율
+      // 가장 높은 비율의 toppingAmountGram 계산
+      const maxToppingAmountGram = mealGramsWithToppings.map(
+        (info) => info.oneMealGram * (maxToppingOption.value / 100),
+      );
+
+      // 가장 높은 비율의 옵션이 조건을 충족하지 않으면 모든 옵션 제거
+      // //! 옵션 선택지가 없는 경우
+      // //! = 80% 까지 즉, 전체 옵션에 대한 계산 값(toppingAmountGram)이 40 이하
+      if (
+        maxToppingAmountGram.every((gram) => gram <= 40) &&
+        form.recipeIdList.length !== 0
+      ) {
+        setIsLowToppingAmountGram(true);
+      } else {
+        setIsLowToppingAmountGram(false);
+
+        toppingOptions.forEach((option) => {
+          const toppingAmountGram = mealGramsWithToppings.map(
+            (info) => info.oneMealGram * (option.value / 100),
+          );
+
+          // toppingAmountGram이 40 이상만 업데이트 옵션에 추가
+          if (toppingAmountGram.every((gram) => gram > 40)) {
+            newToppingOptions.push(option);
+          }
+        });
+      }
+      setToppingOptions(newToppingOptions);
+
+      if (!toppingAmount) {
+        setToppingAmount(
+          newToppingOptions[newToppingOptions.length - 1]?.value,
+        );
+      }
+    }
+  }, [
+    recipeInfo,
+    form,
+    form.plan,
+    selectedRecipeIds,
+    toppingAmount,
+    surveyInfo,
+    selectedPlan,
+  ]);
 
   useEffect(() => {
     setInitialize(true);
@@ -112,17 +182,13 @@ export default function SurveyResultPlan({
           ? recipeInfo.oneMealGram * (toppingAmount / 100)
           : recipeInfo.oneMealGram;
 
-        // 계산된 그램이 40g 이하인 경우에는 토핑 플랜을 표시하지 않음
-        if (toppingAmountGram <= 40) {
-          console.log(toppingAmountGram);
-          // return setIsLowToppingAmountGram(true);
-        }
-
-        // {/* (2) 토핑용량조절 시, 80% 값이 40g 이하일 때  */}
-
         return (
           <div className={s.recipe_text} key={i}>
-            <b>{toppingAmountGram <= 40 ? '-' : toppingAmountGram + 'g'}</b>
+            <b>
+              {toppingAmountGram <= 40
+                ? '-'
+                : transformLocalCurrency(toppingAmountGram) + 'g'}
+            </b>
             <br />
             <i className={s.tinyText}>{recipeInfo.recipeName}</i>
           </div>
@@ -132,30 +198,202 @@ export default function SurveyResultPlan({
     {}[(form, initialize, toppingAmount)],
   ) || <div className={s.recipe_text}>0 g</div>;
 
-  //*** 한 팩당 가격 계산 */
-  const oneMealGramsWithPriceInfosWithTags = useMemo(
-    () =>
-      pricePerPack &&
-      recipeNameList.map((recipeName, i) => {
-        const matchingRecipePrice = pricePerPack.recipePrices.find(
-          (item) => item.recipeName === recipeName,
-        );
-        if (!matchingRecipePrice) {
-          return (
-            <div className={s.recipe_text} key={i}>
-              0 원
-            </div>
-          );
-        }
+  //*** 무게와 가격 계산을 위한 useMemo */
+  const { mealGramsWithToppings, toppingAmountGram } = useMemo(() => {
+    if (!pricePerPack) return { mealGramsWithToppings: null }; // pricePerPack이 없으면 null 반환
 
+    const toppingAmountGram = []; // 배열 초기화
+
+    // 토핑플랜인 경우에만 계산하면 됨
+    if (selectedPlan?.includes('TOPPING')) {
+      // 1. 무게 계산
+      const mealGramsWithToppings = calcOneMealGramsWithRecipeInfo({
+        selectedRecipeIds: selectedRecipeIds,
+        allRecipeInfos: recipeInfo.map((recipe) => ({
+          id: recipe.id,
+          kcalPerGram: recipe.gramPerKcal,
+          name: recipe.name,
+          pricePerGram: recipe.pricePerGram,
+        })),
+        oneDayRecommendKcal: surveyInfo.foodAnalysis.oneDayRecommendKcal,
+      });
+
+      // 2. toppingAmountGram
+      recipeNameList.forEach((recipeName) => {
+        // 일치하는 recipeInfo 찾기
+        const matchingRecipeInfo = recipeInfo.find(
+          (info) => info.name === recipeName,
+        );
+        // 일치하는 mealGramsWithToppings 찾기
+        const matchingRecipeGram = mealGramsWithToppings.find(
+          (info) => info.recipeName === recipeName,
+        );
+
+        // console.log('___', matchingRecipeInfo);
+        // console.log('___', matchingRecipeGram);
+        // console.log('___', mealGramsWithToppings);
+
+        // toppingAmount를 사용해 toppingAmountGram 계산
+        if (matchingRecipeInfo) {
+          const calcedPrice =
+            matchingRecipeGram?.oneMealGram *
+            (toppingAmount / 100) *
+            matchingRecipeInfo?.pricePerGram;
+          toppingAmountGram.push(Math.floor(calcedPrice));
+
+          // console.log(calcedPrice);
+        }
+      });
+
+      // toppingAmountGram의 총합 계산
+      // setToppingTotalPrice(
+      //   toppingAmountGram.reduce((acc, current) => acc + current, 0),
+      // );
+    }
+    // console.log('toppingAmountGram___', toppingAmountGram);
+    setToppingPerPackPriceList(toppingAmountGram);
+
+    return { mealGramsWithToppings, toppingAmountGram };
+  }, [
+    selectedRecipeIds,
+    recipeInfo,
+    surveyInfo,
+    pricePerPack,
+    toppingAmount,
+    form,
+  ]);
+
+  //*** 한 팩당 가격 계산 */
+  const oneMealGramsWithPriceInfosWithTags = useMemo(() => {
+    return recipeNameList.map((recipeName, i) => {
+      const matchingRecipePrice = pricePerPack.recipePrices?.find(
+        (item) => item.recipeName === recipeName,
+      );
+
+      // 일치하는 가격이 없으면 '-' 표시
+      if (!matchingRecipePrice) {
         return (
           <div className={s.recipe_text} key={i}>
-            {transformLocalCurrency(matchingRecipePrice.perPack) + '원'}
+            -
           </div>
         );
-      }),
-    {}[(form, form.recipeIdList, initialize, pricePerPack)],
-  );
+      }
+
+      // TOPPING이 선택된 경우
+      if (selectedPlan?.includes('TOPPING')) {
+        return (
+          <div className={s.recipe_text} key={i}>
+            {transformLocalCurrency(toppingAmountGram[i])} 원
+          </div>
+        );
+      } else {
+        return (
+          <div className={s.recipe_text} key={i}>
+            {transformLocalCurrency(matchingRecipePrice.perPack)} 원
+          </div>
+        );
+      }
+    });
+  }, [
+    pricePerPack,
+    selectedPlan,
+    recipeNameList,
+    recipeInfo,
+    mealGramsWithToppings,
+    form,
+  ]);
+
+  //*** 한 팩당 가격 계산 */
+  // const oneMealGramsWithPriceInfosWithTags = useMemo(() => {
+  //   if (!pricePerPack) return null; // pricePerPack이 없으면 null 반환
+
+  //   // console.log('pricePerPack__', pricePerPack);
+
+  //   // 무게 계산
+  //   const mealGramsWithToppings = calcOneMealGramsWithRecipeInfo({
+  //     selectedRecipeIds: selectedRecipeIds,
+  //     allRecipeInfos: recipeInfo.map((recipe) => ({
+  //       id: recipe.id,
+  //       kcalPerGram: recipe.gramPerKcal,
+  //       name: recipe.name,
+  //       pricePerGram: recipe.pricePerGram,
+  //     })),
+  //     oneDayRecommendKcal: surveyInfo.foodAnalysis.oneDayRecommendKcal,
+  //   });
+
+  //   // console.log('matchingRecipeInfo***', matchingRecipeInfo);
+  //   console.log('mealGramsWithToppings***', mealGramsWithToppings);
+
+  //   return recipeNameList.map((recipeName, i) => {
+  //     const matchingRecipePrice = pricePerPack.recipePrices.find(
+  //       (item) => item.recipeName === recipeName,
+  //     );
+  //     // 일치하는 가격이 없으면 '-' 표시
+  //     if (!matchingRecipePrice) {
+  //       return (
+  //         <div className={s.recipe_text} key={i}>
+  //           -
+  //         </div>
+  //       );
+  //     }
+
+  //     // TOPPING이 선택된 경우
+  //     if (selectedPlan?.includes('TOPPING')) {
+  //       // 일치하는 recipeInfo의 pricePerGram 찾기
+  //       const matchingRecipeInfo = recipeInfo.find(
+  //         (info) => info.name === recipeName,
+  //       );
+
+  //       // toppingAmount를 사용해 toppingAmountGram 계산
+  //       if (matchingRecipeInfo) {
+  //         const toppingAmountGram = mealGramsWithToppings.map(
+  //           (info) =>
+  //             info.oneMealGram *
+  //             (toppingAmount / 100) *
+  //             matchingRecipeInfo.pricePerGram,
+  //         );
+
+  //         // console.log('toppingAmount:::', toppingAmount);
+  //         console.log('toppingAmountGram:::', toppingAmountGram);
+
+  //         // 총 가격 계산
+  //         // const totalPrice = toppingAmountGram.reduce(
+  //         //   (acc, curr) => acc + curr,
+  //         //   0,
+  //         // );
+  //         // setToppingTotalPrice();
+
+  //         return (
+  //           <div className={s.recipe_text} key={i}>
+  //             {transformLocalCurrency(Math.floor(toppingAmountGram[i]))} 원
+  //           </div>
+  //         );
+  //       } else {
+  //         // recipeInfo가 없는 경우 처리
+  //         return (
+  //           <div className={s.recipe_text} key={i}>
+  //             -
+  //           </div>
+  //         );
+  //       }
+  //     } else {
+  //       // TOPPING이 선택되지 않은 경우
+  //       return (
+  //         <div className={s.recipe_text} key={i}>
+  //           {transformLocalCurrency(matchingRecipePrice.perPack)} 원
+  //         </div>
+  //       );
+  //     }
+  //   });
+  // }, [
+  //   form,
+  //   form.recipeIdList,
+  //   initialize,
+  //   pricePerPack,
+  //   selectedPlan,
+  //   recipeNameList,
+  //   recipeInfo,
+  // ]);
 
   const subsribePlanItems = [
     {
@@ -388,13 +626,7 @@ export default function SurveyResultPlan({
     },
   ];
 
-  const toppingOptions = [
-    { label: '선택', value: '' },
-    { label: '20%', value: 20 },
-    { label: '40%', value: 40 },
-    { label: '60%', value: 60 },
-    { label: '80%', value: 80 },
-  ];
+  // console.log(isLowToppingAmountGram);
 
   return (
     <div className={s.plan_container}>
@@ -408,11 +640,12 @@ export default function SurveyResultPlan({
       <div className={s.plan_list}>
         {/* 토핑 풀/하프 플랜이 뜨지 않는 경우 */}
         {/* (1) 권장칼로리 125kcal 미만일 때 */}
+        {/* (2) isLowToppingAmountGram : 옵션 선택지가 없는 경우 = 80% 까지 즉, 전체 옵션에 대한 계산 값(toppingAmountGram)이 40 이하*/}
         {subsribePlanItems
           .filter((item) =>
             calcSubscribeOneDayRecommendKcal(
               surveyInfo.foodAnalysis.oneDayRecommendKcal,
-            ) < 125
+            ) < 125 || isLowToppingAmountGram
               ? !item.title.includes('토핑')
               : item,
           )

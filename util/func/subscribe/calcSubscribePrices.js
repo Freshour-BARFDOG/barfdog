@@ -8,6 +8,7 @@ export const calcSubscribePrice = ({
   pricePerGrams = [],
   isOriginSubscriber,
   recipeNameList = [],
+  toppingPerPackPriceList = [],
 }) => {
   const totalNumberOfPacks = subscribePlanType[planName].totalNumberOfPacks;
 
@@ -17,6 +18,8 @@ export const calcSubscribePrice = ({
       recipe: { pricePerGram, oneMealGram: oneMealGrams[index] },
       isOriginSubscriber,
       recipeName: recipeNameList[index],
+      toppingPerPackPriceList: toppingPerPackPriceList[index],
+      planName,
     });
   });
 
@@ -36,9 +39,13 @@ export const calcSubscribeItemPrice = ({
   recipe = { pricePerGram: 0, oneMealGram: 0 },
   isOriginSubscriber,
   recipeName,
+  toppingPerPackPriceList,
+  planName,
 }) => {
   // console.log('recipe>>>>', recipe);
   // console.log('recipeName:::', recipeName);
+  // console.log('planName___', planName);
+  // console.log('toppingPerPackPriceList__', toppingPerPackPriceList);
 
   let pricePerGram = 0;
 
@@ -67,12 +74,24 @@ export const calcSubscribeItemPrice = ({
   // console.log('pricePerGram 변경 후>>>', pricePerGram);
   // console.log('pricePerGram>>>', pricePerGram);
 
-  const perPackPrice = pricePerGram * recipe.oneMealGram;
+  let perPackPrice = 0;
+
+  if (planName.includes('TOPPING')) {
+    perPackPrice = toppingPerPackPriceList;
+  } else {
+    perPackPrice = pricePerGram * recipe.oneMealGram;
+  }
 
   const totalNumberOfPacks = plan.totalNumberOfPacks;
   const discountPercent = plan.discountPercent;
 
   // console.log('discountPercent!!!', discountPercent);
+  // console.log(
+  //   totalNumberOfPacks,
+  //   perPackPrice,
+  //   1 - discountPercent / 100,
+  //   perPackPrice * (1 - discountPercent / 100),
+  // );
 
   return {
     perPack: Math.round(perPackPrice * (1 - discountPercent / 100)), // 한 팩 가격

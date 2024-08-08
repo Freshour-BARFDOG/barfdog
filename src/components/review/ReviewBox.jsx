@@ -1,22 +1,22 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import s from '../../pages/review/review.module.scss';
 import Spinner from '../atoms/Spinner';
-import {ReviewItem} from './ReviewItem';
-import {EmptyContMessage} from '../atoms/emptyContMessage';
+import { ReviewItem } from './ReviewItem';
+import { EmptyContMessage } from '../atoms/emptyContMessage';
 import PaginationWithAPI from '../atoms/PaginationWithAPI';
 
 export const ReviewBox = () => {
   const searchPageSize = 10;
   const getListApiUrl = '/api/reviews/community';
-  const [itemList, setItemList] = useState( [] );
-  const [isLoading, setIsLoading] = useState( {} );
-  
+  const [itemList, setItemList] = useState([]);
+  const [isLoading, setIsLoading] = useState({});
+
   const pageInterceptor = (res) => {
     // res = DUMMY_REVIEW_LIST_RESPONSE; //  ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
     // // console.log( res );
     const pageData = res.data.page;
     const newItemList =
-      res.data?._embedded?.queryCommunityReviewsDtoList.map( (data) => ({
+      res.data?._embedded?.queryCommunityReviewsDtoList.map((data) => ({
         id: data.reviewDto.id,
         thumbnailUrl: data.reviewDto.thumbnailUrl,
         star: data.reviewDto.star,
@@ -24,9 +24,9 @@ export const ReviewBox = () => {
         username: data.reviewDto.username,
         writtenDate: data.reviewDto.writtenDate,
         imgList: data.reviewImageDtoList,
-      }) ) || [];
-    
-    setItemList( newItemList );
+      })) || [];
+
+    setItemList(newItemList);
     // // console.log(newItemList);
     let newPageInfo = {
       totalPages: pageData.totalPages,
@@ -38,7 +38,7 @@ export const ReviewBox = () => {
     };
     return newPageInfo;
   };
-  
+
   return (
     <div className={s.tab_slide_box}>
       <div className={s.notice_board}>
@@ -52,13 +52,13 @@ export const ReviewBox = () => {
         </div>
         <ul className="reviewBox">
           {isLoading.fetching ? (
-            <Spinner/>
+            <Spinner />
           ) : itemList?.length > 0 ? (
-            itemList?.map( (item, index) => (
-              <ReviewItem key={`review-${item.id}-${index}`} item={item}/>
-            ) )
+            itemList?.map((item, index) => (
+              <ReviewItem key={`review-${item.id}-${index}`} item={item} />
+            ))
           ) : (
-            <EmptyContMessage message={'작성된 리뷰가 없습니다.'}/>
+            <EmptyContMessage message={'작성된 리뷰가 없습니다.'} />
           )}
         </ul>
       </div>
@@ -74,8 +74,6 @@ export const ReviewBox = () => {
     </div>
   );
 };
-
-
 
 //
 // const DUMMY_REVIEW_LIST_RESPONSE = {

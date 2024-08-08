@@ -199,6 +199,7 @@
 
     ul {
       height: rem(50);
+      display: flex;
     }
 
     .date_label_wrap {
@@ -208,7 +209,7 @@
       }
     }
     input {
-      width: rem(400) !important;
+      width: rem(300) !important;
       height: rem(50) !important;
       border-radius: rem(10) !important;
     }
@@ -907,7 +908,6 @@
   display: flex;
   column-gap: rem(17);
   @include char(l18);
-  font-weight: 600;
 }
 
 //반려견성별
@@ -943,21 +943,21 @@
   }
 }
 
-.dogBirth {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: rem(20);
-  font-size: rem(16);
+// .dogBirth {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   gap: rem(20);
+//   font-size: rem(16);
 
-  > li {
-    > div {
-      > input {
-        font-size: rem(16);
-      }
-    }
-  }
-}
+//   > li {
+//     > div {
+//       > input {
+//         font-size: rem(16);
+//       }
+//     }
+//   }
+// }
 
 .dog_choice {
   padding: 0 rem(60);
