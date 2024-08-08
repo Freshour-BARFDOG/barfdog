@@ -26,7 +26,7 @@ export function Main_wedo() {
 
               {data.link === 'AI 추천 문진 진행하기' && (
                 <div className={s.wedo_link_box}>
-                  <Link href="/review">
+                  <Link href="/survey">
                     <a>
                       {data.link}
                       <FaArrowRight />
@@ -38,7 +38,7 @@ export function Main_wedo() {
               {data.link === '상담하러 가기' && (
                 <div className={s.wedo_link_box}>
                   <a
-                    href="https://pf.kakao.com/_WixbrK"
+                    href="https://36o2x.channel.io/home"
                     rel="noreferrer"
                     target="_blank"
                   >

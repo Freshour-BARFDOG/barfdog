@@ -1,17 +1,9 @@
-// 리뷰 Swiper
 import React, { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/router';
 import s from '@src/pages/mainPage.module.scss';
-import { Navigation, Pagination, Lazy } from 'swiper';
-import ArrowRight_m2 from '@public/img/icon/swiper-arrow-medium-style2.svg';
+import { Navigation, Pagination, Lazy, Autoplay } from 'swiper';
 import Link from 'next/link';
-import ArrowLeft_m from '@public/img/icon/swiper-arrow-medium.svg';
-import ArrowRight_m from '@public/img/icon/swiper-arrow-medium2.svg';
-import Quotation from '@public/img/pages/home/home_review_quotation.svg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
-import sorting from '@util/func/sorting';
-import popupWindow from '@util/func/popupWindow';
 
 const swiperSettings_survey = {
   className: `${s.swiper_survey}`,
@@ -22,7 +14,8 @@ const swiperSettings_survey = {
     clickable: true,
   },
   lazy: true,
-  modules: [Lazy, Pagination],
+  modules: [Lazy, Pagination, Autoplay],
+  autoplay: { delay: 3000, disableOnInteraction: false },
   breakpoints: {
     //반응형 조건 속성
     // 100: {
@@ -62,29 +55,15 @@ export function Swiper_survey() {
 
   return (
     <div className={s.swiper_survey_outerWrap}>
-      {/* <i className={s['swiper-button-prev']} ref={navPrevRef}>
-        <ArrowLeft_m width="100%" height="100%" viewBox="0 0 39 39" />
-      </i>
-      <i className={s['swiper-button-next']} ref={navNextRef}>
-        <ArrowRight_m width="100%" height="100%" viewBox="0 0 39 39" />
-      </i> */}
       <Swiper
-        // navigation={{
-        //   prevEl: navPrevRef.current,
-        //   nextEl: navNextRef.current,
-        // }}
         onInit={(swiper) => {
-          // swiper.params.navigation.prevEl = navPrevRef.current;
-          // swiper.params.navigation.nextEl = navNextRef.current;
           swiper.params.pagination.el.classList.add(
             'swiper-pagination__surveySection',
           );
           swiper.params.pagination.el.classList.add(
             s['swiper-pagination__surveySection'],
           );
-          // swiper.navigation.destroy();
-          // swiper.navigation.init();
-          // swiper.navigation.update();
+
           swiper.pagination.destroy();
           swiper.pagination.init();
           swiper.pagination.update();
@@ -94,10 +73,7 @@ export function Swiper_survey() {
         {...swiperSettings_survey}
       >
         {arrangedData.map((d, index) => (
-          <SwiperSlide
-            key={`bestReview-${d.id}-${index}`}
-            className={s.swiper_survey_box}
-          >
+          <SwiperSlide key={`survey-${index}`} className={s.swiper_survey_box}>
             <div className={s.swiper_survey_img}>
               <Image
                 src={require(`/public/img/pages/main/AIstart${index + 1}.png`)}
@@ -105,20 +81,32 @@ export function Swiper_survey() {
                 alt="카드 이미지"
               />
             </div>
+            <div className={s.text_box}>
+              {d.content1} <br />
+              {d.content2} <br />
+              {d.content3}
+            </div>
           </SwiperSlide>
         ))}
-        {/* <SwiperSlide className={s.swiper_review_more}>
-          <Link href="/review" passHref>
-            <a>
-              <div className={s.image_wrap}>
-                <ArrowRight_m2 width="100%" height="100%" viewBox="0 0 39 39" />
-              </div>
-              <div className={s.more}>더보기</div>
-            </a>
-          </Link>
-        </SwiperSlide> */}
       </Swiper>
     </div>
   );
 }
-const arrangedData = [1, 2, 3];
+const arrangedData = [
+  {
+    id: 1,
+    content1: '바프독 AI 맞춤 설문을 통해',
+    content2: '우리 아이의 평소 모습을 알려주세요',
+    content3: '(설문 소요시간 5분 내외)',
+  },
+  {
+    id: 2,
+    content1: '설문 내용을 기반으로 우리 아이만을 위한',
+    content2: 'AI 맞춤 식단을 추천해 드립니다',
+  },
+  {
+    id: 3,
+    content1: '맞춤 식단은 구독 후 일정에 맞춰 배송되며',
+    content2: '언제든 구성과 일정을 변경할 수 있습니다',
+  },
+];

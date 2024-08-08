@@ -16,7 +16,7 @@ export const SurveyDogTypeCustomSelectWithOptions = ({
   activeIndexList,
   setActiveIndexList,
 }) => {
-  const initialSelectedOption = value[id] || options[0]?.value || '';
+  const initialSelectedOption = value[0][id] || options[0]?.value || '';
   const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
   // const initialIsActiveStates = Array(formValues.length).fill(false);
   // const [isActive, setIsActive] = useState(initialIsActiveStates);

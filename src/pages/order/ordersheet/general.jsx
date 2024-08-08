@@ -306,6 +306,19 @@ export default function GeneralOrderSheetPage() {
 
             <div className={s.divider}></div>
 
+            {/* 1) 쿠폰 */}
+            {/* <div className={s.coupon_list}>
+              <div>쿠폰</div>
+              <button
+                type={'button'}
+                className={`${s['coupons']}`}
+                data-modal-type={'coupons'}
+                onClick={onActivleModalHandler}
+              >
+                <b>쿠폰 적용 &gt; </b>
+              </button>
+            </div> */}
+
             <div className={s.reward_wrapper}>
               {/*  적립금 */}
               <OrdersheetReward

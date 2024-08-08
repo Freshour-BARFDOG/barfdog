@@ -17,7 +17,9 @@ export function Main_family() {
               {data.title2}
             </div>
 
-            <div className={s.family_content}>
+            <div
+              className={`${s.family_content} ${idx === 2 ? s.third_item : ''}`}
+            >
               {data.content1} <br />
               {data.content2}
               <br />

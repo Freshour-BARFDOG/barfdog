@@ -52,6 +52,7 @@ const Dealine_timer = ({ className, setIsBottomBannerVisible }) => {
         } ${'scroll-container'} flex-wrap ${className ? className : ''} ${
           isMobile ? s.isMobile : ''
         }`}
+        isMobile={isMobile}
       >
         <Text>AI추천 맞춤식단 정기구독</Text>
         <Timer id="deadline">{message}</Timer>
@@ -136,7 +137,7 @@ const Wrap = styled.div`
   background-color: rgba(0, 0, 0, 0.85);
   border-radius: 0;
   height: ${rem(40)};
-  font-size: ${rem(14)};
+  font-size: ${(props) => (props.isMobile ? rem(14) : rem(18))};
   color: #fff;
   &.scroll-container {
     ${'' /* justify-content: flex-start !important; */}

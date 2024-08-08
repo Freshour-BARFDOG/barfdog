@@ -249,11 +249,11 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                         <a>공지사항</a>
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link href={'/community/event'} passHref>
                         <a>이벤트</a>
                       </Link>
-                    </li>
+                    </li> */}
                     <li>
                       <Link href={'/community/about'} passHref>
                         <a>어바웃</a>

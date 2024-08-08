@@ -26,6 +26,7 @@ export default function SurveyResultPlan({
   const [recipeNameList, setRecipeNameList] = useState([]);
 
   const [toppingAmount, setToppingAmount] = useState('');
+  // const [isLowToppingAmountGram, setIsLowToppingAmountGram] = useState(false);
 
   useEffect(() => {
     const names = form.recipeIdList
@@ -106,20 +107,27 @@ export default function SurveyResultPlan({
           name: recipe.name,
         })),
         oneDayRecommendKcal: surveyInfo.foodAnalysis.oneDayRecommendKcal,
-      })?.map((recipeInfo, i) => (
-        <div className={s.recipe_text} key={i}>
-          <b>
-            {toppingAmount
-              ? transformLocalCurrency(
-                  recipeInfo.oneMealGram * (toppingAmount / 100),
-                )
-              : transformLocalCurrency(recipeInfo.oneMealGram)}
-            g
-          </b>
-          <br />
-          <i className={s.tinyText}>{recipeInfo.recipeName}</i>
-        </div>
-      )),
+      })?.map((recipeInfo, i) => {
+        const toppingAmountGram = toppingAmount
+          ? recipeInfo.oneMealGram * (toppingAmount / 100)
+          : recipeInfo.oneMealGram;
+
+        // 계산된 그램이 40g 이하인 경우에는 토핑 플랜을 표시하지 않음
+        if (toppingAmountGram <= 40) {
+          console.log(toppingAmountGram);
+          // return setIsLowToppingAmountGram(true);
+        }
+
+        // {/* (2) 토핑용량조절 시, 80% 값이 40g 이하일 때  */}
+
+        return (
+          <div className={s.recipe_text} key={i}>
+            <b>{toppingAmountGram <= 40 ? '-' : toppingAmountGram + 'g'}</b>
+            <br />
+            <i className={s.tinyText}>{recipeInfo.recipeName}</i>
+          </div>
+        );
+      }),
 
     {}[(form, initialize, toppingAmount)],
   ) || <div className={s.recipe_text}>0 g</div>;
@@ -380,34 +388,13 @@ export default function SurveyResultPlan({
     },
   ];
 
-  // const onInputChange = (value) => {
-  //   const nextAmount = value;
-  //   // const nextGrams = form.originGrams.map((originGram) =>
-  //   //   Number(
-  //   //     (originGram * (1 + nextAmount / 100)).toFixed(
-  //   //       UnitOfDemicalPointOfOneMealGramInDatabase,
-  //   //     ),
-  //   //   ),
-  //   // ); // ! 1팩 당 무게: 최대 소수점 '4'자리
-  //   // const recipePricePerGrams = form.recipeInfo.pricePerGramList;
-  //   // const planTypeName = form.planInfo.planType;
-  //   // const { perPack, salePrice } = calcSubscribePrice({
-  //   //   discountPercent: subscribeInfo.plan.discountPercent,
-  //   //   oneMealGrams: nextGrams,
-  //   //   planName: planTypeName,
-  //   //   pricePerGrams: recipePricePerGrams,
-  //   //   isOriginSubscriber,
-  //   //   recipeNameList: subscribeInfo.recipe.nameList.map((recipe) => recipe),
-  //   // });
-  //   // // // console.log(perPack, salePrice);
-  //   // setForm((prevState) => ({
-  //   //   ...prevState,
-  //   //   nextAmount,
-  //   //   nextGrams,
-  //   //   nextPricePerPack: perPack,
-  //   //   nextSalePrice: salePrice,
-  //   // }));
-  // };
+  const toppingOptions = [
+    { label: '선택', value: '' },
+    { label: '20%', value: 20 },
+    { label: '40%', value: 40 },
+    { label: '60%', value: 60 },
+    { label: '80%', value: 80 },
+  ];
 
   return (
     <div className={s.plan_container}>
@@ -419,11 +406,13 @@ export default function SurveyResultPlan({
       </div>
       {/* 4-1) 플랜 선택 */}
       <div className={s.plan_list}>
+        {/* 토핑 풀/하프 플랜이 뜨지 않는 경우 */}
+        {/* (1) 권장칼로리 125kcal 미만일 때 */}
         {subsribePlanItems
           .filter((item) =>
             calcSubscribeOneDayRecommendKcal(
               surveyInfo.foodAnalysis.oneDayRecommendKcal,
-            ) <= 125
+            ) < 125
               ? !item.title.includes('토핑')
               : item,
           )
@@ -440,22 +429,6 @@ export default function SurveyResultPlan({
                 option={{ label: '플랜 선택' }}
                 initialize={initialize}
               >
-                {/* {item.label === 'best' && (
-              <ItemLabel
-                label="BEST"
-                style={{
-                  backgroundColor: 'var(--color-main)',
-                }}
-              />
-            )}
-            {item.label === 'new' && (
-              <ItemLabel
-                label="NEW"
-                style={{
-                  backgroundColor: '#FF8C16',
-                }}
-              />
-            )} */}
                 <ul className={s.plan_box}>
                   <li className={s.plan_grid_1}>
                     <h2>
@@ -518,13 +491,7 @@ export default function SurveyResultPlan({
               <div className={s.selectBox}>
                 <CustomSelect
                   id="toppingAmount"
-                  options={[
-                    { label: '선택', value: '' },
-                    { label: '20%', value: 20 },
-                    { label: '40%', value: 40 },
-                    { label: '60%', value: 60 },
-                    { label: '80%', value: 80 },
-                  ]}
+                  options={toppingOptions}
                   value={toppingAmount}
                   setFormValues={setToppingAmount}
                 />

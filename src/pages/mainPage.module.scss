@@ -913,15 +913,18 @@ section.family {
     }
     .family_content {
       font-size: rem(16);
-      margin: rem(10) 0;
+      margin-top: rem(10);
       color: #636363;
+    }
+    .third_item {
+      margin: rem(10) 0 rem(24) 0;
     }
 
     .img_box {
       width: rem(450);
       border-radius: rem(7);
       overflow: hidden;
-      margin: rem(40);
+      margin: rem(0) 0 rem(40) 0;
     }
   }
 }
@@ -1034,14 +1037,21 @@ section.family {
 //*** [ Swiper ] 설문조사
 .swiper_survey_outerWrap {
   position: relative;
-  height: rem(500);
+  height: rem(680);
   width: rem(600);
 
   .swiper_survey {
     margin: rem(60) 0 rem(0);
     position: relative;
 
+    .text_box {
+      color: #898989;
+      margin: rem(60) 0 0 0;
+      font-size: rem(20);
+    }
+
     .swiper-pagination__surveySection {
+      bottom: 20%;
       span {
         border: rem(1) solid #be1a21;
         background-color: #fff;
@@ -1056,7 +1066,7 @@ section.family {
 
   .swiper_survey_box {
     width: rem(340);
-    height: rem(520);
+    height: rem(620);
   }
 
   .swiper_survey_img {
@@ -1069,11 +1079,6 @@ section.family {
     border-radius: rem(8);
     overflow: hidden;
   }
-
-  // .swiper-pagination__reviewSection {
-  //   bottom: rem(100) !important;
-  //   background-color: #000 !important;
-  // }
 }
 
 //SNS swiper

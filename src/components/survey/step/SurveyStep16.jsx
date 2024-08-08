@@ -27,7 +27,9 @@ export default function SurveyStep16({
       {formValues?.map((dog, index) => (
         <div key={index} className={s.gender_neutralization_container}>
           <div className={s.input_neutralization_container}>
-            <p className={s.input_title}>(이)는 생식 급여가 처음인가요 ?</p>
+            <p className={s.input_title}>
+              {dog.name}(이)는 생식 급여가 처음인가요 ?
+            </p>
             <div className={s.input_neutralization_box}>
               <SurveyCustomRadioTrueOrFalse
                 title="newToRawDiet"

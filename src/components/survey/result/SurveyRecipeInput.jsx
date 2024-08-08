@@ -62,24 +62,15 @@ export const SurveyRecipeInput = ({
     );
   };
 
-  // const Input = () => {
-  //   return (
-  //     <>
-  //       {type === 'checkbox' && <InputCheckbox />}
-  //       <span className={s.fake_checkbox}>
-  //         {isChecked || selectedRadio === id ? '선택됨' : option.label}
-  //         <i className={s.icon_checked}>
-  //           <Icon_Checked />
-  //         </i>
-  //       </span>
-  //     </>
-  //   );
-  // };
-
   const onLabelClick = (e) => {
     // CUSTOM FUNCTION (block browser auto focus)
     // : swiper 내에서 input selected됐을 경우, selecgted Input에 auto focusing blocking하기 위함
     e.preventDefault();
+
+    if (e.target.closest('a')) {
+      return;
+    }
+
     const disabled = e.currentTarget.dataset.disabled === 'true'; // ! String 으로 입력됨 true / false값
     if (disabled) return console.error('NOTICE: disabled Element');
 

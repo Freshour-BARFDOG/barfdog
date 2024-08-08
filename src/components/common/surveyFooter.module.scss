@@ -82,9 +82,10 @@ $browser-context: 16;
   // }
   .swiper-button-submit {
     // border-color: transparent;
-    background-color: var(--color-main);
+    // background-color: var(--color-main);
+    background-color: #313131 !important;
     color: #fff;
-    box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
+    box-shadow: 0 rem(2) rem(10) 0 rgba(172, 172, 172, 0.6);
     display: none;
     width: rem(130);
     height: rem(50);
@@ -159,7 +160,7 @@ $browser-context: 16;
 // //**------- RESONSIVE -------**//
 @media (max-width: rem(600)) {
   .swiper-navigation-container {
-    width: rem(400);
+    width: 100vw;
   }
 }
 

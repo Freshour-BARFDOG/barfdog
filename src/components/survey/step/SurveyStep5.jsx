@@ -8,29 +8,6 @@ import surveyYearOptionList from '/util/func/surveyYearOptionList';
 import SurveyBirthdayInput from '../SurveyBirthdayInput';
 import SurveyYearMonth from '../SurveyYearMonthInput';
 
-// const getSurveyBirthObject = (yyyymmObj) => {
-//   const result = {
-//     yyyy: '',
-//     mm: '',
-//     yyyymm: '',
-//   };
-//   for (const key in yyyymmObj) {
-//     const val = yyyymmObj[key];
-//     switch (key) {
-//       case 'yyyy':
-//         result.yyyy = val;
-//         result.yyyymm += val;
-
-//         break;
-//       case 'mm':
-//         result.mm = val;
-//         result.yyyymm += val;
-//         break;
-//     }
-//   }
-//   return result;
-// };
-
 export default function SurveyStep5({
   formValues,
   setFormValues,
@@ -93,17 +70,19 @@ export default function SurveyStep5({
         >
           <p className={s.input_title}>{dog.name} (이)의 생일은 언제인가요 ?</p>
           <div className={s.input_dogBirth_box}>
-            <SurveyBirthdayInput
-              className={s['birthday']}
-              type={'date'}
-              id={'birth'}
-              filteredType={'date'}
-              dogInfoIndex={index}
-              dogInfo={dog}
-              setFormValues={setFormValues}
-              formValue={dog.birth || ''}
-              setIsActiveNextBtn={setIsActiveNextBtn}
-            />
+            {!showBirthOptionsIndex.includes(index) && (
+              <SurveyBirthdayInput
+                className={s['birthday']}
+                type={'date'}
+                id={'birth'}
+                filteredType={'date'}
+                dogInfoIndex={index}
+                dogInfo={dog}
+                setFormValues={setFormValues}
+                formValue={dog.birth || ''}
+                setIsActiveNextBtn={setIsActiveNextBtn}
+              />
+            )}
             <button
               className={s.year_month_btn}
               onClick={(e) => showBirthOptionsHandler(e, index)}
