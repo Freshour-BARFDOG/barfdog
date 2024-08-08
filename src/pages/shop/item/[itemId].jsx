@@ -346,32 +346,32 @@ export default function SingleItemDetailPage({ data }) {
         isLoading={isLoading}
       /> */}
 
-      {isOptionBar && (
-        <ShopFloatingTab
-          id={'optionDtoList'}
-          data={{
-            item: data?.item,
-            itemImages: data?.itemImages,
-            delivery: data?.delivery,
-            opt: data?.opt,
-            minQuantity: minItemQuantity,
-            maxQuantity: maxItemQuantity,
-          }}
-          formValues={formValues}
-          setFormValues={setFormValues}
-          onAddToCart={onAddToCart}
-          activeModal={activeCartShortcutModal}
-          onActiveModal={onActiveCartShortcutModal}
-          onStartBuying={onClickBuyButton}
-          isLoading={isLoading}
-          optionDataList={optionDataList}
-          selectOptions={selectOptions}
-          onSelectOptionHandler={onSelectOptionHandler}
-          onChangeQuantityInputHandler={onChangeQuantityInputHandler}
-          onDeleteOption={onDeleteOption}
-        />
-      )}
       <Layout>
+        {isOptionBar && (
+          <ShopFloatingTab
+            id={'optionDtoList'}
+            data={{
+              item: data?.item,
+              itemImages: data?.itemImages,
+              delivery: data?.delivery,
+              opt: data?.opt,
+              minQuantity: minItemQuantity,
+              maxQuantity: maxItemQuantity,
+            }}
+            formValues={formValues}
+            setFormValues={setFormValues}
+            onAddToCart={onAddToCart}
+            activeModal={activeCartShortcutModal}
+            onActiveModal={onActiveCartShortcutModal}
+            onStartBuying={onClickBuyButton}
+            isLoading={isLoading}
+            optionDataList={optionDataList}
+            selectOptions={selectOptions}
+            onSelectOptionHandler={onSelectOptionHandler}
+            onChangeQuantityInputHandler={onChangeQuantityInputHandler}
+            onDeleteOption={onDeleteOption}
+          />
+        )}
         <Wrapper>
           <ShopBoard
             id={'shopBoard'}

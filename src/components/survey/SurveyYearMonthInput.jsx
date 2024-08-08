@@ -125,20 +125,20 @@ export default function SurveyYearMonthInput({
     if (id === 'yyyy') {
       updatedValue = newValue;
       setSelectedOption(newValue); // 선택한 값
-      //   setBirthYear(newValue);
+      // setBirthYear(newValue);
       // console.log('updatedYear::::', updatedValue);
 
       setFormValues((prevFormValues) => {
         const newFormValues = prevFormValues.map((item, idx) => {
           if (idx === dogInfoIndex) {
             // console.log('item.birth', item.birth);
-            const restOfDate = item.birth.slice(4);
+            const restOfDate = item.birth?.slice(4);
             let newBirth;
             if (item.birth === '') {
               // 날짜 지정 안했을 경우 (2023)
               newBirth = updatedValue;
               // console.log('newBirth>>>>', newBirth);
-            } else if (item.birth.slice(0, 4) === '0000') {
+            } else {
               // 날짜 지정했을 경우 (00000202)
               // const emptyYear = item.birth.slice(0, 4); // 앞에 4글자 '0000' 비어있는 년도
               newBirth = updatedValue + restOfDate;
@@ -164,10 +164,10 @@ export default function SurveyYearMonthInput({
       setFormValues((prevFormValues) => {
         const newFormValues = prevFormValues.map((item, idx) => {
           if (idx === dogInfoIndex) {
-            const restOfDate = item.birth.slice(0, 4); // 맨 앞 네글자 (년도)
+            const restOfDate = item.birth?.slice(0, 4); // 맨 앞 네글자 (년도)
             let newBirth;
 
-            if (item.birth.slice(0, 4) === '0000' || item.birth === '') {
+            if (item.birth?.slice(0, 4) === '0000' || item.birth === '') {
               // 년도 지정 안했을 경우 (00000101)
               newBirth = '0000' + updatedValue + '01';
             } else {
@@ -203,56 +203,6 @@ export default function SurveyYearMonthInput({
 
       //   }
     }
-
-    // // // 년도와 월이 분리된 경우("2023", "03")를 하나의 문자열로 합치고, "01" 일자를 붙임
-    // // // 1) "2023"과 같이 년도가 들어온 경우
-    // // if (newValue.length === 4) {
-    // //   //   value += '0101'; // "20230101" 형태로 만듦
-    // //   // if (value.length === 2) {
-    // //   prevValue = newValue;
-    // //   setSelectedOption(newValue);
-    // //   console.log('year>>>', prevValue);
-    // // } else if (newValue.length === 2) {
-    // //   console.log('month>>>', prevValue);
-
-    // //   // if (value.length === 2) {
-    // //   // 2) "03"과 같이 월이 들어온 경우
-    // //   //   value = selectedOption + newValue + '01'; // selectedOption에 년도("2023")가 저장되어 있음
-    // //   value = prevValue + newValue + '01'; // selectedOption에 년도("2023")가 저장되어 있음
-    // // }
-
-    // // 문자열 -> 숫자로 변환
-    // if (dataType === 'number') {
-    //   updatedValue = Number(updatedValue);
-    // }
-
-    // console.log('updatedValue!!!', updatedValue);
-
-    // if (setValues && typeof setValues === 'function') {
-    // 내용 업데이트
-    // setFormValues((prevFormValues) => {
-    //   const newFormValues = prevFormValues.map((item, idx) => {
-    //     if (idx === dogInfoIndex) {
-    //       return {
-    //         ...item,
-    //         birth: updatedValue,
-    //       };
-    //     }
-    //     return item;
-    //   });
-
-    //   return newFormValues;
-    // });
-
-    // setValues( (prevState) => ({
-    //   ...prevState,
-    //   birth: value,
-    // }) );
-    // }
-
-    // if (onChange && typeof onChange === 'function') {
-    //   onChange(value);
-    // }
   };
 
   const onActiveOptionBox = () => {

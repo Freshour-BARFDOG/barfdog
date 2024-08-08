@@ -40,8 +40,6 @@ export const Modal_coupon = ({
     selectedItemPrice = itemInfo.nextPaymentPrice;
   }
 
-  useEffect(() => {}, []);
-
   const onChangeHandler = useCallback(
     (e) => {
       const radio = e.currentTarget;
@@ -97,19 +95,32 @@ export const Modal_coupon = ({
         ),
       }));
     } else if (orderType === 'subscribe') {
-      setForm((prevState) => ({
-        ...prevState,
-        memberCouponId: couponId,
-        discountCoupon: couponDiscountAmount,
-        coupons: prevState.coupons.map((coupon) =>
-          coupon.memberCouponId === couponId
-            ? {
-                ...coupon,
-                remaining: --coupon.remaining,
-              }
-            : coupon,
-        ),
-      }));
+      setForm((prevState) => {
+        // 기존 쿠폰 복원
+        const updatedCoupons = prevState.coupons.map((coupon) => {
+          if (coupon.memberCouponId === prevState.memberCouponId) {
+            return {
+              ...coupon,
+              remaining: coupon.remaining + 1,
+            };
+          }
+          return coupon;
+        });
+
+        return {
+          ...prevState,
+          memberCouponId: couponId,
+          discountCoupon: couponDiscountAmount,
+          coupons: updatedCoupons.map((coupon) =>
+            coupon.memberCouponId === couponId
+              ? {
+                  ...coupon,
+                  remaining: coupon.remaining - 1, // 새로운 쿠폰 적용
+                }
+              : coupon,
+          ),
+        };
+      });
     }
     onHideModal();
   }, [selectedRadioInfo, orderType, selectedItemId]);
@@ -154,7 +165,7 @@ export const Modal_coupon = ({
       const apiUrl = '/api/coupons/code';
       const res = await putObjData(apiUrl, body);
 
-      console.log(res);
+      // console.log(res);
 
       if (res.isDone) {
         setSubmitted(true);
@@ -188,6 +199,9 @@ export const Modal_coupon = ({
 
   if (!Object.keys(form).length)
     return console.error('Faild to render because of empty data props');
+
+  // console.log(form.coupons);
+  // console.log(form);
 
   return (
     <>

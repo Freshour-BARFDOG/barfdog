@@ -347,11 +347,11 @@ export default function SubscribeOrderSheetPage() {
     popupWindow(href, { width: 600, height: 800 });
   };
 
-  console.log('subscribeInfo>>>', subscribeInfo);
-  console.log('recipeInfo>>>', recipeInfo);
-  console.log('info___', info);
-  console.log('DATA___', DATA);
-  console.log('form___', form);
+  // console.log('subscribeInfo>>>', subscribeInfo);
+  // console.log('recipeInfo>>>', recipeInfo);
+  // console.log('info___', info);
+  // console.log('DATA___', DATA);
+  // console.log('form___', form);
 
   return (
     <>

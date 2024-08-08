@@ -4,9 +4,6 @@ import { setCookie } from '/util/func/cookie';
 import { cookieType } from '@store/TYPE/cookieType';
 import { userType } from '@store/TYPE/userAuthType';
 import { postObjData } from '@src/pages/api/reqData';
-import { surveyDataAction } from '/store/surveyData-slice';
-import { surveyDogAction } from '/store/surveyDog-slice';
-import { useDispatch } from 'react-redux';
 
 // - --------------------------------------------------------------------
 // - CF. Cookie: expiredDate값이 null일 경우, application expired값이 session으로 설정
@@ -36,7 +33,7 @@ const onSubmitSurvey = async (formValues) => {
     const postData = { dogSaveRequestDtos: formValues };
     const postFormValuesApiUrl = '/api/dogs';
     const res = await postObjData(postFormValuesApiUrl, postData);
-    console.log(res);
+    // console.log(res);
     if (res.isDone) {
       //! [수정] 다견 설문조사 id 추출
       const surveyReportsIds =
@@ -81,7 +78,6 @@ const authSlice = createSlice({
       // }
 
       if (action.payload.surveyData) {
-        console.log('action.payload.surveyData', action.payload.surveyData);
         onSubmitSurvey(action.payload.surveyData); // 설문조사 Id 가져온 후, 설문조사 결과 페이지로 이동
       } else {
         const query = temporaryPassword

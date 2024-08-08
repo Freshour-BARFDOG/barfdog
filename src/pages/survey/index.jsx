@@ -84,7 +84,7 @@ const initialFormValues = [
   {
     name: '', // 강아지이름 str
     gender: '', // 강아지 성별 str
-    neutralization: false, // 중성화여부 Boolean
+    neutralization: '', // 중성화여부 Boolean
     dogSize: '', // 강아지 체급 str
     dogType: '', // 강아지 종 str
     birth: '', //! [변경] 강아지 생월 str // [YYYYMMDD]
@@ -126,10 +126,10 @@ export default function Survey() {
   const auth = useSelector((state) => state.auth);
   const userInfo = auth?.userInfo;
   const dispatch = useDispatch();
-
+  const surveyData = useSelector((state) => state.surveyData.surveyData);
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
-  const [formValues, setFormValues] = useState(initialFormValues);
+  const [formValues, setFormValues] = useState(surveyData || initialFormValues);
   const [curStep, setCurStep] = useState(1); // num
   const [isLoading, setIsLoading] = useState({}); // obj
   const [modalMessage, setModalMessage] = useState('');
@@ -201,6 +201,10 @@ export default function Survey() {
     {
       swiperIndex: 2,
       key: 'gender',
+    },
+    {
+      swiperIndex: 3,
+      key: 'neutralization',
     },
     { swiperIndex: 4, key: 'dogSize' },
     { swiperIndex: 4, key: 'dogType' },
@@ -423,6 +427,7 @@ export default function Survey() {
       validationItems && setIsActiveNextBtn(false);
 
       validationItems.forEach((validationItem) => {
+        console.log(dog[validationItem.key]);
         // 이름이 중복되는 경우
         if (idx === 1 && nameSet.has(dog.name)) {
           console.log('1', nameSet, nameSet.has(dog.name));
@@ -435,7 +440,7 @@ export default function Survey() {
             errorMessage: '이름이 중복됩니다.',
           });
           return;
-        } else if (validationItem && !dog[validationItem.key]) {
+        } else if (validationItem && dog[validationItem.key] === '') {
           hasEmptyField = true; // 비어있는 필드가 있음
           setIsValidPage(idx);
           setIsActiveNextBtn(false);
@@ -559,7 +564,7 @@ export default function Survey() {
             errorMessage: '이름이 중복됩니다.',
           });
           return;
-        } else if (validationItem && !dog[validationItem.key]) {
+        } else if (validationItem && dog[validationItem.key] === '') {
           hasEmptyField = true; // 비어있는 필드가 있음
           setIsActiveNextBtn(false);
           setIsValidPage(realCurStep);
@@ -648,10 +653,6 @@ export default function Survey() {
       setSubmitState('READY');
       onSubmit();
     }
-
-    // if (isSubmitButton) {
-
-    // }
   };
 
   const onSubmit = async () => {
@@ -743,7 +744,6 @@ export default function Survey() {
   };
 
   // console.log('errorInfo>>>', errorInfo);
-
   // console.log('formValues>>>', formValues);
 
   return (

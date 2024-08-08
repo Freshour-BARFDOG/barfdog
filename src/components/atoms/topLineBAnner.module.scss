@@ -45,7 +45,7 @@ $bannerHeight: rem(40);
 .bottom_close_button {
   position: absolute;
   transition: right 0.3s ease;
-  left: rem(100);
+  left: 10%;
   // top: 40%;
   // transform: translateY(-50%);
   // transform: translateX(200%);
@@ -67,7 +67,7 @@ $bannerHeight: rem(40);
 
 @media (max-width: rem(600)) {
   .bottom_close_button {
-    left: rem(20);
+    left: rem(10);
   }
 
   // }

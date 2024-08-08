@@ -17,7 +17,7 @@ export default function SurveyStep1({
   const initialFormValue = {
     name: '', // 강아지이름 str
     gender: '', // 강아지 성별 str
-    neutralization: false, // 중성화여부 Boolean
+    neutralization: '', // 중성화여부 Boolean
     dogSize: '', // 강아지 체급 str
     dogType: '', // 강아지 종 str
     birth: '', //! [변경] 강아지 생월 str // [YYYYMMDD]
@@ -84,6 +84,11 @@ export default function SurveyStep1({
     if (targetSwiperElem) {
       targetSwiperElem.style.height = rem(activeSlideHeight);
     }
+  }, [formValues]);
+
+  //* 비로그인 시 설문조사 기록 존재할 경우 -> 바로 다음 버튼 클릭 가능
+  useEffect(() => {
+    formValues[0].name && setIsActiveNextBtn(true);
   }, [formValues]);
 
   return (

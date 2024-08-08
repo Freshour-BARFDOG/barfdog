@@ -14,7 +14,7 @@ export default function OrdersheetSubscribePaymentList({
   setForm,
   formErrors,
   setFormErrors,
-  onActivleModalHandler,
+  onActiveModalHandler,
   orderType,
   subscriptionMonthTypeKey,
 }) {
@@ -153,7 +153,7 @@ export default function OrdersheetSubscribePaymentList({
             type={'button'}
             className={`${s['coupons']}`}
             data-modal-type={'coupons'}
-            onClick={onActivleModalHandler}
+            onClick={onActiveModalHandler}
           >
             <b>쿠폰 적용 &gt; </b>
           </button>
@@ -399,22 +399,7 @@ export default function OrdersheetSubscribePaymentList({
             )}
           </div>
         </div>
-
-        {/* <OrdersheetAmountOfPayment
-                orderType={'subscribe'}
-                info={info}
-                form={form}
-                setForm={setForm}
-                event={{ onActiveModal: onActivleModalHandler }}
-                formErrors={formErrors}
-              /> */}
       </section>
-
-      {/* 2) 총 할인금액 */}
-      {/* <div className={s.total_discount_list}>
-          <h2>총 할인금액</h2>
-          <p>-{transformLocalCurrency(discountPrice)}원</p>
-        </div> */}
     </>
   );
 }

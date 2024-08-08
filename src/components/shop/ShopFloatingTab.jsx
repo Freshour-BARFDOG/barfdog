@@ -172,7 +172,7 @@ export const ShopFloatingTab = ({
                 </ul>
               </div>
 
-              <div>
+              <div className={s.right_box}>
                 <div className={s['price-indicator']}>
                   <span className={s.title}>총 상품금액 :</span>
                   <span className={s.totalPrice}>

@@ -37,7 +37,7 @@ export default function Footer({ mode }) {
           }`}
         >
           <div className={s.sub_footer_top}>
-            <h3>(주) 프레쉬아워 Freshour INC.</h3>
+            <h3 onClick={onClickArrowIcon}>(주) 프레쉬아워 Freshour INC.</h3>
             <Image
               src="/img/icon/footer-arrow.svg"
               alt="arrow"

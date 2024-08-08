@@ -275,7 +275,17 @@ export default function SurveyResultRecipe({
                     ? '체중관리 & 빈혈회복'
                     : ''}
                 </div>
-                <button>자세히 알아보기</button>
+                <button>
+                  <Link href="/recipes" passHref>
+                    <a
+                      target={'_blank'}
+                      rel={'noreferrer'}
+                      onClick={onPopupHandler}
+                    >
+                      자세히 알아보기
+                    </a>
+                  </Link>
+                </button>
               </SurveyRecipeInput>
             </>
           ))}

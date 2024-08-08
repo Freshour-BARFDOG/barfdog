@@ -175,11 +175,6 @@ export default function MainPage({ data }) {
               <div className={s.cont_body}>
                 <Swiper_survey />
               </div>
-              <div className={s.text_box}>
-                바프독 AI 맞춤 설문을 통해 <br />
-                우리 아이의 평소 모습을 알려주세요 <br />
-                (설문 소요시간 5분 내외)
-              </div>
               <div className={s.btn_box}>
                 <Link href="/survey">
                   <a>AI 추천 문진 START!</a>
