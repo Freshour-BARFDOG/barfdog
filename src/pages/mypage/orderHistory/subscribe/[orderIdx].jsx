@@ -125,7 +125,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
             <section className={s.side_empty}>
               <h1 className={s.body_title}>
                 <p>주문상품</p>
-                <div className={s['order-button-controller']}>
+                {/* <div className={s['order-button-controller']}>
                   {availableCancleStatus && (
                     <button
                       type={'button'}
@@ -139,7 +139,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                       주문취소
                     </button>
                   )}
-                </div>
+                </div> */}
               </h1>
 
               <ul className={s.body_content}>
