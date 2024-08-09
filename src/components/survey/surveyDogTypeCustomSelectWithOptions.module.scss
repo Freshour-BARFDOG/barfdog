@@ -100,24 +100,10 @@
   }
 }
 
-// @media (max-width: rem(650)) {
-//   .selectDogBreed {
-//     width: 80vw !important;
-//     min-width: rem(200);
-
-//     .viewer {
-//       margin: 0 auto rem(4);
-//       max-width: rem(315);
-//     }
-//   }
-
-//   .modal-selectDogBreed {
-//     width: 80vw !important;
-//     max-width: rem(315);
-
-//     &.active {
-//       width: 80vw !important;
-//       max-width: rem(315);
-//     }
-//   }
-// }
+@media (max-width: rem(600)) {
+  .viewer {
+    height: rem(50);
+    width: rem(280);
+    margin: rem(20) auto;
+  }
+}

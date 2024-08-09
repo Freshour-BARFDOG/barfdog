@@ -174,7 +174,7 @@ $input-height: rem(44);
     }
 
     input:not([type='radio']) {
-      width: 100%;
+      width: rem(320);
       height: $input-height;
       padding: rem(8) rem(16);
       font-size: rem(15);
