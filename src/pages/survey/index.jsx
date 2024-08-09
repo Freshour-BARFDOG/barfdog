@@ -427,10 +427,8 @@ export default function Survey() {
       validationItems && setIsActiveNextBtn(false);
 
       validationItems.forEach((validationItem) => {
-        console.log(dog[validationItem.key]);
         // 이름이 중복되는 경우
         if (idx === 1 && nameSet.has(dog.name)) {
-          console.log('1', nameSet, nameSet.has(dog.name));
           hasDuplicateName = true;
           setIsActiveNextBtn(false);
           setIsValidPage(idx);

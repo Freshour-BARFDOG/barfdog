@@ -95,13 +95,6 @@ const SurveyBirthdayInput = ({
 
         return newFormValues;
       });
-      //! [이전]
-      // setFormValues((prevState) => {
-      //   return {
-      //     ...prevState,
-      //     [id]: formattedDate,
-      //   };
-      // });
     }
 
     if (date === null) {
@@ -121,16 +114,7 @@ const SurveyBirthdayInput = ({
 
         return newFormValues;
       });
-      //! [이전]
-      // setFormValues((prevState) => {
-      //   return {
-      //     ...prevState,
-      //     [id]: '',
-      //   };
-      // });
-      // return;
     }
-    // // console.log('id:',id,' val:',formattedDate);
 
     setSelectedDate(date);
 
@@ -156,14 +140,6 @@ const SurveyBirthdayInput = ({
 
       return newFormValues;
     });
-
-    //! [이전]
-    // setFormValues((prevState) => {
-    //   return {
-    //     ...prevState,
-    //     [id]: formattedDate,
-    //   };
-    // });
   };
 
   const addedClassNameList = () => {

@@ -21,16 +21,6 @@
     @include char(t24);
     text-align: center;
   }
-
-  // .step1Page {
-  //   padding: rem(0) 0 rem(80);
-  // }
-  // .step2page {
-  //   padding: rem(0) 0 rem(80);
-  // }
-  // .step3page {
-  //   padding: rem(0) 0 rem(80);
-  // }
 }
 .input-row:not(:last-child) {
   margin-bottom: rem(60);
@@ -198,8 +188,10 @@
     align-items: center;
 
     ul {
-      height: rem(50);
+      // height: rem(50);
       display: flex;
+      width: 100%;
+      justify-content: space-between;
     }
 
     .date_label_wrap {
@@ -209,7 +201,7 @@
       }
     }
     input {
-      width: rem(300) !important;
+      // width: rem(400) !important;
       height: rem(50) !important;
       border-radius: rem(10) !important;
     }
@@ -226,7 +218,7 @@
 
 .year_month_btn {
   background-color: white;
-  width: rem(400);
+  width: rem(320);
   height: rem(50);
   border: rem(1) solid #dddddd;
   border-radius: rem(10);
@@ -1351,11 +1343,198 @@
 
 // //**------- RESONSIVE -------**//
 @media (max-width: rem(600)) {
+  .input_title {
+    // font-size: rem(20) !important;
+    width: rem(300);
+    margin: 0 auto;
+  }
+
   .input_name_wrapper {
     display: flex;
     justify-content: center;
     .input_name {
       width: rem(300);
+    }
+  }
+
+  .input_name_guide {
+    width: rem(300);
+  }
+
+  // ******** STEP 5. 몸무게 ********
+  .input_weight_container {
+    height: rem(250);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .input_weight_box {
+    width: rem(300);
+    input {
+      margin-bottom: rem(50);
+      width: rem(300) !important;
+    }
+  }
+  .weight_unit {
+    color: #be1a21;
+    position: absolute;
+    right: rem(15);
+    top: rem(11);
+  }
+
+  // ******** STEP 7. 활동량 ********
+  .specific_status_container {
+    width: rem(330);
+    margin: rem(14) 0 rem(20) 0;
+    font-size: rem(18);
+
+    input {
+      width: rem(330) !important;
+      height: rem(40) !important;
+    }
+
+    .sepcific_title {
+      margin: rem(10) 0;
+      span {
+        font-size: rem(16);
+        color: rgb(96, 96, 96);
+      }
+    }
+    .input_specific_status_box {
+      display: flex;
+      justify-content: center;
+      ul {
+        flex-direction: row;
+        label {
+          width: rem(100);
+          height: rem(50);
+          padding: rem(5);
+        }
+      }
+    }
+    .input_name {
+      margin-top: rem(20);
+    }
+  }
+
+  .lactating_count_container {
+    margin-top: rem(20);
+    ul {
+      display: flex;
+      // gap: rem(10);
+      label {
+        width: rem(75);
+        height: rem(50);
+        padding: rem(10);
+      }
+    }
+  }
+
+  // ******** STEP 11, 13. 영양제, 못먹는 음식********
+  .inedibleFood_select_container,
+  .supplement_select_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .inputRadio-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      justify-content: flex-start;
+      width: rem(420);
+      li {
+        width: rem(90);
+        label {
+          width: rem(90);
+        }
+      }
+      .input_etc {
+        margin: rem(16) 0 0 rem(-105);
+        width: rem(300);
+        height: rem(40);
+      }
+    }
+  }
+
+  .input_supplement_box {
+    margin: rem(10) 0 rem(40) 0;
+    label {
+      width: rem(140);
+      height: rem(50);
+    }
+  }
+
+  .inedibleFood_text {
+    padding: rem(20) rem(10);
+    width: rem(320);
+    font-size: rem(14);
+    margin: rem(30) 0;
+    text-align: center;
+  }
+
+  // ******** STEP 14. 질병 ********
+
+  .caution_text {
+    padding: rem(20) rem(10);
+    width: rem(320);
+    text-align: center;
+    margin-bottom: rem(30);
+  }
+  .caution_select_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .inputRadio-wrap {
+      width: rem(300);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      margin-bottom: rem(30);
+      gap: rem(20);
+      li {
+        width: rem(86);
+        label {
+          width: rem(90);
+          height: rem(58);
+          padding: rem(6);
+        }
+      }
+
+      .input_etc {
+        border: rem(1) solid #ccc;
+        border-radius: rem(8);
+        background-color: white;
+        margin: rem(20) 0 0 rem(-210);
+        width: rem(300);
+        height: rem(40);
+        display: flex;
+
+        &::placeholder {
+          color: rgba(0, 0, 0, 0.25);
+          font-size: rem(14);
+        }
+      }
+
+      .input_supplement_brand:focus {
+        border: none !important;
+        border-bottom: rem(1) solid #be1a21 !important;
+      }
+    }
+  }
+
+  // ******** STEP 15. 고민 우선순위 3가지 ********
+  .recommendRecipeId_select_container {
+    .inputRadio-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      margin-bottom: rem(40);
+
+      label {
+        width: rem(90);
+        height: rem(50);
+        padding: rem(6);
+      }
     }
   }
 }

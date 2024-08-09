@@ -43,38 +43,6 @@ export default function SurveyYearMonthInput({
     } else {
       initValue = initValue?.toString();
     }
-
-    // if (initValue.length === 4) {
-    //   // "2023"과 같이 년도만 들어온 경우
-    //   //   initValue += '0101'; // "20230101" 형태로 만듦
-    // } else if (initValue.length === 6) {
-    //   // if (initValue.length === 6) {
-    //   //   // "202303"과 같이 년도와 월이 들어온 경우
-    //   initValue += '01'; // "20230301" 형태로 만듦
-    // }
-
-    // if (setValues && typeof setValues === 'function') {
-    // 내용 업데이트
-    // setFormValues((prevFormValues) => {
-    //   const newFormValues = prevFormValues.map((item, idx) => {
-    //     if (idx === dogInfoIndex) {
-    //       return {
-    //         ...item,
-    //         birth: initValue,
-    //       };
-    //     }
-    //     return item;
-    //   });
-
-    //   return newFormValues;
-    // });
-
-    // setValues((prevState) => ({
-    //   ...prevState,
-    //   [id]: initValue,
-    // }));
-    // }
-    //   }, [selectedOption, setFormValues, dogInfoIndex, dataType]);
   }, [initialSelectedOption]);
 
   useEffect(() => {
@@ -107,9 +75,6 @@ export default function SurveyYearMonthInput({
       });
     }
   }, [optionBoxRef.current]);
-
-  //   const [birthYear, setBirthYear] = useState('');
-  //   const [birthMonth, setBirthMonth] = useState('');
 
   const onOptionClick = (e, id) => {
     const option = e.currentTarget;
@@ -187,21 +152,6 @@ export default function SurveyYearMonthInput({
         });
         return newFormValues;
       });
-
-      //   setFormValues((prevFormValues) => {
-      //     const newFormValues = prevFormValues.map((item, idx) => {
-      //       if (idx === dogInfoIndex) {
-      //         return {
-      //           ...item,
-      //           birth: newValue,
-      //         };
-      //       }
-      //       return item;
-      //     });
-      //     return newFormValues;
-      //   });
-
-      //   }
     }
   };
 
@@ -233,10 +183,7 @@ export default function SurveyYearMonthInput({
           type="text"
           id={id}
           placeholder={placeholder}
-          //   value={value || selectedOption || ''}
           value={selectedOption || ''}
-          //   onChange={setFormValues}
-          //   onChange={(e) => onChangeHandler(e)}
           readOnly
           onClick={onActiveOptionBox}
           className={'customSelectInput'}

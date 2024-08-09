@@ -29,8 +29,11 @@ export default function SurveyStep7({
 
   useEffect(() => {
     if (
-      formValues[0].specificDogStatus.includes('PREGNANT') &&
-      !formValues[0].expectedPregnancyDay
+      (formValues[0].specificDogStatus.includes('PREGNANT') &&
+        !formValues[0].expectedPregnancyDay) ||
+      formValues[0].specificDogStatus === 'LACTATING' ||
+      (formValues[0].specificDogStatus.includes('ETC') &&
+        !formValues[0].specificDogStatusEtc)
     ) {
       setIsActiveNextBtn(false);
     } else if (
