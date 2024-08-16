@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import { SurveyStatistics } from '/src/components/survey/result/SurveyStatistics';
 import LayoutWithoutFooter from '../../../components/common/LayoutWithoutFooter';
+import { SurveyResult } from '../../../components/survey/result/SurveyResult';
 
 export default function SurveyStatisticsPage({ id }) {
   // 설문조사 조회시, 강아지 ID가 아닌  설문조사의 ID로 조회한다.
@@ -10,7 +10,7 @@ export default function SurveyStatisticsPage({ id }) {
     <>
       <MetaTitle title="설문조사 통계" />
       <LayoutWithoutFooter>
-        <SurveyStatistics id={id} mode={'default'} />
+        <SurveyResult id={id} mode={'default'} />
       </LayoutWithoutFooter>
     </>
   );
