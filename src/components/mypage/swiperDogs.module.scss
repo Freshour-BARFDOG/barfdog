@@ -57,16 +57,22 @@ section.body {
     width: rem(40);
   }
 
+  .delete_wrapper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+
   // 닫기 버튼
   .image_close {
     margin-right: rem(10);
     display: flex;
     // align-items: center;
     cursor: pointer;
-    justify-content: flex-end;
+    // justify-content: flex-end;
     margin-right: rem(20);
     position: relative;
-    top: rem(-10);
+    // top: rem(-10);
   }
 
   .representative_wrapper {

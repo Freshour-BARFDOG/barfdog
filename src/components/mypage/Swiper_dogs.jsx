@@ -270,18 +270,20 @@ const ItemList = ({
 
         {/* 삭제 버튼 */}
         {data.subscribeStatus !== subscribeStatus.SUBSCRIBING && (
-          <div
-            className={`${s.image_close} img-wrap`}
-            data-button-type={'deleteItem'}
-            onClick={(e) => onActiveConfirmModal(e, data)}
-            style={{ cursor: 'pointer' }}
-          >
-            <Image
-              src={'/img/mypage/close_btn.svg'}
-              alt="close_btn"
-              width={14}
-              height={14}
-            />
+          <div className={s.delete_wrapper}>
+            <div
+              className={`${s.image_close} img-wrap`}
+              data-button-type={'deleteItem'}
+              onClick={(e) => onActiveConfirmModal(e, data)}
+              style={{ cursor: 'pointer' }}
+            >
+              <Image
+                src={'/img/mypage/close_btn.svg'}
+                alt="close_btn"
+                width={14}
+                height={14}
+              />
+            </div>
           </div>
         )}
 

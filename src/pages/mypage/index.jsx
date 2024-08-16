@@ -117,6 +117,8 @@ export default function MypageDogInfoPage({ data }) {
     const btn = e.currentTarget;
     const btnType = btn.dataset.buttonType;
     setActiveConfirmModal({ [btnType]: true, data });
+
+    console.log('btn___', btn);
   };
 
   const onDeleteItem = async (confirm, data) => {
@@ -170,6 +172,11 @@ export default function MypageDogInfoPage({ data }) {
   };
 
   // console.log('itemList___', itemList);
+
+  console.log(
+    '  console.log( activeConfirmModal.setRep)>>>',
+    activeConfirmModal,
+  );
 
   return (
     <>
