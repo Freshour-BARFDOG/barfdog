@@ -671,7 +671,8 @@ $container-maxWidth: rem(960);
   display: flex;
 }
 
-.moveto_result_btn {
+.moveto_result_btn,
+.payment_btn {
   background-color: #eeeeee;
   height: rem(56);
   width: rem(600);
@@ -1057,7 +1058,7 @@ $container-maxWidth: rem(960);
 
   .swiper_dogInfo_txt {
     font-weight: normal;
-    font-size: rem(20);
+    font-size: rem(18);
     width: rem(200);
     padding: 0 rem(40);
 
@@ -1070,7 +1071,7 @@ $container-maxWidth: rem(960);
 
     h4 {
       font-weight: bold;
-      font-size: rem(24);
+      font-size: rem(20);
       padding-bottom: rem(10);
     }
 
@@ -1218,10 +1219,10 @@ $container-maxWidth: rem(960);
   }
   //*** [ END ] ***
 
-  .moveto_result_btn {
+  .moveto_result_btn,
+  .payment_btn {
     height: rem(56);
     width: rem(390);
-    bottom: rem(88);
     font-size: rem(20);
     gap: rem(8);
   }

@@ -394,7 +394,9 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
   //* 레시피 확인하러가기
   const moveToResultHandler = async () => {
-    router.push(`/survey/result?id=${id}`);
+    mode === 'default'
+      ? router.push(`/survey/result?id=${id}`)
+      : router.push(`/mypage/dogs/${id}/result`);
   };
 
   const onActiveAlertModalHandler = () => {
@@ -433,11 +435,14 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
         <div className={s.result_box_list}>
           {/* 1. 견종 정보 */}
-          <SurveyDogInfo surveyInfo={surveyInfo} />
+          {surveyInfo.dogType !== '품종 모름' && (
+            <>
+              <SurveyDogInfo surveyInfo={surveyInfo} />
+              <div className={s.divider}></div>
+            </>
+          )}
 
-          <div className={s.divider}></div>
-
-          {/* 2. 견종 정보 */}
+          {/* 2. 건강점수 */}
           <SurveyScore surveyInfo={surveyInfo} />
 
           <div

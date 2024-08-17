@@ -369,7 +369,7 @@ const ItemList = ({
                   '설문 확인하기'
                 )}
               </button>
-              <Link href={`/mypage/dogs/${dogId}/statistic`} passHref>
+              <Link href={`/mypage/dogs/${dogId}/result`} passHref>
                 <a className={s.move_to_plan_recipe} data-id={dogId}>
                   {isLoading[dogId] ? (
                     <Spinner style={{ color: '#fff' }} />

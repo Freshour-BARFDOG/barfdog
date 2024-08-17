@@ -25,10 +25,22 @@ export default function SurveyDogInfo({ surveyInfo }) {
           // const avgHeight = (data.minHeight + data.maxHeight) / 2;
           // const avgWeight = (data.minWeight + data.maxWeight) / 2;
 
+          let diseaseList = [];
+          if (data.diseaseFirst) {
+            diseaseList.push(data.diseaseFirst);
+          }
+          if (data.diseaseSecond) {
+            diseaseList.push(data.diseaseSecond);
+          }
+          if (data.diseaseThird) {
+            diseaseList.push(data.diseaseThird);
+          }
+
           setDogTypeInfo({
             keywords,
             height: { min: data.minHeight, max: data.maxHeight },
             weight: { min: data.minWeight, max: data.maxWeight },
+            diseaseList: [data.diseaseFirst],
           });
         }
       } catch (err) {
