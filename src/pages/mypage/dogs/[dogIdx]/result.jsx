@@ -7,44 +7,19 @@ import Link from 'next/link';
 import { SurveyStatistics } from '/src/components/survey/result/SurveyStatistics';
 import { getDataSSR } from '/src/pages/api/reqData';
 import LayoutWithoutFooter from '../../../../components/common/LayoutWithoutFooter';
+import { SurveyResult } from '../../../../components/survey/result/SurveyResult';
 
-export default function MypageSubscribe_statisticPage({ data }) {
+export default function MypageSubscribe_resultPage({ data }) {
   // console.log(data);
   const router = useRouter();
 
   return (
     <>
       {/* <MetaTitle title={`마이페이지 ${data.name}의${"\u00a0"}설문결과`} /> */}
-      <MetaTitle title={`마이페이지 설문결과`} />
+      <MetaTitle title={`마이페이지 맞춤레시피`} />
       <LayoutWithoutFooter>
         <MypageWrapper>
-          <SurveyStatistics id={data.dogId} mode={'mypage'} />
-          {/* <section className={s.last_text}> */}
-          {/* <p className={s['ref-message']}>
-              ※ 해당 결과지는 바프독 고객을 대상으로한 참고용 결과이니, <br />
-              자세한 반려견의 건강상태는 수의사와 상담해 주세요.
-            </p> */}
-          {/*{true && (*/}
-          {/*  <p className={s['notice-message']}>*/}
-          {/*    *반려견 정보가 수정되어 권장 식사량이 변경되었습니다.*/}
-          {/*    <br />*/}
-          {/*    변경된 정보로 플랜을 재설정 하시겠습니까?*/}
-          {/*    <br/>*/}
-          {/*    <br/>*/}
-          {/*    ( -  TEST : 반려견 정보 수정 이후, 권장식사량 변동에 대한 데이터를 불러올 수 있을 경우 , 적용가능한 기능)*/}
-          {/*    <br/>*/}
-          {/*    ( - 현재는 비구독 상태일 경우에 나타남 )*/}
-          {/*  </p>*/}
-          {/*)}*/}
-          {/* </section> */}
-          {/* <section className={s.btn_box}> */}
-          {/* {data.subscribeStatus && (
-              <Link href={`/order/subscribeShop?dogId=${data.dogId}`} passHref>
-                <a>맞춤 플랜 확인하기</a>
-              </Link>
-            )} */}
-
-          {/* </section> */}
+          <SurveyResult id={data.dogId} mode={'mypage'} />
         </MypageWrapper>
       </LayoutWithoutFooter>
     </>

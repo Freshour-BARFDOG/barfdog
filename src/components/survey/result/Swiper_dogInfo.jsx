@@ -31,22 +31,6 @@ export function Swiper_dogInfo({ data }) {
       nextEl: navNextRef.current,
     },
     modules: [Lazy, Navigation],
-    breakpoints: {
-      //   300: {
-      //     slidesPerView: 1,
-      //     spaceBetween: 0,
-      //   },
-      //   600: {
-      //     spaceBetween: 100,
-      //   },
-      //   1001: {
-      //     slidesPerView: 3,
-      //     spaceBetween: 20,
-      //   },
-      // 1201: {
-      //   slidesPerView: 2,
-      //   spaceBetween: 50,
-    },
   };
 
   useEffect(() => {
@@ -106,13 +90,13 @@ export function Swiper_dogInfo({ data }) {
             <div className={s.txt_content_wrapper}>
               <span>최소</span>
               <span className={s.txt_content}>
-                {data?.height?.min + ' cm' || '-'}{' '}
+                {data?.height?.min ? data?.height?.min + ' cm' : '-'}{' '}
               </span>
             </div>
             <div className={s.txt_content_wrapper}>
               <span>최대</span>
               <span className={s.txt_content}>
-                {data?.height?.max + ' cm' || '-'}
+                {data?.height?.max ? data?.height?.max + ' cm' : '-'}
               </span>
             </div>
           </div>
@@ -137,13 +121,13 @@ export function Swiper_dogInfo({ data }) {
             <div className={s.txt_content_wrapper}>
               <span>최소</span>
               <span className={s.txt_content}>
-                {data?.weight?.min + ' kg' || '-'}{' '}
+                {data?.weight?.min ? data?.weight?.min + ' kg' : '-'}{' '}
               </span>
             </div>
             <div className={s.txt_content_wrapper}>
               <span>최대</span>
               <span className={s.txt_content}>
-                {data?.weight?.max + ' kg' || '-'}
+                {data?.weight?.max ? data?.weight?.max + ' kg' : '-'}
               </span>
             </div>
           </div>
@@ -165,18 +149,12 @@ export function Swiper_dogInfo({ data }) {
 
           <div className={`${s.swiper_dogInfo_txt} ${s.disease_wrapper}`}>
             <h4>많이 걸리는 질병</h4>
-            <div className={s.txt_content_wrapper}>
-              <span>최소</span>
-              <span className={s.txt_content}>
-                {data?.weight?.min + ' kg' || '-'}{' '}
-              </span>
-            </div>
-            <div className={s.txt_content_wrapper}>
-              <span>최대</span>
-              <span className={s.txt_content}>
-                {data?.weight?.max + ' kg' || '-'}
-              </span>
-            </div>
+            {data?.diseaseList?.map((disease, i) => (
+              <div className={s.txt_content_wrapper} key={i}>
+                <span>{i + 1}위</span>
+                <span className={s.txt_content}>{disease || '-'}</span>
+              </div>
+            ))}
           </div>
         </SwiperSlide>
       </Swiper>

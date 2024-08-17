@@ -43,28 +43,7 @@ import SurveyStep16 from '/src/components/survey/step/SurveyStep16';
 import SurveyStep17 from '/src/components/survey/step/SurveyStep17';
 import Image from 'next/image';
 
-export default function UpdateSurveyPage({ data }) {
-  // ! [기존]
-  // const initialFormValues = {
-  //   name: data.dogDto.name, // 강아지이름 str
-  //   gender: data.dogDto.gender, // str TYPE
-  //   birth: data.dogDto.birth, // str (YYYYMM)
-  //   oldDog: data.dogDto.oldDog, // boolean
-  //   dogSize: dogSizeType[data.dogDto.dogSize], // str TYPE
-  //   dogType: data.dogDto.dogType, // str
-  //   weight: data.dogDto.weight, // number
-  //   neutralization: data.dogDto.neutralization, // boolean
-  //   activityLevel: dogActivityLevelType[data.dogDto.activityLevel], // str TYPE
-  //   walkingCountPerWeek: data.dogDto.walkingCountPerWeek, // number
-  //   walkingTimePerOneTime: data.dogDto.walkingTimePerOneTime, // number
-  //   dogStatus: dogPhysicalStatusType[data.dogDto.dogStatus], // str TYPE
-  //   snackCountLevel: data.dogDto.snackCountLevel, // str TYPE
-  //   inedibleFood: data.dogDto.inedibleFood, // str: 못 먹는 음식 [없으면 'NONE', 기타일 경우 'ETC']
-  //   inedibleFoodEtc: data.dogDto.inedibleFoodEtc, // str:기타('ETC') 일 경우 못 먹는 음식 입력 [없으면 'NONE']
-  //   recommendRecipeId: data.dogDto.recommendRecipeId, // number
-  //   caution: data.dogDto.caution, // 기타 특이사항 [없으면 'NONE']
-  // };
-
+export default function UpdateSurveyPage({ data, subscribeId }) {
   const initialFormValues = [
     {
       name: data.dogDto.name, // 강아지이름 str
@@ -332,7 +311,7 @@ export default function UpdateSurveyPage({ data }) {
       setIsLoading({ redir: true });
       const dogId = data.dogIdx;
       //! 변경
-      window.location.href = `/order/subscribeShop?dogId=${dogId}`;
+      window.location.href = `/survey/statistic?id=${dogId}`;
     } else {
       // console.log('추천그램수 변경되고, 취소')
       setIsChangedOneMealRecommendGram(false);
@@ -611,15 +590,24 @@ export async function getServerSideProps({ req, query }) {
   const { dogIdx } = query;
 
   let isMyDog = true;
+  let subscribeId = null;
   const getAllDogsApiUrl = '/api/dogs';
   const allDogRes = await getDataSSR(req, getAllDogsApiUrl);
   if (allDogRes.data) {
-    const allDogIds =
-      allDogRes.data._embedded.queryDogsDtoList.map((data) =>
-        data.id.toString(),
-      ) || [];
-    isMyDog = allDogIds.indexOf(dogIdx) >= 0;
+    // const allDogIds =
+    //   allDogRes.data._embedded.queryDogsDtoList.map((data) =>
+    //     data.id.toString(),
+    //   ) || [];
+    // isMyDog = allDogIds.indexOf(dogIdx) >= 0;
     // console.log('allDogIds: ',allDogIds);
+
+    const allDogList = allDogRes.data._embedded.queryDogsDtoList || [];
+    const matchedDog = allDogList.find((dog) => dog.id.toString() === dogIdx);
+
+    if (matchedDog) {
+      isMyDog = true; // dogIdx와 일치하는 개체가 있다면 true로 설정
+      subscribeId = matchedDog.subscribeId || null; // subscribeId 추출
+    }
   }
 
   const getOneDogInfoApiUrl = `/api/dogs/${dogIdx}`;
@@ -637,5 +625,5 @@ export async function getServerSideProps({ req, query }) {
     data.dogIdx = Number(dogIdx); // form submit 에 사용
   }
 
-  return { props: { data } };
+  return { props: { data, subscribeId } };
 }

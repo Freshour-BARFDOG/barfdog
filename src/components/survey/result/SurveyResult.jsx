@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { getData, putObjData } from '/src/pages/api/reqData';
-import s from './surveyStatistics.module.scss';
+import s from '/src/components/survey/result/surveyStatistics.module.scss';
 import Loading from '/src/components/common/Loading';
 import { calcDogAge } from '/util/func/calcDogAge';
 import Btn_01 from '/public/img/mypage/statistic_dog_walker.svg';
@@ -33,7 +33,7 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
   const auth = useSelector((state) => state.auth);
   const userData = auth.userInfo;
   const surveyData = useSelector((state) => state.surveyData.surveyData);
-  const reportLoadingDuration = 2000;
+  const reportLoadingDuration = 0;
   const [surveyInfo, setSurveyInfo] = useState({});
   const [resultInfo, setResultInfo] = useState({});
   const [recipeInfo, setRecipeInfo] = useState({});
@@ -105,34 +105,12 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
   useEffect(() => {
     if (!id || !id.length) return;
 
-    //! [수정] 다견일 경우
-    // const promises = idList.map(async (id) => {
-    //   const apiUrl = `/api/surveyReports/${id}`;
-    //   const res = await getData(apiUrl);
-    //   return res.data;
-    // });
-
     (async () => {
       try {
         // setIsLoading((prevState) => ({
         //   ...prevState,
         //   fetching: true,
         // }));
-
-        //! [삭제] 다견일 경우
-        // const responses = await Promise.all(promises); // Wait for all API calls to finish
-        // console.log('responses===>', responses);
-        // const dataArr = responses.filter((res) => res);
-        // setSurveyInfo(dataArr);
-
-        // if (!dataArr.length) {
-        // console.error('No data received from API calls.');
-        // setIsLoading((prevState) => ({
-        //   ...prevState,
-        //   fetching: false,
-        // }));
-        // return;
-        // }
 
         // ! mypage => '강아지' id로 조회
         // ! survey => '설문조사' id로 조회
@@ -142,7 +120,7 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
             : `/api/surveyReports/${id}`;
 
         const res = await getData(apiUrl);
-        // console.log('/api/surveyReports/>>>', res);
+        console.log('/api/surveyReports/>>>', res);
         setSurveyInfo(res.data);
 
         //* 문구 설명
@@ -371,7 +349,8 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
 
   //! 로딩 화면
   if (isLoading.fetching || isRendered) {
-    return <Loading />;
+    return <></>;
+    // return <Loading />;
   }
 
   const onClickModalButton = () => {
@@ -484,7 +463,14 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
       <section
         className={`${mode !== 'mypage' ? s.default : s.mypage} ${s.title}`}
       >
-        <h1>{userInfo.name} 보호자님의 가족</h1>
+        <h1>
+          <span className={s.under_text}>
+            {surveyInfo.priorityConcerns.split(',')[0]}
+          </span>
+          이 가장 고민인 <br />
+          <span className={s.under_text}>{surveyInfo.myDogName}</span>(이)에게
+          추천하는 레시피
+        </h1>
         <div className={s.result_box_list}>
           {/* 견종 결과 */}
           {/* {surveyInfo?.map((dogInfo, index) => ( */}
@@ -498,18 +484,13 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
             // onClick={() => dogInfoClickHandler(dogInfo.surveyId, index)}
           >
             <div className={s.dog_info_wrapper}>
-              <div className={s.dog_info_name}>
-                {surveyInfo.myDogName} (이)의 건강 상태를 분석한 결과입니다.
-              </div>
-
-              {/* '더보기' 버튼 클릭 시  */}
               {isShowResult ? (
                 <div
                   className={`${s.survey_result_wrapper} animation-show-all-child`}
                 >
-                  <div className={s.box_line}></div>
+                  {/* <div className={s.box_line}></div> */}
                   {/* 1. 설문조사 정보 */}
-                  <main className={`${s.grid_container_box}`}>
+                  {/* <main className={`${s.grid_container_box}`}>
                     <div className={s.top_tab_container}>
                       현재 {calcDogAge(surveyInfo.dogBirthday.slice(0, 6))},
                       중성화를{' '}
@@ -552,13 +533,13 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
                           : ''}
                       </span>
                     </div>
-                  </main>
+                  </main> */}
 
-                  <div className={s.box_line}></div>
+                  {/* <div className={s.box_line}></div> */}
 
                   {/* 2. 맞춤 문구 설명 */}
                   <div className={s.dog_info_name}>
-                    바프독을 통해 이런 도움을 받을 수 있어요!
+                    그 외 고민 사항들에 대한 도움도 함께 드릴게요!
                   </div>
 
                   <div className={s.dog_tag_container}>
@@ -693,44 +674,4 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
       </button>
     </div>
   );
-};
-
-const transformPercentUnitInGroup = (obj, targetString) => {
-  //  절대값을 상대값( 퍼센트)으로 변화
-  const targetValueArr = Object.keys(obj)
-    .filter((key) => key.indexOf(targetString) >= 0)
-    .map((key) => obj[key]);
-  const valArr = targetString ? targetValueArr : Object.values(obj);
-  const highestVal = Math.max(...valArr);
-
-  if (targetString) {
-    for (const key in obj) {
-      const val = obj[key];
-      const percentUnit = Number((val / highestVal).toFixed(3)) * 100;
-      // // console.log('percentUnit', percentUnit)
-      // // console.log('KEY', key, '&',targetString ,key.indexOf(targetString))
-      obj[key] =
-        typeof val === 'number' && key.indexOf(targetString) >= 0
-          ? percentUnit + '%'
-          : val;
-    }
-  } else {
-    for (const key in obj) {
-      const val = obj[key];
-      const percentUnit = ((val / highestVal) * 100).toFixed(2) + '%';
-      obj[key] = percentUnit;
-    }
-  }
-
-  return obj;
-};
-
-const filter_objectInGroup = (obj, keyword) => {
-  let filteredGroup = [];
-  for (const key in obj) {
-    const val = obj[key];
-    key.indexOf(keyword) >= 0 &&
-      filteredGroup.push({ [key]: val, inGroup: false });
-  }
-  return filteredGroup;
 };

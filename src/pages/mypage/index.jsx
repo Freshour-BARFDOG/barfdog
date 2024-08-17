@@ -69,7 +69,7 @@ export default function MypageDogInfoPage({ data }) {
   const onSetRepresentative = (confirm, data) => {
     if (!confirm) {
       setActiveConfirmModal(false);
-      onShowModalHandler('취소되었습니다.');
+      // onShowModalHandler('취소되었습니다.');
       return;
     }
 
@@ -123,8 +123,8 @@ export default function MypageDogInfoPage({ data }) {
 
   const onDeleteItem = async (confirm, data) => {
     if (!confirm) {
-      setActiveConfirmModal(false);
-      return onShowModalHandler('취소되었습니다.');
+      return setActiveConfirmModal(false);
+      // return onShowModalHandler('취소되었습니다.');
     }
 
     // const subscribeStatus = data.subscribeStatus;

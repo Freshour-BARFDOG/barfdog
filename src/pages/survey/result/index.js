@@ -8,7 +8,7 @@ export default function SurveyStatisticsPage({ id }) {
 
   return (
     <>
-      <MetaTitle title="설문조사 통계" />
+      <MetaTitle title="맞춤레시피" />
       <LayoutWithoutFooter>
         <SurveyResult id={id} mode={'default'} />
       </LayoutWithoutFooter>

@@ -8,7 +8,7 @@ export default function SurveyStatisticsPage({ surveyReportsId }) {
   // 설문조사 조회시, 강아지 ID가 아닌  설문조사의 ID로 조회한다.
   return (
     <>
-      <MetaTitle title="설문조사 통계" />
+      <MetaTitle title="맞춤레시피" />
       <Layout>
         <Wrapper>
           <SurveyResult id={surveyReportsId} mode={'default'} />
