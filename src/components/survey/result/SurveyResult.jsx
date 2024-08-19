@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { getData, putObjData } from '/src/pages/api/reqData';
-import s from '/src/components/survey/result/surveyStatistics.module.scss';
+import s from '/src/components/survey/statistics/surveyStatistics.module.scss';
 import Loading from '/src/components/common/Loading';
 import { calcDogAge } from '/util/func/calcDogAge';
 import Btn_01 from '/public/img/mypage/statistic_dog_walker.svg';
@@ -8,7 +8,7 @@ import Btn_02 from '/public/img/mypage/statistic_dog_walker2.svg';
 import { UnitOfDemicalPointOfOneMealGram } from '../../../../util/func/subscribe/finalVar';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
-import TagChart from './TagChart';
+import TagChart from '../statistics/TagChart';
 import { Swiper_product } from './Swiper_product';
 import { useSubscribePlanInfo } from '/util/hook/useSubscribePlanInfo';
 import SurveyResultRecipe from './SurveyResultRecipe';
@@ -22,7 +22,7 @@ import {
   valid_isTheSameArray,
 } from '/util/func/validation/validationPackage';
 import { calcSubscribePrice } from '/util/func/subscribe/calcSubscribePrices';
-import { surveyDescriptionList } from './description';
+import { surveyDescriptionList } from '../statistics/description';
 import { cartAction } from '/store/cart-slice';
 import { useModalContext } from '/store/modal-context';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';

@@ -1,8 +1,7 @@
 import React from 'react';
 import s from './surveyStatistics.module.scss';
-import { Swiper_dogInfo } from './Swiper_dogInfo';
 
-export default function SurveyScore({ surveyInfo }) {
+export default function HealthScore({ surveyInfo }) {
   return (
     <div className={s.dog_info_wrapper}>
       <div className={s.dog_info_name}>

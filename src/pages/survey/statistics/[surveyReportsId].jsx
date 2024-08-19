@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import { SurveyStatistics } from '/src/components/survey/result/SurveyStatistics';
+import { SurveyStatistics } from '/src/components/survey/statistics/SurveyStatistics';
 
 export default function SurveyStatisticsPage({ surveyReportsId }) {
   // 설문조사 조회시, 강아지 ID가 아닌  설문조사의 ID로 조회한다.

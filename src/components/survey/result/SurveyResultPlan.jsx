@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import SurveyPlanInput from './SurveyPlanInput';
 import Image from 'next/image';
-import s from './surveyStatistics.module.scss';
+import s from '/src/components/survey/statistics/surveyStatistics.module.scss';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
