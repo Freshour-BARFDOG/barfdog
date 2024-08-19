@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import { SurveyStatistics } from '/src/components/survey/result/SurveyStatistics';
+import { SurveyStatistics } from '/src/components/survey/statistics/SurveyStatistics';
 import LayoutWithoutFooter from '../../../components/common/LayoutWithoutFooter';
 
 export default function SurveyStatisticsPage({ id }) {

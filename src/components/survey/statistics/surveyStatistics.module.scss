@@ -918,67 +918,81 @@ $container-maxWidth: rem(960);
       }
     }
   }
+}
 
-  .analysis-result.b_right {
-    grid-area: b_right;
-    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
-    border-radius: rem(32);
-    width: 100%;
-    max-width: rem(460);
-    padding-bottom: rem(40);
+.analysis-result.b_right {
+  border-radius: rem(32);
+  width: 100%;
+  // max-width: rem(500);
+  margin: 0 rem(20);
+  padding-bottom: rem(10);
+  // padding: 0 rem(20);
+  p {
+    font-size: rem(16);
+    font-weight: normal;
+    line-height: 1.5;
+    color: #424242;
+    padding-top: rem(30);
+  }
+  .left_title {
+    // text-align: center;
+    font-weight: bold;
+    padding-top: rem(50);
+    padding-bottom: rem(20);
+    // padding-left: rem(20);
+  }
+  .b_right_grid_box {
+    display: grid;
+    grid-template-columns: minmax(rem(226), auto) minmax(rem(115), auto);
+    row-gap: rem(20);
+    padding: rem(40) rem(50) rem(40) rem(30);
+    // margin: 0 rem(35);
+    background-color: #f8f8f8;
+    border-radius: rem(5);
+    // margin: 0 rem(14);
+  }
+  .right_text {
+    // @include char(l20);
+    font-size: rem(22);
+    line-height: 1.3;
+    font-weight: normal;
+    // display: flex;
+    // flex-direction: column;
+    align-items: center;
+    // padding: rem(9) 0;
+    > *:not(:last-child) {
+      margin-right: rem(10);
+      word-break: keep-all;
+    }
+    span {
+      @include char(l15);
+      color: #424242;
+    }
+    em {
+      // max-width: rem(230);
+      word-break: keep-all;
 
-    .left_title {
-      text-align: center;
-      @include char(l20);
-      font-weight: 700;
-      padding-top: rem(42);
-      padding-bottom: rem(60);
+      > br {
+        display: none;
+      }
     }
-    .b_right_grid_box {
-      display: grid;
-      grid-template-columns: minmax(rem(226), auto) minmax(rem(115), auto);
-      row-gap: rem(20);
-      margin: 0 rem(35);
-    }
+  }
+  &:last-child {
     .right_text {
-      @include char(l20);
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      // padding: rem(9) 0;
-      > *:not(:last-child) {
-        margin-right: rem(10);
-        word-break: keep-all;
-      }
-      span {
-        @include char(l15);
-        color: #4d4d4d;
-      }
-      em {
-        max-width: rem(230);
-        word-break: keep-all;
+      display: grid;
+    }
 
-        > br {
-          display: none;
-        }
-      }
+    p {
+      margin-right: rem(5) !important;
     }
-    &:last-child {
-      .right_text {
-        display: grid;
-      }
-
-      p {
-        margin-right: rem(5) !important;
-      }
-    }
-    .left_text {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      @include char(d32);
-      color: var(--color-main);
-    }
+  }
+  .left_text {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    // @include char(d32);
+    font-size: rem(40);
+    color: #be1a21;
   }
 }
 
@@ -1042,7 +1056,7 @@ $container-maxWidth: rem(960);
     display: flex;
     padding: rem(30) rem(40);
     border-radius: rem(5);
-    margin: 0 rem(14);
+    margin: 0 rem(30);
   }
 
   .swiper_dogInfo_img {
@@ -1090,10 +1104,10 @@ $container-maxWidth: rem(960);
     }
   }
   .weight_box {
-    margin: 0 rem(16);
+    margin: 0 rem(24);
   }
   .disease_box {
-    margin: 0 rem(30);
+    margin: 0 rem(0);
   }
 
   .disease_wrapper {
@@ -1146,6 +1160,81 @@ $container-maxWidth: rem(960);
   left: 5%;
 }
 //*** [ END ] ***
+
+//*** 8. 동일크기 견종 비교 ***
+section.dog_analysis {
+  margin: 0 rem(20);
+  .dog_analysis_wrapper {
+    margin: rem(60) rem(0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .dog_info_name {
+      text-align: left;
+      width: 100%;
+      margin-bottom: rem(20);
+    }
+  }
+
+  .compare_txt {
+    font-weight: normal;
+    font-size: rem(16);
+    padding-left: rem(4);
+  }
+
+  .dog_analysis_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: rem(1) solid #424242;
+    width: rem(380);
+    font-size: rem(20);
+    font-weight: normal;
+    padding: rem(10) rem(30);
+    border-radius: rem(4);
+    margin: rem(30) 0;
+
+    .dog_analysis_content {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  // 3) 음수량
+  .graph_wrapper_water {
+    display: flex;
+    width: rem(300);
+    justify-content: space-between;
+
+    p {
+      font-size: rem(16);
+      text-align: center;
+    }
+    .avg_txt {
+      font-weight: normal;
+    }
+
+    .myDog_txt {
+      font-size: rem(16);
+      color: #be1a21;
+    }
+  }
+
+  // 6) 질병
+  .graph_wrapper_disease {
+    display: flex;
+    width: rem(300);
+    justify-content: space-between;
+
+    p {
+      font-size: rem(16);
+      text-align: center;
+      font-weight: normal;
+    }
+  }
+}
 
 @media (max-width: rem(600)) {
   .dog_info_name {

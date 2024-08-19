@@ -4,7 +4,7 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import { useRouter } from 'next/router';
 import s from '/src/components/survey/surveyStatistics(mypageVersion).module.scss';
 import Link from 'next/link';
-import { SurveyStatistics } from '/src/components/survey/result/SurveyStatistics';
+import { SurveyStatistics } from '/src/components/survey/statistics/SurveyStatistics';
 import { getDataSSR } from '/src/pages/api/reqData';
 import LayoutWithoutFooter from '../../../../components/common/LayoutWithoutFooter';
 

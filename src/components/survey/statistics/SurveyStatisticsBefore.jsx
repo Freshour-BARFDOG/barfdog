@@ -5,7 +5,7 @@ import { dogSizeType } from '/store/TYPE/dogSizeType';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import TagChart from './TagChart';
-import { Swiper_product } from './Swiper_product';
+import { Swiper_product } from '../result/Swiper_product';
 import {
   transformPercentUnitInGroup,
   filter_objectInGroup,

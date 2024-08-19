@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SurveyRecipeInput } from './SurveyRecipeInput';
 import Link from 'next/link';
 import Image from 'next/image';
-import s from './surveyStatistics.module.scss';
+import s from '/src/components/survey/statistics/surveyStatistics.module.scss';
 import popupWindow from '/util/func/popupWindow';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import {
