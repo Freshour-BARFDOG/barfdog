@@ -69,6 +69,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
   const [isArrowActive, setIsArrowActive] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [activeModal, setActiveModal] = useState(false);
+  const [scoreInfo, setScoreInfo] = useState({});
 
   const [form, setForm] = useState({
     plan: null,
@@ -158,6 +159,44 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         const data = res.data;
         // console.log('/api/surveyReports/>>>', res);
         setSurveyInfo(data);
+
+        //*** 건강종합점수 계산
+        const scoreNumber = data.score;
+        let color, text;
+
+        switch (true) {
+          case scoreNumber >= 0 && scoreNumber <= 25:
+            color = '#D60B0B';
+            text = '매우 위험해요';
+            break;
+          case scoreNumber >= 26 && scoreNumber <= 50:
+            color = '#FF9243';
+            text = '다소 위험해요';
+            break;
+          case scoreNumber >= 51 && scoreNumber <= 75:
+            color = '#FFD543';
+            text = '나쁘지 않아요';
+            break;
+          case scoreNumber >= 76 && scoreNumber <= 90:
+            color = '#00C1EC';
+            text = '좋아요!';
+            break;
+          case scoreNumber >= 91 && scoreNumber <= 100:
+            color = '#0BD65C';
+            text = '아주 좋아요!';
+            break;
+          default:
+            color = '#FFFFFF';
+            text = '';
+            break;
+        }
+
+        // 상태 업데이트
+        setScoreInfo({
+          scoreNumber,
+          color,
+          text,
+        });
 
         //*** 칼로리 계산
         const DATA = {
@@ -638,7 +677,11 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
           )}
 
           {/* 2. 건강점수 */}
-          <HealthScore surveyInfo={surveyInfo} />
+          <HealthScore
+            surveyInfo={surveyInfo}
+            scoreInfo={scoreInfo}
+            info={info}
+          />
 
           {/* 3. 생식기준 결과 */}
           <section className={`${s.b_right} ${s['analysis-result']}`}>
@@ -675,8 +718,11 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
               </div> */}
             </div>
             <p>
-              ※ 해당 결과는 ‘권장’ 값이오니 보호자님이 <br />
-              지켜봐주시며 급여량을 증감해주시는 것이 가장 좋습니다!
+              ※ 해당 결과는 ‘권장’ 값이오니 보호자님이 지켜봐주시며 급여량을{' '}
+              증감해주시는 것이 <br />
+              가장 좋습니다! 또한, 안내된 식사량은 ‘하루’ 권장량이오니 반려견의
+              끼니 수에 맞춰 나눠 <br />
+              급여해주세요 :)
             </p>
           </section>
 

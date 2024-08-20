@@ -928,6 +928,8 @@ $container-maxWidth: rem(960);
   padding-bottom: rem(10);
   // padding: 0 rem(20);
   p {
+    // text-align: center;
+    padding-left: rem(20);
     font-size: rem(16);
     font-weight: normal;
     line-height: 1.5;
@@ -1308,9 +1310,9 @@ section.dog_analysis {
     }
     .needle {
       position: absolute;
-      top: 55%; /* 부모 컨테이너의 수직 중앙 */
-      left: 50%; /* 부모 컨테이너의 수평 중앙 */
-      transform: translate(-50%, -50%); /* 요소의 중앙을 기준으로 이동 */
+      top: 60%;
+      left: 50%;
+      transform-origin: 50% 100%; /* 회전 기준점을 바늘의 하단 중앙으로 설정 */
       bottom: 0;
     }
   }
