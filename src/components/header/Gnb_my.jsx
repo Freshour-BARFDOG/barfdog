@@ -36,24 +36,24 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData, isMyPage }) => {
     <>
       <div className={s.gnb_my}>
         <ul className="clearfix">
-          {!isMyPage && (
-            <li>
-              <button
-                type={'button'}
-                data-link={'/mypage'}
-                onClick={(e) => onMovePage(e, '/mypage')}
-                style={{ display: 'flex' }}
-              >
-                <Image
-                  src={'/img/icon/mypage_header.svg'}
-                  alt="mypage_header"
-                  width={26}
-                  height={26}
-                />
-                {/* <div className={s.mypage_wrap}><Icon_mypage/></div> */}
-              </button>
-            </li>
-          )}
+          {/* {!isMyPage && ( */}
+          <li>
+            <button
+              type={'button'}
+              data-link={'/mypage'}
+              onClick={(e) => onMovePage(e, '/mypage')}
+              style={{ display: 'flex' }}
+            >
+              <Image
+                src={'/img/icon/mypage_header.svg'}
+                alt="mypage_header"
+                width={26}
+                height={26}
+              />
+              {/* <div className={s.mypage_wrap}><Icon_mypage/></div> */}
+            </button>
+          </li>
+          {/* )} */}
           <li>
             <button
               id="gnb_cart"
