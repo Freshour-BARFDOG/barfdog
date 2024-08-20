@@ -10,30 +10,30 @@ import {
   Cell,
 } from 'recharts';
 
-const data = [
-  {
-    name: '바프독 전체',
-    hr: 14,
-  },
-  {
-    name: '또래(견)',
-    hr: 12,
-  },
-  {
-    name: '대형견',
-    hr: 12,
-  },
-  {
-    name: '같은 견종',
-    hr: 10,
-  },
-  {
-    name: '왕멍멍이',
-    hr: 13,
-  },
-];
-
 export default function WalkingAnalysis({ surveyInfo }) {
+  const data = [
+    {
+      name: '바프독 전체',
+      hr: surveyInfo.walkingAnalysis.avgWalkingTimeInAllDogs,
+    },
+    {
+      name: '또래(견)',
+      hr: surveyInfo.walkingAnalysis.avgWalkingTimeInAge,
+    },
+    {
+      name: '대형견',
+      hr: surveyInfo.walkingAnalysis.avgWalkingTimeInDogSize,
+    },
+    {
+      name: '같은 견종',
+      hr: surveyInfo.walkingAnalysis.avgWalkingTimeInDogType,
+    },
+    {
+      name: '왕멍멍이',
+      hr: surveyInfo.walkingAnalysis.totalWalingTime,
+    },
+  ];
+
   return (
     <section className={s.walking_analysis}>
       <div>
@@ -45,7 +45,7 @@ export default function WalkingAnalysis({ surveyInfo }) {
             <div className={s.title}>산책 점수</div>
             <p>
               상위
-              <br /> 1%
+              <br /> {Math.round(surveyInfo.walkingAnalysis.highRankPercent)}%
             </p>
           </div>
           <div className={s.right_area}>
@@ -76,7 +76,7 @@ export default function WalkingAnalysis({ surveyInfo }) {
           style={{
             width: '600px',
             height: '300px',
-            margin: '20px auto 0 auto',
+            margin: '0px auto 0 auto',
             position: 'relative',
           }}
         >
@@ -87,6 +87,7 @@ export default function WalkingAnalysis({ surveyInfo }) {
               data={data}
               barSize={50}
               barGap={20}
+              margin={{ top: 60, right: 0, bottom: 0, left: 0 }}
             >
               {/* x축 */}
               <XAxis

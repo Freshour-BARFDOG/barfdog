@@ -2,12 +2,12 @@
 @import '/styles/global/guide';
 
 .modal-container {
-  padding: rem(30) rem(40) !important;
+  padding: rem(50) rem(20) !important;
   width: 100% !important;
   max-width: rem(640);
-  max-height: rem(950);
+  height: rem(800);
   // max-height: calc(100% - rem(40));
-  // overflow: scroll !important;
+  // overflow-y: scroll !important;
   border-radius: rem(40) !important;
 }
 
@@ -29,9 +29,13 @@
     display: flex;
     justify-content: flex-end;
     width: 100%;
+    padding: rem(0) rem(30) rem(30) 0;
   }
   .container {
     width: 100%;
+    height: rem(640);
+    overflow-y: scroll !important;
+    padding: 0 rem(30);
 
     .order_date_text {
       background-color: rgba(255, 246, 18, 0.3);
@@ -51,9 +55,10 @@
   }
 
   .content {
-    padding: rem(10) 0;
+    padding: rem(20) 0;
     font-size: rem(20);
     font-weight: normal;
+    text-align: left;
   }
 }
 

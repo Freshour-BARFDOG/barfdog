@@ -4,14 +4,15 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Label } from 'recharts';
 import Image from 'next/image';
 import { Modal_HealthScore } from '../../modal/Modal_HealthScore';
 
-const data = [
-  { name: 'Group C', value: 85 },
-  { name: 'Group A', value: 100 - 85 },
-  // { name: 'Group B', value: 100 },
-];
-const COLORS = ['#0BD65C', '#e5e5e5', '#E81546', '#0088FE'];
+export default function HealthScore({ surveyInfo, scoreInfo, info }) {
+  const data = [
+    { name: 'Group C', value: scoreInfo.scoreNumber },
+    { name: 'Group A', value: 100 - scoreInfo.scoreNumber },
+    // { name: 'Group B', value: 100 },
+  ];
 
-export default function HealthScore({ surveyInfo }) {
+  const COLORS = [scoreInfo.color, '#e5e5e5'];
+
   const [activeModal, setActiveModal] = useState(false);
 
   const onActiveAlertModalHandler = () => {
@@ -83,18 +84,18 @@ export default function HealthScore({ surveyInfo }) {
                   style={{
                     // textAnchor: 'middle',
                     fontSize: '90px',
-                    fill: '#0BD65C',
+                    fill: scoreInfo.color,
                     transform: 'translateX(-20px) translateY(-40px)',
                   }}
                 >
-                  85
+                  {scoreInfo.scoreNumber}
                 </Label>
                 <Label
                   position="center"
                   style={{
                     // textAnchor: 'middle',
                     fontSize: '46px',
-                    fill: '#0BD65C',
+                    fill: scoreInfo.color,
                     transform: 'translateX(66px) translateY(-30px)',
                   }}
                 >
@@ -107,15 +108,23 @@ export default function HealthScore({ surveyInfo }) {
           <div
             className={s.score_label}
             style={{
-              border: '1px solid #0BD65C',
-              color: '#0BD65C',
+              border: `1px solid ${scoreInfo.color}`,
+              color: scoreInfo.color,
             }}
           >
-            아주 좋아요!
+            {scoreInfo.text}
           </div>
           <div className={s.description_label}>
-            대형견 평균 점수 &nbsp;<b>80점</b>&nbsp; 대비 내 반려견은 &nbsp;
-            <b>5점</b>&nbsp; 높아요!
+            {80 === scoreInfo.scoreNumber &&
+              `${info.dogSize} 평균 점수와 내 점수는 같아요!`}
+
+            {80 - scoreInfo.scoreNumber !== 0 && (
+              <>
+                대형견 평균 점수&nbsp;<b>80점</b>&nbsp;대비 내 반려견은&nbsp;
+                <b>{Math.abs(80 - scoreInfo.scoreNumber)}점</b>&nbsp;
+                {80 < scoreInfo.scoreNumber ? '높아요!' : '낮아요!'}
+              </>
+            )}
           </div>
         </div>
       </section>
