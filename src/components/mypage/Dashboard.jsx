@@ -38,6 +38,7 @@ export default function Dashboard({
     message: false,
   });
 
+  // ! [삭제 예정]
   // const onCopyToClipboard = (value) => {
   //   let hostname;
   //   if (typeof window !== 'undefined') {
@@ -93,7 +94,7 @@ export default function Dashboard({
     return;
   }
 
-  console.log('data____', data);
+  // console.log('data____', data);
 
   const onEditProfileHandler = () => {
     router.push(`/mypage/user`);

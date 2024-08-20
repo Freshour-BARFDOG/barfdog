@@ -1,6 +1,8 @@
 import React from 'react';
 import s from './surveyStatistics.module.scss';
 import Image from 'next/image';
+import VerticalGraph from './VerticalGraph';
+import StatusChart from './StatusChart';
 
 export default function DogAnalysis({ surveyInfo, info }) {
   console.log('inf____', info);
@@ -21,17 +23,26 @@ export default function DogAnalysis({ surveyInfo, info }) {
       {/* 1. 몸무게 */}
       <div className={s.dog_analysis_wrapper}>
         <div className={s.dog_info_name}>
-          몸무게<span className={s.compare_txt}> / {info.dogSize}</span>
+          몸무게<span className={s.compare_txt}></span>
         </div>
 
-        {/* ! [추가] 그래프  */}
-        <div className={s.graph_wrapper}>
-          <Image
-            src={'/img/survey/statistics/scale1.png'}
-            alt="scale"
-            width={232}
-            height={132}
-          />
+        <div className={s.graph_wrapper_scale}>
+          <div className={s.img_wrapper}>
+            <Image
+              src={'/img/survey/statistics/scale1.png'}
+              alt="scale"
+              width={232 * 1.4}
+              height={132 * 1.4}
+            />
+            <div className={s.needle}>
+              <Image
+                src={'/img/survey/statistics/needle.png'}
+                alt="needle"
+                width={15 * 1.4}
+                height={79 * 1.4}
+              />
+            </div>
+          </div>
         </div>
 
         <div className={s.dog_analysis_box}>
@@ -50,18 +61,19 @@ export default function DogAnalysis({ surveyInfo, info }) {
       {/* 2. 현재 상태 */}
       <div className={s.dog_analysis_wrapper}>
         <div className={s.dog_info_name}>
-          현재 상태<span className={s.compare_txt}> / {info.dogSize}</span>
+          현재 상태<span className={s.compare_txt}> </span>
         </div>
 
         {/* ! [추가] 그래프  */}
-        <div className={s.graph_wrapper}>
-          <Image
+        {/* <div className={s.graph_wrapper}> */}
+        {/* <Image
             src={'/img/survey/statistics/scale1.png'}
             alt="scale"
             width={232}
             height={132}
-          />
-        </div>
+          /> */}
+        <StatusChart />
+        {/* </div> */}
 
         <div className={s.dog_analysis_box}>
           <div className={s.dog_analysis_content}>
@@ -82,10 +94,9 @@ export default function DogAnalysis({ surveyInfo, info }) {
       {/* 3. 음수량 */}
       <div className={s.dog_analysis_wrapper}>
         <div className={s.dog_info_name}>
-          음수량<span className={s.compare_txt}> / {info.dogSize}</span>
+          음수량<span className={s.compare_txt}> </span>
         </div>
 
-        {/* ! [추가] 그래프  */}
         <div className={s.graph_wrapper_water}>
           <div>
             <Image
@@ -125,18 +136,11 @@ export default function DogAnalysis({ surveyInfo, info }) {
       {/* 4. 급여식단 */}
       <div className={s.dog_analysis_wrapper}>
         <div className={s.dog_info_name}>
-          급여식단<span className={s.compare_txt}> / {info.dogSize}</span>
+          급여식단<span className={s.compare_txt}> </span>
         </div>
 
-        {/* ! [추가] 그래프  */}
-        <div className={s.graph_wrapper}>
-          <Image
-            src={'/img/survey/statistics/scale1.png'}
-            alt="scale"
-            width={232}
-            height={132}
-          />
-        </div>
+        {/* 그래프  */}
+        <VerticalGraph />
 
         <div className={s.dog_analysis_box}>
           <div className={s.dog_analysis_content}>
@@ -156,18 +160,11 @@ export default function DogAnalysis({ surveyInfo, info }) {
       {/* 5. 영양제 급여량 */}
       <div className={s.dog_analysis_wrapper}>
         <div className={s.dog_info_name}>
-          영양제 급여량<span className={s.compare_txt}> / {info.dogSize}</span>
+          영양제 급여량<span className={s.compare_txt}></span>
         </div>
 
-        {/* ! [추가] 그래프  */}
-        <div className={s.graph_wrapper}>
-          <Image
-            src={'/img/survey/statistics/scale1.png'}
-            alt="scale"
-            width={232}
-            height={132}
-          />
-        </div>
+        {/*  그래프  */}
+        <VerticalGraph />
 
         <div className={s.dog_analysis_box}>
           <div className={s.dog_analysis_content}>
@@ -186,7 +183,7 @@ export default function DogAnalysis({ surveyInfo, info }) {
       {/* 6. 질병 */}
       <div className={s.dog_analysis_wrapper}>
         <div className={s.dog_info_name}>
-          질병<span className={s.compare_txt}> / {info.dogSize}</span>
+          질병<span className={s.compare_txt}> </span>
         </div>
 
         {/* ! [추가] 그래프  */}
@@ -195,8 +192,8 @@ export default function DogAnalysis({ surveyInfo, info }) {
             <Image
               src={'/img/survey/statistics/disease-good-active.png'}
               alt="disease"
-              width={80 * 1.5}
-              height={80 * 1.5}
+              width={80 * 1.6}
+              height={80 * 1.6}
             />
             <p className={s.avg_txt}> 좋아요</p>
           </div>
@@ -204,8 +201,8 @@ export default function DogAnalysis({ surveyInfo, info }) {
             <Image
               src={'/img/survey/statistics/disease-bad.png'}
               alt="disease"
-              width={80 * 1.5}
-              height={80 * 1.5}
+              width={80 * 1.6}
+              height={80 * 1.6}
             />
             <p className={s.myDog_txt}>아파요</p>
           </div>

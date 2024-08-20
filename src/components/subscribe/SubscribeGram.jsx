@@ -14,6 +14,7 @@ import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import { roundedOneMealGram } from '/util/func/subscribe/roundedOneMealGram';
 import { UnitOfDemicalPointOfOneMealGramInDatabase } from '../../../util/func/subscribe/finalVar';
 import { originSubscribeIdList } from '/util/func/subscribe/originSubscribeIdList';
+import { getData } from '../../pages/api/reqData';
 
 export const SubscribeGram = ({ subscribeInfo }) => {
   const planType = subscribeInfo.plan.name;
@@ -41,6 +42,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
+  const [shippingLeftCount, setShippingLeftCount] = useState(null);
 
   console.log('subscribeInfo___', subscribeInfo);
 
@@ -48,6 +50,19 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     //! [추가] 기존 구독자인지 확인
     originSubscribeIdList.includes(subscribeInfo.info.subscribeId) &&
       setIsOriginSubscriber(true);
+
+    try {
+      (async () => {
+        const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/shippingLeft`;
+        const res = await getData(url);
+
+        if (res.status === 200) {
+          setShippingLeftCount(res.data.shippingLeft);
+        }
+      })();
+    } catch (err) {
+      console.error(err);
+    }
   }, []);
 
   // console.log(isOriginSubscriber, subscribeInfo.info.subscribeId);
@@ -102,6 +117,8 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     }));
   };
 
+  console.log('form___', form);
+
   const onActiveConfirmModal = () => {
     if (valid_isTheSameArray(form.originGrams, form.nextGrams)) {
       mct.alertShow('기존과 동일한 무게입니다');
@@ -125,7 +142,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     if (!body.totalPrice)
       return mct.alertShow('결제금액 계산오류가 발생하였습니다.');
 
-    console.log('body___', body);
+    // console.log('body___', body);
 
     try {
       setIsLoading(true);
@@ -156,7 +173,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     window.location.reload();
   };
 
-  console.log('form____', form);
+  console.log(shippingLeftCount);
 
   return (
     <>
@@ -246,15 +263,44 @@ export const SubscribeGram = ({ subscribeInfo }) => {
                 <p className={s.top_text}>변경 후 상품 금액</p>
                 <div className={s.bot_1}>
                   {transformLocalCurrency(form.nextSalePrice)}원
-                  {/* <span>
+                  <span>
+                    {' '}
                     (차액: {form.nextSalePrice - form.originPrice > 0 && '+'}
                     {transformLocalCurrency(
                       form.nextSalePrice - form.originPrice,
                     )}
                     원)
-                  </span> */}
+                  </span>
+                  <div className={s.text3} style={{ color: '#999' }}>
+                    할인율은 미적용된 금액입니다.
+                  </div>
                 </div>
               </div>
+
+              {form.nextSalePrice - form.originPrice !== 0 && (
+                <div className={s.grid_6}>
+                  <p className={s.top_text}>
+                    부분{' '}
+                    {form.nextSalePrice - form.originPrice > 0
+                      ? '결제'
+                      : '환불'}
+                    될 금액
+                  </p>
+                  <div className={s.bot_1}>
+                    <span>
+                      {' '}
+                      {transformLocalCurrency(
+                        Math.abs(form.nextSalePrice - form.originPrice) *
+                          shippingLeftCount,
+                      )}
+                      원
+                    </span>
+                    <div className={s.text3} style={{ color: '#999' }}>
+                      차액 * 배송횟수
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className={s.red_btn_box}>
