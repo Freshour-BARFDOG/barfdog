@@ -87,6 +87,11 @@ section.title_delivery_skip_content {
     display: none;
   }
 }
+.recipe_change_price {
+  background-color: #be1a21;
+  display: flex;
+  justify-content: space-between;
+}
 
 .title {
   // display: grid;
@@ -152,9 +157,6 @@ section.title_delivery_skip_content {
 }
 
 .btn-box {
-}
-.info_text {
-  color: #eee;
 }
 
 // @media (max-width: rem(900)) {

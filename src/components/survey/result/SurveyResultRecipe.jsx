@@ -59,7 +59,7 @@ export default function SurveyResultRecipe({
 
     // recommendRecipeId의 최종 값
     const finalRecommendRecipeId = recommendRecipeIds.length
-      ? recommendRecipeIds[0]
+      ? recommendRecipeIds
       : null;
     setRecommendRecipeId(finalRecommendRecipeId);
 
@@ -117,10 +117,13 @@ export default function SurveyResultRecipe({
     popupWindow(href, { width: 1000, height: 716 });
   };
 
+  console.log('recommendRecipeId___', recommendRecipeId);
+  console.log('inedibleRecipeIds___', inedibleRecipeIds);
+
   return (
     <div className={s.recipe_container}>
       <div className={s.recipe_title}>
-        {surveyInfo.myDogName} (을)를 위한 <span>레시피</span>를 선택해 주세요
+        {surveyInfo.myDogName}(을)를 위한 <span>레시피</span>를 선택해 주세요
         <div className={s.recipe_title_info}>
           <strong>최대 2가지</strong>까지 레시피 선택이 가능합니다
         </div>
@@ -128,7 +131,9 @@ export default function SurveyResultRecipe({
 
       {/* 3-1) 더블 */}
       <div className={s.recipe_box}>
-        <h3>[ 더블미트(복합 단백질) 레시피 ]</h3>
+        <h3>
+          [ <b>더블미트</b>(복합 단백질) 레시피 ]
+        </h3>
 
         <div className={s.recipe_list}>
           {recipeDoubleInfo.map((recipe, index) => (
@@ -143,7 +148,7 @@ export default function SurveyResultRecipe({
                 setSelectedCheckbox={setSelectedCheckbox}
                 option={{ label: '레시피 선택' }}
               >
-                {recommendRecipeId === recipe.id && (
+                {recommendRecipeId?.includes(recipe.id) && (
                   <ItemRecommendlabel
                     label="추천!"
                     style={{
@@ -151,7 +156,7 @@ export default function SurveyResultRecipe({
                     }}
                   />
                 )}
-                {inedibleRecipeIds.includes(recipe.id) && (
+                {inedibleRecipeIds?.includes(recipe.id) && (
                   <ItemRecommendlabel
                     label={`못먹는\n재료 포함`}
                     style={{
@@ -212,7 +217,10 @@ export default function SurveyResultRecipe({
 
       {/* 3-2) 싱글 */}
       <div className={s.recipe_box}>
-        <h3> [ 싱글미트(단일 단백질) 레시피 ]</h3>
+        <h3>
+          {' '}
+          [ <b>싱글미트</b>(단일 단백질) 레시피 ]
+        </h3>
         <div className={s.recipe_list}>
           {recipeSingleInfo.map((recipe, index) => (
             <>
@@ -226,7 +234,7 @@ export default function SurveyResultRecipe({
                 setSelectedCheckbox={setSelectedCheckbox}
                 option={{ label: '레시피 선택' }}
               >
-                {recommendRecipeId === recipe.id && (
+                {recommendRecipeId?.includes(recipe.id) && (
                   <ItemRecommendlabel
                     label="추천!"
                     style={{
@@ -234,7 +242,7 @@ export default function SurveyResultRecipe({
                     }}
                   />
                 )}
-                {inedibleRecipeIds.includes(recipe.id) && (
+                {inedibleRecipeIds?.includes(recipe.id) && (
                   <ItemRecommendlabel
                     label={`못먹는\n재료 포함`}
                     style={{

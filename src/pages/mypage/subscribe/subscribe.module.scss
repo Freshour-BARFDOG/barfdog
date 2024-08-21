@@ -163,6 +163,12 @@ section.pagination_box {
     text-decoration: underline;
   }
   margin-bottom: rem(160);
+
+  .info_text {
+    color: #999;
+    padding: rem(6) rem(60) 0 0;
+    text-align: right;
+  }
 }
 
 // 주소

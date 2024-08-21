@@ -61,6 +61,41 @@ $container-maxWidth: rem(960);
   }
 }
 
+.result_container {
+  .top_wrapper {
+    border-bottom: rem(1) solid #7c7c7c;
+    padding: rem(20) 0;
+    h1 {
+      text-align: center;
+    }
+    .concern_btn_list {
+      padding: rem(20) 0 rem(30) 0;
+      display: flex;
+      gap: rem(20);
+      justify-content: center;
+      button {
+        font-weight: normal;
+        font-size: rem(18);
+        width: 100%;
+        max-width: rem(140);
+        border-radius: rem(30);
+        // background-color: #ff5959;
+        color: #424242;
+        // padding: rem(14) rem(18);
+        border: rem(1) solid #424242;
+      }
+      button:hover,
+      button.active {
+        background-color: #ffe0e1;
+        transition: all 0.3s;
+        border-color: #be1a21;
+        color: #be1a21;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
 // .logo_wrapper {
 //   width: rem(50);
 //   height: rem(50);
@@ -117,17 +152,17 @@ $container-maxWidth: rem(960);
   right: 50%;
 }
 
-.dog_img_wrapper {
-  width: rem(361 * 1.6);
-  background-color: white;
-  border-radius: rem(30);
-  border: rem(1) solid #b9b9b9;
-  padding: rem(20) 0;
-}
+// .dog_img_wrapper {
+//   width: rem(361 * 1.6);
+//   background-color: white;
+//   border-radius: rem(30);
+//   border: rem(1) solid #b9b9b9;
+//   padding: rem(20) 0;
+// }
 
-.dog_img_wrapper.ready {
-  border: rem(2) solid #af3d3d;
-}
+// .dog_img_wrapper.ready {
+//   border: rem(2) solid #af3d3d;
+// }
 
 .dog_info_name {
   padding-bottom: rem(20);
@@ -293,7 +328,7 @@ $container-maxWidth: rem(960);
   .recipe_title {
     font-size: rem(23);
     padding: rem(30) 0;
-
+    text-align: center;
     span {
       background-color: rgba(255, 228, 157, 1);
     }
@@ -314,7 +349,9 @@ $container-maxWidth: rem(960);
   .recipe_box {
     font-size: rem(23);
     padding-bottom: rem(40);
+    text-align: center;
     h3 {
+      font-weight: normal;
       padding-bottom: rem(28);
     }
     .recipe_list {
@@ -341,6 +378,7 @@ $container-maxWidth: rem(960);
 
 // 4. 플랜 선택
 .plan_container {
+  text-align: center;
   .plan_title {
     font-size: rem(23);
     padding: rem(30) 0;
@@ -681,7 +719,7 @@ $container-maxWidth: rem(960);
   position: fixed;
   bottom: rem(88);
   z-index: 100;
-  font-size: rem(24);
+  font-size: rem(22);
   font-weight: bold;
   display: flex;
   justify-content: center;
@@ -689,7 +727,8 @@ $container-maxWidth: rem(960);
   gap: rem(8);
 }
 
-.moveto_result_btn.activated {
+.moveto_result_btn.activated,
+.payment_btn.activated {
   background-color: #be1a21;
   transition: 0.3s all;
 }

@@ -24,6 +24,7 @@ import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMeal
 // import ArrowRight_s from '@public/img/icon/swiper-arrow-small-r.svg';
 import { originSubscribeIdList } from '/util/func/subscribe/originSubscribeIdList';
 import { SurveyRecipeInput } from '../survey/result/SurveyRecipeInput';
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
 
 // const swiperSettings = {
 //   className: `${s.swiper_recipes} ${s.inMypage}`,
@@ -73,11 +74,12 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedIdList, setSelectedIdList] = useState([]);
   const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
-
+  const [changingRecipePrice, setChangingRecipePrice] = useState(null);
   const [recommendRecipeId, setRecommendRecipeId] = useState(null);
   const [inedibleRecipeIds, setInedibleRecipeIds] = useState([]);
   const [recipeDoubleInfo, setRecipeDoubleInfo] = useState([]);
   const [recipeSingleInfo, setRecipeSingleInfo] = useState([]);
+  const [shippingLeftCount, setShippingLeftCount] = useState(null);
 
   // // console.log(selectedRadio)
   // // console.log(selectedCheckbox)
@@ -86,6 +88,21 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
 
   //*** 추천 레시피 & 못먹는 음식 플래그 ***//
   useEffect(() => {}, []);
+
+  useEffect(() => {
+    try {
+      (async () => {
+        const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/shippingLeft`;
+        const res = await getData(url);
+
+        if (res.status === 200) {
+          setShippingLeftCount(res.data.shippingLeft);
+        }
+      })();
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
   async function getRecommendRecipe(dogId) {
     if (!dogId) return console.error('Required User Dog Id');
@@ -216,7 +233,6 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
           .filter((info) => subscribeInfo.recipe.idList.indexOf(info.id) >= 0)
           .map((info) => `${info.name}-${info.id}`);
 
-        console.log('initialValueList___', initialValueList);
         const initRadioVal = initialValueList[0];
         let initCheckboxObjVal = {};
         for (const val of initialValueList) {
@@ -236,8 +252,26 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     })();
   }, []);
 
+  const fetchChangingPrice = async (nextPaymentPrice) => {
+    try {
+      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/price/${
+        nextPaymentPrice * shippingLeftCount
+      }`;
+      const res = await getData(url);
+      console.log(res);
+      if (res) {
+        setChangingRecipePrice(res.data.changingPrice);
+      } else {
+        mct.alertShow(`데이터 전송 실패\n${res.error}`);
+      }
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   useEffect(() => {
     if (!selectedCheckbox || typeof selectedCheckbox !== 'object') return;
+
     let selectedCheckboxCount = 0;
     const keys = Object.keys(selectedCheckbox);
     const seletedIdList = [];
@@ -252,6 +286,11 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
         : seletedIdList?.filter((id) => id !== selectedId);
     });
     const maxSelectedCheckboxCount = 2;
+    console.log(selectedCheckboxCount);
+
+    if (selectedCheckboxCount === 0) {
+      setChangingRecipePrice(null);
+    }
     if (selectedCheckboxCount > maxSelectedCheckboxCount) {
       mct.alertShow('풀플랜은 최대 2개 레시피를 선택할 수 있습니다.');
       setInitialize(true);
@@ -259,8 +298,49 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     } else {
       setInitialize(false);
       setSelectedIdList(seletedIdList);
+
+      const calcSalePriceAfterChangingRecipe = ({ plan: plan }) => {
+        const currentRecipeInfos =
+          recipeInfo &&
+          recipeInfo.data &&
+          recipeInfo.data.filter(
+            (recipe) => selectedIdList.indexOf(recipe.id) >= 0,
+          );
+        const result = calcSubscribePrice({
+          discountPercent: subscribeInfo.plan.discountPercent,
+          oneMealGrams: calcOneMealGramsWithRecipeInfo({
+            selectedRecipeIds: selectedIdList,
+            allRecipeInfos: currentRecipeInfos,
+            oneDayRecommendKcal: subscribeInfo.info.oneDayRecommendKcal,
+            isOriginSubscriber,
+          }).map((recipe) => recipe.oneMealGram),
+          planName: plan,
+          pricePerGrams: currentRecipeInfos?.map(
+            (recipe) => recipe.pricePerGram,
+          ),
+          isOriginSubscriber,
+          recipeNameList: currentRecipeInfos?.map((recipe) => recipe.name),
+        });
+
+        // console.log('result.salePrice>>>', currentRecipeInfos);
+        // console.log('result.salePrice>>>', result);
+        // console.log('currentRecipeInfos:::', currentRecipeInfos);
+
+        return result.avgPrice?.salePrice;
+      };
+
+      const curPlan = subscribeInfo.info.planName;
+      const nextPaymentPrice = calcSalePriceAfterChangingRecipe({
+        plan: curPlan,
+      });
+
+      if (nextPaymentPrice) {
+        fetchChangingPrice(nextPaymentPrice);
+      }
     }
   }, [selectedCheckbox]);
+
+  console.log('changingRecipePrice___', changingRecipePrice);
 
   useEffect(() => {
     if (!selectedRadio) return;
@@ -279,11 +359,11 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     popupWindow(href, { width: 1000, height: 716 });
   };
   // console.log('____selected', selectedRadio);
-  console.log('selectedCheckbox', selectedCheckbox);
+  // console.log('selectedCheckbox', selectedCheckbox);
   // console.log('subscribeInfo.recipe.idList', subscribeInfo.recipe.idList);
   // console.log('subscribeInfo.recipe', subscribeInfo.recipe);
   // console.log('isOriginSubscriber>>>>', isOriginSubscriber);
-  console.log(subscribeInfo);
+  // console.log(subscribeInfo);
 
   const onActiveConfirmModal = () => {
     // // console.log(selectedIdList)
@@ -319,7 +399,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
       recipeNameList: currentRecipeInfos.map((recipe) => recipe.name),
     });
 
-    console.log('result.salePrice>>>', result);
+    // console.log('result.salePrice>>>', result);
     // console.log('currentRecipeInfos:::', currentRecipeInfos);
 
     return result.avgPrice.salePrice;
@@ -379,9 +459,9 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     window.location.reload();
   };
 
-  console.log('recipeInfo___', recipeInfo);
-  console.log('recipeSingleInfo___', recipeSingleInfo);
-  console.log('recipeDoubleInfo___', recipeDoubleInfo);
+  // console.log('recipeInfo___', recipeInfo);
+  // console.log('recipeSingleInfo___', recipeSingleInfo);
+  // console.log('recipeDoubleInfo___', recipeDoubleInfo);
 
   return (
     <>
@@ -552,6 +632,16 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
                 </>
               ))}
             </div>
+          </div>
+        </div>
+      )}
+      {selectedIdList.length > 0 && changingRecipePrice && (
+        <div className={s.recipe_change_price}>
+          <p className={s.top_text}>
+            부분 {changingRecipePrice > 0 ? '결제' : '환불'}될 금액
+          </p>
+          <div className={s.bot_1}>
+            <span> {transformLocalCurrency(changingRecipePrice)}원</span>
           </div>
         </div>
       )}

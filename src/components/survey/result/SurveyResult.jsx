@@ -8,7 +8,6 @@ import Btn_02 from '/public/img/mypage/statistic_dog_walker2.svg';
 import { UnitOfDemicalPointOfOneMealGram } from '../../../../util/func/subscribe/finalVar';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
-import TagChart from '../statistics/TagChart';
 import { Swiper_product } from './Swiper_product';
 import { useSubscribePlanInfo } from '/util/hook/useSubscribePlanInfo';
 import SurveyResultRecipe from './SurveyResultRecipe';
@@ -28,6 +27,7 @@ import { useModalContext } from '/store/modal-context';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useRouter } from 'next/router';
 import { Modal_deliveryNotice } from '../../modal/Modal_deliveryNotice';
+import { FaArrowRight } from 'react-icons/fa';
 
 export const SurveyResult = ({ id, mode = 'default' }) => {
   const auth = useSelector((state) => state.auth);
@@ -70,30 +70,13 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
   });
 
   const [toppingPerPackPriceList, setToppingPerPackPriceList] = useState([]);
+  const [activeConcern, setActiveConcern] = useState('');
 
   const [mypageSubscribeId, setMypageSubscribeId] = useState(null);
 
   // 하단 버튼 '마이페이지로 돌아가기'
   const onPrevPage = () => {
     router.push('/mypage');
-  };
-
-  const getDescriptionBlocks = (data) => {
-    const blocks = [];
-
-    for (const [key, value] of Object.entries(data)) {
-      if (Array.isArray(value)) {
-        value.forEach((item) => {
-          if (surveyDescriptionList[item]) {
-            blocks.push(<li key={item}>{surveyDescriptionList[item]}</li>);
-          }
-        });
-      } else if (typeof value === 'string' && surveyDescriptionList[value]) {
-        blocks.push(<li key={value}>{surveyDescriptionList[value]}</li>);
-      }
-    }
-
-    return blocks;
   };
 
   useEffect(() => {
@@ -123,44 +106,7 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
         console.log('/api/surveyReports/>>>', res);
         setSurveyInfo(res.data);
 
-        //* 문구 설명
-        const validConcerns = [
-          '관절',
-          '피부·모질',
-          '소화력부족',
-          '빈혈',
-          '피로회복',
-        ];
-        setChartData({
-          dogStatus:
-            res.data.dogStatus === 'HEALTHY'
-              ? '#건강해요'
-              : 'THIN'
-              ? '#말랐어요'
-              : 'NEED_DIET'
-              ? '#다이어트필요'
-              : 'OBESITY'
-              ? '#심각한비만'
-              : '',
-          pregnant:
-            res.data.specificDogStatus.includes('PREGNANT') && '#임신한상태',
-          lactating:
-            res.data.specificDogStatus.includes('LACTATING') && '#수유중',
-          waterCountLevel:
-            res.data.waterCountLevel === 'LITTLE' && '#적은음수량',
-          activityLevel:
-            res.data.dogActivity.activityLevel === 'VERY_MUCH' ||
-            res.data.dogActivity.activityLevel === 'MUCH'
-              ? '#많은활동량'
-              : res.data.dogActivity.activityLevel === 'VERY_LITTLE' ||
-                res.data.dogActivity.activityLevel === 'LITTLE'
-              ? '#적은활동량'
-              : '',
-          priorityConcerns: res.data.priorityConcerns
-            .split(',')
-            .filter((concern) => validConcerns.includes(concern))
-            .map((concern) => `#${concern}`),
-        });
+        setActiveConcern(res.data.priorityConcerns.split(',')[0] || '');
 
         setForm((prevState) => ({
           ...prevState,
@@ -357,17 +303,6 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
     mct.alertHide();
   };
 
-  //* '더보기' 클릭
-  const dogInfoClickHandler = () => {
-    setIsShowResult(!isShowResult);
-  };
-
-  const onClickArrowIcon = (e) => {
-    e.preventDefault();
-    setIsArrowActive(!isArrowActive);
-    setRotation((prevRotation) => (prevRotation + 180) % 360);
-  };
-
   //* 결제하러 가기
   const onPayHandler = async () => {
     if (submitted) return;
@@ -450,30 +385,40 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
     setActiveModal(true);
   };
 
+  const handleConcernClick = (concern) => {
+    setActiveConcern(concern);
+  };
+
   // console.log('surveyInfo===>', surveyInfo);
   // console.log('resultInfo===>', resultInfo);
   // console.log('recipeInfo===>', recipeInfo);
   // console.log('recipeDoubleInfo===>', recipeDoubleInfo);
   // console.log('recipeSingleInfo===>', recipeSingleInfo);
   // console.log('form===>', form);
-  // console.log('chartData===>', chartData);
 
   return (
     <div id="statistics">
       <section
-        className={`${mode !== 'mypage' ? s.default : s.mypage} ${s.title}`}
+        className={`${mode !== 'mypage' ? s.default : s.mypage} ${s.title} ${
+          s.result_container
+        }`}
       >
-        <h1>
-          <span className={s.under_text}>
-            {surveyInfo.priorityConcerns.split(',')[0]}
-          </span>
-          {/* 이 가장 고민인 <br />
-          <span className={s.under_text}>{surveyInfo.myDogName}</span>(이)에게
-          추천하는 레시피 */}
-        </h1>
+        <div className={s.top_wrapper}>
+          <h1>고민별 추천 레시피</h1>
+          <div className={s.concern_btn_list}>
+            {surveyInfo.priorityConcerns.split(',').map((concern, index) => (
+              <button
+                key={index}
+                onClick={() => handleConcernClick(concern)}
+                className={activeConcern === concern ? s.active : ''}
+              >
+                #{concern}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className={s.result_box_list}>
-          {/* 견종 결과 */}
-          {/* {surveyInfo?.map((dogInfo, index) => ( */}
           <div
             // key={index}
             className={`${s.dog_img_wrapper} ${isShowResult ? s.active : ''} ${
@@ -484,138 +429,51 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
             // onClick={() => dogInfoClickHandler(dogInfo.surveyId, index)}
           >
             <div className={s.dog_info_wrapper}>
-              {isShowResult ? (
-                <div
-                  className={`${s.survey_result_wrapper} animation-show-all-child`}
-                >
-                  {/* <div className={s.box_line}></div> */}
-                  {/* 1. 설문조사 정보 */}
-                  {/* <main className={`${s.grid_container_box}`}>
-                    <div className={s.top_tab_container}>
-                      현재 {calcDogAge(surveyInfo.dogBirthday.slice(0, 6))},
-                      중성화를{' '}
-                      <span className={s.under_text}>
-                        {' '}
-                        {surveyInfo.neutralization ? '한' : '하지 않은'}
-                      </span>{' '}
-                      {surveyInfo.myDogName}
-                      <br />
-                      <span className={s.under_text}>
-                        {surveyInfo.dogSize === 'LARGE'
-                          ? '대형견'
-                          : surveyInfo.dogSize === 'MIDDLE'
-                          ? '중형견'
-                          : surveyInfo.dogSize === 'SMALL'
-                          ? '소형견'
-                          : ''}{' '}
-                      </span>
-                      이고,{' '}
-                      <span className={s.under_text}>
-                        {' '}
-                        {surveyInfo.dogType}
-                      </span>
-                      인 {surveyInfo.myDogName}
-                      <br />
-                      <span className={s.under_text}>
-                        {' '}
-                        {surveyInfo.priorityConcerns}
-                      </span>{' '}
-                      가 고민인 {surveyInfo.myDogName}는{' '}
-                      <span className={s.under_text}>
-                        {surveyInfo.dogStatus === 'HEALTHY'
-                          ? '건강해요'
-                          : surveyInfo.dogSize === 'NEED_DIET'
-                          ? '다이어트가 필요해요'
-                          : surveyInfo.dogSize === 'OBESITY'
-                          ? '심각한 비만입니다'
-                          : surveyInfo.dogSize === 'THIN'
-                          ? '말랐어요'
-                          : ''}
-                      </span>
-                    </div>
-                  </main> */}
+              <div
+                className={`${s.survey_result_wrapper} animation-show-all-child`}
+              >
+                {/* 3. 레시피 선택 */}
+                <SurveyResultRecipe
+                  surveyInfo={surveyInfo}
+                  recipeInfo={recipeInfo}
+                  recipeDoubleInfo={recipeDoubleInfo}
+                  recipeSingleInfo={recipeSingleInfo}
+                  form={form}
+                  setForm={setForm}
+                  calcPrice={calcSubscribePlanPaymentPrice}
+                  pricePerPack={pricePerPack}
+                  setPricePerPack={setPricePerPack}
+                />
 
-                  {/* <div classNme={s.box_line}></div> */}
+                <div className={s.box_dot_divider}></div>
 
-                  {/* 3. 레시피 선택 */}
-                  <SurveyResultRecipe
-                    surveyInfo={surveyInfo}
-                    recipeInfo={recipeInfo}
-                    recipeDoubleInfo={recipeDoubleInfo}
-                    recipeSingleInfo={recipeSingleInfo}
-                    form={form}
-                    setForm={setForm}
-                    calcPrice={calcSubscribePlanPaymentPrice}
-                    pricePerPack={pricePerPack}
-                    setPricePerPack={setPricePerPack}
-                  />
+                {/* 4. 플랜 선택 */}
+                <SurveyResultPlan
+                  surveyInfo={surveyInfo}
+                  recipeInfo={recipeInfo}
+                  recipeDoubleInfo={recipeDoubleInfo}
+                  recipeSingleInfo={recipeSingleInfo}
+                  form={form}
+                  setForm={setForm}
+                  calcPrice={calcSubscribePlanPaymentPrice}
+                  pricePerPack={pricePerPack}
+                  setPricePerPack={setPricePerPack}
+                  setToppingPerPackPriceList={setToppingPerPackPriceList}
+                />
 
-                  <div className={s.box_dot_divider}></div>
-
-                  {/* 4. 플랜 선택 */}
-                  <SurveyResultPlan
-                    surveyInfo={surveyInfo}
-                    recipeInfo={recipeInfo}
-                    recipeDoubleInfo={recipeDoubleInfo}
-                    recipeSingleInfo={recipeSingleInfo}
-                    form={form}
-                    setForm={setForm}
-                    calcPrice={calcSubscribePlanPaymentPrice}
-                    pricePerPack={pricePerPack}
-                    setPricePerPack={setPricePerPack}
-                    setToppingPerPackPriceList={setToppingPerPackPriceList}
-                  />
-
-                  {/* 5. 챙겨줄 제품 - Swiper */}
-                  {/* <div className={s.recommend_product_container}>
+                {/* 5. 챙겨줄 제품 - Swiper */}
+                {/* <div className={s.recommend_product_container}>
                     {surveyInfo.myDogName} (이)에게 더 챙겨줄 제품은 없을까요?
                     <div className={s.recommend_product_title}>
                       함게 구독하면 좋은 일반 상품도 살펴보세요!
                     </div>
                     <Swiper_product />
                   </div> */}
-
-                  {/* 6. 닫기 버튼 */}
-                  {/* <div className={s.close_btn_wrapper}>
-                    <button
-                      className={s.close_btn}
-                      onClick={() => dogInfoClickHandler(surveyInfo.surveyId)}
-                    >
-                      닫기
-                      <Image
-                        src={'/img/survey/survey_arrow.svg'}
-                        alt="survey_arrow"
-                        width={10}
-                        height={10}
-                        className={s.rotate_180}
-                      />
-                    </button>
-                  </div> */}
-                </div>
-              ) : (
-                <div className={s.dog_info_show_btn_wrapper}>
-                  <button
-                    className={s.dog_info_show_btn}
-                    onClick={dogInfoClickHandler}
-                  >
-                    더보기{' '}
-                    <Image
-                      src={'/img/survey/survey_arrow.svg'}
-                      alt="survey_arrow"
-                      width={10}
-                      height={10}
-                    />
-                  </button>
-                </div>
-              )}
+              </div>
             </div>
           </div>
-          {/* ))} */}
         </div>
 
-        {/* <span className={s.result_description}>
-          더보기를 클릭하여 레시피와 플랜을 선택하여 주세요
-        </span> */}
         {mode === 'mypage' && (
           <button className={s.link} onClick={onPrevPage}>
             마이페이지로 돌아가기
@@ -640,6 +498,7 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
         disabled={!(form.plan && form.recipeIdList.length > 0)}
       >
         결제하러 가기
+        <FaArrowRight />
       </button>
     </div>
   );
