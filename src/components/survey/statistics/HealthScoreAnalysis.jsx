@@ -11,6 +11,8 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { getData } from '../../../pages/api/reqData';
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import AllDogsGraph from './AllDogsGraph';
 
 export default function HealthScoreAnalysis({ surveyInfo }) {
   const [historyData, setHistoryData] = useState([]);
@@ -221,9 +223,35 @@ export default function HealthScoreAnalysis({ surveyInfo }) {
           </ResponsiveContainer>
         </div>
       </div>
-      <div>전체 반려견 중</div>
 
-      <div>다른 견종 중엔?</div>
+      <div className={s.all_dogs_wrapper}>
+        <div className={s.all_dogs_title}>
+          <div>전체 반려견 중</div>
+          <p>상위 {surveyInfo.scoreRankPercentAmongAllDogs}%</p>
+        </div>
+        <div className={s.all_count}>
+          {transformLocalCurrency(surveyInfo.totalDogCount)} 마리 중
+        </div>
+        <AllDogsGraph
+          surveyInfo={surveyInfo}
+          avg={surveyInfo.avgScoreAmongAllDogs}
+        />
+      </div>
+
+      <div className={s.all_dogs_wrapper}>
+        <div className={s.all_dogs_title}>
+          <div> 다른 견종 중엔?</div>
+          <p> 상위 {surveyInfo.scoreRankPercentAmongSameSizeDog}%</p>
+        </div>
+        <div className={s.all_count}>
+          {' '}
+          대형견 {transformLocalCurrency(surveyInfo.dogCountByDogSize)} 마리 중
+        </div>
+        <AllDogsGraph
+          surveyInfo={surveyInfo}
+          avg={surveyInfo.avgScoreAmongSameSizeDog}
+        />
+      </div>
     </section>
   );
 }

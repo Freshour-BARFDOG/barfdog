@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import s from '/src/pages/mypage/subscribe/[subscribeId].module.scss';
 import CustomInput from '../atoms/CustomInput';
 import Image from 'next/image';
@@ -14,6 +14,7 @@ import { useSubscribePlanInfo } from '/util/hook/useSubscribePlanInfo';
 import { roundedOneMealGram } from '/util/func/subscribe/roundedOneMealGram';
 import SurveyPlanInput from '../survey/result/SurveyPlanInput';
 import { calcSubscribeOneDayRecommendKcal } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
+import { getData } from '../../pages/api/reqData';
 
 export const SubscribePlan = ({ subscribeInfo }) => {
   const subscribePlanInfo = useSubscribePlanInfo();
@@ -25,6 +26,23 @@ export const SubscribePlan = ({ subscribeInfo }) => {
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
+  const [changingPlanPrice, setChangingPlanPrice] = useState(null);
+  // const [shippingLeftCount, setShippingLeftCount] = useState(null);
+
+  // useEffect(() => {
+  //   try {
+  //     (async () => {
+  //       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/shippingLeft`;
+  //       const res = await getData(url);
+
+  //       if (res.status === 200) {
+  //         setShippingLeftCount(res.data.shippingLeft);
+  //       }
+  //     })();
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }, []);
 
   const subsribePlanItems = [
     {
@@ -163,6 +181,27 @@ export const SubscribePlan = ({ subscribeInfo }) => {
     },
   ];
 
+  const fetchChangingPrice = async (nextPaymentPrice) => {
+    try {
+      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/price/${nextPaymentPrice}`;
+      const res = await getData(url);
+      console.log(res);
+      if (res) {
+        setChangingPlanPrice(res.data.changingPrice);
+      } else {
+        mct.alertShow(`데이터 전송 실패\n${res.error}`);
+      }
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchChangingPrice(
+      subscribeInfo.price[selectedPlanName].avgPrice.salePrice,
+    );
+  }, [selectedPlanName]);
+
   const onActiveConfirmModal = () => {
     const currentRecipeCount = subscribeInfo.recipe.idList.length;
     // ! validation : 처음과 동일한 플랜일 경우
@@ -185,7 +224,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       return setActiveConfirmModal(false);
     }
 
-    console.log('___subscribeInfo', subscribeInfo);
+    // console.log('___subscribeInfo', subscribeInfo);
 
     const body = {
       plan: selectedPlanName,
@@ -409,11 +448,12 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       </div>
 
       <div className={s.plan_select_price}>
-        <div>변경 후 상품 금액</div>
+        <div> {changingPlanPrice > 0 ? '추가 결제될' : '부분 환불할'} 금액</div>
         <div>
-          {transformLocalCurrency(
+          {transformLocalCurrency(changingPlanPrice)}
+          {/* {transformLocalCurrency(
             subscribeInfo.price[selectedPlanName].avgPrice.salePrice,
-          )}
+          )} */}
           원
         </div>
       </div>

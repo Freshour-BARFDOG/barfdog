@@ -187,7 +187,7 @@ $container-maxWidth: rem(960);
   justify-content: center;
   // align-items: center;
   gap: rem(14);
-  margin: rem(20) 0 0 rem(20);
+  // margin: rem(20) 0 0 rem(20);
 }
 
 .dog_info_show_btn_wrapper {
@@ -1342,6 +1342,42 @@ section.health_score_analysis {
       }
     }
   }
+
+  // 2. 전체 반려견 중
+  .all_dogs_wrapper {
+    margin: rem(40) rem(50);
+    .all_dogs_title {
+      display: flex;
+      justify-content: space-between;
+      // padding-bottom: rem(10);
+
+      p {
+        color: #be1a21;
+      }
+    }
+    .all_count {
+      color: #b8b6b6;
+      font-weight: normal;
+      font-size: rem(18);
+    }
+    .avg_text_wrapper {
+      margin-left: rem(80);
+      width: rem(320);
+      height: rem(30);
+      position: absolute;
+      top: -40%;
+      .avg_text {
+        position: absolute;
+        color: #8d8d8d;
+        font-weight: normal;
+        font-size: rem(16);
+        line-height: 1.2;
+        text-align: center;
+      }
+    }
+  }
+
+  // 3. 다른 견종 중엔
 }
 
 //*** 4. 추천 레시피 ***

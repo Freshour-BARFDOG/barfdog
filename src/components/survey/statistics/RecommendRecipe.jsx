@@ -13,7 +13,7 @@ export default function RecommendRecipe({ surveyInfo, recipeInfo }) {
   const [recommendRecipeId, setRecommendRecipeId] = useState(null);
   const [inedibleRecipeIds, setInedibleRecipeIds] = useState([]);
   const [recommendRecipeInfo, setRecommendRecipeInfo] = useState(recipeInfo);
-  const [isShowResult, setIsShowResult] = useState(true);
+  const [isShowResult, setIsShowResult] = useState(false);
 
   //*** 추천 레시피 & 못먹는 음식 플래그 ***//
   useEffect(() => {

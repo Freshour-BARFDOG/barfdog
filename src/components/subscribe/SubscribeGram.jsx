@@ -301,11 +301,10 @@ export const SubscribeGram = ({ subscribeInfo }) => {
               {form.nextSalePrice - form.originPrice !== 0 && (
                 <div className={s.grid_6}>
                   <p className={s.top_text}>
-                    부분{' '}
                     {form.nextSalePrice - form.originPrice > 0
-                      ? '결제'
-                      : '환불'}
-                    될 금액
+                      ? '추가 결제될'
+                      : '부분 환불할'}
+                    금액
                   </p>
                   <div className={s.bot_1}>
                     <span>

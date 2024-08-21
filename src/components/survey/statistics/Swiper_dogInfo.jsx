@@ -48,7 +48,7 @@ export function Swiper_dogInfo({ data }) {
   //     setIsReachedEnd(true);
   //   }
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className={s.swiper_dogInfo_outerWrap}>

@@ -23,6 +23,7 @@ export default function SurveyResultRecipe({
   setForm,
   pricePerPack,
   setPricePerPack,
+  activeConcern,
   calcPrice,
 }) {
   const [initialize, setInitialize] = useState(false);
@@ -34,20 +35,31 @@ export default function SurveyResultRecipe({
   //*** 추천 레시피 & 못먹는 음식 플래그 ***//
   useEffect(() => {
     // 1. 추천 레시피
-    const selectedConditions = surveyInfo.priorityConcerns
-      .split(',')
-      .filter(Boolean);
-    let recommendRecipeIds = [];
+    // const selectedConditions = surveyInfo.priorityConcerns
+    //   .split(',')
+    //   .filter(Boolean);
+    // let recommendRecipeIds = [];
 
-    selectedConditions.forEach((condition) => {
-      if (concernsRecipeMap[condition]) {
-        recommendRecipeIds.push(...concernsRecipeMap[condition]);
-      }
-    });
+    // selectedConditions.forEach((condition) => {
+    //   if (concernsRecipeMap[condition]) {
+    //     recommendRecipeIds.push(...concernsRecipeMap[condition]);
+    //   }
+    // });
 
-    recommendRecipeIds = [...new Set(recommendRecipeIds)]; // 중복 제거
+    // recommendRecipeIds = [...new Set(recommendRecipeIds)]; // 중복 제거
 
-    // inedibleFood에 포함된 재료의 레시피 ID를 제외
+    // // inedibleFood에 포함된 재료의 레시피 ID를 제외
+    // const inedibleFoods = surveyInfo.inedibleFood.split(',').filter(Boolean);
+    // inedibleFoods.forEach((food) => {
+    //   if (inedibleFoodRecipeMap[food]) {
+    //     recommendRecipeIds = recommendRecipeIds.filter(
+    //       (id) => !inedibleFoodRecipeMap[food].includes(id),
+    //     );
+    //   }
+    // });
+
+    let recommendRecipeIds = concernsRecipeMap[activeConcern] || [];
+
     const inedibleFoods = surveyInfo.inedibleFood.split(',').filter(Boolean);
     inedibleFoods.forEach((food) => {
       if (inedibleFoodRecipeMap[food]) {
@@ -77,7 +89,7 @@ export default function SurveyResultRecipe({
 
       setInedibleRecipeIds(uniqueRecipeIds);
     }
-  }, []);
+  }, [activeConcern]);
 
   useEffect(() => {
     if (!selectedCheckbox) return;
@@ -117,8 +129,8 @@ export default function SurveyResultRecipe({
     popupWindow(href, { width: 1000, height: 716 });
   };
 
-  console.log('recommendRecipeId___', recommendRecipeId);
-  console.log('inedibleRecipeIds___', inedibleRecipeIds);
+  // console.log('recommendRecipeId___', recommendRecipeId);
+  // console.log('inedibleRecipeIds___', inedibleRecipeIds);
 
   return (
     <div className={s.recipe_container}>

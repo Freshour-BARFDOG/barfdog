@@ -103,7 +103,7 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
             : `/api/surveyReports/${id}`;
 
         const res = await getData(apiUrl);
-        console.log('/api/surveyReports/>>>', res);
+        // console.log('/api/surveyReports/>>>', res);
         setSurveyInfo(res.data);
 
         setActiveConcern(res.data.priorityConcerns.split(',')[0] || '');
@@ -443,6 +443,7 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
                   calcPrice={calcSubscribePlanPaymentPrice}
                   pricePerPack={pricePerPack}
                   setPricePerPack={setPricePerPack}
+                  activeConcern={activeConcern}
                 />
 
                 <div className={s.box_dot_divider}></div>
