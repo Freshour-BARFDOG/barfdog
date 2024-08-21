@@ -25,6 +25,10 @@ import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMeal
 import { originSubscribeIdList } from '/util/func/subscribe/originSubscribeIdList';
 import { SurveyRecipeInput } from '../survey/result/SurveyRecipeInput';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import {
+  concernsRecipeMap,
+  inedibleFoodRecipeMap,
+} from '../../../store/TYPE/recipeIdWithConcernsInedibleFood';
 
 // const swiperSettings = {
 //   className: `${s.swiper_recipes} ${s.inMypage}`,
@@ -87,20 +91,80 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   // // console.log(tbContext)
 
   //*** 추천 레시피 & 못먹는 음식 플래그 ***//
-  useEffect(() => {}, []);
+  useEffect(() => {
+    (async () => {
+      try {
+        const apiUrl = `/api/dogs/${subscribeInfo.info.dogId}/surveyReport`;
+        const res = await getData(apiUrl);
+        const data = res.data;
+
+        // 1. 추천 레시피
+        const selectedConditions = data.priorityConcerns
+          .split(',')
+          .filter(Boolean);
+        let recommendRecipeIds = [];
+
+        selectedConditions.forEach((condition) => {
+          if (concernsRecipeMap[condition]) {
+            recommendRecipeIds.push(...concernsRecipeMap[condition]);
+          }
+        });
+
+        recommendRecipeIds = [...new Set(recommendRecipeIds)]; // 중복 제거
+
+        // inedibleFood에 포함된 재료의 레시피 ID를 제외
+        const inedibleFoods = data.inedibleFood.split(',').filter(Boolean);
+        inedibleFoods.forEach((food) => {
+          if (inedibleFoodRecipeMap[food]) {
+            recommendRecipeIds = recommendRecipeIds.filter(
+              (id) => !inedibleFoodRecipeMap[food].includes(id),
+            );
+          }
+        });
+
+        // recommendRecipeId의 최종 값
+        const finalRecommendRecipeId = recommendRecipeIds.length
+          ? recommendRecipeIds
+          : null;
+        setRecommendRecipeId(finalRecommendRecipeId);
+
+        // 2. 못먹는 음식
+        if (data.inedibleFood) {
+          const inedibleFoodList = data.inedibleFood
+            .split(',')
+            .map((food) => food.trim());
+
+          const recipeIds = inedibleFoodList.flatMap(
+            (food) => inedibleFoodRecipeMap[food] || [],
+          );
+
+          const uniqueRecipeIds = [...new Set(recipeIds)];
+
+          setInedibleRecipeIds(uniqueRecipeIds);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, []);
+
+  // console.log('recommendRecipeId__', recommendRecipeId);
+  // console.log('inedibleRecipeIds_', inedibleRecipeIds);
 
   useEffect(() => {
-    try {
-      (async () => {
-        const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/shippingLeft`;
-        const res = await getData(url);
+    if (subscribeInfo.info.subscriptionMonth) {
+      try {
+        (async () => {
+          const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/shippingLeft`;
+          const res = await getData(url);
 
-        if (res.status === 200) {
-          setShippingLeftCount(res.data.shippingLeft);
-        }
-      })();
-    } catch (err) {
-      console.error(err);
+          if (res.status === 200) {
+            setShippingLeftCount(res.data.shippingLeft);
+          }
+        })();
+      } catch (err) {
+        console.error(err);
+      }
     }
   }, []);
 
@@ -252,11 +316,10 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     })();
   }, []);
 
-  const fetchChangingPrice = async (nextPaymentPrice) => {
+  const fetchChangingPrice = async (price) => {
+    console.log('price!!!!!!!', price);
     try {
-      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/price/${
-        nextPaymentPrice * shippingLeftCount
-      }`;
+      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/price/${price}`;
       const res = await getData(url);
       console.log(res);
       if (res) {
@@ -286,7 +349,6 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
         : seletedIdList?.filter((id) => id !== selectedId);
     });
     const maxSelectedCheckboxCount = 2;
-    console.log(selectedCheckboxCount);
 
     if (selectedCheckboxCount === 0) {
       setChangingRecipePrice(null);
@@ -295,52 +357,75 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
       mct.alertShow('풀플랜은 최대 2개 레시피를 선택할 수 있습니다.');
       setInitialize(true);
       setSelectedIdList([]);
-    } else {
-      setInitialize(false);
-      setSelectedIdList(seletedIdList);
-
-      const calcSalePriceAfterChangingRecipe = ({ plan: plan }) => {
-        const currentRecipeInfos =
-          recipeInfo &&
-          recipeInfo.data &&
-          recipeInfo.data.filter(
-            (recipe) => selectedIdList.indexOf(recipe.id) >= 0,
-          );
-        const result = calcSubscribePrice({
-          discountPercent: subscribeInfo.plan.discountPercent,
-          oneMealGrams: calcOneMealGramsWithRecipeInfo({
-            selectedRecipeIds: selectedIdList,
-            allRecipeInfos: currentRecipeInfos,
-            oneDayRecommendKcal: subscribeInfo.info.oneDayRecommendKcal,
-            isOriginSubscriber,
-          }).map((recipe) => recipe.oneMealGram),
-          planName: plan,
-          pricePerGrams: currentRecipeInfos?.map(
-            (recipe) => recipe.pricePerGram,
-          ),
-          isOriginSubscriber,
-          recipeNameList: currentRecipeInfos?.map((recipe) => recipe.name),
-        });
-
-        // console.log('result.salePrice>>>', currentRecipeInfos);
-        // console.log('result.salePrice>>>', result);
-        // console.log('currentRecipeInfos:::', currentRecipeInfos);
-
-        return result.avgPrice?.salePrice;
-      };
-
-      const curPlan = subscribeInfo.info.planName;
-      const nextPaymentPrice = calcSalePriceAfterChangingRecipe({
-        plan: curPlan,
-      });
-
-      if (nextPaymentPrice) {
-        fetchChangingPrice(nextPaymentPrice);
-      }
     }
+    setInitialize(false);
+    setSelectedIdList(seletedIdList);
+
+    console.log('$$$', seletedIdList);
+
+    const calcSalePriceAfterChangingRecipe = ({ plan: plan }) => {
+      const currentRecipeInfos =
+        recipeInfo &&
+        recipeInfo.data &&
+        recipeInfo.data.filter(
+          (recipe) => selectedIdList.indexOf(recipe.id) >= 0,
+        );
+
+      const result = calcSubscribePrice({
+        discountPercent: subscribeInfo.plan.discountPercent,
+        oneMealGrams: calcOneMealGramsWithRecipeInfo({
+          selectedRecipeIds: selectedIdList,
+          allRecipeInfos: currentRecipeInfos,
+          oneDayRecommendKcal: subscribeInfo.info.oneDayRecommendKcal,
+          isOriginSubscriber,
+        }).map((recipe) => recipe.oneMealGram),
+        planName: plan,
+        pricePerGrams: currentRecipeInfos?.map((recipe) => recipe.pricePerGram),
+        isOriginSubscriber,
+        recipeNameList: currentRecipeInfos?.map((recipe) => recipe.name),
+      });
+      console.log('selectedIdList***', selectedIdList);
+      console.log(
+        'recipeInfo***',
+        recipeInfo?.data?.filter(
+          (recipe) => selectedIdList.indexOf(recipe.id) >= 0,
+        ),
+      );
+      console.log('result.salePrice>>>', currentRecipeInfos);
+      console.log('result.salePrice>>>', result);
+      console.log('currentRecipeInfos:::', currentRecipeInfos);
+
+      return result.avgPrice?.salePrice;
+    };
+
+    const curPlan = subscribeInfo.info.planName;
+    const nextPaymentPrice = calcSalePriceAfterChangingRecipe({
+      plan: curPlan,
+    });
+
+    // if (nextPaymentPrice) {
+    //   const formattedPrice =
+    //     subscribeInfo.info.subscriptionMonth === null
+    //       ? nextPaymentPrice
+    //       : nextPaymentPrice * shippingLeftCount;
+    //   // fetchChangingPrice(formattedPrice);
+
+    //   (async () => {
+    //     try {
+    //       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/price/${formattedPrice}`;
+    //       const res = await getData(url);
+    //       console.log(res);
+    //       if (res) {
+    //         setChangingRecipePrice(res.data.changingPrice);
+    //       }
+    //     } catch (err) {
+    //       console.error(err);
+    //     }
+    //   })();
+    // }
   }, [selectedCheckbox]);
 
-  console.log('changingRecipePrice___', changingRecipePrice);
+  // console.log('changingRecipePrice___', changingRecipePrice);
 
   useEffect(() => {
     if (!selectedRadio) return;
@@ -360,7 +445,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   };
   // console.log('____selected', selectedRadio);
   // console.log('selectedCheckbox', selectedCheckbox);
-  // console.log('subscribeInfo.recipe.idList', subscribeInfo.recipe.idList);
+  // console.log('subscribeInfo___', subscribeInfo);
   // console.log('subscribeInfo.recipe', subscribeInfo.recipe);
   // console.log('isOriginSubscriber>>>>', isOriginSubscriber);
   // console.log(subscribeInfo);
@@ -422,7 +507,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
 
     const body = {
       plan: curPlan,
-      nextPaymentPrice: nextPaymentPrice, // 선택된 플랜의 판매가격
+      nextPaymentPrice: nextPaymentPrice, // 선택된 레시피의 판매가격
       recipeIdList: selectedIdList,
     };
 
@@ -459,9 +544,70 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     window.location.reload();
   };
 
+  const onRecipeClickHandler = (selectedValue) => {
+    console.log('selectedValue___', selectedValue);
+    console.log('????', selectedIdList);
+
+    // const calcSalePriceAfterChangingRecipe = ({ plan: plan }) => {
+    //   const currentRecipeInfos =
+    //     recipeInfo &&
+    //     recipeInfo.data &&
+    //     recipeInfo.data.filter(
+    //       (recipe) => selectedIdList.indexOf(recipe.id) >= 0,
+    //     );
+    //   const result = calcSubscribePrice({
+    //     discountPercent: subscribeInfo.plan.discountPercent,
+    //     oneMealGrams: calcOneMealGramsWithRecipeInfo({
+    //       selectedRecipeIds: selectedIdList,
+    //       allRecipeInfos: currentRecipeInfos,
+    //       oneDayRecommendKcal: subscribeInfo.info.oneDayRecommendKcal,
+    //       isOriginSubscriber,
+    //     }).map((recipe) => recipe.oneMealGram),
+    //     planName: plan,
+    //     pricePerGrams: currentRecipeInfos?.map((recipe) => recipe.pricePerGram),
+    //     isOriginSubscriber,
+    //     recipeNameList: currentRecipeInfos?.map((recipe) => recipe.name),
+    //   });
+
+    //   console.log('result.salePrice>>>', currentRecipeInfos);
+    //   console.log('result.salePrice>>>', result);
+    //   console.log('currentRecipeInfos:::', currentRecipeInfos);
+
+    //   return result.avgPrice?.salePrice;
+    // };
+
+    // const curPlan = subscribeInfo.info.planName;
+    // const nextPaymentPrice = calcSalePriceAfterChangingRecipe({
+    //   plan: curPlan,
+    // });
+    // console.log('nextPaymentPrice*****', nextPaymentPrice);
+
+    // if (nextPaymentPrice) {
+    //   const formattedPrice =
+    //     subscribeInfo.info.subscriptionMonth === null
+    //       ? nextPaymentPrice
+    //       : nextPaymentPrice * shippingLeftCount;
+    //   // fetchChangingPrice(formattedPrice);
+
+    //   (async () => {
+    //     try {
+    //       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/price/${formattedPrice}`;
+    //       const res = await getData(url);
+    //       console.log(res);
+    //       if (res) {
+    //         setChangingRecipePrice(res.data.changingPrice);
+    //       }
+    //     } catch (err) {
+    //       console.error(err);
+    //     }
+    //   })();
+    // }
+  };
+
   // console.log('recipeInfo___', recipeInfo);
   // console.log('recipeSingleInfo___', recipeSingleInfo);
   // console.log('recipeDoubleInfo___', recipeDoubleInfo);
+  console.log('changingRecipePrice___', changingRecipePrice);
 
   return (
     <>
@@ -478,7 +624,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
 
             <div className={s.recipe_list}>
               {recipeDoubleInfo.map((recipe, index) => (
-                <>
+                <div key={index} onClick={() => onRecipeClickHandler(recipe)}>
                   <SurveyRecipeInput
                     id={`${recipe.name}-${recipe.id}`}
                     name={name}
@@ -488,7 +634,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
                     setSelectedCheckbox={setSelectedCheckbox}
                     option={{ label: '레시피 선택' }}
                   >
-                    {recommendRecipeId === recipe.id && (
+                    {recommendRecipeId.includes(recipe.id) && (
                       <ItemRecommendlabel
                         label="추천!"
                         style={{
@@ -552,7 +698,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
                       </Link>
                     </button>
                   </SurveyRecipeInput>
-                </>
+                </div>
               ))}
             </div>
           </div>
@@ -575,7 +721,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
                     setSelectedCheckbox={setSelectedCheckbox}
                     option={{ label: '레시피 선택' }}
                   >
-                    {recommendRecipeId === recipe.id && (
+                    {recommendRecipeId.includes(recipe.id) && (
                       <ItemRecommendlabel
                         label="추천!"
                         style={{
@@ -635,15 +781,17 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
           </div>
         </div>
       )}
-      {selectedIdList.length > 0 && changingRecipePrice && (
+      {selectedIdList.length > 0 && changingRecipePrice ? (
         <div className={s.recipe_change_price}>
           <p className={s.top_text}>
-            부분 {changingRecipePrice > 0 ? '결제' : '환불'}될 금액
+            {changingRecipePrice > 0 ? '추가 결제될' : '부분 환불할'} 금액
           </p>
           <div className={s.bot_1}>
             <span> {transformLocalCurrency(changingRecipePrice)}원</span>
           </div>
         </div>
+      ) : (
+        ''
       )}
       <div className={s.btn_box}>
         <button className={s.btn} onClick={onActiveConfirmModal}>

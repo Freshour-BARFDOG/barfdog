@@ -311,7 +311,7 @@ export default function UpdateSurveyPage({ data, subscribeId }) {
       setIsLoading({ redir: true });
       const dogId = data.dogIdx;
       //! 변경
-      window.location.href = `/survey/statistic?id=${dogId}`;
+      window.location.href = `/mypage/dogs/${dogId}/result`;
     } else {
       // console.log('추천그램수 변경되고, 취소')
       setIsChangedOneMealRecommendGram(false);
