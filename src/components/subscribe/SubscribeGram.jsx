@@ -43,8 +43,9 @@ export const SubscribeGram = ({ subscribeInfo }) => {
   const [submitted, setSubmitted] = useState(false);
   const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
   const [shippingLeftCount, setShippingLeftCount] = useState(null);
+  const [changingPrice, setChangingPrice] = useState(null);
 
-  console.log('subscribeInfo___', subscribeInfo);
+  // console.log('subscribeInfo___', subscribeInfo);
 
   useEffect(() => {
     //! [추가] 기존 구독자인지 확인
@@ -67,7 +68,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
 
   // console.log(isOriginSubscriber, subscribeInfo.info.subscribeId);
 
-  const onInputChange = (value) => {
+  const onInputChange = async (value) => {
     const nextAmount = value;
     const nextGrams = form.originGrams.map((originGram) =>
       Number(
@@ -115,9 +116,24 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       nextPricePerPack: avgPrice.perPack,
       nextSalePrice: avgPrice.salePrice,
     }));
+
+    try {
+      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/price/${
+        avgPrice.salePrice * shippingLeftCount
+      }`;
+      const res = await getData(url);
+      console.log(res);
+      if (res) {
+        setChangingPrice(res.data.changingPrice);
+      } else {
+        mct.alertShow(`데이터 전송 실패\n${res.error}`);
+      }
+    } catch (err) {
+      alert(err);
+    }
   };
 
-  console.log('form___', form);
+  // console.log('form___', form);
 
   const onActiveConfirmModal = () => {
     if (valid_isTheSameArray(form.originGrams, form.nextGrams)) {
@@ -135,7 +151,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
 
     const body = {
       stringGrams: form.nextGrams.join(', '), // 원래 Number 여야하지만,  Number[] 배열로 전달한다.
-      totalPrice: form.nextSalePrice,
+      totalPrice: form.nextSalePrice * shippingLeftCount,
     };
 
     // validation: Incorrect paymentPrice
@@ -162,7 +178,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       setActiveConfirmModal(false);
     } catch (err) {
       alert(err);
-      console.error(err.response);
+      // console.error(err.response);
     } finally {
       setIsLoading(false);
     }
@@ -173,7 +189,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     window.location.reload();
   };
 
-  console.log(shippingLeftCount);
+  // console.log(shippingLeftCount);
 
   return (
     <>
@@ -259,7 +275,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
                   </span>
                 </div>
               </div> */}
-              <div className={s.grid_6}>
+              {/* <div className={s.grid_6}>
                 <p className={s.top_text}>변경 후 상품 금액</p>
                 <div className={s.bot_1}>
                   <span>
@@ -267,20 +283,20 @@ export const SubscribeGram = ({ subscribeInfo }) => {
                       form.nextSalePrice * shippingLeftCount,
                     )}
                     원
-                  </span>
-                  {/* <span> */}
-                  {/* {' '}
+                  </span> */}
+              {/* <span> */}
+              {/* {' '}
                     (차액: {form.nextSalePrice - form.originPrice > 0 && '+'}
                     {transformLocalCurrency(
                       form.nextSalePrice - form.originPrice,
                     )}
                     원) */}
-                  {/* </span> */}
-                  <div className={s.text3} style={{ color: '#999' }}>
+              {/* </span> */}
+              {/* <div className={s.text3} style={{ color: '#999' }}>
                     할인율은 미적용된 금액입니다.
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {form.nextSalePrice - form.originPrice !== 0 && (
                 <div className={s.grid_6}>
@@ -294,15 +310,15 @@ export const SubscribeGram = ({ subscribeInfo }) => {
                   <div className={s.bot_1}>
                     <span>
                       {' '}
-                      {transformLocalCurrency(
+                      {/* {transformLocalCurrency(
                         Math.abs(form.nextSalePrice - form.originPrice) *
                           shippingLeftCount,
-                      )}
-                      원
+                      )} */}
+                      {transformLocalCurrency(changingPrice)}원
                     </span>
-                    <div className={s.text3} style={{ color: '#999' }}>
+                    {/* <div className={s.text3} style={{ color: '#999' }}>
                       차액 * 배송횟수
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               )}
