@@ -138,7 +138,7 @@ export default function SignupPage() {
           },
         })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.status === 200) {
             const token = res.headers.authorization;
             const { temporaryPassword, email, name, roleList } = res.data;
@@ -155,7 +155,7 @@ export default function SignupPage() {
             };
             dispatch(authAction.login(payload));
             // 홈으로 이동
-            // router.push('/');
+            router.push('/');
           } else {
             alert('로그인에 실패하였습니다.');
           }
