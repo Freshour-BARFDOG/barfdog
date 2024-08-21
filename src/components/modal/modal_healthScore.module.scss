@@ -48,9 +48,9 @@
 
   header {
     display: flex;
-    justify-content: center;
+    // justify-content: center;
     font-weight: bold;
-    font-size: rem(26);
+    font-size: rem(30);
     padding: rem(10) 0;
   }
 
@@ -59,6 +59,26 @@
     font-size: rem(20);
     font-weight: normal;
     text-align: left;
+    line-height: 1.4;
+
+    h5 {
+      position: relative;
+      font-weight: bold;
+      display: inline-block;
+      z-index: 1;
+      font-size: rem(22);
+    }
+    h5::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -2%;
+      width: 104%;
+      height: 1.3em;
+      background-color: #fff1a9;
+      z-index: -1;
+      pointer-events: none;
+    }
   }
 }
 

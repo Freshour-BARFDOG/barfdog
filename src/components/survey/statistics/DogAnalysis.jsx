@@ -18,8 +18,27 @@ export default function DogAnalysis({ surveyInfo, info }) {
 
   const [scaleNum, setScaleNum] = useState(1);
   const [waterNum, setWaterNum] = useState({});
+  const [caution, setCaution] = useState({});
   const [dietInfo, setDietInfo] = useState({});
+  const [statusInfo, setStatusInfo] = useState({});
   const [supplementInfo, setSupplementInfo] = useState({});
+
+  const dogStatusType = {
+    THIN: 'THIN',
+    HEALTHY: 'HEALTHY',
+    NEED_DIET: 'NEED_DIET',
+    OBESITY: 'OBESITY',
+    PREGNANT: 'PREGNANT',
+    LACTATING: 'LACTATING',
+    KOR: {
+      THIN: '말랐어요',
+      HEALTHY: '건강해요',
+      NEED_DIET: '다이어트 필요',
+      OBESITY: '심각한 비만',
+      PREGNANT: '임신한 상태',
+      LACTATING: '수유 중',
+    },
+  };
 
   useEffect(() => {
     const avgWeight = surveyInfo.weightAnalysis.avgWeight;
@@ -106,42 +125,44 @@ export default function DogAnalysis({ surveyInfo, info }) {
       myDog: myDogWaterNum,
     });
 
-    //* 평균 질병 이미지
-    switch (true) {
-      case surveyInfo.topWaterCountLevelAmongSameSizeDog === 'LITTLE':
-        avgWaterNum = 1;
-        break;
-      case surveyInfo.topWaterCountLevelAmongSameSizeDog === 'NORMAL':
-        avgWaterNum = 2;
-        break;
-      case surveyInfo.topWaterCountLevelAmongSameSizeDog === 'MUCH':
-        avgWaterNum = 3;
-        break;
-      default:
-        avgWaterNum = 2;
-        break;
-    }
-
     //* 나의 질병 이미지
-    switch (true) {
-      case surveyInfo.waterCountLevel === 'LITTLE':
-        myDogWaterNum = 1;
-        break;
-      case surveyInfo.waterCountLevel === 'NORMAL':
-        myDogWaterNum = 2;
-        break;
-      case surveyInfo.waterCountLevel === 'MUCH':
-        myDogWaterNum = 3;
-        break;
-      default:
-        myDogWaterNum = 2;
-        break;
+    let good, bad;
+    if (surveyInfo.cautionCount === 0) {
+      good = 'good-active';
+      bad = 'bad';
+    } else if (surveyInfo.cautionCount > 0) {
+      good = 'good';
+      bad = 'bad-active';
     }
 
-    setWaterNum({
-      avg: avgWaterNum,
-      myDog: myDogWaterNum,
+    setCaution({
+      good,
+      bad,
     });
+
+    //* 현재 상태 카운트
+    const statusList = [
+      { id: '건강해요', count: surveyInfo.healthyCount },
+      { id: '다이어트 필요', count: surveyInfo.needDietCount },
+      { id: '심각한 비만', count: surveyInfo.obesityCount },
+      { id: '말랐어요', count: surveyInfo.thinCount },
+      { id: '임신한 상태', count: surveyInfo.pregnantCount },
+      { id: '수유 중', count: surveyInfo.lactatingCount },
+    ];
+
+    setStatusInfo(
+      statusList.map((status) => ({
+        ...status,
+        color:
+          dogStatusType.KOR[surveyInfo.dogStatus] === status.id
+            ? '#ffc5c5'
+            : '#ececec',
+        textColor:
+          dogStatusType.KOR[surveyInfo.dogStatus] === status.id
+            ? '#fff'
+            : '#929292',
+      })),
+    );
 
     //* 급여식단
     const dietNumList = [
@@ -341,9 +362,11 @@ export default function DogAnalysis({ surveyInfo, info }) {
           현재 상태<span className={s.compare_txt}> </span>
         </div>
 
-        <StatusChart />
+        {statusInfo && statusInfo.length > 0 && (
+          <StatusChart statusInfo={statusInfo} />
+        )}
 
-        <div className={s.dog_analysis_box}>
+        <div className={s.dog_analysis_box} style={{ marginTop: '60px' }}>
           <div className={s.dog_analysis_content}>
             <div>{info.dogSize} 1위</div>
             <div>
@@ -464,21 +487,20 @@ export default function DogAnalysis({ surveyInfo, info }) {
           질병<span className={s.compare_txt}> </span>
         </div>
 
-        {/* ! [추가] 그래프  */}
         <div className={s.graph_wrapper_disease}>
           <div>
             <Image
-              src={'/img/survey/statistics/disease-good-active.png'}
-              alt="disease"
+              src={`/img/survey/statistics/caution-${caution.good}.png`}
+              alt="caution"
               width={80 * 1.6}
               height={80 * 1.6}
             />
-            <p className={s.avg_txt}> 좋아요</p>
+            <p className={s.avg_txt}>좋아요</p>
           </div>
           <div>
             <Image
-              src={'/img/survey/statistics/disease-bad.png'}
-              alt="disease"
+              src={`/img/survey/statistics/caution-${caution.bad}.png`}
+              alt="caution"
               width={80 * 1.6}
               height={80 * 1.6}
             />

@@ -103,9 +103,20 @@ export default function SubscribeInfoPage({ data }) {
                   <SubscribeGram subscribeInfo={subscribeInfo} />
                 </ToggleBox>
 
-                <ToggleBox title="구독 플랜 변경">
-                  <SubscribePlan subscribeInfo={subscribeInfo} />
-                </ToggleBox>
+                {subscribeInfo?.info.subscriptionMonth === null ? (
+                  <ToggleBox title="구독 플랜 변경">
+                    <SubscribePlan subscribeInfo={subscribeInfo} />
+                  </ToggleBox>
+                ) : (
+                  <>
+                    <ToggleBox title="구독 플랜 변경" disable={true}>
+                      <SubscribePlan subscribeInfo={subscribeInfo} />
+                    </ToggleBox>
+                    <div className={s.info_text}>
+                      패키지 구독은 플랜 변경 불가합니다.
+                    </div>
+                  </>
+                )}
 
                 <ToggleBox
                   title="구독 레시피 변경"

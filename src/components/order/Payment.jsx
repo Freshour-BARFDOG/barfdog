@@ -210,7 +210,7 @@ export function Payment({
             // allianceType: allianceType, // 콕뱅크 주문인지 확인
           };
 
-    // console.log('----- request body:\n', body);
+    console.log('----- request body:\n', body);
 
     try {
       setIsLoading((prevState) => ({

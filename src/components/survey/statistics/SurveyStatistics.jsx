@@ -54,9 +54,9 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
   const [userInfo, setUserInfo] = useState(userData);
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [isRendered, setIsRendered] = useState(true);
-  const [isShowResult, setIsShowResult] = useState(true);
-  const [isActiveDogIdx, setIsActiveDogIdx] = useState('');
-  const [chartData, setChartData] = useState({});
+  const [isShowResult, setIsShowResult] = useState(false);
+
+  const [etcConcernsData, setEtcConcernsData] = useState({});
   const [pricePerPack, setPricePerPack] = useState(''); // 가격
   const [submitted, setSubmitted] = useState(false);
   const [info, setInfo] = useState({});
@@ -87,27 +87,26 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
   const [mypageSubscribeId, setMypageSubscribeId] = useState(null);
 
+  const dogStatusType = {
+    THIN: 'THIN',
+    HEALTHY: 'HEALTHY',
+    NEED_DIET: 'NEED_DIET',
+    OBESITY: 'OBESITY',
+    PREGNANT: 'PREGNANT',
+    LACTATING: 'LACTATING',
+    KOR: {
+      THIN: '말랐어요',
+      HEALTHY: '건강해요',
+      NEED_DIET: '다이어트 필요',
+      OBESITY: '심각한 비만',
+      PREGNANT: '임신한 상태',
+      LACTATING: '수유 중',
+    },
+  };
+
   // 하단 버튼 '마이페이지로 돌아가기'
   const onPrevPage = () => {
     router.push('/mypage');
-  };
-
-  const getDescriptionBlocks = (data) => {
-    const blocks = [];
-
-    for (const [key, value] of Object.entries(data)) {
-      if (Array.isArray(value)) {
-        value.forEach((item) => {
-          if (surveyDescriptionList[item]) {
-            blocks.push(<li key={item}>{surveyDescriptionList[item]}</li>);
-          }
-        });
-      } else if (typeof value === 'string' && surveyDescriptionList[value]) {
-        blocks.push(<li key={value}>{surveyDescriptionList[value]}</li>);
-      }
-    }
-
-    return blocks;
   };
 
   useEffect(() => {
@@ -384,43 +383,79 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         setInfo(allDATA);
 
         //* 문구 설명
-        const validConcerns = [
-          '관절',
-          '피부·모질',
-          '소화력부족',
-          '빈혈',
-          '피로회복',
-        ];
-        setChartData({
-          dogStatus:
-            res.data.dogStatus === 'HEALTHY'
-              ? '#건강해요'
-              : 'THIN'
-              ? '#말랐어요'
-              : 'NEED_DIET'
-              ? '#다이어트필요'
-              : 'OBESITY'
-              ? '#심각한비만'
-              : '',
-          pregnant:
-            res.data.specificDogStatus.includes('PREGNANT') && '#임신한상태',
-          lactating:
-            res.data.specificDogStatus.includes('LACTATING') && '#수유중',
-          waterCountLevel:
-            res.data.waterCountLevel === 'LITTLE' && '#적은음수량',
-          activityLevel:
-            res.data.dogActivity.activityLevel === 'VERY_MUCH' ||
-            res.data.dogActivity.activityLevel === 'MUCH'
-              ? '#많은활동량'
-              : res.data.dogActivity.activityLevel === 'VERY_LITTLE' ||
-                res.data.dogActivity.activityLevel === 'LITTLE'
-              ? '#적은활동량'
-              : '',
-          priorityConcerns: res.data.priorityConcerns
-            .split(',')
-            .filter((concern) => validConcerns.includes(concern))
-            .map((concern) => `#${concern}`),
-        });
+        let etcConcernsList = [];
+        if (res.data.dogStatus !== 'HEALTHY') {
+          etcConcernsList.push(dogStatusType.KOR[res.data.dogStatus]);
+        }
+
+        if (res.data.specificDogStatus.includes('PREGNANT')) {
+          etcConcernsList.push('임신한 상태');
+        }
+
+        if (res.data.specificDogStatus.includes('LACTATING')) {
+          etcConcernsList.push('수유 중');
+        }
+
+        if (res.data.waterCountLevel === 'LITTLE') {
+          etcConcernsList.push('적은 음수량');
+        }
+
+        if (
+          res.data.dogActivity.activityLevel === 'VERY_MUCH' ||
+          res.data.dogActivity.activityLevel === 'MUCH'
+        ) {
+          etcConcernsList.push('많은 활동량');
+        } else if (
+          res.data.dogActivity.activityLevel === 'VERY_LITTLE' ||
+          res.data.dogActivity.activityLevel === 'LITTLE'
+        ) {
+          etcConcernsList.push('적은 활동량');
+        }
+
+        const etcConcernsTextList = res.data.priorityConcerns
+          .split(',')
+          .slice(1); // 첫 번째 항목을 제외
+
+        if (etcConcernsTextList.length > 0) {
+          etcConcernsList = [...etcConcernsList, ...etcConcernsTextList];
+        }
+
+        setEtcConcernsData(etcConcernsList);
+
+        // const etcConcerns =
+        //   res.data.dogStatus === '건강해요' &&
+        //   !res.data.specificDogStatus.includes('PREGNANT') &&
+        //   !res.data.specificDogStatus.includes('LACTATING') &&
+        //   res.data.waterCountLevel !== 'LITTLE' &&
+        //   res.data.dogActivity.activityLevel !== 'VERY_MUCH' &&
+        //   res.data.dogActivity.activityLevel !== 'MUCH' &&
+        //   res.data.dogActivity.activityLevel !== 'VERY_LITTLE' &&
+        //   res.data.dogActivity.activityLevel !== 'LITTLE' &&
+        //   !res.data.priorityConcerns.split(',').slice(1)
+        //     ? false
+        //     : [];
+
+        // {
+        //     dogStatus: dogStatusType.KOR[res.data.dogStatus],
+        //     pregnant:
+        //       res.data.specificDogStatus.includes('PREGNANT') &&
+        //       '임신한 상태',
+        //     lactating:
+        //       res.data.specificDogStatus.includes('LACTATING') && '수유 중',
+        //     waterCountLevel:
+        //       res.data.waterCountLevel === 'LITTLE' && '적은 음수량',
+        //     activityLevel:
+        //       res.data.dogActivity.activityLevel === 'VERY_MUCH' ||
+        //       res.data.dogActivity.activityLevel === 'MUCH'
+        //         ? '많은 활동량'
+        //         : res.data.dogActivity.activityLevel === 'VERY_LITTLE' ||
+        //           res.data.dogActivity.activityLevel === 'LITTLE'
+        //         ? '적은 활동량'
+        //         : '',
+        //     etcPriorityConcerns: res.data.priorityConcerns
+        //       .split(',')
+        //       .slice(1), // 첫 번째 항목을 제외
+        //   };
 
         setForm((prevState) => ({
           ...prevState,
@@ -644,7 +679,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
   // console.log('recipeDoubleInfo===>', recipeDoubleInfo);
   // console.log('recipeSingleInfo===>', recipeSingleInfo);
   // console.log('form===>', form);
-  console.log('chartData===>', chartData);
+  console.log('etcConcernsData===>', etcConcernsData);
 
   return (
     <div id="statistics">
@@ -652,20 +687,9 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         className={`${mode !== 'mypage' ? s.default : s.mypage} ${s.title}`}
       >
         <header>
-          {/* ! 제거 예정 - 이전 설문페이지로 다시 이동 X */}
-          {/* <div className={s.prev_btn} style={{ cursor: 'pointer' }}>
-            <Image
-              src={'/img/order/left_arrow.svg'}
-              alt="left_arrow"
-              width={24}
-              height={24}
-              onClick={onSurveyPage}
-            />
-          </div> */}
           <p className={s.survey_date}>
             {surveyInfo.lastSurveyDate}의 설문 결과입니다
           </p>
-          {/* <h1>{userInfo.name} 보호자님의 가족</h1> */}
         </header>
 
         <div className={s.result_box_list}>
@@ -688,9 +712,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
             <div className={s.left_title}>바프독 기준 결과</div>
             <div className={s.b_right_grid_box}>
               <div className={s.right_text}>
-                {/* <em> */}
                 {info?.myDogName}(이)의 <br /> 하루 권장 <b>칼로리</b>
-                {/* </em> */}
               </div>
               <div className={s.left_text}>
                 {Number(info?.foodAnalysis?.oneDayRecommendKcal).toFixed(0)}{' '}
@@ -729,12 +751,16 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
           <div className={s.divider}></div>
 
           {/* 4. 추천 레시피 */}
-          <RecommendRecipe surveyInfo={surveyInfo} />
+          {surveyInfo.priorityConcerns && (
+            <RecommendRecipe surveyInfo={surveyInfo} recipeInfo={recipeInfo} />
+          )}
 
           <div className={s.divider}></div>
 
           {/* 5. 그 외 고민사항 */}
-          <ConcernDetails chartData={chartData} />
+          {etcConcernsData.length > 0 && (
+            <ConcernDetails etcConcernsData={etcConcernsData} />
+          )}
 
           <div className={s.divider}></div>
 
@@ -754,58 +780,6 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
           <div
             className={`${s.survey_result_wrapper} animation-show-all-child`}
           >
-            {/* <main className={`${s.grid_container_box}`}>
-              <div className={s.top_tab_container}>
-                현재 {calcDogAge(surveyInfo.dogBirthday.slice(0, 6))}, 중성화를{' '}
-                <span className={s.under_text}>
-                  {' '}
-                  {surveyInfo.neutralization ? '한' : '하지 않은'}
-                </span>{' '}
-                {surveyInfo.myDogName}
-                <br />
-                <span className={s.under_text}>
-                  {surveyInfo.dogSize === 'LARGE'
-                    ? '대형견'
-                    : surveyInfo.dogSize === 'MIDDLE'
-                    ? '중형견'
-                    : surveyInfo.dogSize === 'SMALL'
-                    ? '소형견'
-                    : ''}{' '}
-                </span>
-                이고,{' '}
-                <span className={s.under_text}> {surveyInfo.dogType}</span>인{' '}
-                {surveyInfo.myDogName}
-                <br />
-                <span className={s.under_text}>
-                  {' '}
-                  {surveyInfo.priorityConcerns}
-                </span>{' '}
-                가 고민인 {surveyInfo.myDogName}는{' '}
-                <span className={s.under_text}>
-                  {surveyInfo.dogStatus === 'HEALTHY'
-                    ? '건강해요'
-                    : surveyInfo.dogSize === 'NEED_DIET'
-                    ? '다이어트가 필요해요'
-                    : surveyInfo.dogSize === 'OBESITY'
-                    ? '심각한 비만입니다'
-                    : surveyInfo.dogSize === 'THIN'
-                    ? '말랐어요'
-                    : ''}
-                </span>
-              </div>
-            </main> */}
-
-            {/* 2. 맞춤 문구 설명 */}
-            {/* <div className={s.dog_tag_container}> */}
-            {/* <div className={s.dog_tag_box}>
-                <TagChart chartData={chartData} />
-              </div> */}
-
-            {/* 구분선 */}
-            {/* <ul className={isArrowActive ? s.tag_list_active : ''}>
-                {getDescriptionBlocks(chartData)}
-              </ul> */}
-
             {/* <button onClick={onClickArrowIcon}>
                 더보기
                 <Image

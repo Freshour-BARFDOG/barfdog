@@ -29,33 +29,17 @@ const ResponsiveCirclePacking = dynamic(
 //   );
 // };
 
-export default function StatusChart({ chartData }) {
+export default function StatusChart({ statusInfo }) {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(null);
 
-  useEffect(() => {
-    // const data = {
-    //   name: 'nivo',
-    //   color: 'hsl(56, 70%, 50%)',
-    //   loc: 2,
-    //   children: [
-    //     {
-    //       name: 'viz',
-    //       color: 'hsl(250, 70%, 50%)',
-    //       loc: 2,
-    //     },
-    //   ],
-    // };
+  // console.log(statusInfo);
 
+  useEffect(() => {
     const data = {
       name: '',
       color: '#fff',
-      children: [
-        { id: '건강해요', loc: 10, color: '#ececec' },
-        { id: '다이어트 필요', loc: 20, color: '#ececec' },
-        { id: '심각한 비만', loc: 5, color: '#ececec' },
-        { id: '말랐어요', loc: 5, color: '#FFC5C5' },
-      ],
+      children: statusInfo,
     };
 
     setData(data);
@@ -64,13 +48,13 @@ export default function StatusChart({ chartData }) {
   const theme = {
     labels: {
       text: {
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: 'normal',
       },
     },
   };
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <div
@@ -87,21 +71,14 @@ export default function StatusChart({ chartData }) {
           <ResponsiveCirclePacking
             data={data}
             id="id"
-            value="loc"
-            // colors="#fff"
+            value="count"
             colors={(node) => node.data.color}
             padding={5}
             enableLabels={true}
             //   labelSkipWidth={100}
             //   labelSkipHeight={100}
             //   labelsSkipRadius={0}
-            // labelTextColor={(node) => node.data.color}
-            labelTextColor={(node) => {
-              if (node.data.id === '말랐어요') {
-                return '#fff'; // Specific color for '말랐어요'
-              }
-              return '#929292'; // Default color for other labels
-            }}
+            labelTextColor={(node) => node.data.textColor}
             theme={theme}
             enableTooltip={false}
             tooltip={() => <></>}
