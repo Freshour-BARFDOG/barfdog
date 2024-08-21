@@ -51,6 +51,10 @@ section.title_delivery_skip_content {
   &.active .clickTrigger .title i {
     transform: translateY(-50%) rotate(-90deg);
   }
+  &.disable {
+    background-color: #e2e2e2;
+    color: #9b9b9b;
+  }
   .clickTrigger {
     padding: rem(16) 0;
     cursor: pointer;
@@ -72,7 +76,11 @@ section.title_delivery_skip_content {
         transition: transform var(--ani-default);
       }
     }
+    &.disable {
+      cursor: default;
+    }
   }
+
   .cont {
     padding: rem(27) 0 rem(16);
     border-top: rem(1) solid var(--color-line-04);
@@ -144,6 +152,9 @@ section.title_delivery_skip_content {
 }
 
 .btn-box {
+}
+.info_text {
+  color: #eee;
 }
 
 // @media (max-width: rem(900)) {

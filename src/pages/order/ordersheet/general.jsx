@@ -405,6 +405,7 @@ function getDeliveryPrice(info) {
   const isAllItemDeliveryFree =
     info.orderItemDtoList.filter((item) => !item.deliveryFree).length === 0;
   const isPaymentPriceFreeCondition = info.orderPrice >= info.freeCondition;
+
   return isAllItemDeliveryFree || isPaymentPriceFreeCondition
     ? 0
     : info.deliveryPrice;

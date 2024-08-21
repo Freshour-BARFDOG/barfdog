@@ -467,9 +467,9 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
           <span className={s.under_text}>
             {surveyInfo.priorityConcerns.split(',')[0]}
           </span>
-          이 가장 고민인 <br />
+          {/* 이 가장 고민인 <br />
           <span className={s.under_text}>{surveyInfo.myDogName}</span>(이)에게
-          추천하는 레시피
+          추천하는 레시피 */}
         </h1>
         <div className={s.result_box_list}>
           {/* 견종 결과 */}
@@ -535,38 +535,7 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
                     </div>
                   </main> */}
 
-                  {/* <div className={s.box_line}></div> */}
-
-                  {/* 2. 맞춤 문구 설명 */}
-                  <div className={s.dog_info_name}>
-                    그 외 고민 사항들에 대한 도움도 함께 드릴게요!
-                  </div>
-
-                  <div className={s.dog_tag_container}>
-                    <div className={s.dog_tag_box}>
-                      <TagChart chartData={chartData} />
-                    </div>
-
-                    <div className={s.box_line}></div>
-
-                    {/* 구분선 */}
-                    <ul className={isArrowActive ? s.tag_list_active : ''}>
-                      {getDescriptionBlocks(chartData)}
-                    </ul>
-
-                    <button onClick={onClickArrowIcon}>
-                      더보기
-                      <Image
-                        src={'/img/survey/survey_arrow.svg'}
-                        alt="survey_arrow"
-                        width={10}
-                        height={10}
-                        style={{ transform: `rotate(${rotation}deg)` }}
-                      />
-                    </button>
-                  </div>
-
-                  <div className={s.box_dot_divider}></div>
+                  {/* <div classNme={s.box_line}></div> */}
 
                   {/* 3. 레시피 선택 */}
                   <SurveyResultRecipe

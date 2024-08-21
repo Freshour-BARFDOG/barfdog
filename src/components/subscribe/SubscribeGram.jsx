@@ -262,15 +262,20 @@ export const SubscribeGram = ({ subscribeInfo }) => {
               <div className={s.grid_6}>
                 <p className={s.top_text}>변경 후 상품 금액</p>
                 <div className={s.bot_1}>
-                  {transformLocalCurrency(form.nextSalePrice)}원
                   <span>
-                    {' '}
+                    {transformLocalCurrency(
+                      form.nextSalePrice * shippingLeftCount,
+                    )}
+                    원
+                  </span>
+                  {/* <span> */}
+                  {/* {' '}
                     (차액: {form.nextSalePrice - form.originPrice > 0 && '+'}
                     {transformLocalCurrency(
                       form.nextSalePrice - form.originPrice,
                     )}
-                    원)
-                  </span>
+                    원) */}
+                  {/* </span> */}
                   <div className={s.text3} style={{ color: '#999' }}>
                     할인율은 미적용된 금액입니다.
                   </div>

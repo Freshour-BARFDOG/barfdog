@@ -31,7 +31,7 @@ export const useSubscribeInfo = (subscribeId) => {
         const subscribeApiurl = `/api/subscribes/${subscribeId}`;
         let res = await getData(subscribeApiurl);
         const data = res.data;
-        // console.log('___무게 변경 후 구독 하나 조회', res);
+        // console.log('___', res);
 
         //! [추가] 기존 구독자인지 확인
         let isOriginSubscriber = originSubscribeIdList.includes(
@@ -137,6 +137,7 @@ export const useSubscribeInfo = (subscribeId) => {
             discountCoupon: data.subscribeDto.discountCoupon,
             discountGrade: data.subscribeDto.discountGrade,
             overDiscount: data.subscribeDto.overDiscount,
+            subscriptionMonth: data.subscribeDto.subscriptionMonth,
             oneDayRecommendKcal: data.subscribeDto.oneDayRecommendKcal,
             planName: currentPlanName,
             recipeNames: data.subscribeRecipeDtoList
