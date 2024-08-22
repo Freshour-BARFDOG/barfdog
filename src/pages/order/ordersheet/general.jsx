@@ -301,7 +301,11 @@ export default function GeneralOrderSheetPage() {
               )}
 
               {/* 3) 배송 안내 */}
-              <OrdersheetDeliveryNotice />
+              <OrdersheetDeliveryNotice
+                info={info}
+                form={form}
+                setForm={setForm}
+              />
             </section>
 
             <div className={s.divider}></div>

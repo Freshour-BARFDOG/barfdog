@@ -168,3 +168,32 @@ $mobileMenuHeight: rem(48);
     font-weight: 500;
   }
 }
+
+@media (max-width: rem(600)) {
+  .mobile-menu-wrap {
+    border-bottom: rem(1) solid var(--color-line-03);
+    box-sizing: border-box;
+    padding: rem(14) 0 !important;
+
+    .mobile-menu {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: rem(10);
+      li {
+        display: flex;
+        flex-direction: column;
+      }
+      li a,
+      li button {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: rem(5);
+        padding: 0 rem(10);
+        font-size: rem(12);
+      }
+    }
+  }
+}

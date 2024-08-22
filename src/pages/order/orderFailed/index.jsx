@@ -1,17 +1,18 @@
-import Layout from "/src/components/common/Layout";
-import Wrapper from "/src/components/common/Wrapper";
-import s from './orderFailed.module.scss'
-import React from "react";
-import MetaTitle from "/src/components/atoms/MetaTitle";
+import Layout from '/src/components/common/Layout';
+import Wrapper from '/src/components/common/Wrapper';
+import s from './orderFailed.module.scss';
+import React from 'react';
+import MetaTitle from '/src/components/atoms/MetaTitle';
 import Link from 'next/link';
+import LayoutWithoutFooter from '../../../components/common/LayoutWithoutFooter';
 
-export default function OrderFailedPage (props) {
-  
-    return (<>
+export default function OrderFailedPage(props) {
+  return (
+    <>
       <MetaTitle title="결제 실패" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
-        <section className={s.text_box}>
+          <section className={s.text_box}>
             <div className={s.box}>
               <div className={s.box_text}>!</div>
             </div>
@@ -20,9 +21,7 @@ export default function OrderFailedPage (props) {
               <br />
               완료되지 않았습니다.
             </div>
-            <div className={s.row_2}>
-              이용에 불편을 드려 죄송합니다.
-            </div>
+            <div className={s.row_2}>이용에 불편을 드려 죄송합니다.</div>
           </section>
           <section className={s.btn_box}>
             <div className={s.flex_box}>
@@ -39,6 +38,7 @@ export default function OrderFailedPage (props) {
             </div>
           </section>
         </Wrapper>
-      </Layout>
-    </>)
+      </LayoutWithoutFooter>
+    </>
+  );
 }

@@ -17,7 +17,7 @@ section.reciever {
   padding: rem(20) 0 rem(41);
 }
 section.shipping {
-  padding: rem(30) 0 rem(50);
+  padding: rem(0) 0 rem(50);
 }
 section.reserves {
   padding: rem(20) 0;
@@ -795,7 +795,7 @@ $grid-row-gap: rem(16);
     display: grid !important;
     grid-template-columns: 1fr 1fr;
     column-gap: rem(10);
-    padding-top: rem(20);
+    // padding-top: rem(20);
     label {
       margin: 0 !important;
       padding: rem(16) rem(15) rem(16) !important;
