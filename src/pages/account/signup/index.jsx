@@ -122,61 +122,61 @@ export default function SignupPage() {
     }
   }, []);
 
-  const onLoginHandler = async () => {
-    try {
-      // const autologinValue = cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 변경가능
-      const defValue = cookieType.LOGIN_EXPIRED_PERIOD.VALUE_FOR_RESTAPI; // 2시간 (클라이언트에서 def 값은 변경불가)
-      const body = {
-        email: formValues.email,
-        password: formValues.password,
-        tokenValidDays: defValue,
-      };
-      await axios
-        .post('/api/login', body, {
-          headers: {
-            'content-Type': 'application/json',
-          },
-        })
-        .then((res) => {
-          // console.log(res);
-          if (res.status === 200) {
-            const token = res.headers.authorization;
-            const { temporaryPassword, email, name, roleList } = res.data;
+  // const onLoginHandler = async () => {
+  //   try {
+  //     // const autologinValue = cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 변경가능
+  //     const defValue = cookieType.LOGIN_EXPIRED_PERIOD.VALUE_FOR_RESTAPI; // 2시간 (클라이언트에서 def 값은 변경불가)
+  //     const body = {
+  //       email: formValues.email,
+  //       password: formValues.password,
+  //       tokenValidDays: defValue,
+  //     };
+  //     await axios
+  //       .post('/api/login', body, {
+  //         headers: {
+  //           'content-Type': 'application/json',
+  //         },
+  //       })
+  //       .then((res) => {
+  //         // console.log(res);
+  //         if (res.status === 200) {
+  //           const token = res.headers.authorization;
+  //           const { temporaryPassword, email, name, roleList } = res.data;
 
-            const payload = {
-              token,
-              expiredDate: res.data.expiresAt,
-              data: {
-                temporaryPassword,
-                email,
-                name,
-                roleList,
-              },
-            };
-            dispatch(authAction.login(payload));
-            // 홈으로 이동
-            router.push('/');
-          } else {
-            alert('로그인에 실패하였습니다.');
-          }
-          // setIsLoading((prevState) => ({
-          //   ...prevState,
-          //   movePage: true,
-          // }));
-        })
-        .catch((err) => {
-          if (!err) return;
-          console.error('ERROR: ', err);
-          // const errorStatus = err?.response?.status;
-          // let errorMessage = '';
-          // errorMessage = '서버 장애입니다. 잠시 후 다시 시도해주세요.';
-          // mct.alertShow(errorMessage);
-        });
-    } catch (err) {
-      console.error('통신에러: ', err);
-      mct.alertShow(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
-    }
-  };
+  //           const payload = {
+  //             token,
+  //             expiredDate: res.data.expiresAt,
+  //             data: {
+  //               temporaryPassword,
+  //               email,
+  //               name,
+  //               roleList,
+  //             },
+  //           };
+  //           dispatch(authAction.login(payload));
+  //           // 홈으로 이동
+  //           router.push('/');
+  //         } else {
+  //           alert('로그인에 실패하였습니다.');
+  //         }
+  //         // setIsLoading((prevState) => ({
+  //         //   ...prevState,
+  //         //   movePage: true,
+  //         // }));
+  //       })
+  //       .catch((err) => {
+  //         if (!err) return;
+  //         console.error('ERROR: ', err);
+  //         // const errorStatus = err?.response?.status;
+  //         // let errorMessage = '';
+  //         // errorMessage = '서버 장애입니다. 잠시 후 다시 시도해주세요.';
+  //         // mct.alertShow(errorMessage);
+  //       });
+  //   } catch (err) {
+  //     console.error('통신에러: ', err);
+  //     mct.alertShow(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
+  //   }
+  // };
 
   const onSubmit = async () => {
     if (submitted) return console.error('Already Submitted!');
@@ -326,6 +326,60 @@ export default function SignupPage() {
   };
 
   const onSuccessCallback = async () => {
+    try {
+      // const autologinValue = cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 변경가능
+      const defValue = cookieType.LOGIN_EXPIRED_PERIOD.VALUE_FOR_RESTAPI; // 2시간 (클라이언트에서 def 값은 변경불가)
+      const body = {
+        email: formValues.email,
+        password: formValues.password,
+        tokenValidDays: defValue,
+      };
+      await axios
+        .post('/api/login', body, {
+          headers: {
+            'content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          // console.log(res);
+          if (res.status === 200) {
+            const token = res.headers.authorization;
+            const { temporaryPassword, email, name, roleList } = res.data;
+
+            const payload = {
+              token,
+              expiredDate: res.data.expiresAt,
+              data: {
+                temporaryPassword,
+                email,
+                name,
+                roleList,
+              },
+            };
+            dispatch(authAction.login(payload));
+            // 홈으로 이동
+            router.push('/');
+          } else {
+            alert('로그인에 실패하였습니다.');
+          }
+          // setIsLoading((prevState) => ({
+          //   ...prevState,
+          //   movePage: true,
+          // }));
+        })
+        .catch((err) => {
+          if (!err) return;
+          console.error('ERROR: ', err);
+          // const errorStatus = err?.response?.status;
+          // let errorMessage = '';
+          // errorMessage = '서버 장애입니다. 잠시 후 다시 시도해주세요.';
+          // mct.alertShow(errorMessage);
+        });
+    } catch (err) {
+      console.error('통신에러: ', err);
+      mct.alertShow(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
+    }
+
     // await router.push(`/account/signup/success?username=${userName}`);
 
     // 전환 스크립트 설정
@@ -345,7 +399,7 @@ export default function SignupPage() {
     // // 전환 스크립트가 작동할 시간을 주기 위해 잠시 대기
     // setTimeout(() => {
     // 회원가입 후 바로 로그인
-    onLoginHandler();
+    // onLoginHandler();
     // }, 500); // 0.5초 대기
   };
 

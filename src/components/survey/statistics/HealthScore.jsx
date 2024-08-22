@@ -46,9 +46,10 @@ export default function HealthScore({ surveyInfo, scoreInfo, info }) {
           style={{
             width: '400px',
             height: '400px',
-            margin: '20px auto 0 auto',
+            margin: '10px auto 0 auto',
             position: 'relative',
           }}
+          className={s.health_score_graph_wrapper}
         >
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -57,7 +58,7 @@ export default function HealthScore({ surveyInfo, scoreInfo, info }) {
                 startAngle={180}
                 endAngle={0}
                 innerRadius={140}
-                outerRadius={180}
+                outerRadius={170}
                 paddingAngle={0}
                 dataKey="value"
                 cornerRadius={0}

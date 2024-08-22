@@ -36,6 +36,7 @@ export default function AllDogsGraph({ surveyInfo, avg }) {
             margin: '30px 100px 0 auto',
             position: 'relative',
           }}
+          className={s.all_dogs_graph_wrapper}
         >
           <div className={s.avg_text_wrapper}>
             <div

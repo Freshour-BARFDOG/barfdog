@@ -779,19 +779,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
           <div
             className={`${s.survey_result_wrapper} animation-show-all-child`}
-          >
-            {/* <button onClick={onClickArrowIcon}>
-                더보기
-                <Image
-                  src={'/img/survey/survey_arrow.svg'}
-                  alt="survey_arrow"
-                  width={10}
-                  height={10}
-                  style={{ transform: `rotate(${rotation}deg)` }}
-                />
-              </button>
-            </div> */}
-          </div>
+          ></div>
         </div>
 
         {mode === 'mypage' && (

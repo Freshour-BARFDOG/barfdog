@@ -29,6 +29,7 @@ import {
   concernsRecipeMap,
   inedibleFoodRecipeMap,
 } from '../../../store/TYPE/recipeIdWithConcernsInedibleFood';
+import { getObjData, postData } from '../../pages/api/reqData';
 
 // const swiperSettings = {
 //   className: `${s.swiper_recipes} ${s.inMypage}`,
@@ -78,6 +79,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedIdList, setSelectedIdList] = useState([]);
   const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
+  const [recipePrice, setRecipePrice] = useState(null);
   const [changingRecipePrice, setChangingRecipePrice] = useState(null);
   const [recommendRecipeId, setRecommendRecipeId] = useState(null);
   const [inedibleRecipeIds, setInedibleRecipeIds] = useState([]);
@@ -361,68 +363,122 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     setInitialize(false);
     setSelectedIdList(seletedIdList);
 
-    console.log('$$$', seletedIdList);
+    // 기존 레시피와 변경 레시피가 같은지 확인
+    const isEqual = (arr1, arr2) => {
+      const set1 = new Set(arr1);
+      const set2 = new Set(arr2);
 
-    const calcSalePriceAfterChangingRecipe = ({ plan: plan }) => {
-      const currentRecipeInfos =
-        recipeInfo &&
-        recipeInfo.data &&
-        recipeInfo.data.filter(
-          (recipe) => selectedIdList.indexOf(recipe.id) >= 0,
-        );
+      if (set1.size !== set2.size) return false;
 
-      const result = calcSubscribePrice({
-        discountPercent: subscribeInfo.plan.discountPercent,
-        oneMealGrams: calcOneMealGramsWithRecipeInfo({
-          selectedRecipeIds: selectedIdList,
-          allRecipeInfos: currentRecipeInfos,
-          oneDayRecommendKcal: subscribeInfo.info.oneDayRecommendKcal,
-          isOriginSubscriber,
-        }).map((recipe) => recipe.oneMealGram),
-        planName: plan,
-        pricePerGrams: currentRecipeInfos?.map((recipe) => recipe.pricePerGram),
-        isOriginSubscriber,
-        recipeNameList: currentRecipeInfos?.map((recipe) => recipe.name),
-      });
-      console.log('selectedIdList***', selectedIdList);
-      console.log(
-        'recipeInfo***',
-        recipeInfo?.data?.filter(
-          (recipe) => selectedIdList.indexOf(recipe.id) >= 0,
-        ),
-      );
-      console.log('result.salePrice>>>', currentRecipeInfos);
-      console.log('result.salePrice>>>', result);
-      console.log('currentRecipeInfos:::', currentRecipeInfos);
-
-      return result.avgPrice?.salePrice;
+      for (let item of set1) {
+        if (!set2.has(item)) return false;
+      }
+      return true;
     };
 
-    const curPlan = subscribeInfo.info.planName;
-    const nextPaymentPrice = calcSalePriceAfterChangingRecipe({
-      plan: curPlan,
-    });
+    // console.log('seletedIdList', seletedIdList);
+    // console.log('subscribeInfo.recipe.idList.?>>', subscribeInfo.recipe.idList);
 
-    // if (nextPaymentPrice) {
-    //   const formattedPrice =
-    //     subscribeInfo.info.subscriptionMonth === null
-    //       ? nextPaymentPrice
-    //       : nextPaymentPrice * shippingLeftCount;
-    //   // fetchChangingPrice(formattedPrice);
+    if (isEqual(seletedIdList, subscribeInfo.recipe.idList)) {
+      return setChangingRecipePrice(0);
+    } else {
+      //   const body = {
+      //     recipeIdList: seletedIdList,
+      //   };
 
-    //   (async () => {
-    //     try {
-    //       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/price/${formattedPrice}`;
-    //       const res = await getData(url);
-    //       console.log(res);
-    //       if (res) {
-    //         setChangingRecipePrice(res.data.changingPrice);
-    //       }
-    //     } catch (err) {
-    //       console.error(err);
-    //     }
-    //   })();
-    // }
+      //   let recipePriceData = null;
+
+      //   if (seletedIdList.length > 0) {
+      //     (async () => {
+      //       try {
+      //         const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/recipePrice`;
+      //         const res = await postObjData(url, body);
+      //         console.log(res.data);
+      //         if (res.data) {
+      //           recipePriceData = res.data.data.recipePrice;
+      //           setRecipePrice(res.data.data.recipePrice);
+      //           console.log('recipePriceData___', recipePriceData);
+
+      //           if (recipePriceData) {
+      //             const priceUrl = `/api/subscribes/${subscribeInfo.info.subscribeId}/price/${recipePriceData}`;
+      //             const priceRes = await getData(priceUrl);
+      //             console.log('changingRecipePrice____', priceRes);
+      //             if (priceRes) {
+      //               setChangingRecipePrice(priceRes.data.changingPrice);
+      //             }
+      //           }
+      //         }
+      //       } catch (err) {
+      //         console.error(err);
+      //       }
+      //     })();
+      //   }
+      // }
+
+      const calcSalePriceAfterChangingRecipe = ({ plan: plan }) => {
+        const currentRecipeInfos =
+          recipeInfo &&
+          recipeInfo.data &&
+          recipeInfo.data
+            .filter((recipe) => seletedIdList.indexOf(recipe.id) >= 0)
+            .sort(
+              (a, b) =>
+                selectedIdList.indexOf(b.id) - selectedIdList.indexOf(a.id),
+            ); // 클릭한 순서대로
+
+        const result = calcSubscribePrice({
+          discountPercent: subscribeInfo.plan.discountPercent,
+          oneMealGrams: calcOneMealGramsWithRecipeInfo({
+            selectedRecipeIds: seletedIdList,
+            allRecipeInfos: currentRecipeInfos,
+            oneDayRecommendKcal: subscribeInfo.info.oneDayRecommendKcal,
+            isOriginSubscriber,
+          }).map((recipe) => recipe.oneMealGram),
+          planName: plan,
+          pricePerGrams: currentRecipeInfos?.map(
+            (recipe) => recipe.pricePerGram,
+          ),
+          isOriginSubscriber,
+          recipeNameList: currentRecipeInfos?.map((recipe) => recipe.name),
+        });
+        // console.log('currentRecipeInfos***', currentRecipeInfos);
+        // console.log(
+        //   'recipeInfo***',
+        //   recipeInfo?.data?.filter(
+        //     (recipe) => seletedIdList.indexOf(recipe.id) >= 0,
+        //   ),
+        // );
+        // console.log('result.salePrice>>>', result);
+
+        return result.avgPrice?.salePrice;
+      };
+
+      const curPlan = subscribeInfo.info.planName;
+      const nextPaymentPrice = calcSalePriceAfterChangingRecipe({
+        plan: curPlan,
+      });
+
+      const formattedPrice =
+        subscribeInfo.info.subscriptionMonth === null
+          ? nextPaymentPrice
+          : nextPaymentPrice * shippingLeftCount;
+      // console.log('formattedPrice', formattedPrice);
+
+      if (nextPaymentPrice) {
+        (async () => {
+          try {
+            const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/price/${formattedPrice}`;
+            const res = await getData(url);
+            // console.log(res);
+            if (res) {
+              setChangingRecipePrice(res.data.changingPrice);
+            }
+          } catch (err) {
+            console.error(err);
+          }
+        })();
+      }
+    }
   }, [selectedCheckbox]);
 
   // console.log('changingRecipePrice___', changingRecipePrice);
@@ -467,9 +523,12 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   };
 
   const calcSalePriceAfterChangingRecipe = ({ plan: plan }) => {
-    const currentRecipeInfos = recipeInfo.data.filter(
-      (recipe) => selectedIdList.indexOf(recipe.id) >= 0,
-    );
+    const currentRecipeInfos = recipeInfo.data
+      .filter((recipe) => selectedIdList.indexOf(recipe.id) >= 0)
+      .sort(
+        (a, b) => selectedIdList.indexOf(b.id) - selectedIdList.indexOf(a.id),
+      ); // 클릭한 순서대로
+
     const result = calcSubscribePrice({
       discountPercent: subscribeInfo.plan.discountPercent,
       oneMealGrams: calcOneMealGramsWithRecipeInfo({
@@ -544,70 +603,10 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     window.location.reload();
   };
 
-  const onRecipeClickHandler = (selectedValue) => {
-    console.log('selectedValue___', selectedValue);
-    console.log('????', selectedIdList);
-
-    // const calcSalePriceAfterChangingRecipe = ({ plan: plan }) => {
-    //   const currentRecipeInfos =
-    //     recipeInfo &&
-    //     recipeInfo.data &&
-    //     recipeInfo.data.filter(
-    //       (recipe) => selectedIdList.indexOf(recipe.id) >= 0,
-    //     );
-    //   const result = calcSubscribePrice({
-    //     discountPercent: subscribeInfo.plan.discountPercent,
-    //     oneMealGrams: calcOneMealGramsWithRecipeInfo({
-    //       selectedRecipeIds: selectedIdList,
-    //       allRecipeInfos: currentRecipeInfos,
-    //       oneDayRecommendKcal: subscribeInfo.info.oneDayRecommendKcal,
-    //       isOriginSubscriber,
-    //     }).map((recipe) => recipe.oneMealGram),
-    //     planName: plan,
-    //     pricePerGrams: currentRecipeInfos?.map((recipe) => recipe.pricePerGram),
-    //     isOriginSubscriber,
-    //     recipeNameList: currentRecipeInfos?.map((recipe) => recipe.name),
-    //   });
-
-    //   console.log('result.salePrice>>>', currentRecipeInfos);
-    //   console.log('result.salePrice>>>', result);
-    //   console.log('currentRecipeInfos:::', currentRecipeInfos);
-
-    //   return result.avgPrice?.salePrice;
-    // };
-
-    // const curPlan = subscribeInfo.info.planName;
-    // const nextPaymentPrice = calcSalePriceAfterChangingRecipe({
-    //   plan: curPlan,
-    // });
-    // console.log('nextPaymentPrice*****', nextPaymentPrice);
-
-    // if (nextPaymentPrice) {
-    //   const formattedPrice =
-    //     subscribeInfo.info.subscriptionMonth === null
-    //       ? nextPaymentPrice
-    //       : nextPaymentPrice * shippingLeftCount;
-    //   // fetchChangingPrice(formattedPrice);
-
-    //   (async () => {
-    //     try {
-    //       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/price/${formattedPrice}`;
-    //       const res = await getData(url);
-    //       console.log(res);
-    //       if (res) {
-    //         setChangingRecipePrice(res.data.changingPrice);
-    //       }
-    //     } catch (err) {
-    //       console.error(err);
-    //     }
-    //   })();
-    // }
-  };
-
   // console.log('recipeInfo___', recipeInfo);
   // console.log('recipeSingleInfo___', recipeSingleInfo);
   // console.log('recipeDoubleInfo___', recipeDoubleInfo);
-  console.log('changingRecipePrice___', changingRecipePrice);
+  // console.log('changingRecipePrice___', changingRecipePrice);
 
   return (
     <>
@@ -624,7 +623,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
 
             <div className={s.recipe_list}>
               {recipeDoubleInfo.map((recipe, index) => (
-                <div key={index} onClick={() => onRecipeClickHandler(recipe)}>
+                <div key={index}>
                   <SurveyRecipeInput
                     id={`${recipe.name}-${recipe.id}`}
                     name={name}
