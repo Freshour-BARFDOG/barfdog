@@ -79,15 +79,16 @@ export default function WalkingAnalysis({ surveyInfo }) {
             margin: '0px auto 0 auto',
             position: 'relative',
           }}
+          className={s.walking_time_graph_wrapper}
         >
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
-              width={150}
+              width={100}
               height={40}
               data={data}
-              barSize={50}
+              barSize={40}
               barGap={20}
-              margin={{ top: 60, right: 0, bottom: 0, left: 0 }}
+              margin={{ top: 40, right: 0, bottom: 0, left: 0 }}
             >
               {/* x축 */}
               <XAxis

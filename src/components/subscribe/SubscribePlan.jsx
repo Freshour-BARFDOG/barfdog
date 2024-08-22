@@ -185,7 +185,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
     try {
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/price/${nextPaymentPrice}`;
       const res = await getData(url);
-      console.log(res);
+      // console.log(res);
       if (res) {
         setChangingPlanPrice(res.data.changingPrice);
       } else {
@@ -268,8 +268,8 @@ export const SubscribePlan = ({ subscribeInfo }) => {
     return <FullScreenLoading opacity={1} />;
   }
 
-  console.log('subscribeInfo___', subscribeInfo);
-  console.log('selectedPlanName___', selectedPlanName);
+  // console.log('subscribeInfo___', subscribeInfo);
+  // console.log('selectedPlanName___', selectedPlanName);
 
   return (
     <>

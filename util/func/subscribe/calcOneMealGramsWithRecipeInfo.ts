@@ -62,7 +62,7 @@ export const calcOneMealGramsWithRecipeInfo = ({
     }
     // console.log('isOriginSubscriber', isOriginSubscriber);
     // console.log('kcalPerGram 변경 전>>>', recipe.kcalPerGram);
-    // console.log('kcalPerGram 변경 후>>>', kcalPerGram);
+    // console.log('kcalPerGram 변경 후>>>', recipe.name, kcalPerGram);
 
     // 한 팩 무게 = 하루권장칼로리 /  무게상수(kcalPerGram) / 하루식사회수 => 소수점 둘 째자리에서 반올림 (웹개발기획서 22년 4월 2주)
     const oneMealGram: number = parseFloat(
@@ -71,6 +71,13 @@ export const calcOneMealGramsWithRecipeInfo = ({
       ),
     );
 
+    // console.log(
+    //   '******',
+    //   oneDayRecommendKcal,
+    //   kcalPerGram,
+    //   numberOfMealsPerDay,
+    //   oneMealGram,
+    // );
     // console.log('******', recipe, kcalPerGram);
 
     return {

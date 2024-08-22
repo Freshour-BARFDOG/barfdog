@@ -57,6 +57,7 @@ export default function DietGrpah({ dietInfo }) {
             height: '300px',
             margin: '0 100px 0 auto',
           }}
+          className={s.diet_graph_wrapper}
         >
           <ResponsiveContainer width="100%" height="100%">
             <BarChart

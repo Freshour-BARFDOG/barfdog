@@ -12,6 +12,9 @@ export const calcSubscribePrice = ({
 }) => {
   const totalNumberOfPacks = subscribePlanType[planName].totalNumberOfPacks;
 
+  // console.log('oneMealGrams___', oneMealGrams);
+  // console.log('recipeNameList___', recipeNameList);
+
   const calcPriceList = pricePerGrams.map((pricePerGram, index) => {
     return calcSubscribeItemPrice({
       plan: { totalNumberOfPacks, discountPercent },
@@ -72,7 +75,8 @@ export const calcSubscribeItemPrice = ({
   }
   // console.log('pricePerGram 변경 전>>>', recipe.pricePerGram);
   // console.log('pricePerGram 변경 후>>>', pricePerGram);
-  // console.log('pricePerGram>>>', pricePerGram);
+  // console.log('pricePerGram>>>', recipeName, pricePerGram);
+  // console.log('recipe.oneMealGram>>>', recipe.oneMealGram);
 
   let perPackPrice = 0;
 
@@ -87,9 +91,9 @@ export const calcSubscribeItemPrice = ({
 
   // console.log('discountPercent!!!', discountPercent);
   // console.log(
-  //   totalNumberOfPacks,
+  //   // totalNumberOfPacks,
   //   perPackPrice,
-  //   1 - discountPercent / 100,
+  //   // 1 - discountPercent / 100,
   //   perPackPrice * (1 - discountPercent / 100),
   // );
 

@@ -8,6 +8,9 @@ import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMeal
 import { useSubscribePlanInfo } from '/util/hook/useSubscribePlanInfo';
 import { calcSubscribeOneDayRecommendKcal } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
+import { CustomSelectWithCustomOptions } from '/src/components/survey/CustomSelectWithCustomOptions';
+import { SurveyCustomSelectWithCustomOptions } from '../SurveyCustomSelectWithCustomOptions';
+import { ReCustomSelectWithCustomOptions } from './ReCustomSelectWithCustomOptions';
 
 export default function SurveyResultPlan({
   surveyInfo,
@@ -681,129 +684,161 @@ export default function SurveyResultPlan({
       </div>
 
       {/* 4-2) 팩 */}
-      <div className={s.pack_box}>
-        {/* (1) 선택 레시피 */}
-        {/* 하프플랜, 풀플랜 선택에 따라 보여지는 칸 수가 달라지도록 */}
-        <div className={s.one_pack_row}>
-          <div className={s.one_pack_text}>
-            {selectedPlan === 'TOPPING_FULL' ||
-            selectedPlan === 'TOPPING_HALF' ? (
-              <>
-                하루 2팩 기준 <br />
-                1팩당 권장량:
-              </>
+      <div className={s.pack_calc_wrapper}>
+        <div className={s.pack_box}>
+          {/* (1) 선택 레시피 */}
+          {/* 하프플랜, 풀플랜 선택에 따라 보여지는 칸 수가 달라지도록 */}
+          <div className={s.one_pack_row}>
+            <div className={s.one_pack_text}>
+              {selectedPlan === 'TOPPING_FULL' ||
+              selectedPlan === 'TOPPING_HALF' ? (
+                <>
+                  하루 2팩 기준 <br />
+                  1팩당 권장량:
+                </>
+              ) : (
+                <>
+                  선택 레시피: <br />
+                  (1팩 기준){' '}
+                </>
+              )}
+            </div>
+
+            {recipeNameList.length === 0 ? (
+              <p className={s.recipe_single_wrapper}>
+                <div className={s.recipe_text}>0 g</div>
+              </p>
+            ) : recipeNameList.length === 1 ? (
+              <p className={s.recipe_single_wrapper}>
+                {oneMealGramsWithRecipeInfosWithTags}
+              </p>
             ) : (
-              <>
-                선택 레시피: <br />
-                (1팩 기준){' '}
-              </>
+              <p className={s.recipe_double_wrapper}>
+                {oneMealGramsWithRecipeInfosWithTags}
+              </p>
             )}
           </div>
 
-          {recipeNameList.length === 0 ? (
-            <p className={s.recipe_single_wrapper}>
-              <div className={s.recipe_text}>0 g</div>
-            </p>
-          ) : recipeNameList.length === 1 ? (
-            <p className={s.recipe_single_wrapper}>
-              {oneMealGramsWithRecipeInfosWithTags}
-            </p>
-          ) : (
-            <p className={s.recipe_double_wrapper}>
-              {oneMealGramsWithRecipeInfosWithTags}
-            </p>
-          )}
-        </div>
+          {/* +++ 토핑 플랜 */}
+          {(selectedPlan === 'TOPPING_FULL' ||
+            selectedPlan === 'TOPPING_HALF') && (
+            <>
+              <div className={s.one_pack_row}>
+                <div className={s.one_pack_text}>토핑 용량 조절:</div>
+                <div className={s.selectBox}>
+                  <CustomSelect
+                    id="toppingAmount"
+                    options={toppingOptions}
+                    value={toppingAmount}
+                    setFormValues={setToppingAmount}
+                  />
 
-        {/* +++ 토핑 플랜 */}
-        {(selectedPlan === 'TOPPING_FULL' ||
-          selectedPlan === 'TOPPING_HALF') && (
-          <>
-            <div className={s.one_pack_row}>
-              <div className={s.one_pack_text}>토핑 용량 조절:</div>
-              <div className={s.selectBox}>
-                <CustomSelect
-                  id="toppingAmount"
-                  options={toppingOptions}
-                  value={toppingAmount}
-                  setFormValues={setToppingAmount}
-                />
+                  {/* <ReCustomSelectWithCustomOptions
+                    id={'toppingAmount'}
+                    options={toppingOptions}
+                    value={toppingAmount}
+                    setFormValues={setToppingAmount}
+                    width={120}
+                  /> */}
+
+                  {/* <CustomSelectWithCustomOptions
+                    id={'toppingAmount'}
+                    className={s.customSelect}
+                    options={toppingOptions}
+                    // options={[
+                    //   { label: '20%', value: 20 },
+                    //   { label: '15%', value: 15 },
+                    //   { label: '10%', value: 10 },
+                    //   { label: '5%', value: 5 },
+                    //   { label: '0%', value: 0 },
+                    //   { label: '-5%', value: -5 },
+                    //   { label: '-10%', value: -10 },
+                    //   { label: '-15%', value: -15 },
+                    //   { label: '-20%', value: -20 },
+                    // ]}
+                    // value={form.nextAmount === 0 ? '0' : form.nextAmount}
+                    value={toppingAmount}
+                    // onChange={onInputChange}
+                    setValues={setToppingAmount}
+                    // unit={'%'}
+                    // placeholder={'mm'}
+                  /> */}
+                </div>
               </div>
-            </div>
-            <div className={s.one_pack_row}>
-              <div className={s.one_pack_text}>토핑용 1팩:</div>
-              <div className={s.selectBox}>
-                {recipeNameList.length === 0 ? (
-                  <p className={s.recipe_single_wrapper}>
-                    <div className={s.recipe_text}>0 g</div>
-                  </p>
-                ) : recipeNameList.length === 1 ? (
-                  <p className={s.recipe_single_wrapper}>
-                    {oneMealGramsWithToppingAmountWithTags}
-                  </p>
-                ) : (
-                  <p className={s.recipe_double_wrapper}>
-                    {oneMealGramsWithToppingAmountWithTags}
-                  </p>
+              <div className={s.one_pack_row}>
+                <div className={s.one_pack_text}>토핑용 1팩:</div>
+                <div className={s.selectBox}>
+                  {recipeNameList.length === 0 ? (
+                    <p className={s.recipe_single_wrapper}>
+                      <div className={s.recipe_text}>0 g</div>
+                    </p>
+                  ) : recipeNameList.length === 1 ? (
+                    <p className={s.recipe_single_wrapper}>
+                      {oneMealGramsWithToppingAmountWithTags}
+                    </p>
+                  ) : (
+                    <p className={s.recipe_double_wrapper}>
+                      {oneMealGramsWithToppingAmountWithTags}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* (2) 한 팩당 */}
+          <div className={s.one_pack_row}>
+            <div className={s.one_pack_text}>한 팩당:</div>
+            {recipeNameList.length === 0 ? (
+              <p className={s.recipe_single_wrapper}>
+                <div className={s.recipe_text}>0 원</div>
+              </p>
+            ) : recipeNameList.length === 1 ? (
+              <p className={s.recipe_single_wrapper}>
+                {oneMealGramsWithPriceInfosWithTags || (
+                  <div className={s.recipe_text}>
+                    <b>0 원</b>
+                  </div>
                 )}
+              </p>
+            ) : (
+              <p className={s.recipe_double_wrapper}>
+                {oneMealGramsWithPriceInfosWithTags || (
+                  <>
+                    <div className={s.recipe_text}>
+                      <b>0 원</b>
+                    </div>
+                    <div className={s.recipe_text}>
+                      <b>0 원</b>
+                    </div>
+                  </>
+                )}
+              </p>
+            )}
+          </div>
+
+          {/* (3) 팩 수 */}
+          <div className={s.one_pack_row}>
+            <div className={s.one_pack_text}>팩수:</div>
+            {recipeNameList.length < 2 ? (
+              <div className={s.recipe_text_single}>
+                <p>{recipeNameList.length === 1 ? '28' : '0'}팩</p>
               </div>
-            </div>
-          </>
-        )}
-
-        {/* (2) 한 팩당 */}
-        <div className={s.one_pack_row}>
-          <div className={s.one_pack_text}>한 팩당:</div>
-          {recipeNameList.length === 0 ? (
-            <p className={s.recipe_single_wrapper}>
-              <div className={s.recipe_text}>0 원</div>
-            </p>
-          ) : recipeNameList.length === 1 ? (
-            <p className={s.recipe_single_wrapper}>
-              {oneMealGramsWithPriceInfosWithTags || (
-                <div className={s.recipe_text}>
-                  <b>0 원</b>
-                </div>
-              )}
-            </p>
-          ) : (
-            <p className={s.recipe_double_wrapper}>
-              {oneMealGramsWithPriceInfosWithTags || (
-                <>
-                  <div className={s.recipe_text}>
-                    <b>0 원</b>
+            ) : (
+              recipeNameList.map((recipeName, index) => {
+                return (
+                  <div className={s.recipe_text_double} key={index}>
+                    <p>14팩</p>
                   </div>
-                  <div className={s.recipe_text}>
-                    <b>0 원</b>
-                  </div>
-                </>
-              )}
-            </p>
-          )}
-        </div>
-
-        {/* (3) 팩 수 */}
-        <div className={s.one_pack_row}>
-          <div className={s.one_pack_text}>팩수:</div>
-          {recipeNameList.length < 2 ? (
-            <div className={s.recipe_text_single}>
-              <p>{recipeNameList.length === 1 ? '28' : '0'}팩</p>
-            </div>
-          ) : (
-            recipeNameList.map((recipeName, index) => {
-              return (
-                <div className={s.recipe_text_double} key={index}>
-                  <p>14팩</p>
-                </div>
-              );
-            })
-          )}
-        </div>
-        {/* ! [삭제예정] */}
-        {/* (4) 최대 할인가 */}
-        {/* - 결제페이지의 12개월 구독 혜택인 최대 '25%할인'가로 노출 */}
-        {/* - 1회 배송 시 최대 할인가(25%)로 노출! */}
-        {/* <div className={s.one_pack_row}>
+                );
+              })
+            )}
+          </div>
+          {/* ! [삭제예정] */}
+          {/* (4) 최대 할인가 */}
+          {/* - 결제페이지의 12개월 구독 혜택인 최대 '25%할인'가로 노출 */}
+          {/* - 1회 배송 시 최대 할인가(25%)로 노출! */}
+          {/* <div className={s.one_pack_row}>
           <div className={s.maximum_discount_text}>
             <ToolTip
               message={`보호자님! 구독 결제를 12개월 선결제, 풀 플랜 선택 시 최대 24% 할인을 받을 수 있답니다. 
@@ -818,6 +853,7 @@ export default function SurveyResultPlan({
             <p>0 원</p>
           </div>
         </div> */}
+        </div>
       </div>
     </div>
   );
