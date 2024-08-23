@@ -92,3 +92,74 @@
     height: rem(36 * 1.4);
   }
 }
+
+@media (max-width: rem(600)) {
+  .modal-container {
+    padding: rem(20) rem(20) !important;
+    max-width: rem(300);
+    max-height: rem(480);
+  }
+
+  .main {
+    margin: auto;
+    max-width: rem(1200);
+
+    .delivery_container {
+      width: 100%;
+
+      .order_date_text {
+        padding: rem(6);
+        width: 100%;
+        margin: rem(30) auto rem(10) auto;
+        font-size: rem(14);
+
+        span {
+          font-weight: bold;
+          color: #c40000;
+        }
+      }
+    }
+
+    header {
+      display: flex;
+      justify-content: center;
+      font-size: rem(20);
+      padding: rem(10) 0;
+    }
+
+    .delivery_info {
+      padding: rem(10) 0;
+      font-size: rem(15);
+
+      p {
+        margin-bottom: rem(16);
+      }
+      .gray {
+        margin-bottom: rem(20);
+      }
+    }
+  }
+
+  .save_btn_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: rem(50);
+    gap: rem(10);
+    width: 100%;
+    font-size: rem(14);
+    .back_btn {
+      width: 50%;
+      height: rem(36);
+      border-radius: rem(30);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: rem(12);
+    }
+    .save_btn {
+      width: 50%;
+      height: rem(36);
+    }
+  }
+}

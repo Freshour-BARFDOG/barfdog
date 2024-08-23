@@ -8,12 +8,27 @@ import Link from 'next/link';
 import popupWindow from '/util/func/popupWindow';
 import Image from 'next/image';
 import { recommendRecipeDescriptionList } from './recommendRecipeDescription';
+import Modal_recipes from '/src/components/modal/recipes/Modal_recipes';
+import { recipeInfoType } from '../../../../store/TYPE/recipeType';
 
 export default function RecommendRecipe({ surveyInfo, recipeInfo }) {
   const [recommendRecipeId, setRecommendRecipeId] = useState(null);
   const [inedibleRecipeIds, setInedibleRecipeIds] = useState([]);
   const [recommendRecipeInfo, setRecommendRecipeInfo] = useState(recipeInfo);
   const [isShowResult, setIsShowResult] = useState(false);
+
+  const [isActiveModal, setIsActiveModal] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState();
+
+  const onShowModal = (e) => {
+    const idx = Number(e.currentTarget.dataset.selectedIdx);
+    setSelectedIndex(idx);
+    setIsActiveModal(true);
+  };
+
+  const onHideModal = () => {
+    setIsActiveModal(false);
+  };
 
   //*** 추천 레시피 & 못먹는 음식 플래그 ***//
   useEffect(() => {
@@ -80,97 +95,111 @@ export default function RecommendRecipe({ surveyInfo, recipeInfo }) {
   // console.log('inedibleRecipeIds___', inedibleRecipeIds);
 
   return (
-    <section className={s.recommend_recipe}>
-      <div className={s.title_wrapper}>
-        <span className={s.under_text}>
-          {surveyInfo.priorityConcerns.split(',')[0]}
-        </span>
-        이 필요한
-        <br />
-        <span className={s.under_text}>{surveyInfo.myDogName}</span> (이)에게
-        추천하는 레시피
-      </div>
+    <>
+      <section className={s.recommend_recipe}>
+        <div className={s.title_wrapper}>
+          <span className={s.under_text}>
+            {surveyInfo.priorityConcerns.split(',')[0]}
+          </span>
+          이 필요한
+          <br />
+          <span className={s.under_text}>{surveyInfo.myDogName}</span> (이)에게
+          추천하는 레시피
+        </div>
 
-      <div className={s.recipe_list}>
-        {recipeInfo
-          .filter((recipe) => recommendRecipeId?.includes(recipe.id))
-          .map((recipe, index) => (
-            <div key={index} className={s.recipe_wrapper}>
-              <Image
-                src={recipe.thumbnailUri2}
-                width={149 * 1.4}
-                height={149 * 1.4}
-                alt="레시피 상세 이미지"
-              />
-              <div className={s.right_box}>
-                <div>{recipe.uiNameKorean}</div>
-                <div className={s.recipe_description}>
-                  · 주재료: {recipe.ingredientList.join(', ')} <br />·{' '}
-                  {recipe.name === 'STARTER PREMIUM +'
-                    ? '첫 생식에 추천'
-                    : recipe.name === 'TURKEY&BEEF +'
-                    ? '성장기 자견에게 추천'
-                    : recipe.name === 'DUCK&LAMB +'
-                    ? '기력회복이 필요하다면 추천'
-                    : recipe.name === 'LAMB&BEEF +'
-                    ? '푸석푸석한 모질이라면 추천'
-                    : recipe.name === 'Premium CHICKEN'
-                    ? '자견~노견, 전 연령 추천'
-                    : recipe.name === 'Premium TURKEY'
-                    ? '성장기 자견에게 추천'
-                    : recipe.name === 'Premium LAMB'
-                    ? '활동량이 많다면 추천'
-                    : recipe.name === 'Premium BEEF'
-                    ? '자견~노견, 전 연령 추천'
-                    : ''}
-                  <br />·{' '}
-                  {recipe.name === 'STARTER PREMIUM +'
-                    ? '부드러워 소화에 적은 부담'
-                    : recipe.name === 'TURKEY&BEEF +'
-                    ? '영양 보충 & 면역력 강화'
-                    : recipe.name === 'DUCK&LAMB +'
-                    ? '관절 강화 & 근력 회복'
-                    : recipe.name === 'LAMB&BEEF +'
-                    ? '윤기나는 피부와 모질'
-                    : recipe.name === 'Premium CHICKEN'
-                    ? '관절 강화 & 소화 흡수율 높음'
-                    : recipe.name === 'Premium TURKEY'
-                    ? '영양 보충 & 면역력 강화'
-                    : recipe.name === 'Premium LAMB'
-                    ? '피로회복 & 피모관리'
-                    : recipe.name === 'Premium BEEF'
-                    ? '체중관리 & 빈혈회복'
-                    : ''}
-                </div>
-                <button>
-                  <Link href="/recipes" passHref>
-                    <a
-                      target={'_blank'}
-                      rel={'noreferrer'}
-                      onClick={onPopupHandler}
+        <div className={s.recipe_list}>
+          {recipeInfo
+            .filter((recipe) => recommendRecipeId?.includes(recipe.id))
+            .map((recipe, index) => (
+              <div key={index} className={s.recipe_wrapper}>
+                <Image
+                  src={recipe.thumbnailUri2}
+                  width={149 * 1.4}
+                  height={149 * 1.4}
+                  alt="레시피 상세 이미지"
+                />
+                <div className={s.right_box}>
+                  <div>{recipe.uiNameKorean}</div>
+                  <div className={s.recipe_description}>
+                    · 주재료: {recipe.ingredientList.join(', ')} <br />·{' '}
+                    {recipe.name === 'STARTER PREMIUM +'
+                      ? '첫 생식에 추천'
+                      : recipe.name === 'TURKEY&BEEF +'
+                      ? '성장기 자견에게 추천'
+                      : recipe.name === 'DUCK&LAMB +'
+                      ? '기력회복이 필요하다면 추천'
+                      : recipe.name === 'LAMB&BEEF +'
+                      ? '푸석푸석한 모질이라면 추천'
+                      : recipe.name === 'Premium CHICKEN'
+                      ? '자견~노견, 전 연령 추천'
+                      : recipe.name === 'Premium TURKEY'
+                      ? '성장기 자견에게 추천'
+                      : recipe.name === 'Premium LAMB'
+                      ? '활동량이 많다면 추천'
+                      : recipe.name === 'Premium BEEF'
+                      ? '자견~노견, 전 연령 추천'
+                      : ''}
+                    <br />·{' '}
+                    {recipe.name === 'STARTER PREMIUM +'
+                      ? '부드러워 소화에 적은 부담'
+                      : recipe.name === 'TURKEY&BEEF +'
+                      ? '영양 보충 & 면역력 강화'
+                      : recipe.name === 'DUCK&LAMB +'
+                      ? '관절 강화 & 근력 회복'
+                      : recipe.name === 'LAMB&BEEF +'
+                      ? '윤기나는 피부와 모질'
+                      : recipe.name === 'Premium CHICKEN'
+                      ? '관절 강화 & 소화 흡수율 높음'
+                      : recipe.name === 'Premium TURKEY'
+                      ? '영양 보충 & 면역력 강화'
+                      : recipe.name === 'Premium LAMB'
+                      ? '피로회복 & 피모관리'
+                      : recipe.name === 'Premium BEEF'
+                      ? '체중관리 & 빈혈회복'
+                      : ''}
+                  </div>
+                  <button>
+                    {/* <Link href="/recipes" passHref> */}
+                    <div
+                      // target={'_blank'}
+                      // rel={'noreferrer'}
+                      // onClick={onPopupHandler}
+                      onClick={onShowModal}
+                      data-selected-idx={recipeInfoType.title_en.indexOf(
+                        recipe.name,
+                      )}
                     >
                       자세히 알아보기
-                    </a>
-                  </Link>
-                </button>
+                    </div>
+                    {/* </Link> */}
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-      </div>
+            ))}
+        </div>
 
-      <div
-        className={`${s.description_wrapper} ${isShowResult ? s.active : ''}
+        <div
+          className={`${s.description_wrapper} ${isShowResult ? s.active : ''}
       `}
-      >
-        {
-          recommendRecipeDescriptionList[
-            surveyInfo.priorityConcerns.split(',')[0]
-          ]
-        }
-        <button className={s.more_info_show_btn} onClick={moreClickHandler}>
-          {isShowResult ? '접기' : '더보기'}
-        </button>
-      </div>
-    </section>
+        >
+          {
+            recommendRecipeDescriptionList[
+              surveyInfo.priorityConcerns.split(',')[0]
+            ]
+          }
+          <button className={s.more_info_show_btn} onClick={moreClickHandler}>
+            {isShowResult ? '접기' : '더보기'}
+          </button>
+        </div>
+      </section>
+      {isActiveModal && (
+        <Modal_recipes
+          onHideModal={onHideModal}
+          isActiveModal={isActiveModal}
+          data={recipeInfoType}
+          selectedIndex={selectedIndex}
+        />
+      )}
+    </>
   );
 }

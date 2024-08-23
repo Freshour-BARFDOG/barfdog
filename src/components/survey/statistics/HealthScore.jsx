@@ -19,6 +19,9 @@ export default function HealthScore({ surveyInfo, scoreInfo, info }) {
     setActiveModal(true);
   };
 
+  console.log(scoreInfo);
+  console.log(surveyInfo);
+
   return (
     <>
       <section className={s.health_score}>
@@ -116,14 +119,27 @@ export default function HealthScore({ surveyInfo, scoreInfo, info }) {
             {scoreInfo.text}
           </div>
           <div className={s.description_label}>
-            {80 === scoreInfo.scoreNumber &&
+            {surveyInfo.avgScoreAmongSameSizeDog === scoreInfo.scoreNumber &&
               `${info.dogSize} 평균 점수와 내 점수는 같아요!`}
 
-            {80 - scoreInfo.scoreNumber !== 0 && (
+            {surveyInfo.avgScoreAmongSameSizeDog - scoreInfo.scoreNumber !==
+              0 && (
               <>
-                대형견 평균 점수&nbsp;<b>80점</b>&nbsp;대비 내 반려견은&nbsp;
-                <b>{Math.abs(80 - scoreInfo.scoreNumber)}점</b>&nbsp;
-                {80 < scoreInfo.scoreNumber ? '높아요!' : '낮아요!'}
+                {info.dogSize} 평균 점수&nbsp;<b>80점</b>&nbsp;대비 내
+                반려견은&nbsp;
+                <b>
+                  {Math.abs(
+                    Math.round(
+                      surveyInfo.avgScoreAmongSameSizeDog -
+                        scoreInfo.scoreNumber,
+                    ),
+                  )}
+                  점
+                </b>
+                &nbsp;
+                {surveyInfo.avgScoreAmongSameSizeDog < scoreInfo.scoreNumber
+                  ? '높아요!'
+                  : '낮아요!'}
               </>
             )}
           </div>

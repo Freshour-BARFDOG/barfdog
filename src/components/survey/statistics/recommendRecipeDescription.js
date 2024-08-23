@@ -1,7 +1,7 @@
 export const recommendRecipeDescriptionList = {
   '구토·설사·복통': (
     <div>
-      1. Starter Premium
+      1. 스타터프리미엄 플러스
       <br />
       <br />
       닭고기와 칠면조 가슴살을 사용한 이 레시피는 소화가 잘 되는 단백질을
@@ -16,7 +16,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Premium Chicken
+      2. 프리미엄 치킨
       <br />
       <br />
       닭 가슴살과 닭 심장을 사용한 이 레시피는 구토, 설사 및 복통을 예방하는 데
@@ -30,7 +30,7 @@ export const recommendRecipeDescriptionList = {
       #닭가슴살 #닭심장 #단호박 #브로콜리
       <br />
       <br />
-      3. Duck & Lamb
+      3. 덕앤램 플러스
       <br />
       <br />
       오리 가슴살과 양 어깨살을 사용한 이 레시피는 소화가 잘되는 단백질과
@@ -49,7 +49,7 @@ export const recommendRecipeDescriptionList = {
   ),
   '체중 조절': (
     <div>
-      1. Lamb & Beef
+      1. 램앤비프 플러스
       <br />
       <br />
       소 홍두깨살과 양 어깨살을 사용한 이 레시피는 체중 관리와 근육 보호를
@@ -64,7 +64,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Premium Beef
+      2. 프리미엄 비프
       <br />
       <br />
       소 홍두깨살과 소심장을 포함한 이 레시피는 체중 조절과 근육 보호에 필요한
@@ -79,7 +79,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Premium Turkey
+      3. 프리미엄 터키
       <br />
       <br />
       칠면조 가슴살을 사용한 이 레시피는 저지방 고단백질로, 체중 조절과 근육
@@ -98,7 +98,7 @@ export const recommendRecipeDescriptionList = {
 
   피로회복: (
     <div>
-      1. Duck & Lamb
+      1. 덕앤램 플러스
       <br />
       오리 가슴살과 양 어깨살을 사용한 이 레시피는 피로 회복에 필수적인 단백질과
       필수 지방산을 제공합니다. 오리고기는 오메가-3 지방산이 풍부하여 염증을
@@ -110,7 +110,7 @@ export const recommendRecipeDescriptionList = {
       #오리가슴살 #양어깨살 #단호박 #블루베리
       <br />
       <br />
-      2. Premium Lamb
+      2. 프리미엄 램
       <br />
       양 어깨살과 양심장을 포함한 이 레시피는 피로 회복에 필요한 고단백질을
       제공하여 체력을 빠르게 회복시킵니다. 양고기는 비타민 B12와 아연이 풍부하여
@@ -123,7 +123,7 @@ export const recommendRecipeDescriptionList = {
       #양어깨살 #양심장 #단호박 #사과 #블루베리
       <br />
       <br />
-      3. Starter Premium
+      3. 스타터프리미엄 플러스
       <br />
       닭고기와 칠면조 가슴살을 사용한 이 레시피는 피로 회복에 필요한 단백질과
       에너지를 제공합니다. 닭고기는 필수 아미노산과 비타민 B6가 풍부해 근육
@@ -140,7 +140,7 @@ export const recommendRecipeDescriptionList = {
   ),
   눈물·눈곱: (
     <div>
-      1. Premium Lamb
+      1. 프리미엄 램
       <br />
       <br />
       양 어깨살과 양심장을 사용한 이 레시피는 눈 건강을 유지하는 데 도움이 되는
@@ -154,7 +154,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Turkey & Beef
+      2. 터키앤비프 플러스
       <br />
       <br />
       칠면조 가슴살과 소 홍두깨살을 사용한 이 레시피는 눈 건강을 유지하는 데
@@ -169,7 +169,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Duck & Lamb
+      3. 덕앤램 플러스
       <br />
       <br />
       오리 가슴살과 양 어깨살을 사용한 이 레시피는 눈 건강을 위한 필수 지방산과
@@ -188,7 +188,7 @@ export const recommendRecipeDescriptionList = {
   ),
   '적은 음수량': (
     <div>
-      1. Starter Premium
+      1. 스타터프리미엄 플러스
       <br />
       <br />
       닭고기와 칠면조 가슴살을 사용한 이 레시피는 음수량이 적은 반려견에게
@@ -203,7 +203,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Premium Chicken
+      2. 프리미엄 치킨
       <br />
       <br />
       닭 가슴살과 닭 심장을 사용한 이 레시피는 음수량이 적은 반려견에게 수분
@@ -218,7 +218,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Premium Turkey
+      3. 프리미엄 터키
       <br />
       <br />
       칠면조 가슴살을 사용한 이 레시피는 음수량이 적은 반려견에게 필요한 수분을
@@ -236,7 +236,7 @@ export const recommendRecipeDescriptionList = {
   ),
   피부·모질: (
     <div>
-      1. Lamb & Beef
+      1. 램앤비프 플러스
       <br />
       <br />
       소 홍두깨살과 양 어깨살을 사용한 이 레시피는 반려견의 피부와 모질 건강을
@@ -251,7 +251,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Premium Lamb
+      2. 프리미엄 램
       <br />
       <br />
       양 어깨살과 양심장이 포함된 이 레시피는 반려견의 피부와 모질을 건강하게
@@ -265,7 +265,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Premium Beef
+      3. 프리미엄 비프
       <br />
       <br />
       소 홍두깨살과 소심장을 사용한 이 레시피는 반려견의 피부와 모질 건강을
@@ -283,7 +283,7 @@ export const recommendRecipeDescriptionList = {
   ),
   '관절 건강': (
     <div>
-      1. Duck & Lamb
+      1. 덕앤램 플러스
       <br />
       <br />
       오리 가슴살과 양 어깨살을 사용한 이 레시피는 반려견의 관절 건강을 지키는
@@ -298,7 +298,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Premium Chicken
+      2. 프리미엄 치킨
       <br />
       <br />
       닭 가슴살과 닭 심장을 사용한 이 레시피는 반려견의 관절 건강을 강화하는 데
@@ -313,7 +313,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Lamb & Beef
+      3. 램앤비프 플러스
       <br />
       <br />
       소 홍두깨살과 양 어깨살을 사용한 이 레시피는 반려견의 관절 건강을 지키는
@@ -331,7 +331,7 @@ export const recommendRecipeDescriptionList = {
   ),
   '자견 발육': (
     <div>
-      1. Turkey & Beef
+      1. 터키앤비프 플러스
       <br />
       <br />
       칠면조 가슴살과 소 홍두깨살이 포함된 이 레시피는 자견의 건강한 발육에
@@ -346,7 +346,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Premium Turkey
+      2. 프리미엄 터키
       <br />
       <br />
       칠면조 가슴살을 사용한 이 레시피는 자견의 성장과 발달을 지원하는 고단백
@@ -360,7 +360,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Starter Premium
+      3. 스타터프리미엄 플러스
       <br />
       <br />
       닭고기와 칠면조 가슴살을 사용한 이 레시피는 자견의 발육에 필요한 필수
@@ -378,7 +378,7 @@ export const recommendRecipeDescriptionList = {
   ),
   '노령견 건강': (
     <div>
-      1. Premium Chicken
+      1. 프리미엄 치킨
       <br />
       <br />
       닭 가슴살과 닭 심장을 사용한 이 레시피는 노령견의 건강을 유지하는 데
@@ -392,7 +392,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Premium Beef
+      2. 프리미엄 비프
       <br />
       <br />
       소 홍두깨살과 소심장을 사용한 이 레시피는 노령견의 근육 유지와 에너지를
@@ -407,7 +407,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Turkey & Beef
+      3. 터키앤비프 플러스
       <br />
       <br />
       칠면조 가슴살과 소 홍두깨살을 사용한 이 레시피는 노령견의 건강을 유지하는
@@ -428,7 +428,7 @@ export const recommendRecipeDescriptionList = {
   //*** 그 외 고민사항 */
   말랐어요: (
     <div>
-      1. Turkey & Beef
+      1. 터키앤비프 플러스
       <br />
       <br />
       칠면조 가슴살과 소 홍두깨살이 포함된 이 레시피는 체중 증가에 필요한
@@ -444,7 +444,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Premium Lamb
+      2. 프리미엄 램
       <br />
       <br />
       양고기와 양심장을 포함한 이 레시피는 단백질과 필수 비타민을 제공하여 체중
@@ -458,7 +458,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Starter Premium
+      3. 스타터프리미엄 플러스
       <br />
       <br />
       닭고기와 칠면조 가슴살이 포함된 이 레시피는 체중이 적은 반려견의 근육
@@ -478,7 +478,7 @@ export const recommendRecipeDescriptionList = {
   '다이어트 필요': (
     <div>
       <br />
-      1. Lamb & Beef
+      1. 램앤비프 플러스
       <br />
       <br />
       소 홍두깨살과 양 어깨살을 포함한 이 레시피는 저지방 고단백질로, 체중
@@ -495,7 +495,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Duck & Lamb
+      2. 덕앤램 플러스
       <br />
       <br />
       오리 가슴살과 양 어깨살을 사용한 이 레시피는 고단백질이면서 지방 함량이
@@ -510,7 +510,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Premium Turkey
+      3. 프리미엄 터키
       <br />
       <br />
       칠면조 고기를 포함한 이 레시피는 저지방 고단백질로, 체중 감소와 근육
@@ -529,7 +529,7 @@ export const recommendRecipeDescriptionList = {
   ),
   '심각한 비만': (
     <div>
-      1. Premium Chicken
+      1. 프리미엄 치킨
       <br />
       <br />
       닭 가슴살, 닭 심장, 닭 근위를 포함한 이 레시피는 저지방 고단백 식단으로
@@ -544,7 +544,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Premium Beef
+      2. 프리미엄 비프
       <br />
       <br />
       소 홍두깨살과 소 심장을 포함한 이 레시피는 지방 함량이 낮아 체중 감소에
@@ -560,7 +560,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Lamb & Beef
+      3. 램앤비프 플러스
       <br />
       <br />
       소 홍두깨살과 양 어깨살을 사용한 이 레시피는 저지방 고단백질로, 건강한
@@ -579,7 +579,7 @@ export const recommendRecipeDescriptionList = {
   ),
   '임신한 상태': (
     <div>
-      1. Turkey & Beef
+      1. 터키앤비프 플러스
       <br />
       <br />
       칠면조 가슴살과 소 홍두깨살을 사용한 이 레시피는 임신 중인 반려견에게
@@ -597,7 +597,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Premium Turkey
+      2. 프리미엄 터키
       <br />
       <br />
       칠면조 가슴살을 사용한 이 레시피는 임신 중 반려견의 건강한 발달을
@@ -613,7 +613,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Duck & Lamb
+      3. 덕앤램 플러스
       <br />
       <br />
       오리 가슴살과 양 어깨살은 단백질과 필수 지방산을 제공하여 임신 중 반려견의
@@ -629,7 +629,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Turkey & Beef
+      3. 터키앤비프 플러스
       <br />
       <br />
       칠면조 가슴살과 소 홍두깨살을 사용한 이 레시피는 노령견의 건강을 유지하는
@@ -648,7 +648,7 @@ export const recommendRecipeDescriptionList = {
   ),
   '수유 중': (
     <div>
-      1. Premium Lamb
+      1. 프리미엄 램
       <br />
       <br />
       양 어깨살과 양심장을 사용한 이 레시피는 수유 중 반려견에게 필요한 단백질과
@@ -663,7 +663,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Premium Chicken
+      2. 프리미엄 치킨
       <br />
       <br />
       닭 가슴살과 닭 심장을 사용한 이 레시피는 수유 중 반려견에게 필수적인
@@ -678,7 +678,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Starter Premium
+      3. 스타터프리미엄 플러스
       <br />
       <br />
       닭고기와 칠면조 가슴살을 사용한 이 레시피는 수유 중 반려견에게 필요한
@@ -700,7 +700,7 @@ export const recommendRecipeDescriptionList = {
   //* 현재 상태 이외
   '적은 음수량': (
     <div>
-      1. Starter Premium
+      1. 스타터프리미엄 플러스
       <br />
       <br />
       닭고기와 칠면조 가슴살을 사용한 이 레시피는 반려견이 더 많은 수분을
@@ -716,7 +716,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Lamb & Beef
+      2. 램앤비프 플러스
       <br />
       <br />
       소 홍두깨살과 양 어깨살을 사용한 이 레시피는 반려견이 충분한 수분을 섭취할
@@ -731,7 +731,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Premium Turkey
+      3. 프리미엄 터키
       <br />
       <br />
       칠면조 가슴살을 사용한 이 레시피는 음수량이 적은 반려견에게 이상적입니다.
@@ -750,7 +750,7 @@ export const recommendRecipeDescriptionList = {
   ),
   '많은 활동량': (
     <div>
-      1. Turkey & Beef
+      1. 터키앤비프 플러스
       <br />
       <br />
       칠면조 가슴살과 소 홍두깨살이 포함된 이 레시피는 활동량이 많은 반려견에게
@@ -766,7 +766,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Premium Chicken
+      2. 프리미엄 치킨
       <br />
       <br />
       닭 가슴살과 닭 심장을 사용한 이 레시피는 높은 활동량을 가진 반려견의
@@ -781,7 +781,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Starter Premium
+      3. 스타터프리미엄 플러스
       <br />
       <br />
       닭고기와 칠면조 가슴살을 사용한 이 레시피는 활동량이 많은 반려견에게
@@ -800,7 +800,7 @@ export const recommendRecipeDescriptionList = {
   ),
   '적은 활동량': (
     <div>
-      1. Premium Lamb
+      1. 프리미엄 램
       <br />
       <br />
       양 어깨살과 양심장이 포함된 이 레시피는 활동량이 적은 반려견에게 적합한
@@ -815,7 +815,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      2. Duck & Lamb
+      2. 덕앤램 플러스
       <br />
       <br />
       오리 가슴살과 양 어깨살을 사용한 이 레시피는 저지방 고단백 식재료로,
@@ -830,7 +830,7 @@ export const recommendRecipeDescriptionList = {
       <br />
       <br />
       <br />
-      3. Lamb & Beef
+      3. 램앤비프 플러스
       <br />
       <br />
       소 홍두깨살과 양 어깨살을 사용한 이 레시피는 지방이 적은 고단백 식재료로,

@@ -54,10 +54,17 @@ const SurveyBirthdayInput = ({
     const rawInput = e.target.value;
     // 입력값이 'yyyyMMdd' 형식과 일치하는지 확인
     const dateIsValid = rawInput?.match(/^(\d{4}).?(\d{2}).?(\d{2})$/);
+
     if (dateIsValid) {
-      // const formattedDate = `${dateIsValid[1]}-${dateIsValid[2]}-${dateIsValid[3]}`;
-      const formattedDate = `${dateIsValid[1]}${dateIsValid[2]}${dateIsValid[3]}`;
-      handleDateChange(new Date(formattedDate));
+      const formattedDate = `${dateIsValid[1]}-${dateIsValid[2]}-${dateIsValid[3]}`;
+      const parsedDate = new Date(formattedDate);
+      if (!isNaN(parsedDate)) {
+        handleDateChange(parsedDate);
+      } else {
+        // console.error('Invalid date:', rawInput);
+      }
+    } else {
+      // console.error('Invalid input format:', rawInput);
     }
   };
 
@@ -66,12 +73,13 @@ const SurveyBirthdayInput = ({
 
     const pregnancyStatus = calculatePregnancyStatus(date);
 
-    // console.log(pregnancyStatus, date);
+    console.log(pregnancyStatus, date);
 
     // date 값이 유효하면, 날짜 포맷 변경
     if (date && !isNaN(date)) {
-      // formattedDate = format(date, 'yyyy-MM-dd');
       formattedDate = format(date, 'yyyyMMdd');
+      console.log('formattedDate___', formattedDate);
+      // formattedDate = format(date, 'yyyy-MM-dd');
       setSelectedDate(date);
       setIsActiveNextBtn(true);
       setFormValues((prevFormValues) => {

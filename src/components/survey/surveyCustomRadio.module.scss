@@ -60,3 +60,9 @@ $browser-context: 16;
     }
   }
 }
+
+@media (max-width: rem(600)) {
+  .inp-wrap.radio.letter-in-shape {
+    width: rem(280);
+  }
+}

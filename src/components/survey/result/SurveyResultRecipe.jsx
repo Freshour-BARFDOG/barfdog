@@ -32,6 +32,15 @@ export default function SurveyResultRecipe({
   const [recommendRecipeId, setRecommendRecipeId] = useState(null);
   const [inedibleRecipeIds, setInedibleRecipeIds] = useState([]);
 
+  const [isActiveModal, setIsActiveModal] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState();
+
+  const onShowModal = (e) => {
+    const idx = Number(e.currentTarget.dataset.selectedIdx);
+    setSelectedIndex(idx);
+    setIsActiveModal(true);
+  };
+
   //*** 추천 레시피 & 못먹는 음식 플래그 ***//
   useEffect(() => {
     // 1. 추천 레시피
@@ -213,9 +222,11 @@ export default function SurveyResultRecipe({
                 <button>
                   <Link href="/recipes" passHref>
                     <a
-                      target={'_blank'}
-                      rel={'noreferrer'}
-                      onClick={onPopupHandler}
+                      // target={'_blank'}
+                      // rel={'noreferrer'}
+                      // onClick={onPopupHandler}
+                      onClick={onShowModal}
+                      data-selected-idx={0}
                     >
                       자세히 알아보기
                     </a>
