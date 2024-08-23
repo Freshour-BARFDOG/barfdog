@@ -25,6 +25,7 @@ import { deleteCookie, getCookie, setCookie } from '@util/func/cookie';
 import { useEffect } from 'react';
 import { cookieType } from '/store/TYPE/cookieType';
 import { authAction } from '/store/auth-slice';
+import LayoutWithoutFooter from '../../../components/common/LayoutWithoutFooter';
 
 String.prototype.insertAt = function (index, str) {
   return this.slice(0, index) + str + this.slice(index);
@@ -358,7 +359,7 @@ export default function SignupPage() {
             };
             dispatch(authAction.login(payload));
             // 홈으로 이동
-            router.push('/');
+            // router.push('/');
           } else {
             alert('로그인에 실패하였습니다.');
           }
@@ -421,7 +422,7 @@ export default function SignupPage() {
   return (
     <>
       <MetaTitle title="회원가입" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
           <div className={s.main}>
             <div className={s['title-wrap']}>
@@ -466,7 +467,7 @@ export default function SignupPage() {
             </div>
           </div>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
       {isModalActive.termsOfService && (
         <Modal_termsOfSerivce
           modalState={isModalActive.termsOfService}

@@ -184,17 +184,17 @@ export default function MypageDogInfoPage({ data }) {
       <LayoutMypage>
         <Wrapper bgColor={'#fff'}>
           {/* <MypageWrapper> */}
-          {itemList && (
-            <Dashboard
-              className={s.dashboard}
-              itemList={itemList}
-              onUploadImageModalHandler={onUploadImageModalHandler}
-              onShowModalHandler={onShowModalHandler}
-              onActiveConfirmModal={onActiveConfirmModal}
-              setIsLoading={setIsLoading}
-              isLoading={isLoading}
-            />
-          )}
+          {/* {itemList && ( */}
+          <Dashboard
+            className={s.dashboard}
+            itemList={itemList}
+            onUploadImageModalHandler={onUploadImageModalHandler}
+            onShowModalHandler={onShowModalHandler}
+            onActiveConfirmModal={onActiveConfirmModal}
+            setIsLoading={setIsLoading}
+            isLoading={isLoading}
+          />
+          {/* )} */}
           <MypageBanner />
           <BottomMenu />
           {/* </MypageWrapper> */}
