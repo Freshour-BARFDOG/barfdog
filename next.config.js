@@ -28,11 +28,7 @@ module.exports = withNextVideo({
     return newConfig;
   },
   images: {
-    domains: [
-      'localhost',
-      'www.barfdogserver.com',
-      'backend-dev.barfdog.co.kr',
-    ],
+    domains: ['localhost', 'www.barfdogserver.com', 'dev.barfdogserver.com'],
 
     remotePatterns: [
       {
