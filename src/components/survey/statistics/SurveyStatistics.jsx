@@ -679,7 +679,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
   // console.log('recipeDoubleInfo===>', recipeDoubleInfo);
   // console.log('recipeSingleInfo===>', recipeSingleInfo);
   // console.log('form===>', form);
-  console.log('etcConcernsData===>', etcConcernsData);
+  // console.log('etcConcernsData===>', etcConcernsData);
 
   return (
     <div id="statistics">

@@ -237,7 +237,7 @@ export default function MainPage({ data }) {
           </section>
         </Wrapper> */}
       </Layout>
-      {data?.popupDtoList.length > 0 && (
+      {data?.popupDtoList?.length > 0 && (
         <Modal_Popup popupData={data?.popupDtoList}></Modal_Popup>
       )}
     </>
