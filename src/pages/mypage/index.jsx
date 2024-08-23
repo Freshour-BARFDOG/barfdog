@@ -173,11 +173,6 @@ export default function MypageDogInfoPage({ data }) {
 
   // console.log('itemList___', itemList);
 
-  console.log(
-    '  console.log( activeConfirmModal.setRep)>>>',
-    activeConfirmModal,
-  );
-
   return (
     <>
       <MetaTitle title="마이페이지 반려견정보" />

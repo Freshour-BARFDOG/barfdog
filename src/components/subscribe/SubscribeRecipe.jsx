@@ -87,6 +87,15 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   const [recipeSingleInfo, setRecipeSingleInfo] = useState([]);
   const [shippingLeftCount, setShippingLeftCount] = useState(null);
 
+  const [isActiveModal, setIsActiveModal] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState();
+
+  const onShowModal = (e) => {
+    const idx = Number(e.currentTarget.dataset.selectedIdx);
+    setSelectedIndex(idx);
+    setIsActiveModal(true);
+  };
+
   // // console.log(selectedRadio)
   // // console.log(selectedCheckbox)
   // // console.log(subscribeInfo);
@@ -688,9 +697,11 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
                     <button>
                       <Link href="/recipes" passHref>
                         <a
-                          target={'_blank'}
-                          rel={'noreferrer'}
-                          onClick={onPopupHandler}
+                          // target={'_blank'}
+                          // rel={'noreferrer'}
+                          // onClick={onPopupHandler}
+                          onClick={onShowModal}
+                          data-selected-idx={0}
                         >
                           자세히 알아보기
                         </a>

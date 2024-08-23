@@ -6,7 +6,7 @@ import Document, {
   DocumentContext,
   DocumentInitialProps,
 } from 'next/document';
-// import MetaTags from './_metaTags';
+import MetaTags from './_metaTags';
 // eslint-disable-next-line @next/next/no-script-in-document
 import {
   GA_TRACKING_ID,
@@ -103,7 +103,7 @@ export default function CustomDocument() {
         `,
           }}
         ></script>
-        {/* <MetaTags /> */}
+        <MetaTags />
       </Head>
       <body>
         <noscript>

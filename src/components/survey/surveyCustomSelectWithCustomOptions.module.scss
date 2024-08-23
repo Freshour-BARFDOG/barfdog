@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: space-between;
   height: rem(35);
+
   input {
     font-size: rem(16);
     height: 100%;
@@ -57,6 +58,8 @@
     padding: 0;
     box-shadow: 0 0 rem(0) rgba(0, 0, 0, 0);
     pointer-events: none;
+    overflow-y: auto; /* 세로 스크롤 */
+    max-height: rem(200); /* 최대 높이 설정 */
     &.active {
       height: rem(200);
       pointer-events: all;

@@ -220,7 +220,7 @@ export const SurveyCustomSelectWithCustomOptions = ({
         <em className={s.unit}>{unit}</em>
         <ScrollContainer
           height={'200'}
-          scrollBarWidth={'0'}
+          scrollBarWidth={'10'}
           className={`${s.scrollContainer} ${isActive ? s.active : ''}`}
           ref={optionBoxRef}
         >

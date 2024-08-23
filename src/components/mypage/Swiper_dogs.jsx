@@ -59,7 +59,7 @@ export function Swiper_dogs({
   //   })();
   // }, []);
 
-  console.log('___', itemList);
+  // console.log('___', itemList);
 
   return (
     <div className={s.swiper_review_outerWrap}>

@@ -65,7 +65,7 @@ export default function Footer({ mode }) {
                     <span className={s.info_title}>사업자번호:</span>
                     <span className={s.info_cont}>351-87-02455</span>
                     <a
-                      href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=7038801843"
+                      href="http://www.ftc.go.kr/bizCommPop.do?wrkr_no=3518702455"
                       rel="noreferrer"
                       target="_blank"
                       className={s.info_site}
