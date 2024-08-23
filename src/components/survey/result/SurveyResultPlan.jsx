@@ -770,7 +770,7 @@ export default function SurveyResultPlan({
                 <div className={s.selectBox}>
                   {recipeNameList.length === 0 ? (
                     <p className={s.recipe_single_wrapper}>
-                      <div className={s.recipe_text}>0 g</div>
+                      <p className={s.recipe_text}>0 g</p>
                     </p>
                   ) : recipeNameList.length === 1 ? (
                     <p className={s.recipe_single_wrapper}>
@@ -805,12 +805,12 @@ export default function SurveyResultPlan({
               <p className={s.recipe_double_wrapper}>
                 {oneMealGramsWithPriceInfosWithTags || (
                   <>
-                    <div className={s.recipe_text}>
+                    <p className={s.recipe_text}>
                       <b>0 원</b>
-                    </div>
-                    <div className={s.recipe_text}>
+                    </p>
+                    <p className={s.recipe_text}>
                       <b>0 원</b>
-                    </div>
+                    </p>
                   </>
                 )}
               </p>

@@ -633,7 +633,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
                     setSelectedCheckbox={setSelectedCheckbox}
                     option={{ label: '레시피 선택' }}
                   >
-                    {recommendRecipeId.includes(recipe.id) && (
+                    {recommendRecipeId?.includes(recipe.id) && (
                       <ItemRecommendlabel
                         label="추천!"
                         style={{
@@ -641,7 +641,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
                         }}
                       />
                     )}
-                    {inedibleRecipeIds.includes(recipe.id) && (
+                    {inedibleRecipeIds?.includes(recipe.id) && (
                       <ItemRecommendlabel
                         label={`못먹는\n재료 포함`}
                         style={{
@@ -720,7 +720,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
                     setSelectedCheckbox={setSelectedCheckbox}
                     option={{ label: '레시피 선택' }}
                   >
-                    {recommendRecipeId.includes(recipe.id) && (
+                    {recommendRecipeId?.includes(recipe.id) && (
                       <ItemRecommendlabel
                         label="추천!"
                         style={{
@@ -728,7 +728,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
                         }}
                       />
                     )}
-                    {inedibleRecipeIds.includes(recipe.id) && (
+                    {inedibleRecipeIds?.includes(recipe.id) && (
                       <ItemRecommendlabel
                         label={`못먹는\n재료 포함`}
                         style={{

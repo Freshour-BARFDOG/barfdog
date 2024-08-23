@@ -673,8 +673,8 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     setActiveModal(true);
   };
 
-  console.log('surveyInfo===>', surveyInfo);
-  console.log('resultInfo===>', resultInfo);
+  // console.log('surveyInfo===>', surveyInfo);
+  // console.log('resultInfo===>', resultInfo);
   // console.log('recipeInfo===>', recipeInfo);
   // console.log('recipeDoubleInfo===>', recipeDoubleInfo);
   // console.log('recipeSingleInfo===>', recipeSingleInfo);
@@ -759,10 +759,11 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
           {/* 5. 그 외 고민사항 */}
           {etcConcernsData.length > 0 && (
-            <ConcernDetails etcConcernsData={etcConcernsData} />
+            <>
+              <ConcernDetails etcConcernsData={etcConcernsData} />
+              <div className={s.divider}></div>
+            </>
           )}
-
-          <div className={s.divider}></div>
 
           {/* 6. 건강점수 그래프  */}
           <HealthScoreAnalysis surveyInfo={surveyInfo} />

@@ -59,7 +59,7 @@ export function Swiper_dogs({
   //   })();
   // }, []);
 
-  // console.log('___', itemList);
+  console.log('___', itemList);
 
   return (
     <div className={s.swiper_review_outerWrap}>
@@ -76,6 +76,12 @@ export function Swiper_dogs({
               return b.id - a.id;
             }
             return a.representative ? -1 : 1;
+          })
+          ?.sort((a, b) => {
+            if (a.subscribeStatus === b.subscribeStatus) {
+              return 0;
+            }
+            return a.subscribeStatus === 'SUBSCRIBING' ? -1 : 1;
           })
           .map((item, index) => (
             <SwiperSlide
@@ -400,6 +406,17 @@ const ItemList = ({
             <div className={s.btn_wrapper}>
               <button
                 type={'button'}
+                data-id={dogId}
+                onClick={(e) => nextPageHandler(e, 'updateSurvey')}
+              >
+                {isLoading[dogId] ? (
+                  <Spinner style={{ color: '#fff' }} />
+                ) : (
+                  '설문 확인하기'
+                )}
+              </button>
+              {/* <button
+                type={'button'}
                 className={s.reactive}
                 data-id={dogId}
                 onClick={(e) => nextPageHandler(e, 'order')} // 주문서로 이동
@@ -408,6 +425,19 @@ const ItemList = ({
                   <Spinner style={{ color: '#fff' }} />
                 ) : (
                   '재구독하기'
+                )}
+              </button> */}
+
+              <button
+                type={'button'}
+                className={s.payment}
+                data-id={dogId}
+                onClick={(e) => nextPageHandler(e, 'order')} // 주문서로 이동
+              >
+                {isLoading[dogId] ? (
+                  <Spinner style={{ color: '#fff' }} />
+                ) : (
+                  '구독 결제하기'
                 )}
               </button>
             </div>

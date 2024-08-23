@@ -314,4 +314,11 @@ $browser-context: 16;
       // }
     }
   }
+  .policy_area {
+    font-size: rem(12);
+  }
+  .sub_footer_right {
+    margin-top: rem(50) !important;
+    width: rem(70) !important;
+  }
 }

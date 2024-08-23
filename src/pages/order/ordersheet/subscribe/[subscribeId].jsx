@@ -83,7 +83,7 @@ export default function SubscribeOrderSheetPage() {
           id: subscribeId,
         };
         const res = await getData(apiUrl, body);
-        // console.log('/api/orders/sheet/subscribe/${subscribeId} = ', res.data);
+        console.log('/api/orders/sheet/subscribe/${subscribeId} = ', res.data);
 
         const subscribeInfoApiUrl = `/api/subscribes/${subscribeId}`;
         const subscribeInfoRes = await getData(subscribeInfoApiUrl);
@@ -95,11 +95,14 @@ export default function SubscribeOrderSheetPage() {
         const getDeliveryInfoApiUrl = `/api/address`;
         const deliveryInfoData = await getData(getDeliveryInfoApiUrl);
 
-        const addresses =
-          deliveryInfoData.data._embedded.addressResponseDtoList;
+        let addresses;
+        let defaultAddress;
 
-        // 기본 주소
-        const defaultAddress = addresses.find((address) => address.default);
+        if (deliveryInfoData.data?._embedded) {
+          addresses = deliveryInfoData.data?._embedded.addressResponseDtoList;
+          // 기본 주소
+          defaultAddress = addresses.find((address) => address.default);
+        }
 
         if (res.status !== 200) {
           alert('주문 정보를 확인할 수 없습니다.');
@@ -184,7 +187,7 @@ export default function SubscribeOrderSheetPage() {
           // );
         };
 
-        // console.log(getDeliveryCount(subscriptionMonthType.SIX));
+        console.log(getDeliveryCount(subscriptionMonthType.SIX));
 
         //* 주문에 대한 모든 데이터
         const initInfo = {
@@ -217,10 +220,10 @@ export default function SubscribeOrderSheetPage() {
           grade: data.grade, // ! SUBSCRIBE ONLY
           gradeDiscountPercent: data.gradeDiscountPercent, // ! SUBSCRIBE ONLY
           address: {
-            city: data.defaultAddress.city, // 시도
-            street: data.defaultAddress.street, // 도로명 주소
-            detailAddress: data.defaultAddress.detailAddress, // 상세주소
-            zipcode: data.defaultAddress.zipcode, // 우편번호
+            city: data.defaultAddress.city || '', // 시도
+            street: data.defaultAddress.street || '', // 도로명 주소
+            detailAddress: data.defaultAddress.detailAddress || '', // 상세주소
+            zipcode: data.defaultAddress.zipcode || '', // 우편번호
           },
           deliveryPrice: 0, // 정기구독 배송비: 무료
           reward: data.reward,
@@ -246,12 +249,12 @@ export default function SubscribeOrderSheetPage() {
               expiredDate: transformDate(cp.expiredDate),
             })) || [],
           deliveryDto: {
-            name: defaultAddress.recipientName || null, // 수령자 이름 ("정기배송과" 묶음 배송일 경우, null => 정기배송 수령자를 따름)
-            phone: defaultAddress.phoneNumber || null, // 수령자 전화번호 (묶음 배송일 경우, null)
-            zipcode: defaultAddress.zipcode || null, // 우편번호 (묶음 배송일 경우, null)
-            street: defaultAddress.street || null, // 도로명 주소 (묶음 배송일 경우, null)
-            detailAddress: defaultAddress.detailAddress || null, // 상세주소 (묶음 배송일 경우, null)
-            request: defaultAddress.request || null, // 배송 요청사항 (묶음 배송일 경우, null)
+            name: defaultAddress?.recipientName || null, // 수령자 이름 ("정기배송과" 묶음 배송일 경우, null => 정기배송 수령자를 따름)
+            phone: defaultAddress?.phoneNumber || null, // 수령자 전화번호 (묶음 배송일 경우, null)
+            zipcode: defaultAddress?.zipcode || null, // 우편번호 (묶음 배송일 경우, null)
+            street: defaultAddress?.street || null, // 도로명 주소 (묶음 배송일 경우, null)
+            detailAddress: defaultAddress?.detailAddress || null, // 상세주소 (묶음 배송일 경우, null)
+            request: defaultAddress?.request || null, // 배송 요청사항 (묶음 배송일 경우, null)
           },
           orderPrice:
             data.subscribeDto.nextPaymentPrice *
@@ -275,6 +278,8 @@ export default function SubscribeOrderSheetPage() {
           brochure: false, // 브로슈어 수령여부
           subscriptionMonth: 6, //구독 개월 수 [null(정기구독), 3, 6, 9]
         };
+        // console.log('initInfo>>', initInfo);
+        // console.log('initForm>>', initForm);
 
         setInfo(initInfo);
         setForm(initForm);
@@ -349,7 +354,7 @@ export default function SubscribeOrderSheetPage() {
 
   // console.log('subscribeInfo>>>', subscribeInfo);
   // console.log('recipeInfo>>>', recipeInfo);
-  // console.log('info___', info);
+  console.log('info___', info);
   // console.log('DATA___', DATA);
   // console.log('form___', form);
 

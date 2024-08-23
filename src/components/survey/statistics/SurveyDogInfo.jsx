@@ -49,8 +49,6 @@ export default function SurveyDogInfo({ surveyInfo }) {
     })();
   }, []);
 
-  console.log(dogTypeInfo);
-
   return (
     <div className={s.dog_info_wrapper}>
       <div className={s.dog_info_name}>
