@@ -328,7 +328,7 @@ export const SurveyResult = ({ id, mode = 'default' }) => {
     const errObj = validate(body);
     const isPassed = valid_hasFormErrors(errObj);
 
-    console.log(errObj, isPassed);
+    // console.log(errObj, isPassed);
     if (!isPassed)
       return mct.alertShow(
         '유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요. ',

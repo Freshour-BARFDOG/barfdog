@@ -19,16 +19,16 @@ export default function OrdersheetSubscribePaymentList({
   subscriptionMonthTypeKey,
 }) {
   const getDeliveryCount = (type) => {
-    if (type.VALUE === null) {
+    if (type?.VALUE === null) {
       return 1;
     } else if (
-      info.subscribeDto.plan === 'FULL' ||
-      info.subscribeDto.plan === 'TOPPING_FULL'
+      info.subscribeDto?.plan === 'FULL' ||
+      info.subscribeDto?.plan === 'TOPPING_FULL'
     ) {
       return type.fullDeliveryCount;
     } else if (
-      info.subscribeDto.plan === 'HALF' ||
-      info.subscribeDto.plan === 'TOPPING_HALF'
+      info.subscribeDto?.plan === 'HALF' ||
+      info.subscribeDto?.plan === 'TOPPING_HALF'
     ) {
       return type.halfDeliveryCount;
     } else return 1;
@@ -85,9 +85,9 @@ export default function OrdersheetSubscribePaymentList({
           row4: type.freeSkip && <p>건너 뛰기 무제한</p>,
           row5: type.freeDelivery && <p>무료 배송</p>,
           row6:
-            type.fullDeliveryCount && info.subscribeDto.plan === 'FULL'
+            type.fullDeliveryCount && info.subscribeDto?.plan === 'FULL'
               ? `(${type.fullDeliveryCount}회 배송)`
-              : type.fullDeliveryCount && info.subscribeDto.plan === 'HALF'
+              : type.fullDeliveryCount && info.subscribeDto?.plan === 'HALF'
               ? `(${type.halfDeliveryCount}회 배송)`
               : '', // 배송횟수
           row7: type.freeKit && ( // 진단기기 가격 (하나당 98,000원)
@@ -184,11 +184,11 @@ export default function OrdersheetSubscribePaymentList({
                   ) -
                   calcResult?.discountTotal -
                   Math.floor(
-                    info.subscribeDto.originPrice *
+                    info.subscribeDto?.originPrice *
                       getDeliveryCount(
                         subscriptionMonthType[subscriptionMonthTypeKey],
                       ) *
-                      (info.subscribeDto.discountPlan / 100),
+                      (info.subscribeDto?.discountPlan / 100),
                   ),
               )}
               원
@@ -247,21 +247,21 @@ export default function OrdersheetSubscribePaymentList({
             <div>할인&혜택</div>
             <span>
               {calcResult?.discountTotal +
-                info.subscribeDto.originPrice *
+                info.subscribeDto?.originPrice *
                   getDeliveryCount(
                     subscriptionMonthType[subscriptionMonthTypeKey],
                   ) *
-                  (info.subscribeDto.discountPlan / 100) >
+                  (info.subscribeDto?.discountPlan / 100) >
                 0 && '-'}
               {/* 총 할인금액 = 계산된할인금액(플랜할인율 미적용) + 1개원가*배송횟수*플랜할인율(플랜할인금액) */}
               {transformLocalCurrency(
                 calcResult?.discountTotal +
                   Math.floor(
-                    info.subscribeDto.originPrice *
+                    info.subscribeDto?.originPrice *
                       getDeliveryCount(
                         subscriptionMonthType[subscriptionMonthTypeKey],
                       ) *
-                      (info.subscribeDto.discountPlan / 100),
+                      (info.subscribeDto?.discountPlan / 100),
                   ),
               )}
               원
@@ -292,11 +292,11 @@ export default function OrdersheetSubscribePaymentList({
                 </div>
               )}
               {orderType === 'subscribe' &&
-                (info.subscribeDto.plan === 'FULL' ||
-                  info.subscribeDto.plan === 'HALF') && (
+                (info.subscribeDto?.plan === 'FULL' ||
+                  info.subscribeDto?.plan === 'HALF') && (
                   <div className={`${s.discount_info} ${s.red_text}`}>
                     <div>
-                      {subscribePlanType[info.subscribeDto.plan].KOR} 할인 (
+                      {subscribePlanType[info.subscribeDto?.plan].KOR} 할인 (
                       {info.subscribeDto.discountPlan}%)
                     </div>
                     <div>
@@ -305,15 +305,15 @@ export default function OrdersheetSubscribePaymentList({
                           getDeliveryCount(
                             subscriptionMonthType[subscriptionMonthTypeKey],
                           ) *
-                          (info.subscribeDto.discountPlan / 100) >
+                          (info.subscribeDto?.discountPlan / 100) >
                           0 && '-'}
                         {transformLocalCurrency(
                           Math.floor(
-                            info.subscribeDto.originPrice *
+                            info.subscribeDto?.originPrice *
                               getDeliveryCount(
                                 subscriptionMonthType[subscriptionMonthTypeKey],
                               ) *
-                              (info.subscribeDto.discountPlan / 100),
+                              (info.subscribeDto?.discountPlan / 100),
                           ),
                         )}
                         원

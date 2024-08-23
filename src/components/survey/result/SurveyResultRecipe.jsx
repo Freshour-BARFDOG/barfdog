@@ -149,7 +149,7 @@ export default function SurveyResultRecipe({
 
         <div className={s.recipe_list}>
           {recipeDoubleInfo.map((recipe, index) => (
-            <>
+            <div key={index}>
               <SurveyRecipeInput
                 id={`${recipe.name}-${recipe.id}`}
                 type={inputType}
@@ -222,7 +222,7 @@ export default function SurveyResultRecipe({
                   </Link>
                 </button>
               </SurveyRecipeInput>
-            </>
+            </div>
           ))}
         </div>
       </div>
@@ -235,7 +235,7 @@ export default function SurveyResultRecipe({
         </h3>
         <div className={s.recipe_list}>
           {recipeSingleInfo.map((recipe, index) => (
-            <>
+            <div key={index}>
               <SurveyRecipeInput
                 id={`${recipe.name}-${recipe.id}`}
                 type={inputType}
@@ -307,7 +307,7 @@ export default function SurveyResultRecipe({
                   </Link>
                 </button>
               </SurveyRecipeInput>
-            </>
+            </div>
           ))}
         </div>
       </div>

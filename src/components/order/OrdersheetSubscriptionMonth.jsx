@@ -29,16 +29,16 @@ export default function OrdersheetSubscriptionMonth({
   );
 
   const getDeliveryCount = (type) => {
-    if (type.VALUE === null) {
+    if (type?.VALUE === null) {
       return 1;
     } else if (
-      info.subscribeDto.plan === 'FULL' ||
-      info.subscribeDto.plan === 'TOPPING_FULL'
+      info.subscribeDto?.plan === 'FULL' ||
+      info.subscribeDto?.plan === 'TOPPING_FULL'
     ) {
       return type.fullDeliveryCount;
     } else if (
-      info.subscribeDto.plan === 'HALF' ||
-      info.subscribeDto.plan === 'TOPPING_HALF'
+      info.subscribeDto?.plan === 'HALF' ||
+      info.subscribeDto?.plan === 'TOPPING_HALF'
     ) {
       return type.halfDeliveryCount;
     } else return 1;
@@ -53,9 +53,9 @@ export default function OrdersheetSubscriptionMonth({
         info.subscribeDto?.originPrice *
           getDeliveryCount(subscriptionMonthType[subscriptionMonthTypeKey]) -
         Math.floor(
-          info.subscribeDto.originPrice *
+          info.subscribeDto?.originPrice *
             getDeliveryCount(subscriptionMonthType[subscriptionMonthTypeKey]) *
-            (info.subscribeDto.discountPlan / 100),
+            (info.subscribeDto?.discountPlan / 100),
         ),
       //! [리뉴얼 수정] paymentPrice = nextPaymentPrice * 배송횟수
       paymentPrice:
@@ -63,9 +63,9 @@ export default function OrdersheetSubscriptionMonth({
           getDeliveryCount(subscriptionMonthType[subscriptionMonthTypeKey]) -
         calcResult?.discountTotal -
         Math.floor(
-          info.subscribeDto.originPrice *
+          info.subscribeDto?.originPrice *
             getDeliveryCount(subscriptionMonthType[subscriptionMonthTypeKey]) *
-            (info.subscribeDto.discountPlan / 100),
+            (info.subscribeDto?.discountPlan / 100),
         ),
     }));
   }, []);
@@ -100,12 +100,12 @@ export default function OrdersheetSubscriptionMonth({
           row5: type.freeDelivery && <p>무료 배송</p>,
           row6:
             type.fullDeliveryCount &&
-            (info.subscribeDto.plan === 'FULL' ||
-              info.subscribeDto.plan === 'TOPPING_FULL')
+            (info.subscribeDto?.plan === 'FULL' ||
+              info.subscribeDto?.plan === 'TOPPING_FULL')
               ? `(${type.fullDeliveryCount}회 배송)`
               : type.fullDeliveryCount &&
-                (info.subscribeDto.plan === 'HALF' ||
-                  info.subscribeDto.plan === 'TOPPING_HALF')
+                (info.subscribeDto?.plan === 'HALF' ||
+                  info.subscribeDto?.plan === 'TOPPING_HALF')
               ? `(${type.halfDeliveryCount}회 배송)`
               : '', // 배송횟수
           row7: type.freeKit && ( // 진단기기 가격 (하나당 98,000원)
