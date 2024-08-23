@@ -15,6 +15,7 @@ import Modal_alert from '/src/components/modal/Modal_alert';
 import { openGradePopupHandler } from '/src/pages/popup/gradePolicy';
 import { useRouter } from 'next/router';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
+import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 
 export default function Dashboard({
   className,
@@ -226,16 +227,40 @@ export default function Dashboard({
         </div> */}
       </section>
 
-      <section className={s.dog_list}>
-        <Swiper_dogs
-          itemList={itemList}
-          onUploadImageModalHandler={onUploadImageModalHandler}
-          onShowModalHandler={onShowModalHandler}
-          onActiveConfirmModal={onActiveConfirmModal}
-          setIsLoading={setIsLoading}
-          isLoading={isLoading}
-        />
-      </section>
+      {itemList?.length > 0 ? (
+        <section className={s.dog_list}>
+          <Swiper_dogs
+            itemList={itemList}
+            onUploadImageModalHandler={onUploadImageModalHandler}
+            onShowModalHandler={onShowModalHandler}
+            onActiveConfirmModal={onActiveConfirmModal}
+            setIsLoading={setIsLoading}
+            isLoading={isLoading}
+          />
+        </section>
+      ) : (
+        <div
+          style={{
+            margin: '20px 0 40px 0',
+          }}
+        >
+          <EmptyContMessage
+            // message={
+            //   '아직 등록된 반려견이 없습니다\n강아지 정보를 등록하고 맞춤 플랜을 확인하세요.'
+            // }
+            message={
+              '아직 등록된 반려견이 없습니다.\n지금 설문하고 보호자님의 반려견만을 위한\n건강한 식사를 구독해보세요!'
+            }
+            options={{
+              // button: { url: '/survey', label: '반려견 등록하기' },
+              button: { url: '/survey', label: '설문하고 구독 시작하기' },
+            }}
+            bgColor={'rgba(99, 99, 99, 0.8)'}
+            borderRadius={4}
+            color={'white'}
+          />
+        </div>
+      )}
 
       {activeModal.message && (
         <Modal_sendPhoneMessage

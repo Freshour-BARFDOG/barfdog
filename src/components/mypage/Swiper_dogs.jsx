@@ -4,7 +4,6 @@ import s from './swiperDogs.module.scss';
 import { Scrollbar } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
-import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import Spinner from '../atoms/Spinner';
 import DeleteIcon from '/public/img/mypage/dog_info_delete.svg';
 import Link from 'next/link';
@@ -60,7 +59,7 @@ export function Swiper_dogs({
   //   })();
   // }, []);
 
-  console.log('___', itemList);
+  // console.log('___', itemList);
 
   return (
     <div className={s.swiper_review_outerWrap}>
@@ -71,50 +70,32 @@ export function Swiper_dogs({
           swiper.params.scrollbar.nextEl = scrollbarRef.current;
         }}
       >
-        {itemList?.length > 0 ? (
-          itemList
-            ?.sort((a, b) => {
-              if (a.representative === b.representative) {
-                return b.id - a.id;
-              }
-              return a.representative ? -1 : 1;
-            })
-            .map((item, index) => (
-              <SwiperSlide
-                className={s.slide}
-                key={`bestReview-${item.id}`}
-                data-id={item.id}
-              >
-                <div className={s.mid_box}>
-                  <ItemList
-                    key={`${item.id}-${index}`}
-                    data={item}
-                    onEditImage={onUploadImageModalHandler}
-                    onShowModalHandler={onShowModalHandler}
-                    onActiveConfirmModal={onActiveConfirmModal}
-                    setIsLoading={setIsLoading}
-                    isLoading={isLoading}
-                  />
-                </div>
-              </SwiperSlide>
-            ))
-        ) : (
-          <EmptyContMessage
-            // message={
-            //   '아직 등록된 반려견이 없습니다\n강아지 정보를 등록하고 맞춤 플랜을 확인하세요.'
-            // }
-            message={
-              '아직 등록된 반려견이 없습니다.\n지금 설문하고 보호자님의 반려견만을 위한\n건강한 식사를 구독해보세요!'
+        {itemList
+          ?.sort((a, b) => {
+            if (a.representative === b.representative) {
+              return b.id - a.id;
             }
-            options={{
-              // button: { url: '/survey', label: '반려견 등록하기' },
-              button: { url: '/survey', label: '설문하고 구독 시작하기' },
-            }}
-            bgColor={'rgba(99, 99, 99, 0.8)'}
-            borderRadius={4}
-            color={'white'}
-          />
-        )}
+            return a.representative ? -1 : 1;
+          })
+          .map((item, index) => (
+            <SwiperSlide
+              className={s.slide}
+              key={`bestReview-${item.id}`}
+              data-id={item.id}
+            >
+              <div className={s.mid_box}>
+                <ItemList
+                  key={`${item.id}-${index}`}
+                  data={item}
+                  onEditImage={onUploadImageModalHandler}
+                  onShowModalHandler={onShowModalHandler}
+                  onActiveConfirmModal={onActiveConfirmModal}
+                  setIsLoading={setIsLoading}
+                  isLoading={isLoading}
+                />
+              </div>
+            </SwiperSlide>
+          ))}
       </Swiper>
     </div>
   );

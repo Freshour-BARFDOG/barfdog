@@ -82,8 +82,8 @@ const authSlice = createSlice({
       } else {
         const query = temporaryPassword
           ? '?tempPw=true'
-          : action.payload.previousPath.slice(1); //! [수정] 로그인하기 이전 페이지로 돌아가기
-        window.location.href = '/' + query;
+          : action.payload.previousPath?.slice(1); //! [수정] 로그인하기 이전 페이지로 돌아가기
+        window.location.href = query ? '/' + query : '/';
       }
     },
     autoLogin(state, action) {
