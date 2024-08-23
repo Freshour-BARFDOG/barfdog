@@ -6,7 +6,7 @@ import Document, {
   DocumentContext,
   DocumentInitialProps,
 } from 'next/document';
-import MetaTags from './_metaTags';
+// import MetaTags from './_metaTags';
 // eslint-disable-next-line @next/next/no-script-in-document
 import {
   GA_TRACKING_ID,
@@ -67,7 +67,7 @@ export default function CustomDocument() {
           }}
         />
         {/* <!-- Meta Pixel Code -->  */}
-        <script
+        {/* <script
           data-script-title={'META PIXEL'}
           dangerouslySetInnerHTML={{
             __html: `
@@ -83,7 +83,7 @@ export default function CustomDocument() {
             fbq('track', 'PageView');
           `,
           }}
-        />
+        /> */}
         {/* <!-- End Meta Pixel Code --> */}
 
         {/* <!-- Google Tag Manager --> */}
@@ -103,7 +103,7 @@ export default function CustomDocument() {
         `,
           }}
         ></script>
-        <MetaTags />
+        {/* <MetaTags /> */}
       </Head>
       <body>
         <noscript>
@@ -116,12 +116,12 @@ export default function CustomDocument() {
           ></iframe>
           {/* <!-- End Google Tag Manager (noscript) --> */}
           {/* <!-- Meta Pixel Code (noscript) -->  */}
-          <img
+          {/* <img
             height="1"
             width="1"
             style={{ display: 'none' }}
             src="https://www.facebook.com/tr?id=1294667177830818&ev=PageView&noscript=1"
-          />
+          /> */}
           {/* <!-- End Meta Pixel Code (noscript) --> */}
         </noscript>
         <Main />
