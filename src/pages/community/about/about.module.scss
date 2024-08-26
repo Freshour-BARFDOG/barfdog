@@ -6,7 +6,7 @@
     //our story 이미지
     .img_wrap {
       position: absolute;
-      width: 97%;
+      width: 100%;
       height: rem(400);
       border-radius: 0 0 rem(300) 0;
 
@@ -301,7 +301,7 @@
 
     .letter_box {
       border-radius: 0;
-      width: calc(100% - #{rem(20)});
+      width: calc(100% - #{rem(0)});
       padding: rem(60) rem(0) rem(35) rem(0);
 
       .title {
