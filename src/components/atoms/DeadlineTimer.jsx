@@ -55,7 +55,7 @@ const Dealine_timer = ({ className, setIsBottomBannerVisible }) => {
         isMobile={isMobile}
       >
         <Text>AI추천 맞춤식단 정기구독</Text>
-        <Timer id="deadline">{message}</Timer>
+        <span className={s.deadline_timer_text}>{message}</span>
         <NormalText>이후 주문 마감!</NormalText>
         <CloseButton
           onClick={onHideHandler}
@@ -96,13 +96,18 @@ const NormalText = styled.span`
   align-items: center;
 `;
 
-const Timer = styled.span`
-  margin: 0 ${rem(8)};
-  white-space: nowrap;
-  font-weight: 400;
-  width: ${rem(88)};
-  text-align: left;
-`;
+// const Timer = styled.span`
+//   margin: 0 ${rem(8)};
+//   white-space: nowrap;
+//   font-weight: 400;
+//   text-align: left;
+//   width: ${rem(112)};
+//   ${(props) =>
+//     props.isMobile &&
+//     `
+//     width: ${rem(75)};
+//   `}
+// `;
 
 const IconWrap = styled.i`
   display: flex;
@@ -137,7 +142,7 @@ const Wrap = styled.div`
   background-color: rgba(0, 0, 0, 0.85);
   border-radius: 0;
   height: ${rem(40)};
-  font-size: ${(props) => (props.isMobile ? rem(14) : rem(18))};
+  font-size: ${(props) => (props.isMobile ? rem(12) : rem(18))};
   color: #fff;
   &.scroll-container {
     ${'' /* justify-content: flex-start !important; */}
@@ -145,8 +150,10 @@ const Wrap = styled.div`
     white-space: nowrap;
     padding: 0 rem(10);
     box-sizing: border-box;
-    > * {
+    ${
+      '' /* > * {
       width: auto;
+    } */
     }
     &::-webkit-scrollbar {
       width: 0;

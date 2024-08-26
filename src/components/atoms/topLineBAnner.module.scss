@@ -56,6 +56,14 @@ $bannerHeight: rem(40);
   width: 100vw !important;
 }
 
+.deadline_timer_text {
+  margin: 0 rem(8);
+  white-space: nowrap;
+  font-weight: 400;
+  text-align: left;
+  width: rem(112);
+}
+
 @keyframes moveToTop {
   from {
     top: 0;
@@ -70,9 +78,11 @@ $bannerHeight: rem(40);
     left: rem(10);
   }
 
-  // }
+  .deadline_timer_text {
+    margin: 0 rem(8);
+    width: rem(70);
+  }
 
-  // @media (max-width: rem(600)) {
   //   .topLineBanner a {
   //     font-size: rem(14);
   //   }

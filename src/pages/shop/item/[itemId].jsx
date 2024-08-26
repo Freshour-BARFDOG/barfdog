@@ -8,6 +8,7 @@ import { ShopReturnExchageGuideBox } from '/src/components/shop/ShopReturnExchag
 import { ShopItemInfoBox } from '/src/components/shop/ShopItemInfoBox';
 import { ShopTabMenus } from '/src/components/shop/ShopTabMenus';
 import { ShopReviewBox } from '/src/components/shop/ShopReviewBox';
+import LayoutWithoutFooter from '/src/components/common/LayoutWithoutFooter';
 import { ShopOptionBar } from '/src/components/shop/ShopOptionBar';
 import { postUserObjData } from '/src/pages/api/reqData';
 import { useRouter } from 'next/router';
@@ -346,7 +347,7 @@ export default function SingleItemDetailPage({ data }) {
         isLoading={isLoading}
       /> */}
 
-      <Layout>
+      <LayoutWithoutFooter>
         {isOptionBar && (
           <ShopFloatingTab
             id={'optionDtoList'}
@@ -412,7 +413,7 @@ export default function SingleItemDetailPage({ data }) {
             </li>
           </ul>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
       {activeGlobalAlertModal && (
         <Modal_global_alert onClick={onClickModalButton} background />
       )}
