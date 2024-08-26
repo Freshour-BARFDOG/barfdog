@@ -155,8 +155,8 @@ export default function MobileGnb({ deadLine, footer, mode }) {
                         : '/img/icon/home.jpg'
                     }
                     alt="home"
-                    width={35}
-                    height={35}
+                    width={isMobile ? 30 : 35}
+                    height={isMobile ? 30 : 35}
                     style={{ fill: curPath === '/' ? 'red' : 'none' }}
                   />
                   홈
@@ -173,8 +173,8 @@ export default function MobileGnb({ deadLine, footer, mode }) {
                         : '/img/icon/store.jpg'
                     }
                     alt="store"
-                    width={35}
-                    height={35}
+                    width={isMobile ? 30 : 35}
+                    height={isMobile ? 30 : 35}
                   />
                   스토어
                 </a>
@@ -196,8 +196,8 @@ export default function MobileGnb({ deadLine, footer, mode }) {
                         : '/img/icon/ai.jpg'
                     }
                     alt="c"
-                    width={40}
-                    height={40}
+                    width={isMobile ? 35 : 40}
+                    height={isMobile ? 35 : 40}
                   />
                   AI 추천 식단
                 </a>
@@ -213,8 +213,8 @@ export default function MobileGnb({ deadLine, footer, mode }) {
                       : '/img/icon/note.jpg'
                   }
                   alt="subscribe"
-                  width={36}
-                  height={36}
+                  width={isMobile ? 30 : 36}
+                  height={isMobile ? 30 : 36}
                 />
                 건강수첩
               </a>

@@ -19,7 +19,6 @@ const swiperSettings_review = {
   className: `${s.swiper_review}`,
   spaceBetween: 40,
   slidesPerView: 'auto',
-  // loop: true,
   autoplay: {
     delay: 2500,
     disableOnInteraction: false,
@@ -32,9 +31,8 @@ const swiperSettings_review = {
   modules: [Lazy, Autoplay],
   breakpoints: {
     //반응형 조건 속성
-    // 100: {
-    //   slidesPerView: 1,
-    //   spaceBetween: 20,
+    // 600: {
+    //   spaceBetween: 200,
     // },
     // 901: {
     //   spaceBetween: 20,

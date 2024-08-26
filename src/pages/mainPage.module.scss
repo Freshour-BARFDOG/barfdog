@@ -1,7 +1,7 @@
 $browser-context: 16; // html font-size
 $title-font-size: 38; // 세션별 제목 폰트 크기
 $subtitle-font-size: 22; // 세션별 소제목 폰트 크기
-$mob-title-font-size: 30; // 세션별 제목 폰트 크기 (모바일)
+$mob-title-font-size: 26; // 세션별 제목 폰트 크기 (모바일)
 $mob-subtitle-font-size: 18; // 세션별 소제목 폰트 크기 (모바일)
 @function rem($px, $context: $browser-context) {
   @return #{$px / $context}rem;
@@ -1071,11 +1071,11 @@ section.family {
 
   .swiper_survey_img {
     position: relative;
-    // padding: 0 rem(20);
+
     box-sizing: border-box;
     margin: 0 auto;
     width: rem(330);
-    // height: rem(340);
+
     border-radius: rem(8);
     overflow: hidden;
   }
@@ -1229,16 +1229,10 @@ section.family {
 
 @media (max-width: rem(600)) {
   section.recipe_info {
-    padding: rem(60) 0 rem(140);
+    padding: rem(60) rem(30) rem(140);
   }
 
-  // .intro_top_wrapper {
-  //   height: 100% !important;
-  // }
-
   .video_wrapper {
-    // width: rem(1500/3.5) !important;
-    // height: rem(1966/3.5) !important;
     position: relative;
     width: 100vw !important;
     height: 70vh !important;
@@ -1248,7 +1242,6 @@ section.family {
     .text_box {
       top: 50% !important;
       left: 50% !important;
-      // transform: translate(-50%, -50%) !important;
       width: 100%;
 
       h1 {
@@ -1272,18 +1265,18 @@ section.family {
     }
 
     h4 {
-      font-size: rem($mob-subtitle-font-size);
+      font-size: rem(16);
     }
   }
 
   //*** 2. 건강문제별 맞춤 추천 ***
   .swiper_recipe_outerWrap {
     h3 {
-      font-size: rem(24) !important;
+      font-size: rem(20) !important;
     }
 
     h4 {
-      font-size: rem(16) !important;
+      font-size: rem(17) !important;
       margin: 0 rem(20);
     }
   }
@@ -1298,8 +1291,84 @@ section.family {
     height: auto;
   }
 
+  //*** [ Swiper ] 리뷰 후기
+  .swiper_review_outerWrap {
+    position: relative;
+    height: rem(500);
+
+    .swiper_review {
+      margin: rem(60) 0 rem(0);
+      position: relative;
+    }
+
+    .swiper_review_bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      // width: rem(400);
+      height: rem(480);
+      border-radius: rem(8);
+      background-color: #fff;
+      box-shadow: 0.3125rem 0.3125rem 1.25rem rgb(0 0 0 / 10%);
+      padding: rem(20);
+      box-sizing: border-box;
+    }
+
+    .swiper_review_box {
+      width: rem(300);
+      height: rem(500);
+    }
+
+    .swiper_review_img {
+      position: relative;
+      box-sizing: border-box;
+      margin: 0 auto;
+      width: rem(240);
+      height: rem(240);
+      border-radius: rem(8);
+      overflow: hidden;
+    }
+
+    .swiper_review_txt {
+      margin: rem(20) rem(10);
+      height: rem(180);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .swiper_review_title {
+        span {
+          font-weight: bold;
+          font-size: rem(20);
+          padding-bottom: rem(4);
+          border-bottom: rem(1) solid #000;
+        }
+      }
+    }
+    .swiper_review_bottom {
+    }
+    .swiper_review_start {
+      text-align: right;
+    }
+    .swiper_review_info {
+      display: flex;
+      justify-content: space-between;
+      color: #4a4a4a;
+    }
+
+    .contents {
+      margin: rem(10) auto;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+      font-size: rem(16);
+    }
+  }
+
   //*** 4. 따져볼수록
   .wedo {
+    padding: 0 rem(40);
     .wedo_cont_body {
       li {
         display: flex;
@@ -1324,6 +1393,23 @@ section.family {
         }
       }
     }
+    .swiper_survey_img {
+      margin: 0 auto;
+      width: rem(280);
+      border-radius: rem(8);
+      overflow: hidden;
+    }
+
+    .swiper-pagination__surveySection {
+      bottom: 29% !important;
+    }
+
+    .text_box {
+      top: 50% !important;
+      left: 50% !important;
+      width: 100%;
+      font-size: rem(16) !important;
+    }
   }
 
   //*** 6. 인증
@@ -1342,6 +1428,12 @@ section.family {
       .family_content {
         font-size: rem(14);
       }
+    }
+    .img_box {
+      width: rem(380) !important;
+      border-radius: rem(7);
+      overflow: hidden;
+      margin: rem(0) 0 rem(40) 0;
     }
   }
 

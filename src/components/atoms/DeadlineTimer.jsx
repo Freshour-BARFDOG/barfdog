@@ -136,12 +136,12 @@ const Wrap = styled.div`
   margin: auto;
   left: 0;
   right: 0;
-  bottom: ${rem(88.5)};
+  bottom: ${(props) => (props.isMobile ? rem(79) : rem(88.5))};
   top: auto;
   transform: initial;
   background-color: rgba(0, 0, 0, 0.85);
   border-radius: 0;
-  height: ${rem(40)};
+  height: ${(props) => (props.isMobile ? rem(32) : rem(40))};
   font-size: ${(props) => (props.isMobile ? rem(12) : rem(18))};
   color: #fff;
   &.scroll-container {
