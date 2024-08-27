@@ -270,3 +270,42 @@ button.naverLogin-btn > div > div:nth-child(2) .auto__login__check {
     margin-right: rem(20);
   }
 }
+
+@media (max-width: rem(600)) {
+  .flex__container {
+    margin: rem(77) auto rem(100) auto;
+    width: rem(320);
+    height: rem(700);
+    .title {
+      font-weight: 500;
+      text-align: center;
+      > h2 {
+        font-size: rem(24);
+      }
+      > h4 {
+        color: #838383;
+        font-weight: normal;
+      }
+    }
+  }
+
+  // 구분선 (소셜, 이메일)
+  .line_box {
+    .line_text {
+      font-size: rem(14);
+    }
+  }
+
+  // * ----- sns 로그인 버튼 커스텀 ----- *
+  .login_sns_btn {
+    .loginBtn {
+      div {
+        width: 78%;
+
+        div:first-child {
+          width: rem(120);
+        }
+      }
+    }
+  }
+}

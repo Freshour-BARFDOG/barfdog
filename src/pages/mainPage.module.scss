@@ -1,7 +1,7 @@
 $browser-context: 16; // html font-size
 $title-font-size: 38; // 세션별 제목 폰트 크기
 $subtitle-font-size: 22; // 세션별 소제목 폰트 크기
-$mob-title-font-size: 26; // 세션별 제목 폰트 크기 (모바일)
+$mob-title-font-size: 24; // 세션별 제목 폰트 크기 (모바일)
 $mob-subtitle-font-size: 18; // 세션별 소제목 폰트 크기 (모바일)
 @function rem($px, $context: $browser-context) {
   @return #{$px / $context}rem;
@@ -253,7 +253,7 @@ section.family {
 
   //*** 건강문제 - 상단
   .swiper_slide {
-    width: rem(250) !important;
+    width: rem(248) !important;
   }
 
   .recipe_box {
@@ -279,7 +279,7 @@ section.family {
     .img_wrap {
       // margin: rem(10);
       position: relative;
-      width: rem(139 * 1.7);
+      width: rem(139 * 1.6);
       // height: rem(182 * 1.8);
       display: flex;
 
@@ -1272,12 +1272,35 @@ section.family {
   //*** 2. 건강문제별 맞춤 추천 ***
   .swiper_recipe_outerWrap {
     h3 {
-      font-size: rem(20) !important;
+      font-size: rem(18) !important;
     }
 
     h4 {
-      font-size: rem(17) !important;
+      font-size: rem(14) !important;
       margin: 0 rem(20);
+    }
+
+    //*** 건강문제 - 상단
+    .swiper_slide {
+      width: rem(216) !important;
+    }
+
+    .recipe_box {
+      width: rem(240);
+      height: 100%;
+      margin: rem(10);
+    }
+
+    .recipe_a {
+      height: 100%;
+      position: relative;
+
+      // 건강문제 이미지
+      .img_wrap {
+        position: relative;
+        width: rem(139 * 1.4);
+        display: flex;
+      }
     }
   }
 
