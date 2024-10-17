@@ -16,13 +16,13 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
   const selectedRecipeIds = form.recipeIdList;
   const maxSelectedRecipeCount = 2;
   
-  useEffect( () => {
-    // 최대 선택가능한 레시피개수가 많아졌을 경우, 초기화 시킴.
+  // useEffect( () => {
+  //   // 최대 선택가능한 레시피개수가 많아졌을 경우, 초기화 시킴.
     
-    const seletedRecipeCount = form.recipeIdList.length;
-    setInitialize( seletedRecipeCount > maxSelectedRecipeCount );
+  //   const seletedRecipeCount = form.recipeIdList.length;
+  //   setInitialize( seletedRecipeCount > maxSelectedRecipeCount );
   
-  }, [form.recipeIdList] );
+  // }, [form.recipeIdList] );
   
   
   useEffect( () => {
@@ -32,7 +32,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
       plan: selectedPlan,
     }) );
     
-    setInitialize( null); // null : 플랜 선택된 상태는 유지, form값 초기화
+    // setInitialize( null); // null : 플랜 선택된 상태는 유지, form값 초기화
     
   }, [selectedPlan] );
   

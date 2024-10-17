@@ -21,14 +21,14 @@ export const SubscribeCustomInput = ({
   let initialChecked = setInitCheckboxValue(selectedCheckbox, id);
   const [isChecked, setIsChecked] = useState(initialChecked || false); //
   
-  useEffect(() => {
-    // value 초기화
-    if (initialize) {
-      setIsChecked(false);
-      setSelectedRadio(false);
-      if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function') setSelectedCheckbox(null);
-    }
-  }, [type, initialize]);
+  // useEffect(() => {
+  //   // value 초기화
+  //   if (initialize) {
+  //     setIsChecked(false);
+  //     setSelectedRadio(false);
+  //     if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function') setSelectedCheckbox(null);
+  //   }
+  // }, [type, initialize]);
 
   
   const onCheckboxInputHandler = (e, labelId) => {
@@ -77,7 +77,8 @@ export const SubscribeCustomInput = ({
   const Input = () => {
     return (
       <>
-        {type === 'radio' && <InputRadio />}
+        {/* {type === 'radio' && <InputRadio />} */}
+        {type === 'radio' && <InputCheckbox />}
         {type === 'checkbox' && <InputCheckbox />}
         <span className={s.fake_checkbox}>
           {isChecked || selectedRadio === id ? '선택됨' : option.label}

@@ -15,6 +15,7 @@ import checkStringUnderConsonant from '/util/func/checkStringUnderConsonant';
 import Link from 'next/link';
 import ArrowLeft_s from '@public/img/icon/swiper-arrow-small-l.svg';
 import ArrowRight_s from '@public/img/icon/swiper-arrow-small-r.svg';
+import { SubscribeCustomButton } from './SubscribeCustomButton';
 
 const swiperSettings = {
   className: s.swiper_recipes,
@@ -49,10 +50,20 @@ const swiperSettings = {
 export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
   const navPrevRef = useRef(null);
   const navNextRef = useRef(null);
+
+  // 재현 ==============================
+  const [selectedRecipes, setSelectedRecipes] = useState(form.recipeIdList || []);
+  const planType = form.plan;
+  const maxSelection = planType === 'FULL' ? 2 : 1;
+
+  // 재현 ==============================
+
+
   const selectedRecipe = info.recipeInfoList?.filter(
     (rc) => form.recipeIdList.indexOf(rc.id) >= 0,
   );
   const selectedRecipeNames = selectedRecipe?.map((rc) => rc.name).join(',');
+
   const selectedIngredientList = selectedRecipe
     ?.map((rc) => rc.ingredientList)
     .join(',')
@@ -60,67 +71,6 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
   const curIngredient = selectedIngredientList
     ?.filter((ingr, i) => selectedIngredientList.indexOf(ingr) === i)
     .join(', ');
-
-  const [initialize, setInitialize] = useState(false);
-  const [selectedCheckbox, setSelectedCheckbox] = useState({}); // * 풀플랜: 최대 2가지 레시피 선택 가능 (Checkbox Input) // ex.{터키비프: true}
-  const [selectedRadio, setSelectedRadio] = useState(null); // * 그 외 플랜: 1가지 레시피 선택 가능 (Radio Input)
-  const [inputType, setInputType] = useState(null);
-
-  useEffect(() => {
-    // Recipe Input 타입 변환
-    const type =
-      form.plan === subscribePlanType.FULL.NAME ? 'checkbox' : 'radio';
-    setInputType(type);
-    // 플랜이 변경되었을 경우, Recipe Value And Input 초기화
-    setInitialize(true);
-    setForm((prevState) => ({
-      ...prevState,
-      [name]: [],
-    }));
-  }, [form.plan]);
-
-  useEffect(() => {
-    if (inputType !== 'radio') return; // ! 유효성체크 안할 경우, selectedCheckbox값에 영향끼침
-    const selectedId = info.recipeInfoList.filter(
-      (rc) => rc.name === `${selectedRadio && selectedRadio.split('-')[0]}`,
-    )[0]?.id;
-
-    // // console.log(selectedId)
-    setForm((prevState) => ({
-      ...prevState,
-      [name]: [selectedId],
-    }));
-    setSelectedRadio(`${selectedRadio}`);
-  }, [selectedRadio]);
-
-  useEffect(() => {
-    if (!selectedCheckbox) return;
-    if (inputType !== 'checkbox') return; // ! 유효성체크 안할 경우, selectedRadio값에 영향끼침
-    let selectedCheckboxCount = 0;
-    const keys = Object.keys(selectedCheckbox);
-    const selectedIdList = [];
-    keys.forEach((key) => {
-      const selectedId = info.recipeInfoList.filter(
-        (rc, index) => rc.name === `${selectedCheckbox && key.split('-')[0]}`,
-      )[0]?.id;
-      const val = selectedCheckbox[key];
-      val && selectedCheckboxCount++;
-      val
-        ? selectedIdList.push(selectedId)
-        : selectedIdList?.filter((id) => id !== selectedId);
-    });
-    const maxSelectedCheckboxCount = 2;
-    const isOverSelected = selectedCheckboxCount > maxSelectedCheckboxCount;
-    if (isOverSelected) {
-      alert('풀플랜은 최대 2개 레시피까지 선택가능합니다.');
-    }
-
-    setInitialize(isOverSelected);
-    setForm((prevState) => ({
-      ...prevState,
-      [name]: isOverSelected ? [] : selectedIdList,
-    }));
-  }, [selectedCheckbox]);
 
   const onPopupHandler = (e) => {
     e.preventDefault();
@@ -197,24 +147,27 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
         >
           {info.recipeInfoList.length > 0 &&
             info.recipeInfoList.map((rc, index) => (
-              <>
+              <React.Fragment key={`fragment-${rc.id}-${index}`}>
                 {rc.leaked === 'LEAKED' && (
                   <SwiperSlide
                     key={`recipe-${rc.id}-${index}`}
                     className={s.slide}
                   >
-                    <SubscribeCustomInput
-                      id={`${rc.name}-${rc.id}`}
-                      selectedRadio={selectedRadio}
-                      type={inputType}
-                      name={name}
-                      initialize={initialize}
-                      disabled={!rc.inStock}
-                      selectedCheckbox={selectedCheckbox}
-                      setSelectedCheckbox={setSelectedCheckbox}
-                      setSelectedRadio={setSelectedRadio}
-                      option={{ label: '레시피 선택' }}
-                    >
+
+                                      <SubscribeCustomButton
+                                  id={rc.id}
+                                  name={name}
+                                  info={info}
+                                  form={form}
+                                  setForm={setForm}
+                                  planType={planType}
+                                  selectedRecipes={selectedRecipes}
+                                  setSelectedRecipes={setSelectedRecipes}
+                                  maxSelection={maxSelection}
+                                  disabled={!rc.inStock}
+                                  isRecommend={info.recommendRecipeName === rc.name}
+                                  label='레시피 선택'
+                >
                       {info.recommendRecipeName === rc.name && (
                         <ItemRecommendlabel
                           label="추천!"
@@ -246,10 +199,11 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
                           </a>
                         </Link>
                       </p>
-                    </SubscribeCustomInput>
+                      </SubscribeCustomButton>
+
                   </SwiperSlide>
                 )}
-              </>
+              </React.Fragment>
             ))}
         </Swiper>
       </div>

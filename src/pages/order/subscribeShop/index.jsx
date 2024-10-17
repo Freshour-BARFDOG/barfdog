@@ -351,18 +351,19 @@ export default function RegisterSubscribeInfoPage({ data }) {
       <Layout>
         <Wrapper>
           <SubscribeRecommendResult info={info} />
+
+          <SubscribeShopRecipe
+            name="recipeIdList"
+            info={info}
+            form={form}
+            setForm={setForm}
+          />
           <SubscribeShopPlan
             name={'plan'}
             info={info}
             form={form}
             setForm={setForm}
             calcPrice={calcSubscribePlanPaymentPrice}
-          />
-          <SubscribeShopRecipe
-            name="recipeIdList"
-            info={info}
-            form={form}
-            setForm={setForm}
           />
           <section className={s.btn_box}>
             <button className={s.prevPage} onClick={onPrevPage}>
