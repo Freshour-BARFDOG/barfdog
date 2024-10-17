@@ -19,6 +19,7 @@ export const SubscribeCustomButton = ({
   ...props
 }) => {
   const isSelected = selectedRecipes.includes(id);
+console.log(selectedRecipes, 'selectedRecipes');
 
   useEffect(() => {
     if (info.recommendRecipeName) {
@@ -39,39 +40,36 @@ export const SubscribeCustomButton = ({
   }, []);
 
 
-
+  useEffect(() => {
+    setSelectedRecipes(form.recipeIdList);
+  }, [form.recipeIdList, setSelectedRecipes]);
+  
   const handleSelect = () => {
     if (planType === 'FULL') {
       if (isSelected) {
         const newSelected = selectedRecipes.filter((recipeId) => recipeId !== id);
-        setTimeout(() => {
           setSelectedRecipes(newSelected);
           setForm((prev) => ({
             ...prev,
             [name]: newSelected,
           }));
-        }, 0); // 상태 변경을 비동기로 처리
       } else if (selectedRecipes.length < maxSelection) {
         const newSelected = [...selectedRecipes, id];
-        setTimeout(() => {
           setSelectedRecipes(newSelected);
           setForm((prev) => ({
             ...prev,
             [name]: newSelected,
           }));
-        }, 0); // 상태 변경을 비동기로 처리
       } else {
         alert('풀플랜은 최대 2개 레시피만 선택 가능합니다.');
       }
     } else {
       if (!isSelected) {
-        setTimeout(() => {
           setSelectedRecipes([id]);
           setForm((prev) => ({
             ...prev,
             [name]: [id],
           }));
-        }, 0); // 상태 변경을 비동기로 처리
       }
     }
   };

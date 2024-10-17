@@ -12,7 +12,29 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
   const [selectedPlan, setSelectedPlan] = useState(initialPlan);
   const [initialize, setInitialize] = useState(false);
   const selectedRecipeIds = form.recipeIdList;
-  const maxSelectedRecipeCount = 2;
+
+  useEffect(() => {
+    if (selectedPlan !== subscribePlanType.FULL.NAME && selectedRecipeIds.length > 1) {
+      // 첫 번째 레시피만 유지하고 나머지는 해제
+      const updatedRecipeList = [selectedRecipeIds[0]];
+      console.log(updatedRecipeList, 'uuu');
+      
+      setForm((prevState) => ({
+        ...prevState,
+        recipeIdList: updatedRecipeList,
+      }));
+    }
+  }, [selectedPlan]);
+
+  // 플랜 변경 시 선택된 플랜을 form에 반영
+  useEffect(() => {
+    if (selectedPlan !== form.plan) {
+      setForm((prevState) => ({
+        ...prevState,
+        plan: selectedPlan,
+      }));
+    }
+  }, [selectedPlan, form.plan, setForm]);
 
   // useEffect( () => {
   //   // 최대 선택가능한 레시피개수가 많아졌을 경우, 초기화 시킴.
@@ -22,14 +44,14 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
 
   // }, [form.recipeIdList] );
 
-  useEffect(() => {
-    if (selectedPlan !== form.plan) {
-      setForm((prevState) => ({
-        ...prevState,
-        plan: selectedPlan,
-      }));
-    }
-  }, [selectedPlan, form.plan, setForm]);
+  // useEffect(() => {
+  //   if (selectedPlan !== form.plan) {
+  //     setForm((prevState) => ({
+  //       ...prevState,
+  //       plan: selectedPlan,
+  //     }));
+  //   }
+  // }, [selectedPlan, form.plan, setForm]);
 
   const oneMealGramsWithRecipeInfosWithTags = useMemo(
     () =>

@@ -52,12 +52,13 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
   const navNextRef = useRef(null);
 
   // 재현 ==============================
-  const [selectedRecipes, setSelectedRecipes] = useState(form.recipeIdList || []);
+  const [selectedRecipes, setSelectedRecipes] = useState(
+    form.recipeIdList || [],
+  );
   const planType = form.plan;
   const maxSelection = planType === 'FULL' ? 2 : 1;
 
   // 재현 ==============================
-
 
   const selectedRecipe = info.recipeInfoList?.filter(
     (rc) => form.recipeIdList.indexOf(rc.id) >= 0,
@@ -153,21 +154,20 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
                     key={`recipe-${rc.id}-${index}`}
                     className={s.slide}
                   >
-
-                                      <SubscribeCustomButton
-                                  id={rc.id}
-                                  name={name}
-                                  info={info}
-                                  form={form}
-                                  setForm={setForm}
-                                  planType={planType}
-                                  selectedRecipes={selectedRecipes}
-                                  setSelectedRecipes={setSelectedRecipes}
-                                  maxSelection={maxSelection}
-                                  disabled={!rc.inStock}
-                                  isRecommend={info.recommendRecipeName === rc.name}
-                                  label='레시피 선택'
-                >
+                    <SubscribeCustomButton
+                      id={rc.id}
+                      name={name}
+                      info={info}
+                      form={form}
+                      setForm={setForm}
+                      planType={planType}
+                      selectedRecipes={selectedRecipes}
+                      setSelectedRecipes={setSelectedRecipes}
+                      maxSelection={maxSelection}
+                      disabled={!rc.inStock}
+                      isRecommend={info.recommendRecipeName === rc.name}
+                      label="레시피 선택"
+                    >
                       {info.recommendRecipeName === rc.name && (
                         <ItemRecommendlabel
                           label="추천!"
@@ -199,8 +199,7 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
                           </a>
                         </Link>
                       </p>
-                      </SubscribeCustomButton>
-
+                    </SubscribeCustomButton>
                   </SwiperSlide>
                 )}
               </React.Fragment>
