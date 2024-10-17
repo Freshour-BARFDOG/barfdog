@@ -195,7 +195,6 @@ export default function RegisterSubscribeInfoPage({ data }) {
       ), // 반려견 설문조사 변경여부 검증용
     };
 
-    console.log('body>>>', body);
 
     const errObj = validate(body);
     const isPassed = valid_hasFormErrors(errObj);
@@ -343,7 +342,6 @@ export default function RegisterSubscribeInfoPage({ data }) {
     return <FullScreenRunningDog opacity={1} />;
   }
 
-  console.log('form>>>', form);
 
   return (
     <>

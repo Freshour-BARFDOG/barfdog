@@ -59,14 +59,10 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
   const maxSelection = planType === 'FULL' ? 2 : 1;
   //  =================================
 
-<<<<<<< Updated upstream
-  // 재현 ==============================
-=======
   // 경은 ------------------------------
   const recommendRecipe = info.recipeInfoList.find(recommend => recommend.id === info.recommendRecipeId)
   const newRecipeInfoList = [recommendRecipe, ...info.recipeInfoList.filter(recommend => recommend.id !== info.recommendRecipeId)];
   //  ---------------------------------
->>>>>>> Stashed changes
 
   const selectedRecipe = info.recipeInfoList?.filter(
     (rc) => form.recipeIdList.indexOf(rc.id) >= 0,
@@ -155,14 +151,14 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
           }}
         >
           {info.recipeInfoList.length > 0 &&
-<<<<<<< Updated upstream
-            info.recipeInfoList.map((rc, index) => (
+            newRecipeInfoList.map((rc, index) => (
               <React.Fragment key={`fragment-${rc.id}-${index}`}>
                 {rc.leaked === 'LEAKED' && (
                   <SwiperSlide
                     key={`recipe-${rc.id}-${index}`}
                     className={s.slide}
                   >
+
                     <SubscribeCustomButton
                       id={rc.id}
                       name={name}
@@ -175,7 +171,7 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
                       maxSelection={maxSelection}
                       disabled={!rc.inStock}
                       isRecommend={info.recommendRecipeName === rc.name}
-                      label="레시피 선택"
+                      label='레시피 선택'
                     >
                       {info.recommendRecipeName === rc.name && (
                         <ItemRecommendlabel
@@ -209,71 +205,11 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
                         </Link>
                       </p>
                     </SubscribeCustomButton>
+
                   </SwiperSlide>
                 )}
               </React.Fragment>
             ))}
-=======
-          newRecipeInfoList.map((rc, index) => (
-            <React.Fragment key={`fragment-${rc.id}-${index}`}>
-              {rc.leaked === 'LEAKED' && (
-                <SwiperSlide
-                  key={`recipe-${rc.id}-${index}`}
-                  className={s.slide}
-                >
-
-                  <SubscribeCustomButton
-                    id={rc.id}
-                    name={name}
-                    info={info}
-                    form={form}
-                    setForm={setForm}
-                    planType={planType}
-                    selectedRecipes={selectedRecipes}
-                    setSelectedRecipes={setSelectedRecipes}
-                    maxSelection={maxSelection}
-                    disabled={!rc.inStock}
-                    isRecommend={info.recommendRecipeName === rc.name}
-                    label='레시피 선택'
-                  >
-                    {info.recommendRecipeName === rc.name && (
-                      <ItemRecommendlabel
-                        label="추천!"
-                        style={{
-                          backgroundColor: '#000',
-                        }}
-                      />
-                    )}
-                    {!rc.inStock && <ItemSoldOutLabel />}
-                    <figure className={`${s.image} img-wrap`}>
-                      <Image
-                        src={rc.thumbnailUri2}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="레시피 상세 이미지"
-                      />
-                    </figure>
-                    <p className={s.row_1}>{rc.uiNameEnglish}</p>
-                    <p className={s.row_2}>{rc.uiNameKorean}</p>
-                    <p className={s.row_3}>{rc.description}</p>
-                    <p className={s.row_4}>
-                      <Link href="/recipes" passHref>
-                        <a
-                          target={'_blank'}
-                          rel={'noreferrer'}
-                          onClick={onPopupHandler}
-                        >
-                          더 알아보기
-                        </a>
-                      </Link>
-                    </p>
-                  </SubscribeCustomButton>
-
-                </SwiperSlide>
-              )}
-            </React.Fragment>
-          ))}
->>>>>>> Stashed changes
         </Swiper>
       </div>
     </section>

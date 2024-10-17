@@ -19,7 +19,6 @@ export const SubscribeCustomButton = ({
   ...props
 }) => {
   const isSelected = selectedRecipes.includes(id);
-console.log(selectedRecipes, 'selectedRecipes');
 
   useEffect(() => {
     if (info.recommendRecipeName) {
