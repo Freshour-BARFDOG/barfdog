@@ -13,6 +13,7 @@ import { AlertLayer } from '@src/layers/AlertLayer';
 import SiteMaintenance from '/src/pages/siteMaintenance';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
+import useNaverAnalytics from "@util/hook/useNaverAnalytics";
 
 // Server Only File (client에서 사용하는 로직 사용불가)
 // Next JS : 최초실행
@@ -50,22 +51,22 @@ export default function MyApp({ Component, pageProps, CustomProps }) {
         </AuthInterceptor>
       </Provider>
       {/* Include Naver Analytics Script */}
-      <Script
-        id="naver-init"
-        src="//wcs.naver.net/wcslog.js"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-              if (!wcs_add) var wcs_add={};
-              wcs_add["wa"] = "s_22b538074ef0";
-              if (!_nasa) var _nasa={};
-              if(window.wcs){
-                wcs.inflow();
-                wcs_do(_nasa);
-              }
-            `,
-        }}
-      />
+      {/*<Script*/}
+      {/*  id="naver-init"*/}
+      {/*  src="//wcs.naver.net/wcslog.js"*/}
+      {/*  strategy="afterInteractive"*/}
+      {/*  dangerouslySetInnerHTML={{*/}
+      {/*    __html: `*/}
+      {/*        if (!wcs_add) var wcs_add={};*/}
+      {/*        wcs_add["wa"] = "s_22b538074ef0";*/}
+      {/*        if (!_nasa) var _nasa={};*/}
+      {/*        if(window.wcs){*/}
+      {/*          wcs.inflow();*/}
+      {/*          wcs_do(_nasa);*/}
+      {/*        }*/}
+      {/*      `,*/}
+      {/*  }}*/}
+      {/*/>*/}
     </GAProvider>
   );
 }

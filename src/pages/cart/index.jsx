@@ -21,6 +21,7 @@ import { cartAction } from '/store/cart-slice';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { postUserObjData } from '../api/reqData';
+import useNaverAnalytics from "../../../util/hook/useNaverAnalytics";
 
 const calculateCartDeliveryPrice = ({
   selectedItemDto,
@@ -52,6 +53,7 @@ export default function CartPage({ data, error }) {
   };
   const [storedItem, setStoredItem] = useState();
   // 비로그인 시 담은 아이템을 장바구니에 등록
+  const { triggerConversion } = useNaverAnalytics();
   useEffect(() => {
     const storedItemData = localStorage.getItem('storedItem');
     setStoredItem(storedItemData);
@@ -62,18 +64,19 @@ export default function CartPage({ data, error }) {
           const res = await postUserObjData(postDataApiUrl, storedItemData);
           if (res.isDone) {
             // 전환 스크립트 설정
-            const script1 = document.createElement('script');
-            script1.src = '//wcs.naver.net/wcslog.js';
-            script1.async = true;
-            document.body.appendChild(script1);
-
-            const script2 = document.createElement('script');
-            script2.type = 'text/javascript';
-            script2.innerHTML = `
-        var _nasa = {};
-        if (window.wcs) _nasa["cnv"] = wcs.cnv("3", "1"); // 전환유형 : 장바구니 담기, 전환가치 
-      `;
-            document.body.appendChild(script2);
+            triggerConversion('3', '1');
+      //       const script1 = document.createElement('script');
+      //       script1.src = '//wcs.naver.net/wcslog.js';
+      //       script1.async = true;
+      //       document.body.appendChild(script1);
+      //
+      //       const script2 = document.createElement('script');
+      //       script2.type = 'text/javascript';
+      //       script2.innerHTML = `
+      //   var _nasa = {};
+      //   if (window.wcs) _nasa["cnv"] = wcs.cnv("3", "1"); // 전환유형 : 장바구니 담기, 전환가치
+      // `;
+      //       document.body.appendChild(script2);
 
             // 전환 스크립트가 작동할 시간을 주기 위해 잠시 대기
             setTimeout(() => {
