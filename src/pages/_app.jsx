@@ -37,6 +37,7 @@ export default function MyApp({ Component, pageProps, CustomProps }) {
     storage.setItem('currentPath', globalThis.location.pathname);
   }
 
+  useNaverAnalytics();
   return (
     <GAProvider>
       <Provider store={store}>
