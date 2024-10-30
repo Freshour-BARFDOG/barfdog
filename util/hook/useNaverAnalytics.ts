@@ -5,6 +5,7 @@ declare global {
     wcs: any;
     wcs_add: any;
     _nasa: any;
+    wcs_do: () => void
   }
 }
 
