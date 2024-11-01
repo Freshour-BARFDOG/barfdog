@@ -311,7 +311,7 @@ export default function SignupPage() {
         // console.log(res.data);
         if (res.status === 201) {
           const userName = formvalues.name;
-          mct.alertShow(`회원가입에 성공하였습니다.`, onSuccessCallback);
+          mct.alertShow(`회원가입에 성공하였습니다.`, () => onSuccessCallback(userName));
           // router.push(`/account/signup/success?username=${userName}`);
         } else {
           mct.alertHide(
@@ -326,11 +326,11 @@ export default function SignupPage() {
       });
   };
   const { triggerConversion } = useNaverAnalytics();
-  const onSuccessCallback = async () => {
+  const onSuccessCallback = async (userName) => {
     // await router.push(`/account/signup/success?username=${userName}`);
 
     // 전환 스크립트 설정
-    triggerConversion('2', '1');
+    triggerConversion('sign_up', userName);
 
     // const script1 = document.createElement('script');
     // script1.src = '//wcs.naver.net/wcslog.js';

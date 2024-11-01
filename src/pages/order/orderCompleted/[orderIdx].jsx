@@ -14,7 +14,7 @@ function OrderCompletedPage(props) {
 
   useEffect(() => {
     // Naver Analytics Script
-    triggerConversion('1', props.orderPrice);
+    triggerConversion('purchase', props.orderPrice);
 
     // const script1 = document.createElement('script');
     // script1.src = '//wcs.naver.net/wcslog.js';

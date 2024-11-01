@@ -236,7 +236,7 @@ export default function SingleItemDetailPage({ data }) {
       // console.log(res);
       if (res.isDone) {
         // 전환 스크립트 설정
-        triggerConversion('3', '1');
+        triggerConversion('add_to_cart', '1');
         // const script1 = document.createElement('script');
         // script1.src = '//wcs.naver.net/wcslog.js';
         // script1.async = true;

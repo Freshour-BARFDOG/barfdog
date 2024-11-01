@@ -33,7 +33,7 @@ function OrderCompletedPage(props) {
     }
 
     // Naver Analytics Script
-    triggerConversion('1', orderPrice);
+    triggerConversion('purchase', orderPrice);
 
     // const script1 = document.createElement('script');
     // script1.src = '//wcs.naver.net/wcslog.js';
