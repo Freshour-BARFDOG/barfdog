@@ -51,15 +51,20 @@ const useNaverAnalytics = () => {
   // 회원가입 -> '2'
   // 장바구니 -> '3'
   const triggerConversion = (conversionType: string, conversionValue: number | string) => {
-    if (!window._nasa) window._nasa = {};
-    if (window.wcs && window.wcs.cnv) {
-      // 전환 정보 설정
-      window._nasa["cnv"] = window.wcs.cnv(conversionType, conversionValue);
+    const checkAndTrigger = () => {
+      if (window.wcs && window.wcs.cnv) {
+        if (!window._nasa) window._nasa = {};
+        // 전환 정보 설정
+        window._nasa["cnv"] = window.wcs.cnv(conversionType, conversionValue);
 
-      // 전환 전송
-      window.wcs_do(window._nasa);  // _nasa 객체와 함께 전송
-      console.log('Conversion triggered:', { conversionType, conversionValue });
+        // 전환 전송
+        window.wcs_do(window._nasa); // _nasa 객체와 함께 전송
+        console.log('Conversion triggered:', { conversionType, conversionValue });
+      } else {
+        setTimeout(checkAndTrigger, 100);
+      }
     }
+    checkAndTrigger();
   };
 
   return { triggerConversion };

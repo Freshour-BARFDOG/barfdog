@@ -33,7 +33,7 @@ function OrderCompletedPage(props) {
     //   document.body.removeChild(script1);
     //   document.body.removeChild(script2);
     // };
-  }, []);
+  }, [props.orderPrice]);
 
   return (
     <>

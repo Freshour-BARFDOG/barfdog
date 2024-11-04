@@ -25,7 +25,9 @@ function OrderCompletedPage(props) {
         const res = await getData(url);
 
         if (res?.status === 200) {
-          setOrderPrice(Number(res.data.orderDto.orderPrice));
+          const price = res.data.orderDto.orderPrice;
+          setOrderPrice(Number(price));
+          triggerConversion('1', price);
         }
       })();
     } catch (err) {
@@ -33,7 +35,6 @@ function OrderCompletedPage(props) {
     }
 
     // Naver Analytics Script
-    triggerConversion('1', orderPrice);
 
     // const script1 = document.createElement('script');
     // script1.src = '//wcs.naver.net/wcslog.js';
