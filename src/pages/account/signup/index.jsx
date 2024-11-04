@@ -331,20 +331,6 @@ export default function SignupPage() {
 
     // 전환 스크립트 설정
     triggerConversion('2', 1);
-
-    // const script1 = document.createElement('script');
-    // script1.src = '//wcs.naver.net/wcslog.js';
-    // script1.async = true;
-    // document.body.appendChild(script1);
-    //
-    // const script2 = document.createElement('script');
-    // script2.type = 'text/javascript';
-    // script2.innerHTML = `
-    //           var _nasa = {};
-    //           if (window.wcs) _nasa["cnv"] = wcs.cnv("2", "1"); // 전환유형 2: 회원가입 완료, 전환가치 1: 고정 값
-    //         `;
-    // document.body.appendChild(script2);
-
     // // 전환 스크립트가 작동할 시간을 주기 위해 잠시 대기
     setTimeout(() => {
       // 회원가입 후 바로 로그인

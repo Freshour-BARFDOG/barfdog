@@ -51,23 +51,6 @@ export default function MyApp({ Component, pageProps, CustomProps }) {
           </ChannelTalkProvider>
         </AuthInterceptor>
       </Provider>
-      {/* Include Naver Analytics Script */}
-      {/*<Script*/}
-      {/*  id="naver-init"*/}
-      {/*  src="//wcs.naver.net/wcslog.js"*/}
-      {/*  strategy="afterInteractive"*/}
-      {/*  dangerouslySetInnerHTML={{*/}
-      {/*    __html: `*/}
-      {/*        if (!wcs_add) var wcs_add={};*/}
-      {/*        wcs_add["wa"] = "s_22b538074ef0";*/}
-      {/*        if (!_nasa) var _nasa={};*/}
-      {/*        if(window.wcs){*/}
-      {/*          wcs.inflow();*/}
-      {/*          wcs_do(_nasa);*/}
-      {/*        }*/}
-      {/*      `,*/}
-      {/*  }}*/}
-      {/*/>*/}
     </GAProvider>
   );
 }

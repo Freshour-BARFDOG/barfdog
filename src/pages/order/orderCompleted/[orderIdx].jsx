@@ -15,24 +15,6 @@ function OrderCompletedPage(props) {
   useEffect(() => {
     // Naver Analytics Script
     triggerConversion('1', props.orderPrice);
-
-    // const script1 = document.createElement('script');
-    // script1.src = '//wcs.naver.net/wcslog.js';
-    // script1.async = true;
-    // document.body.appendChild(script1);
-    //
-    // const script2 = document.createElement('script');
-    // script2.type = 'text/javascript';
-    // script2.innerHTML = `
-    //   var _nasa = {};
-    //   if (window.wcs) _nasa["cnv"] = wcs.cnv("1", "${props.orderPrice}"); // 전환유형, 전환가치
-    // `;
-    // document.body.appendChild(script2);
-    //
-    // return () => {
-    //   document.body.removeChild(script1);
-    //   document.body.removeChild(script2);
-    // };
   }, [props.orderPrice]);
 
   return (

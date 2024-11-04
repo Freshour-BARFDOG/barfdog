@@ -126,21 +126,6 @@ export default function CustomDocument() {
         </noscript>
         <Main />
         <NextScript />
-        {/* Naver Analytics */}
-        {/* <script async src="//wcs.naver.net/wcslog.js"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if (!wcs_add) var wcs_add={};
-              wcs_add["wa"] = "s_22b538074ef0";
-              if (!_nasa) var _nasa={};
-              if(window.wcs){
-                wcs.inflow();
-                wcs_do(_nasa);
-              }
-            `,
-          }}
-        ></script> */}
       </body>
     </Html>
   );
