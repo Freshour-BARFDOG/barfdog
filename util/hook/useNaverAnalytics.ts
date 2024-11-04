@@ -47,7 +47,10 @@ const useNaverAnalytics = () => {
   }, []);
 
   // 전환 스크립트 트리거 함수
-  const triggerConversion = (conversionType: 'purchase' | 'add_to_cart' | 'sign_up', conversionValue: number | string) => {
+  // 구매완료 -> '1'
+  // 회원가입 -> '2'
+  // 장바구니 -> '3'
+  const triggerConversion = (conversionType: string, conversionValue: number | string) => {
     if (!window._nasa) window._nasa = {};
     if (window.wcs && window.wcs.cnv) {
       // 전환 정보 설정

@@ -330,7 +330,7 @@ export default function SignupPage() {
     // await router.push(`/account/signup/success?username=${userName}`);
 
     // 전환 스크립트 설정
-    triggerConversion('sign_up', userName);
+    triggerConversion('2', 1);
 
     // const script1 = document.createElement('script');
     // script1.src = '//wcs.naver.net/wcslog.js';
