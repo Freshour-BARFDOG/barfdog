@@ -178,7 +178,7 @@ export default function CreateReviewPage() {
     mct.alertHide();
     if (modalMessage === '리뷰가 성공적으로 등록되었습니다.') {
       // <-- modal상태 추가하는 것으로 추후에 코드 변경하기
-      router.push('/bf-admin/review/normal');
+      router.push('/mypage/review');
     }
   };
 
