@@ -88,13 +88,15 @@ export const Modal_uploadDogProfileImage = ({
             pictureUrl: uploadResponse?.url,
             dogPictureId: dogPictureId,
           }));
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        } else {
+          modalMessage = '프로필 사진 업데이트에 실패하였습니다.';
         }
-        
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-        
-      } else if (uploadResponse && uploadResponse?.response.status === 400) {
+
+        } else if (uploadResponse && uploadResponse?.response.status === 400) {
         // ERROR STATUS
         modalMessage = '프로필 사진 업데이트에 실패하였습니다.';
       }
