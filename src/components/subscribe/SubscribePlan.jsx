@@ -94,6 +94,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
     }
   };
 
+  
   const onChangePlan = async (confirm) => {
     if (submitted) return console.error('이미 제출된 양식입니다.');
     if (!confirm) {
