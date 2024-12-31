@@ -151,7 +151,7 @@ export default function CouponPage () {
   const onGlobalModalCallback = () => {
     mct.alertHide();
   };
-  
+
   return (
     <>
       <MetaTitle title="마이페이지 쿠폰조회"/>
@@ -197,7 +197,6 @@ export default function CouponPage () {
                   {itemList.map( (item, i) => {
                       const expired = getRemainingDaysNumberUntilExpired( item.expiredDate ) < 0;
                       const maxDiscountString = (item.discountType === discountUnitType.FIXED_RATE && item.availableMaxDiscount) >= 9999999 && "최대 할인금액 제한없음";
-                      const minPriceString = (item.discountType === discountUnitType.FIXED_RATE && item.availableMinPrice) <= 0 && "최소 이용금액 없음";
                       return <li key={`coupon-${item.id}-${i}`} className={`${s.grid_box} ${expired && s.expiredCoupon}`}>
                         <div className={s.left_top}>
                           <span className={s.name}>{item.name}</span>
@@ -223,11 +222,10 @@ export default function CouponPage () {
                           <div className={s.left_bot_text}>
                             <p>{item.description}</p>
                             <p>{couponUseType.KOR[item.couponTarget]} 사용가능</p>
-                            {item.discountType === discountUnitType.FIXED_RATE &&
-                            <span className={`${s.availableMinPrice} ${s.left_text}`}>{
-                              minPriceString
-                              || (`${transformLocalCurrency(item.availableMinPrice)}원 이상 구매시`)}
-                            </span>
+                            {item.availableMinPrice > 0 &&
+                              <span className={`${s.availableMinPrice} ${s.left_text}`}>
+                                 {(`${transformLocalCurrency(item.availableMinPrice)}원 이상 구매시`)}
+                              </span>
                             }
                               {/* <div className={s.left_text}>사용기한</div>
                               <div className={s.line}>
