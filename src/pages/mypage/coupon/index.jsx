@@ -224,7 +224,7 @@ export default function CouponPage () {
                             <p>{couponUseType.KOR[item.couponTarget]} 사용가능</p>
                             {item.availableMinPrice > 0 &&
                               <span className={`${s.availableMinPrice} ${s.left_text}`}>
-                                 {(`${transformLocalCurrency(item.availableMinPrice)}원 이상 구매시`)}
+                                 {transformLocalCurrency(item.availableMinPrice)}원 이상 구매시
                               </span>
                             }
                               {/* <div className={s.left_text}>사용기한</div>
