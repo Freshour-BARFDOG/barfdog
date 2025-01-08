@@ -20,7 +20,7 @@
       // border-bottom: rem(1) dashed var(--color-line-02);
       position: relative;
 
-      &::after{
+      &::after {
         content: "";
         position: absolute;
         bottom: 0;
@@ -31,6 +31,7 @@
         background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='4' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
         opacity: .3;
       }
+
       // &::after{
       //   content: "";
       //   position: absolute;
@@ -52,16 +53,6 @@
     align-items: center;
     position: relative;
 
-    //&::after{
-    //  content: "";
-    //  position: absolute;
-    //  bottom: 0;
-    //  left: 0;
-    //  width: 100%;
-    //  height: rem(1);
-    //  background-color: var(--color-line-01);
-    //}
-
     .title {
       font-size: rem(20);
       width: 100%;
@@ -79,9 +70,10 @@
     }
   }
 
-  .content_box.used-coupon .flex_box{
+  .content_box.used-coupon .flex_box {
     grid-template-columns: rem(25) 1fr rem(100);
   }
+
   .content_box {
     .flex_box {
       display: grid;
@@ -92,9 +84,11 @@
 
       text-align: center;
       align-content: center;
+
       &.header {
         font-size: rem(15);
         align-items: center;
+
         border: {
           top: rem(1) solid var(--color-line-01);
           bottom: rem(1) solid var(--color-line-01);
@@ -108,9 +102,17 @@
         grid-column: 1 / span 2;
       }
 
-      > span:nth-child(1) {
+      >span:nth-child(1) {
         display: flex;
         justify-content: flex-start;
+        box-sizing: border-box;
+      }
+
+      >span:nth-child(2),
+      >span:nth-child(3),
+      >span:nth-child(4) {
+        display: flex;
+        justify-content: flex-end;
         box-sizing: border-box;
       }
 
@@ -119,27 +121,46 @@
         min-height: rem(51);
         border-top: 0;
         border-bottom: rem(1) solid var(--color-line-03);
+
         .radio {
           justify-content: center;
           gap: rem(10);
         }
-        > span {
+
+        >span {
           color: var(--color-font-def);
         }
+
         .name {
           text-align: left;
           justify-content: flex-start;
           padding-left: rem(5);
         }
+
+        .min_price {
+          justify-content: flex-end;
+        }
+
+        .date {
+          justify-content: flex-end;
+        }
+
         .price {
           color: var(--color-main);
+          justify-content: flex-end;
         }
-        > * {
+
+        >* {
           display: flex;
           align-items: center;
           justify-content: center;
           font-weight: 400 !important;
           font-size: rem(14);
+        }
+
+        .grayText {
+          color: #B3B3B3;
+          /* 비활성화 상태의 텍스트 색상 */
         }
       }
     }
@@ -178,11 +199,13 @@
       }
     }
   }
+
   .btn_box {
     display: flex;
     justify-content: center;
     column-gap: rem(10);
     padding-top: rem(30);
+
     .cancle_btn {
       display: flex;
       justify-content: center;
@@ -194,6 +217,7 @@
       border-radius: rem(4);
       cursor: pointer;
     }
+
     .choice_btn {
       display: flex;
       justify-content: center;
@@ -222,6 +246,7 @@
     padding-bottom: rem(10);
     color: var(--color-font-def)
   }
+
   .text_price {
     @include char(l18);
     font-weight: 500;
@@ -234,34 +259,38 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    
-    >h4{
+
+    >h4 {
       display: flex;
       justify-content: space-between;
       width: 100%;
       font-size: rem(18);
-      >span{
+
+      >span {
         font-size: rem(24);
         font-weight: 700;
       }
     }
-    
+
     span {
       padding-left: rem(18);
       color: var(--color-main);
       @include char(l20);
       font-weight: 600;
     }
-    .unappliedDiscountAmount{
+
+    .unappliedDiscountAmount {
       font-size: rem(12);
     }
   }
+
   .line {
     display: flex;
     border-top: rem(1) solid var(--color-line-01);
     width: rem(16);
     height: rem(1);
   }
+
   .vertical_line {
     display: flex;
     border-right: rem(1) solid var(--color-line-03);
@@ -283,12 +312,13 @@
       display: flex;
       justify-content: space-between;
 
-      >h4{
+      >h4 {
         display: flex;
         justify-content: space-between;
         width: 100%;
         font-size: rem(18);
-        >span{
+
+        >span {
           font-size: rem(24);
           font-weight: 700;
         }
@@ -308,16 +338,15 @@
     }
   }
 
-
   .modal-container {
     padding: rem(20) rem(25) !important;
     width: 100% !important;
-    max-width: rem(340);
+    max-width: rem(390);
   }
 
   .modal {
     .title_box {
-      &::after{
+      &::after {
         display: none;
       }
 
@@ -335,62 +364,75 @@
         }
 
         &.coupons {
-          grid:
-            'radio name count price'
-            'radio date count price' / rem(40) 1fr rem(30) minmax(rem(80), auto);
+          display: grid;
+          grid-template-areas:
+            "radio name price"
+            "radio min_price date";
+          grid-template-columns: rem(40) 1fr 1fr;
           border: rem(1) solid var(--color-line-03);
           border-radius: rem(4);
           font-size: rem(15);
           align-items: center;
           min-height: rem(65);
           padding: rem(10) 0;
+          padding-right: rem(10);
           margin-bottom: rem(8);
 
           .radio {
-            grid-row: 1 / span 2;
-
-            input {
-              min-width: rem(16);
-              min-height: rem(16);
-            }
-          }
-
-          span {
-            display: block;
+            grid-area: radio;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            grid-row: span 2;
+            /* 1열 병합 */
           }
 
           .name {
-            padding-left: 0;
-            align-items: flex-start;
-          }
-
-          .count {
-            color: #909090;
-            grid-column: 3 / span 1;
-            grid-row: 1 / span 2;
-          }
-
-          .date {
-            color: #909090;
-            grid-column: 2 / span 1;
+            grid-area: name;
             text-align: left;
-            padding-top: rem(10);
+            font-size: rem(13);
+            font-weight: 500;
+            justify-content: flex-start;
           }
 
           .price {
-            grid-column: 4 / span 1;
-            grid-row: 1 / span 2;
-            font-size: rem(14);
-            padding-right: rem(5);
+            grid-area: price;
+            color: var(--color-main);
+            font-weight: 600;
+            font-size: rem(13);
+            text-align: right;
+            justify-content: center;
+          }
+
+          .min_price {
+            grid-area: min_price;
+            font-size: rem(13);
+            color: var(--color-font-sub);
+            justify-content: flex-start;
+            padding-left: 0.3125rem;
+            padding-top: rem(8);
+          }
+
+          .date {
+            grid-area: date;
+            font-size: rem(13);
+            color: var(--color-font-def);
+            text-align: right;
+            padding-top: rem(8);
+            justify-content: center;
+          }
+
+          .grayText {
+            color: #B3B3B3;
+            /* 비활성화 상태의 텍스트 색상 */
           }
         }
       }
     }
 
-    
     .coupon-section {
       &:not(:last-child) {
-        &::after{
+        &::after {
           width: calc(100% + rem(40));
           background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='4' stroke-dasharray='4%2c 16' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
         }
