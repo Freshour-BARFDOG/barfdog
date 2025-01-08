@@ -77,8 +77,8 @@ export const Modal_coupon = ({
                 remaining: --coupon.remaining,
               }
             : coupon,
-        ),
-      }));
+        ), 
+      })); 
     } else if (orderType === 'subscribe') {
       setForm((prevState) => ({
         ...prevState,
