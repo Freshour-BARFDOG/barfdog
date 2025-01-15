@@ -84,6 +84,12 @@
         .row_1 {
           padding: rem(7) 0 rem(8);
         }
+        .row_1_sub {
+          color: gray;
+          font-size: 12px;
+          display: block;
+          margin-top: 5px;
+        }
 
         .row_2 {
           @include char(l20);
