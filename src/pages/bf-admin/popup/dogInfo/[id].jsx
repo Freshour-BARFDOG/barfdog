@@ -998,8 +998,10 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                               </i>
                               {isActive.nextPaymentPrice && (
                                 <pre>
-                                  * 이 값은 원금이며, 실제 결제금액은 <br />
-                                  [원금-쿠폰할인량-등급할인량] 으로 계산됩니다.
+                                  * 이 값은 플랜할인이 적용된 원금이며,<br />
+                                  등급할인과 쿠폰할인이 포함되어있지 않습니다.<br />
+                                  다음결제원금 변경 시 <b>플랜할인을 적용하여 변경</b>해주세요.<br />
+                                  (실제 결제금액 계: 원금 - 쿠폰할인 - 등급할인)
                                 </pre>
                               )}
                             </em>
