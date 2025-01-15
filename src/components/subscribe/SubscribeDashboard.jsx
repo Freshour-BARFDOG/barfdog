@@ -138,7 +138,10 @@ export const SubscribeDashboard = ({ subscribeInfo }) => {
                     alt="카드 이미지"
                   />
                 </div>
-                <div className={s.row_1}>다음 결제금액</div>
+                <div className={s.row_1}>
+                  다음 결제금액
+                  <span className={s.row_1_sub}>(등급할인 포함)</span>
+                </div>
                 <div className={s.row_2}>{transformLocalCurrency(info.nextPaymentPrice)}원</div>
                 <div className={s.row_3}>
                   <button type={'button'} className={s['coupon-btn']} onClick={onActiveCouponModal}>
