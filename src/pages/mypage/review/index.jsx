@@ -87,6 +87,7 @@ export default function ReviewPage() {
       itemThumbnailUrl: info.imageUrl, // ! 상품 image Url (** update와 key가 다르므로 주의)
       reviewType: info.reviewType, // 리뷰 타입 (단품 / 구독상품)
       id: info.id, // 주문한 상품의 id 또는 구독 id입
+      orderId: info.orderId, // 주문한 상품의 orderId
       targetId: info.targetId,// 리뷰대상 (리뷰 대상 id [itemId or recipeId] )
       title: info.title, // 상품 타이틀
       orderedDate : info.orderedDate, // 주문일자

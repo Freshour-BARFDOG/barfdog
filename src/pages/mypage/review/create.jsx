@@ -89,12 +89,13 @@ export default function CreateReviewPage() {
   // console.log(form);
   useEffect(() => {
     const reviewInfo = userState.reviewInfo;
-    const { reviewType, id, targetId, title, orderedDate, itemThumbnailUrl } = reviewInfo;
+    const { reviewType, id, targetId, orderId, title, orderedDate, itemThumbnailUrl } = reviewInfo;
     setForm((prevState) => ({
       ...prevState,
       reviewType,
       id,
       targetId,
+      orderId,
       itemThumbnailUrl,
       title,
       orderedDate,
@@ -129,6 +130,7 @@ export default function CreateReviewPage() {
     const body = {
       reviewType: form.reviewType,
       id: Number(form.id),
+      orderId: form.orderId,
       targetId: form.targetId,
       star: form.star,
       contents: form.contents,
