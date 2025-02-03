@@ -22,8 +22,13 @@ const getAuthNumberForPhoneNumber = async (phoneNumber) => {
     .post(API_URL, body, config)
     .then(res=> {
       // MEMO res.data.responseCode : 다이렉트샌드 상태메시지
-      if(res.data.responseCode !== 200) return console.error('::: 외부API서버 에러');
-      message = '인증번호가 발송되었습니다.'
+      const data = res.data;
+      if(data.responseCode !== 200 || (data.responseCode === 200 && data.msg !== null)) {
+        message = '인증번호 발송에 실패했습니다.'
+        return console.error('::: 외부API서버 에러');
+      } else {
+        message = '인증번호가 발송되었습니다.'
+      }
       return res.data.authNumber;
     })
     .catch((err)=>{
