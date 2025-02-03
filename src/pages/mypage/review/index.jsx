@@ -168,7 +168,7 @@ export default function ReviewPage() {
                 ) : writableReviewList.length === 0 ? (
                   <EmptyContMessage message={'작성가능한 후기가 없습니다.'} />
                 ) : (
-                  <ul className={'item_wrap'}>
+                  <ul className={s.item_wrap}>
                     {writableReviewList.map((item, index) => (
                       <li key={`writable-reviews-${item.id}-${item.index}`} className={s.content}>
                         <div className={s.flex}>

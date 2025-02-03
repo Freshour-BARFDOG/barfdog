@@ -90,9 +90,11 @@ section.content_title2 {
     }
   }
 }
-
+.item_wrap {
+  margin-top: 1rem;
+}
 .content {
-
+  margin-bottom: 1rem;
   .flex {
     display: grid;
     grid-template-columns: 1fr rem(160);
@@ -110,7 +112,6 @@ section.content_title2 {
       .title_text {
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
         padding: rem(4) 0 0 rem(16);
 
         @include char(l18);
@@ -119,12 +120,13 @@ section.content_title2 {
         .mid_text {
           color: var(--color-font-sub);
           @include char(l14);
-          padding-bottom: rem(25);
+          margin-top: 5px;
         }
         .day_text {
           @include char(l14);
           font-weight: 400;
           color: var(--color-font-sub2);
+          margin-top: auto;
         }
       }
     }
