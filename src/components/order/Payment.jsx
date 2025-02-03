@@ -150,6 +150,7 @@ export function Payment({
               zipcode: form.deliveryDto.zipcode, // 우편번호
               street: form.deliveryDto.street, // 도로명 주소
               detailAddress: form.deliveryDto.detailAddress, // 상세주소
+              deliveryName: "", // 배송지 이름
               request: form.deliveryDto.request, // 배송 요청사항
             },
             deliveryId: form.deliveryId || null, // 묶음 배송 할 배송 id . 묶음배송 아닐 경우 null
@@ -215,6 +216,7 @@ export function Payment({
 
         const orderId = res.data.data.id;
         if (orderType === 'general') {
+
           // 일반 주문 결제
           await generalPayment({
             body: body,
@@ -272,6 +274,7 @@ export function Payment({
 
     /* 2. 결제 데이터 정의하기  1원 결제 -> 실패 , 100원 결제 -> 성공 */
     // TODO: name(주문명) test 지우기
+    
     const data = {
       pg: pgType.GENERAL[body.paymentMethod], // PG사
       pay_method: paymethodFilter(body.paymentMethod), // 결제수단
@@ -281,11 +284,10 @@ export function Payment({
       buyer_name: info.name, // 구매자 이름
       buyer_tel: info.phone, // 구매자 전화번호
       buyer_email: info.email, // 구매자 이메일
-      buyer_addr: `${info.address.street}, ${info.address.detailAddress}`, // 구매자 주소
-      buyer_postcode: info.address.zipcode, // 구매자 우편번호
+      buyer_addr: `${info.defaultAddress.street}, ${info.defaultAddress.detailAddress}`, // 구매자 주소
+      buyer_postcode: info.defaultAddress.zipcode, // 구매자 우편번호
       m_redirect_url: `${window.location.origin}/order/loading/${id}`,
     };
-
     // 네이버 페이 추가
     if (body.paymentMethod === paymentMethodType.NAVER_PAY) {
       Object.assign(
@@ -344,7 +346,7 @@ export function Payment({
     /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
-
+    
     /* 2. [결제등록] 결제 데이터 정의하기 */
     const itemName = `${info.recipeNameList.join(', ')}`;
     const mobileItemName = `${info.recipeNameList.join(', ')}`;

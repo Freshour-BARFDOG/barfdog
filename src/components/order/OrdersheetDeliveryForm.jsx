@@ -21,6 +21,7 @@ export const OrdersheetDeliveryForm = ({
     street: null, // 도로명 주소 (묶음 배송일 경우, null)
     city: null,
     detailAddress: null, // 상세주소 (묶음 배송일 경우, null)
+    deliveryName: null, // 배송지 이름 (묶음 배송일 경우, null)
     request: null, // 배송 요청사항 (묶음 배송일 경우, null)
   };
   // 묶음배송여부 ! Client ONLY  (cf. 묶음배송아닐 경우, form.deliveryId = null) // 정기구독중이지 않을 경우, 묶음배송기능 아예 작동하지 않게함
@@ -68,6 +69,7 @@ export const OrdersheetDeliveryForm = ({
       zipcode: bundle ? null : sameUserInfo ? info.address?.zipcode : '', // 우편번호 (묶음 배송일 경우, null)
       street: bundle ? null : sameUserInfo ? info.address?.street : '', // 도로명 주소 (묶음 배송일 경우, null)
       city: bundle ? null : sameUserInfo ? info.address?.city : '',
+      deliveryName: bundle ? null : sameUserInfo ? info.address?.deliveryName : '', // 배송지 이름 (묶음 배송일 경우, null)
       detailAddress: bundle
         ? null
         : sameUserInfo

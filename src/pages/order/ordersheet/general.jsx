@@ -78,13 +78,13 @@ export default function GeneralOrderSheetPage() {
         const postItemInfoApiUrl = `/api/orders/sheet/general`;
         const res = await postUserObjData(postItemInfoApiUrl, requestBody);
         // 요청 파라미터가 복잡하여 GET이 아닌 POST 사용
-        // // console.log(res);
+        // console.log(res);
         if (res.status !== 200) {
           alert('상품 정보를 확인할 수 없습니다.');
           return (window.location.href = '/cart');
         }
         const info = res.data.data;
-        // // console.log(info);
+        // console.log("/api/orders/sheet/general", info);
         // 주문에 대한 모든 데이터
         // console.log('info:  ',info)
         const calcedReward = Number(info.reward) > 0 ? info.reward : 0;
@@ -92,11 +92,12 @@ export default function GeneralOrderSheetPage() {
           name: info.name, // 구매자
           email: info.email, // 연락처
           phone: info.phoneNumber,
-          address: {
-            city: info.address.city, // 시도
-            street: info.address.street, // 도로명 주소
-            detailAddress: info.address.detailAddress, // 상세주소
-            zipcode: info.address.zipcode, // 우편번호
+          defaultAddress: {
+            city: info.defaultAddress.city, // 시도
+            deliveryName: "",
+            street: info.defaultAddress.street, // 도로명 주소
+            detailAddress: info.defaultAddress.detailAddress, // 상세주소
+            zipcode: info.defaultAddress.zipcode, // 우편번호
           },
           deliveryId: info.deliveryId || Math.floor(Math.random() * 100), // ! IMPORTANT : 묶음 배송할 정기구독 배송 ID (묶음배송 불가능할 경우 null / 묶음 배송 불가할 경우, 배송정보의 묶음배송 Radio input 비활성화)
           nextSubscribeDeliveryDate: info.nextSubscribeDeliveryDate, // ! IMPORTANT: 묶음배송할 배송 예정일 . 묶음배송 불가능한 경우 null
@@ -163,6 +164,7 @@ export default function GeneralOrderSheetPage() {
             zipcode: null, // 우편번호 (묶음 배송일 경우, null)
             street: null, // 도로명 주소 (묶음 배송일 경우, null)
             detailAddress: null, // 상세주소 (묶음 배송일 경우, null)
+            deliveryName: null, // 배송지명 (묶음 배송일 경우, null)
             request: null, // 배송 요청사항 (묶음 배송일 경우, null)
           },
           deliveryId: info.deliveryId, // ! IMPORTANT : 묶음 배송일 경우 , info.deliveryId값 추가/ 일반배송: null)

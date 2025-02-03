@@ -129,6 +129,7 @@ export default function SubscribeOrderSheetPage() {
             street: data.address.street, // 도로명 주소
             detailAddress: data.address.detailAddress, // 상세주소
             zipcode: data.address.zipcode, // 우편번호
+            deliveryName: "",
           },
           deliveryPrice: 0, // 정기구독 배송비: 무료
           reward: data.reward,
@@ -159,7 +160,8 @@ export default function SubscribeOrderSheetPage() {
             zipcode: null, // 우편번호 (묶음 배송일 경우, null)
             street: null, // 도로명 주소 (묶음 배송일 경우, null)
             detailAddress: null, // 상세주소 (묶음 배송일 경우, null)
-            request: null, // 배송 요청사항 (묶음 배송일 경우, null)
+            request: null, // 배송 요청사항 (묶음 배송일 경우, null)\
+            deliveryName: null,
           },
           orderPrice: data.subscribeDto.nextPaymentPrice,
           deliveryPrice: 0, // 배송비
