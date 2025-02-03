@@ -25,13 +25,14 @@ import { deleteObjData } from '/src/pages/api/reqData';
 
 import { userType } from '/store/TYPE/userAuthType';
 import userStateSlice, { userStateAction } from '/store/userState-slice';
-
-
+import useDeviceState from "../../../../util/hook/useDeviceState";
 
 export default function ReviewPage() {
   const searchWritableReivewApiUrl = '/api/reviews/writeable'; // 작성 가능한 리뷰 리스트 조회(페이징)
   const searchMyReivewApiUrl = '/api/reviews'; // 작성한 리뷰 리스트 조회(페이징)
   const searchPageSize = 10;
+
+  const isMobile = useDeviceState().isMobile;
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -170,37 +171,54 @@ export default function ReviewPage() {
                 ) : (
                   <ul className={s.item_wrap}>
                     {writableReviewList.map((item, index) => (
-                      <li key={`writable-reviews-${item.id}-${item.index}`} className={s.content}>
-                        <div className={s.flex}>
-                          <div className={s.left}>
+                      <li key={`writable-reviews-${item.id}-${item.index}`} className={`${s.content} ${s.writableReviewItem}`}>
+                        <div className={s.orderedDate}>
+                          주문일자: {transformDate(item.orderedDate)}
+                        </div>
+                        <div className={`${s.flex} ${s.itemInfo}`}>
+                          {isMobile &&
+                            <p className={s.reviewTitle}>
+                              {item.title} {item.reviewType === 'SUBSCRIBE' && `(${item.subscribeCount}회차)`}
+                            </p>
+                          }
+                          <div className={s.reviewLeft}>
                             <div className={`${s.image} img-wrap`}>
                               {item.imageUrl && (
                                 <Image
                                   src={item.imageUrl}
                                   objectFit="cover"
-                                  layout="fill"
+                                  width={104}
+                                  height={104}
                                   alt="카드 이미지"
                                 />
                               )}
                             </div>
-                            <div className={s.title_text}>
-                              <p>{item.title}</p>
-                              {/*{item.reviewType === global_reviewType.SUBSCRIBE ? <div className={s.mid_text}>*/}
-                              {/*  {global_reviewType.KOR[item.reviewType]} &middot; {item.id} 회차*/}
-                              {/*</div> : <div className={s.mid_text}>*/}
-                              {/*  {global_reviewType.KOR[item.reviewType]}*/}
-                              {/*</div>}*/}
-                              <div className={s.mid_text}>
+                            <div className={s.itemInfoText}>
+                              <div className={s.reviewType}>
                                 {global_reviewType.KOR[item.reviewType]}
                               </div>
-                              <div className={s.day_text}>
-                                주문일자: {transformDate(item.orderedDate)}
-                              </div>
+                              {!isMobile &&
+                                <p className={s.reviewTitle}>
+                                  {item.title} {item.reviewType === 'SUBSCRIBE' && `(${item?.subscribeCount || '-'}회차)`}
+                                </p>
+                              }
+                              <span className={`${s.reviewSubInfo} ${s.orderNumber}`}>
+                                주문번호 {item?.merchantUid}
+                              </span>
+                              <span className={s.reviewSubInfo}>
+                                결제금액 {item?.orderPaymentPrice?.toLocaleString() || 0}원
+                              </span>
                             </div>
                           </div>
-                          <div className={s.right}>
+                          <div className={s.reviewRight}>
+                            <a
+                              href={`/mypage/orderHistory/${item.reviewType === 'ITEM' ? 'single' : 'subscribe'}/${item.orderId}`}
+                              className={`${s.reviewBtn} ${s.orderLink}`}
+                            >
+                              주문상세
+                            </a>
                             <button
-                              className={s.btn}
+                              className={s.reviewBtn}
                               data-review-id={item.id}
                               onClick={createReviewHandler}
                             >
@@ -252,7 +270,6 @@ export default function ReviewPage() {
                                   </div>
                                 </figure>
                                 <h3 className={s.content_inner_title}>{item.title}</h3>
-                                {/*상품명*/}
                                 <span className={s.reviewType}>{item.reviewType}</span>
                               </div>
                               <div className={s.row_2}>
