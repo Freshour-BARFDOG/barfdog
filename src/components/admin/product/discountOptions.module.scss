@@ -25,9 +25,7 @@ $browser-context: 16;
   .discountAmount {
     display: grid;
     align-items: center;
-    grid-template-columns: rem(80) 1fr rem(30);
-    gap: rem(4);
-    justify-content: flex-start;
+    grid-template-columns: 3rem 1fr rem(30);
     em {
       font-size: rem(16);
       text-decoration: dotted #333;

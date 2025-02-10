@@ -14,12 +14,7 @@ import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency'
 import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_singleItem';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import {
-  getData,
-  getDataSSR,
-  postObjData,
-  putObjData,
-} from '/src/pages/api/reqData';
+import { getData, putObjData } from '/src/pages/api/reqData';
 import { useModalContext } from '/store/modal-context';
 import dynamic from 'next/dynamic';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
@@ -29,10 +24,10 @@ import Tooltip from '/src/components/atoms/Tooltip';
 import CheckboxGroup from '/src/components/atoms/CheckboxGroup';
 import transformClearLocalCurrencyInEveryObject from '/util/func/transformClearLocalCurrencyInEveryObject';
 import SingleItemOptions from '/src/components/admin/product/SingleItemOptions';
-import SingleItemDiscountOptions from '/src/components/admin/product/SingleItemDiscountOptions';
 import { general_itemType } from '/store/TYPE/itemType';
 import { itemHealthTypeList } from '/store/TYPE/itemHealthType';
 import pc from '/src/components/atoms/pureCheckbox.module.scss';
+import DiscountSettings from "/src/components/admin/product/DiscountSection";
 
 export default function UpdateSingleItemPage({ id }) {
   const getFormValuesApiUrl = `/api/admin/items/${id}`;
@@ -52,7 +47,6 @@ export default function UpdateSingleItemPage({ id }) {
   const [formValues, setFormValues] = useState({});
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [activeDiscountOption, setActiveDiscountOption] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -107,6 +101,8 @@ export default function UpdateSingleItemPage({ id }) {
           itemIcons: DATA.itemIcons,
           deliveryFree: DATA.deliveryFree, // 배송비무료
           itemStatus: DATA.status, // 노출 여부
+
+          // alliance: [],
         };
         setFormValues(initialFormValues);
 
@@ -137,14 +133,6 @@ export default function UpdateSingleItemPage({ id }) {
     }
   }, [formValues?.inStock]);
 
-  useEffect(() => {
-    // - 할인적용된 가격이 존재할 경우, 할인설정 option변경
-    if (formValues.salePrice) {
-      const active = !!formValues.salePrice;
-      setActiveDiscountOption(active);
-    }
-  }, [formValues.salePrice]);
-
   const onInputChangeHandler = (e) => {
     // 만약에 할인옵션이 false면, ..... 할인적용후 가격 -> 판매가격과 동일하게 설정한다.
     const input = e.currentTarget;
@@ -162,14 +150,6 @@ export default function UpdateSingleItemPage({ id }) {
 
     if (filteredType && filteredType.indexOf('currency') >= 0) {
       filteredValue = transformLocalCurrency(filteredValue);
-    }
-
-    if (filteredType && filteredType.indexOf('discountPercent') >= 0) {
-      filteredValue =
-        transformClearLocalCurrency(filteredValue) > '100'
-          ? '100'
-          : filteredValue;
-      // - MEMO 100 : string이어야함.
     }
 
     setFormValues((prevState) => ({
@@ -272,7 +252,7 @@ export default function UpdateSingleItemPage({ id }) {
     mct.alertHide();
     router.push('/bf-admin/product/single');
   };
-  // console.log('formValues>>>', formValues);
+  console.log('formValues>>>', formValues);
 
   return (
     <>
@@ -440,35 +420,11 @@ export default function UpdateSingleItemPage({ id }) {
                   </div>
                 </div>
                 {/* cont_divider */}
-                <div className="cont_divider">
-                  <div className="input_row multipleLines">
-                    <div className="title_section fixedHeight">
-                      <label className="title" htmlFor={'discountDegree'}>
-                        할인설정
-                      </label>
-                    </div>
-                    <div className="inp_section">
-                      <div className="inp_box">
-                        <CustomRadioTrueOrFalse
-                          name="discount"
-                          value={activeDiscountOption}
-                          setValue={setActiveDiscountOption}
-                          labelList={['Y', 'N']}
-                          returnBooleanValue
-                        />
-                      </div>
-                      {activeDiscountOption && (
-                        <SingleItemDiscountOptions
-                          id={'salePrice'}
-                          formValues={formValues}
-                          setFormValues={setFormValues}
-                          formErrors={formErrors}
-                          onChange={onInputChangeHandler}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <DiscountSettings
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  formErrors={formErrors}
+                />
                 {/* cont_divider */}
                 <div className="cont_divider">
                   <div className="input_row multipleLines">

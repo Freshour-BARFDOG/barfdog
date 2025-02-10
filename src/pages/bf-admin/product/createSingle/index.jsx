@@ -11,12 +11,9 @@ import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import QuillEditor from '../../../../components/admin/product/QuillEditor';
 import SingleItemOptions from '../../../../components/admin/product/SingleItemOptions';
-import SingleItemDiscountOptions from '../../../../components/admin/product/SingleItemDiscountOptions';
-import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
 import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_singleItem';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { postObjData } from '/src/pages/api/reqData';
 import { useModalContext } from '/store/modal-context';
 import dynamic from 'next/dynamic';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
@@ -28,7 +25,7 @@ import transformClearLocalCurrencyInEveryObject from '/util/func/transformClearL
 import { discountUnitType } from '/store/TYPE/discountUnitType';
 import { itemHealthTypeList } from '/store/TYPE/itemHealthType';
 import pc from '/src/components/atoms/pureCheckbox.module.scss';
-
+import DiscountSettings from "/src/components/admin/product/DiscountSection";
 // - 할인적용 후 판매가격 -> N일 경우 그냥 판매가격이랑 동일하게 처리한다.
 // - 아이템 아이콘
 
@@ -37,10 +34,6 @@ const initialFormValues = {
   itemHealthType: '',
   name: '',
   description: '',
-  originalPrice: 0, // 판매가격
-  discountType: discountUnitType.FLAT_RATE || discountUnitType.FIXED_RATE,
-  discountDegree: 0, // 할인정도
-  salePrice: 0, // 할인적용가
   inStock: true, // 일반상품 > 재고 여부
   remaining: 0, // 일반상품 > 재고 수량
   itemOptionSaveDtoList: [
@@ -58,7 +51,20 @@ const initialFormValues = {
   itemIcons: '',
   deliveryFree: true,
   itemStatus: 'LEAKED' || 'HIDDEN', // 노출여부
+
+  originalPrice: 0, // 판매가격
+
+  discountType: discountUnitType.FLAT_RATE || discountUnitType.FIXED_RATE,
+  discountDegree: 0, // 할인정도
+  salePrice: 0, // 할인적용가
+
+  alliance: [],
+
+  // allianceDiscountType: discountUnitType.FLAT_RATE || discountUnitType.FIXED_RATE,
+  // allianceDiscountDegree: 0,
+  // allianceSalePrice: 0,
 };
+
 
 const initialFormErrors = {};
 
@@ -74,9 +80,9 @@ function CreateSingleItemPage() {
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [activeDiscountOption, setActiveDiscountOption] = useState(false);
 
-  // // console.log(formValues)
+  console.log('create formValues', formValues)
+
   useEffect(() => {
     // - 품절일 경우, 재고수량 초기화
     if (formValues.inStock === false) {
@@ -87,13 +93,6 @@ function CreateSingleItemPage() {
     }
   }, [formValues?.inStock]);
 
-  useEffect(() => {
-    // - 할인적용된 가격이 존재할 경우, 할인설정 option변경
-    if (formValues?.salePrice) {
-      const active = !!formValues?.salePrice;
-      setActiveDiscountOption(active);
-    }
-  }, [formValues?.salePrice]);
 
   useEffect(() => {
     // - INIT QUILL EDITOR
@@ -116,21 +115,12 @@ function CreateSingleItemPage() {
     if (filteredType) {
       filteredValue = filter_emptyValue(value);
     }
-
     if (filteredType && filteredType.indexOf('number') >= 0) {
       filteredValue = filter_onlyNumber(filteredValue);
     }
 
     if (filteredType && filteredType.indexOf('currency') >= 0) {
       filteredValue = transformLocalCurrency(filteredValue);
-    }
-
-    if (filteredType && filteredType.indexOf('discountPercent') >= 0) {
-      filteredValue =
-        transformClearLocalCurrency(filteredValue) > '100'
-          ? '100'
-          : filteredValue;
-      // - MEMO 100 : string이어야함.
     }
 
     setFormValues((prevState) => ({
@@ -171,12 +161,11 @@ function CreateSingleItemPage() {
       discountDegree: 'discountDegree',
       itemOptionSaveDtoList: { price: 'price', remaining: 'remaining' },
     };
-    // console.log(filteredFormValues);
+
     filteredFormValues = transformClearLocalCurrencyInEveryObject(
       filteredFormValues,
       filterStringObj,
     );
-    // console.log(filteredFormValues);
     // 문자열로 변환. 컴마(,)로 구분
     if (!filteredFormValues.itemHealthType) {
       filteredFormValues.itemHealthType = 'NONE';
@@ -191,10 +180,9 @@ function CreateSingleItemPage() {
         ...prevState,
         submit: true,
       }));
-      // console.log('filteredFormValues>>>', filteredFormValues);
+
       const apiUrl = '/api/admin/items';
       const res = await postObjData(apiUrl, filteredFormValues);
-      // console.log(res);
       if (res.isDone) {
         mct.alertShow('일반상품이 생성되었습니다.', onGlobalModalCallback);
         setIsSubmitted(true);
@@ -213,7 +201,6 @@ function CreateSingleItemPage() {
       submit: false,
     }));
   };
-
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
@@ -385,35 +372,11 @@ function CreateSingleItemPage() {
                   </div>
                 </div>
                 {/* cont_divider */}
-                <div className="cont_divider">
-                  <div className="input_row multipleLines">
-                    <div className="title_section fixedHeight">
-                      <label className="title" htmlFor={'discountDegree'}>
-                        할인설정
-                      </label>
-                    </div>
-                    <div className="inp_section">
-                      <div className="inp_box">
-                        <CustomRadioTrueOrFalse
-                          name="discount"
-                          value={activeDiscountOption}
-                          setValue={setActiveDiscountOption}
-                          labelList={['Y', 'N']}
-                          returnBooleanValue
-                        />
-                      </div>
-                      {activeDiscountOption && (
-                        <SingleItemDiscountOptions
-                          id={'salePrice'}
-                          formValues={formValues}
-                          setFormValues={setFormValues}
-                          formErrors={formErrors}
-                          onChange={onInputChangeHandler}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <DiscountSettings
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  formErrors={formErrors}
+                />
                 {/* cont_divider */}
                 <div className="cont_divider">
                   <div className="input_row multipleLines">
