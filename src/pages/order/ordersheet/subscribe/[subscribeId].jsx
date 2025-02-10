@@ -135,7 +135,6 @@ export default function SubscribeOrderSheetPage() {
           reward: data.reward,
           brochure: data.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
         };
-
         // FormDatas
         const initForm = {
           selfInfo: {
@@ -198,7 +197,7 @@ export default function SubscribeOrderSheetPage() {
     }) => {
       const originPrice = paymentPrice * (100 / (100 - discountPercent));
       return (
-        Math.floor(originPrice / subscribePriceCutOffUnit) *
+        Math.ceil(originPrice / subscribePriceCutOffUnit) *
         subscribePriceCutOffUnit
       );
     };

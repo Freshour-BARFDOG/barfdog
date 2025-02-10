@@ -5,6 +5,7 @@ import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { calcOrdersheetPrices } from './calcOrdersheetPrices';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
+import { getCookie } from "../../../util/func/cookie";
 
 export const OrdersheetAmountOfPayment = ({
   info,
@@ -27,6 +28,13 @@ export const OrdersheetAmountOfPayment = ({
         : info.subscribeDto?.originPrice - info.subscribeDto?.nextPaymentPrice,
     [info],
   );
+
+  // const isFirstOrder = true;
+  // const hasAllianceFirstOrderDiscount = getCookie('alliance') === 'cb' && isFirstOrder;
+  const hasAllianceFirstOrderDiscount = false;
+
+  const discountRate = 0.5;
+  const allianceDiscount = Math.round(calcResult.paymentPrice * (1 - discountRate));
 
   return (
     <>
@@ -123,10 +131,31 @@ export const OrdersheetAmountOfPayment = ({
 
         <hr />
 
+        {hasAllianceFirstOrderDiscount &&
+          <>
+          <div className={s.flex_box6}>
+            <span className='pointColor'>제휴사 첫 구독 50% 할인</span>
+            <span className='pointColor'>
+                {originalItemDiscount > 0 && '-'}&nbsp;
+              {transformLocalCurrency(allianceDiscount)}
+              원
+              </span>
+          </div>
+          <hr />
+          </>
+        }
+
         <div className={s.last_flex_box}>
           <div className={s.flex_box}>
             <span>최종 결제금액</span>
-            <span>{transformLocalCurrency(calcResult?.paymentPrice)}원</span>
+            <span>
+              {
+                transformLocalCurrency(
+                  hasAllianceFirstOrderDiscount && allianceDiscount
+                    ? allianceDiscount
+                    : calcResult?.paymentPrice
+                )}원
+            </span>
           </div>
           {formErrors.paymentPrice && (
             <ErrorMessage>{formErrors.paymentPrice}</ErrorMessage>
