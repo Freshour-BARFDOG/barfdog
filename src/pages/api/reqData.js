@@ -437,7 +437,7 @@ export const getTokenFromServerSide = (req) => {
   // - MEMBER & ADMIN 모두 동일한 API에서 동일한 TOKEN을 발급받는다
   // - SERVER에서 TOKEN 속에 권한에 대한 값을 설정하여 검증한다.
   let token;
-  if (!req.headers.cookie) {
+  if (!req?.headers?.cookie) {
     token = null; // window 첫 load 시, cookie가 없는 경우
   } else {
     const cookies = req.headers.cookie.split(';');
