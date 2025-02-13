@@ -426,6 +426,7 @@ export default function UpdateSingleItemPage({ id, allianceList }) {
                 </div>
                 {/* cont_divider */}
                 <DiscountSettings
+                  isUpdate
                   formValues={formValues}
                   setFormValues={setFormValues}
                   formErrors={formErrors}

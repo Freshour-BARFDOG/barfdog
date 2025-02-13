@@ -85,7 +85,6 @@ export default function CreateSingleItemPage({ allianceList }) {
         import('/src/components/admin/form/QuillEditor'),
       );
       setQuillEditor(QuillEditor);
-      // console.log('Editor init is complete.');
     }
   }, []);
 

@@ -57,14 +57,31 @@ const DiscountOptions = ({
           inputMode="numeric"
           className='text-align-right'
           value={formValues[discountDegreeName]}
-          onChange={(e) => setFormValues({ ...formValues, [discountDegreeName]: e.target.value })}
+          onChange={(e) =>
+            setFormValues({
+              ...formValues,
+              [discountDegreeName]:
+                formValues?.[discountTypeName] === discountUnitType.FIXED_RATE && e.target.value > 100
+                ? 100
+                : e.target.value === '' ? 0 : e.target.value
+            })
+          }
         />
         {formErrors?.[discountDegreeName] && (
           <ErrorMessage>{formErrors?.[discountDegreeName]}</ErrorMessage>
         )}
         <UnitBox
           name={discountTypeName}
-          setValue={(value) => setFormValues({ ...formValues, [discountTypeName]: value })}
+          setValue={(value) =>
+            setFormValues({
+              ...formValues,
+              [discountTypeName]: value,
+              [discountDegreeName]:
+                formValues?.[discountTypeName] === discountUnitType.FIXED_RATE && Number(formValues?.[discountDegreeName]) > 100
+                  ? 100
+                  : formValues?.[discountDegreeName]
+            })
+          }
           unitList={unitSettings}
           value={formValues?.[discountTypeName] || unitSettings[0].value}
           isDiscountAlliance

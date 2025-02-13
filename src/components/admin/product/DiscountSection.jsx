@@ -1,11 +1,10 @@
 import {useEffect, useMemo, useState} from "react";
 import styles from './discountSection.module.css';
-import {discountUnitType} from "/store/TYPE/discountUnitType";
+import { discountUnitType } from "/store/TYPE/discountUnitType";
 import CustomRadioTrueOrFalse from "../form/CustomRadioTrueOrFalse";
 import DiscountOptions from "./DiscountOptions";
 import CloseButton from "../../atoms/CloseButton";
 import CustomSelect from "../form/CustomSelect";
-import transformClearLocalCurrency from "../../../../util/func/transformClearLocalCurrency";
 
 // targetKey: 일반 할인  'general', 제휴사 할인 'alliance'
 // allowMultiple: 일반 할인 false, 제휴사 할인 true
@@ -20,6 +19,7 @@ const DiscountSection = ({
 	setAllianceCategory = () => {},
 	formErrors = {},
 	allowMultiple = false,
+	initialActive,
 }) => {
 	// 일반 할인과 제휴사 할인의 데이터 명칭을 다르게 하기 위함
 	const discountDegreeName = targetKey === 'general' ? 'discountDegree' : 'allianceDegree';
@@ -27,14 +27,10 @@ const DiscountSection = ({
 	const salePriceName = targetKey === 'general' ? 'salePrice' : 'allianceSalePrice';
 
 	// 수정시 할인 설정 여부 검증
-	const initialActive = targetKey === 'alliance'
-		? items?.length > 0
-		: items?.some(item => Number(transformClearLocalCurrency(item[discountDegreeName])) !== 0);
-
 	const [isActive, setIsActive] = useState(initialActive);
 
 	useEffect(() => {
-		setIsActive(initialActive)
+		setIsActive(initialActive);
 	}, [initialActive]);
 
 	// ----------------- targetKey === 'alliance' 의 경우에만 적용 -----------------
@@ -123,10 +119,6 @@ const DiscountSection = ({
 										id={item.allianceId || targetKey}
 										formValues={item}
 										setFormValues={(updatedItem) => {
-											console.log('updatedItem', updatedItem)
-											console.log('items', items)
-											console.log('item', item)
-											// setItems(updatedItem)
 											setItems(items.map(value => value.allianceId === item.allianceId ? updatedItem : value));
 										}}
 										formErrors={formErrors[item.allianceId] || {}}
@@ -145,7 +137,7 @@ const DiscountSection = ({
 	);
 };
 
-const DiscountSettings = ({ formValues, setFormValues, formErrors, allianceList = [] }) => {
+const DiscountSettings = ({ formValues, setFormValues, formErrors, allianceList = [], isUpdate = false }) => {
   const [allianceCategory, setAllianceCategory] = useState(() => {
     const defaultCategory = [{ label: '선택', value: '' }];
     if (!allianceList.length) return defaultCategory;
@@ -174,6 +166,7 @@ const DiscountSettings = ({ formValues, setFormValues, formErrors, allianceList 
 				items={[formValues]}
 				setItems={(updated) => setFormValues(updated[0])}
 				formErrors={formErrors}
+				initialActive={isUpdate ? formValues.salePrice !== formValues.originPrice : false}
 			/>
 			<DiscountSection
 				title='제휴사 할인설정'
@@ -185,6 +178,7 @@ const DiscountSettings = ({ formValues, setFormValues, formErrors, allianceList 
 				allowMultiple
 				formErrors={formErrors.allianceDtoList || {}}
 				originalPrice={formValues.originalPrice}
+				initialActive={formValues.allianceDtoList?.length > 0}
 			/>
 		</>
 	)
