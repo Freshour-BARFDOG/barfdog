@@ -21,9 +21,9 @@ export const MoveToAdminPageButton = () => {
   
   return (
     <>
-      <li><Link href="/bf-admin/dashboard">관리자 페이지</Link></li>
-      <li> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; </li>
-      <li><Link href="/bf-admin2">관리자 페이지2</Link></li>
+      <li><Link href="/bf-admin/product/single?page=1&size=10&&itemType=ALL">관리자 페이지</Link></li>
+      {/*<li> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; </li>*/}
+      {/*<li><Link href="/bf-admin2">관리자 페이지2</Link></li>*/}
     </>
   );
 }
