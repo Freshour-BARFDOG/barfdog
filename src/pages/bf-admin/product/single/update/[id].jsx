@@ -10,7 +10,6 @@ import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import QuillEditor from '/src/components/admin/form/QuillEditor';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
 import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_singleItem';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
@@ -28,8 +27,9 @@ import { general_itemType } from '/store/TYPE/itemType';
 import { itemHealthTypeList } from '/store/TYPE/itemHealthType';
 import pc from '/src/components/atoms/pureCheckbox.module.scss';
 import DiscountSettings from "/src/components/admin/product/DiscountSection";
+import { getAllianceList } from "/service/admin";
 
-export default function UpdateSingleItemPage({ id }) {
+export default function UpdateSingleItemPage({ id, allianceList }) {
   const getFormValuesApiUrl = `/api/admin/items/${id}`;
   const putFormValuesApiUrl = `/api/admin/items/${id}`;
   const postThumbFileApiUrl = '/api/admin/items/image/upload';
@@ -57,7 +57,6 @@ export default function UpdateSingleItemPage({ id }) {
           fetching: true,
         }));
         const res = await getData(getFormValuesApiUrl);
-        // console.log(res);
 
         const originOptionDataListFromServer = res.data.itemOptionAdminDtoList; // 에디터 >  원본아이디리스트
         setOriginOptionList(originOptionDataListFromServer); // 원본 option list
@@ -102,16 +101,19 @@ export default function UpdateSingleItemPage({ id }) {
           deliveryFree: DATA.deliveryFree, // 배송비무료
           itemStatus: DATA.status, // 노출 여부
 
-          // alliance: [],
+          allianceDtoList: res.data.allianceDtoList.map(item => ({
+            ...item,
+            allianceDegree: transformLocalCurrency(item.allianceDegree),
+            allianceSalePrice: transformLocalCurrency(item.allianceSalePrice),
+          })) || [],
         };
-        setFormValues(initialFormValues);
 
+        setFormValues(initialFormValues);
         if (document) {
           const QuillEditor = dynamic(() =>
             import('/src/components/admin/form/QuillEditor'),
           );
           setQuillEditor(QuillEditor);
-          // console.log('Editor init is complete.');
         }
       } catch (err) {
         console.error(err);
@@ -195,6 +197,7 @@ export default function UpdateSingleItemPage({ id }) {
       discountDegree: 'discountDegree',
       itemOptionSaveDtoList: { price: 'price', remaining: 'remaining' },
       itemOptionUpdateDtoList: { price: 'price', remaining: 'remaining' },
+      allianceDtoList: { allianceDegree: 'allianceDegree', allianceSalePrice: 'allianceSalePrice'}
     };
     filteredFormValues = transformClearLocalCurrencyInEveryObject(
       filteredFormValues,
@@ -208,16 +211,19 @@ export default function UpdateSingleItemPage({ id }) {
       filteredFormValues.itemHealthType =
         filteredFormValues.itemHealthType?.join(',');
 
+    // 제휴사 할인 설정을 클릭 또는 제휴사를 선택했으나 degree 값을 입력하지 않았을 경우 필터링
+    if (filteredFormValues.allianceDtoList) {
+      filteredFormValues.allianceDtoList = filteredFormValues.allianceDtoList.filter(item => item.allianceDegree !== 0)
+    }
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
-      if (isPassed) {
-        // console.log('filteredFormValues>>>', filteredFormValues);
 
+      if (isPassed) {
         const res = await putObjData(putFormValuesApiUrl, filteredFormValues);
-        // console.log(res);
         if (res.isDone) {
           onShowModalHandler('일반상품이 수정되었습니다.');
           setIsSubmitted(true);
@@ -252,7 +258,6 @@ export default function UpdateSingleItemPage({ id }) {
     mct.alertHide();
     router.push('/bf-admin/product/single');
   };
-  console.log('formValues>>>', formValues);
 
   return (
     <>
@@ -424,6 +429,7 @@ export default function UpdateSingleItemPage({ id }) {
                   formValues={formValues}
                   setFormValues={setFormValues}
                   formErrors={formErrors}
+                  allianceList={allianceList}
                 />
                 {/* cont_divider */}
                 <div className="cont_divider">
@@ -660,8 +666,15 @@ export default function UpdateSingleItemPage({ id }) {
 }
 
 export async function getServerSideProps(ctx) {
-  const { query } = ctx;
+  const { query, req } = ctx;
   const { id } = query;
 
-  return { props: { id: id || null } };
+  const allianceList = await getAllianceList(req);
+
+  return {
+    props: {
+      id: id || null,
+      allianceList,
+    }
+  };
 }

@@ -26,6 +26,8 @@ import { discountUnitType } from '/store/TYPE/discountUnitType';
 import { itemHealthTypeList } from '/store/TYPE/itemHealthType';
 import pc from '/src/components/atoms/pureCheckbox.module.scss';
 import DiscountSettings from "/src/components/admin/product/DiscountSection";
+import { getAllianceList } from "/service/admin";
+import { postObjData } from "/src/pages/api/reqData";
 // - 할인적용 후 판매가격 -> N일 경우 그냥 판매가격이랑 동일하게 처리한다.
 // - 아이템 아이콘
 
@@ -36,39 +38,23 @@ const initialFormValues = {
   description: '',
   inStock: true, // 일반상품 > 재고 여부
   remaining: 0, // 일반상품 > 재고 수량
-  itemOptionSaveDtoList: [
-    /*{
-      name: '',
-      price: 0,
-      remaining: 0,
-    }*/
-  ],
-  itemImageOrderDtoList: [
-    /*{ id: null, leakOrder: null }*/
-  ], // 썸네일 아이디 리스트
+  itemOptionSaveDtoList: [],
+  itemImageOrderDtoList: [], // 썸네일 아이디 리스트
   contents: '', // 상품아이콘: 2개 이상일 경우 콤마로 구분.
   contentImageIdList: [], // 상품설명 내 이미지 리스트
   itemIcons: '',
   deliveryFree: true,
   itemStatus: 'LEAKED' || 'HIDDEN', // 노출여부
-
   originalPrice: 0, // 판매가격
-
   discountType: discountUnitType.FLAT_RATE || discountUnitType.FIXED_RATE,
   discountDegree: 0, // 할인정도
   salePrice: 0, // 할인적용가
-
-  alliance: [],
-
-  // allianceDiscountType: discountUnitType.FLAT_RATE || discountUnitType.FIXED_RATE,
-  // allianceDiscountDegree: 0,
-  // allianceSalePrice: 0,
+  allianceDtoList: [],
 };
-
 
 const initialFormErrors = {};
 
-function CreateSingleItemPage() {
+export default function CreateSingleItemPage({ allianceList }) {
   const postThumbFileApiUrl = '/api/admin/items/image/upload';
   const postDetailImageFileApiUrl = '/api/admin/items/contentImage/upload';
   const router = useRouter();
@@ -80,8 +66,6 @@ function CreateSingleItemPage() {
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  console.log('create formValues', formValues)
 
   useEffect(() => {
     // - 품절일 경우, 재고수량 초기화
@@ -160,6 +144,7 @@ function CreateSingleItemPage() {
       remaining: 'remaining',
       discountDegree: 'discountDegree',
       itemOptionSaveDtoList: { price: 'price', remaining: 'remaining' },
+      allianceDtoList: { allianceDegree: 'allianceDegree', allianceSalePrice: 'allianceSalePrice'}
     };
 
     filteredFormValues = transformClearLocalCurrencyInEveryObject(
@@ -172,6 +157,11 @@ function CreateSingleItemPage() {
     } else
       filteredFormValues.itemHealthType =
         filteredFormValues.itemHealthType?.join(',');
+
+    // 제휴사 할인 설정을 클릭 또는 제휴사를 선택했으나 degree 값을 입력하지 않았을 경우 필터링
+    if (filteredFormValues.allianceDtoList) {
+      filteredFormValues.allianceDtoList = filteredFormValues.allianceDtoList.filter(item => item.allianceDegree !== 0)
+    }
 
     if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
 
@@ -376,6 +366,7 @@ function CreateSingleItemPage() {
                   formValues={formValues}
                   setFormValues={setFormValues}
                   formErrors={formErrors}
+                  allianceList={allianceList}
                 />
                 {/* cont_divider */}
                 <div className="cont_divider">
@@ -588,4 +579,12 @@ function CreateSingleItemPage() {
   );
 }
 
-export default CreateSingleItemPage;
+
+export async function getServerSideProps(req) {
+  const allianceList = await getAllianceList(req);
+  return {
+    props: {
+      allianceList,
+    }
+  };
+}
