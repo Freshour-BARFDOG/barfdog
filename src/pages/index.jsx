@@ -1,7 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MetaTitle from '../components/atoms/MetaTitle';
 import s from './mainPage.module.scss';
-import Image from 'next/image';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import 'swiper/css';
@@ -11,7 +10,6 @@ import 'swiper/css/effect-fade';
 import Barfraw from '/public/img/barfraw.png';
 import Barfgood1 from '/public/img/barfgood1.png';
 import Barfgood2 from '/public/img/barfgood2.png';
-import Halftest from '/public/img/halftest.png';
 import LeftPic from '/public/img/leftPic.png';
 import midPic from '/public/img/midPic.png';
 import rightPic from '/public/img/rightPic.png';
@@ -33,17 +31,13 @@ import { Modal_tempPasswrod } from '/src/components/modal/Modal_tempPasswrod';
 import { Modal_Popup } from '/src/components/modal/Modal_Popup';
 import useDeviceState from '/util/hook/useDeviceState';
 import { getTokenFromServerSide } from '/src/pages/api/reqData';
-import { Tween } from 'react-gsap';
-import { Controller, Scene } from 'react-scrollmagic';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import ImageWithLoadingSpinner from '/src/components/atoms/ImageWithLoadingSpinner';
 
-import { getData, postData, postObjData, putObjData } from './api/reqData';
-import { deleteCookie, getCookie, setCookie } from '@util/func/cookie';
+import { setCookie } from '@util/func/cookie';
 
 export default function MainPage({ data }) {
-  // // console.log(data)
   const router = useRouter();
   const isMobile = useDeviceState().isMobile;
   const [activeTempPasswordModal, setActiveTempPasswordModal] = useState(false);
@@ -70,46 +64,13 @@ export default function MainPage({ data }) {
   // YYL 콕뱅크 쿠키 관련
   useEffect(() => {
     const alliance = router.query.alliance;
-
+    // setCookie('alliance', 'cb', 'hour', 1);
     if (alliance === 'cb') {
       setCookie('alliance', 'cb', 'hour', 1);
-
       // 메인으로 리다이렉트
       router.push('/');
-
-      // (async () => {
-      //   try {
-      //     const url = '/api/planDiscountTest';
-      //     const res = await getData(url);
-
-      //     if (res?.status === 200) {
-      //       const dataToAssign = res.data ?? {};
-      //       setDataBase(dataToAssign);
-      //     }
-      //   } catch (err) {
-      //     console.error(err);
-      //   }
-      // })();
-
-      // (async () => {
-      //   try {
-      //     const url = '/api/alliance?alliance=cb';
-      //     const res = await getData(url);
-
-      //     // console.log(res)
-
-      //     // console.log(document.cookie);
-
-      //     if (res?.status === 200) {
-      //       const dataToAssign = res.data ?? {};
-      //       setDataBase(dataToAssign);
-      //     }
-      //   } catch (err) {
-      //     console.error(err);
-      //   }
-      // })();
     }
-  });
+  }, []);
 
   return (
     <>

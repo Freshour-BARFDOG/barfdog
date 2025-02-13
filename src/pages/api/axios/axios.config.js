@@ -16,9 +16,12 @@ axios.defaults.timeout = 10000;
 
 export default function axiosConfig(contType = 'application/json') {
   const accessToken = getCookie(cookieType.LOGIN_COOKIE);
+  const alliance = getCookie('alliance') === 'cb' ? 'alliance=cb' : '';
   return {
+    withCredentials: true,
     headers: {
       authorization: accessToken,
+      Cookie: alliance,
       'content-Type': contType,
     },
   };
@@ -26,9 +29,12 @@ export default function axiosConfig(contType = 'application/json') {
 
 export function axiosConfigBlob(contType = 'application/json') {
   const accessToken = getCookie(cookieType.LOGIN_COOKIE);
+  const alliance = getCookie('alliance') === 'cb' ? 'alliance=cb' : '';
   return {
+    withCredentials: true,
     headers: {
       authorization: accessToken,
+      Cookie: alliance,
       'content-Type': contType,
     },
     responseType: 'blob',
@@ -37,10 +43,12 @@ export function axiosConfigBlob(contType = 'application/json') {
 
 export function axiosUserConfig(contType = 'application/json') {
   const accessToken = getCookie(cookieType.LOGIN_COOKIE);
-  // // console.log(accessToken)
+  const alliance = getCookie('alliance') === 'cb' ? 'alliance=cb' : '';
   return {
+    withCredentials: true,
     headers: {
       authorization: accessToken,
+      Cookie: alliance,
       'content-Type': contType,
     },
   };
