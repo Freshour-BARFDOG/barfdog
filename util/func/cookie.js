@@ -21,14 +21,11 @@ export const setCookie = function (
 
   const today = new Date();
   today.setTime(today.getTime() + expiryTime[dateUnit || 'def']);
-  document.cookie = `${name}=${value};expires=${today.toUTCString()};path=${
-    option.path
-  }`;
-  // // console.log('쿠키 만료예정\n','CookieName:',name, '\nCookieDate: ',today, expNumber, dateUnit)
+  document.cookie = `${name}=${value};expires=${today.toUTCString()};path=${option.path}`;
 };
 
 export const getCookie = function (name) {
-  const value = document.cookie.match(`(^|;) ?${name}=([^;]*)(;|$)`);
+  const value = typeof window !== "undefined" && document?.cookie?.match(`(^|;) ?${name}=([^;]*)(;|$)`);
   return value ? value[2] : null;
 };
 

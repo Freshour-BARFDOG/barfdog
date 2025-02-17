@@ -46,6 +46,7 @@ export default function SingleItemDetailPage({ data }) {
     itemPrice: validation_itemPrice(data?.item), // 장바구니항목에서 제외
     totalPrice: 0, // 장바구니 항목 아님
   };
+  console.log(data)
 
   const contentRef = useRef();
   const [isLoading, setIsLoading] = useState({ fetching: true });
@@ -100,7 +101,7 @@ export default function SingleItemDetailPage({ data }) {
   selectOptions?.unshift(defaultOption);
 
   // SELECTED OPTION LIST INFO
-  const initialOptionDataList = data.opt?.map((option) => ({
+  const initialOptionDataList = data?.opt?.map((option) => ({
     id: option.id,
     name: option.name,
     optionPrice: option.optionPrice,

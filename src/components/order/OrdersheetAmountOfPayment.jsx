@@ -14,13 +14,21 @@ export const OrdersheetAmountOfPayment = ({
   event,
   formErrors,
   orderType = 'general',
+  hasAllianceDiscount
 }) => {
+  // 첫 정기구독 50% 할인 적용 검증
+  const hasAllianceSubscribeDiscount = hasAllianceDiscount && info.newSubscribe;
   const calcResult = useCallback(
-    calcOrdersheetPrices(form, orderType, {
-      deliveryFreeConditionPrice: info.freeCondition,
-    }),
+    calcOrdersheetPrices(
+      form,
+      orderType,
+      {deliveryFreeConditionPrice: info.freeCondition,},
+      orderType === 'general' ? hasAllianceDiscount : hasAllianceSubscribeDiscount
+    ),
     [form, orderType],
   );
+  const discountSubscribeAlliance = calcResult?.discountSubscribeAlliance || 0;
+  console.log('calcResult', calcResult)
   const originalItemDiscount = useMemo(
     () =>
       orderType === 'general'
@@ -28,14 +36,6 @@ export const OrdersheetAmountOfPayment = ({
         : info.subscribeDto?.originPrice - info.subscribeDto?.nextPaymentPrice,
     [info],
   );
-
-  // const isFirstOrder = true;
-  // const hasAllianceFirstOrderDiscount = getCookie('alliance') === 'cb' && isFirstOrder;
-  const hasAllianceFirstOrderDiscount = false;
-
-  const discountRate = 0.5;
-  const allianceDiscount = Math.round(calcResult.paymentPrice * (1 - discountRate));
-
   return (
     <>
       <section className={s.payment}>
@@ -131,13 +131,13 @@ export const OrdersheetAmountOfPayment = ({
 
         <hr />
 
-        {hasAllianceFirstOrderDiscount &&
+        {hasAllianceSubscribeDiscount &&
           <>
           <div className={s.flex_box6}>
             <span className='pointColor'>제휴사 첫 구독 50% 할인</span>
             <span className='pointColor'>
                 {originalItemDiscount > 0 && '-'}&nbsp;
-              {transformLocalCurrency(allianceDiscount)}
+              {transformLocalCurrency(discountSubscribeAlliance)}
               원
               </span>
           </div>
@@ -151,8 +151,8 @@ export const OrdersheetAmountOfPayment = ({
             <span>
               {
                 transformLocalCurrency(
-                  hasAllianceFirstOrderDiscount && allianceDiscount
-                    ? allianceDiscount
+                  hasAllianceSubscribeDiscount && discountSubscribeAlliance
+                    ? discountSubscribeAlliance
                     : calcResult?.paymentPrice
                 )}원
             </span>

@@ -43,7 +43,7 @@ export const ShopFloatingTab = ({
   };
 
   return (
-    <div id={s['shop-optionBar']} className={`${active ? s.active : ''}`}>
+    <div id={s['shop-optionBar']} className={`${active ? s.active : ''} ${isOpenBtn ? s.open : ''}`}>
       <Wrapper>
         <div className={s.product_info}>
           <div className={`${s.image}`}>
@@ -54,6 +54,7 @@ export const ShopFloatingTab = ({
                 width={80}
                 height={80}
                 alt={data.itemImages[0].filename}
+                className={isOpenBtn ? s.open : ''}
               />
             ) : (
               <div className={s.spinner_wrapper}>
@@ -102,7 +103,7 @@ export const ShopFloatingTab = ({
                     </div>
                   </div>
 
-                  <div>
+                  <div className={s.options}>
                     <div className={s.title_text}>
                       <span>추가상품</span>
                     </div>
@@ -185,9 +186,7 @@ export const ShopFloatingTab = ({
                     ) : (
                       <>
                         택배배송 {transformLocalCurrency(data?.delivery?.price)}
-                        원<p className={s.del_br}></p> (
-                        {transformLocalCurrency(data?.delivery?.freeCondition)}
-                        원 이상 구매 시 무료)
+                        원 ({transformLocalCurrency(data?.delivery?.freeCondition)}원 이상 구매 시 무료)
                       </>
                     )}
 

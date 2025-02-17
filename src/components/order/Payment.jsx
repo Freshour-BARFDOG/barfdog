@@ -30,8 +30,8 @@ import {
 import { isAbandonedPayment } from 'util/func/order/paymentUtils';
 import { getAmountOfPaymentRegisterationByPaymentMethod } from '../../../util/func/subscribe/getAmountOfPaymentRegisterationByPaymentMethod';
 import { FullScreenLoading } from '../atoms/FullScreenLoading';
-
 import { getCookie } from '@util/func/cookie';
+
 
 export function Payment({
   info,
@@ -40,11 +40,14 @@ export function Payment({
   setIsLoading,
   setFormErrors,
   orderType = 'general',
+  hasAllianceDiscount = false,
 }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const router = useRouter();
   const ds = useDeviceState();
   const isMobile = ds.isMobile;
+
+  const hasAllianceSubscribeDiscount = hasAllianceDiscount && info.newSubscribe;
 
   useEffect(() => {
     const jquery = document.createElement('script');
@@ -61,6 +64,8 @@ export function Payment({
       document.head.removeChild(iamport);
     };
   }, []);
+  console.log('info', info)
+  console.log('form', form)
 
   const onSubmit = async () => {
     if (isSubmitted) return console.error('이미 제출된 양식입니다.');
@@ -86,12 +91,9 @@ export function Payment({
       detailAddress: form.deliveryDto.detailAddress,
       paymentMethod: form.paymentMethod,
       agreePrivacy: form.agreePrivacy,
-      paymentPrice: calcOrdersheetPrices(form, orderType, {
-        deliveryFreeConditionPrice: info.freeCondition,
-      }).paymentPrice,
+      paymentPrice: calcOrdersheetPrices(form, orderType, {deliveryFreeConditionPrice: info.freeCondition,}).paymentPrice,
     };
-    // // console.log(valid_target)
-    // // console.log(info)
+
     // ! bundle일 경우, validation항목 다르게 변경해주기.
     let errObj;
     if (form.bundle) {
@@ -119,9 +121,13 @@ export function Payment({
       overDiscount,
       paymentPrice,
       discountGrade,
-    } = calcOrdersheetPrices(form, orderType, {
-      deliveryFreeConditionPrice: info.freeCondition,
-    });
+      discountSubscribeAlliance,
+    } = calcOrdersheetPrices(
+      form,
+      orderType,
+      {deliveryFreeConditionPrice: info.freeCondition},
+      orderType === 'general' ? hasAllianceDiscount : hasAllianceSubscribeDiscount
+    );
 
     const customerUid = generateCustomerUid(); // ! [client '결제실패' / Webhook 'paid'] CASE 처리를 위해, 주문서 생성 시에도 cutomerUid 전송.
 
@@ -191,11 +197,14 @@ export function Payment({
             nextDeliveryDate: form.nextDeliveryDate, // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
             agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
             brochure: form.brochure, // 브로슈어 수령여부
-
             // allianceType: allianceType, // 콕뱅크 주문인지 확인
           };
+        if (hasAllianceSubscribeDiscount) {
+          body.discountSubscribeAlliance = discountSubscribeAlliance;
+          // body.paymentPrice = paymentPrice;
+        }
 
-    // console.log('----- request body:\n', body);
+    console.log('----- request body:\n', body);
 
     try {
       setIsLoading((prevState) => ({
@@ -210,6 +219,7 @@ export function Payment({
           ? `/api/orders/general`
           : `/api/orders/subscribe/${subscribeId}`;
       const res = await postObjData(apiUrl, body);
+      console.log('res!!!!!!', res)
 
       if (res.isDone) {
         const merchantUid = res.data.data.merchantUid;

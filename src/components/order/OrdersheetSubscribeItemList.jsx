@@ -105,10 +105,11 @@ export const OrdersheetSubscribeItemList = ({
                 ) : (
                   <button
                     type={'button'}
-                    className={`${s['btn']}`}
+                    className={`${s['btn']} ${form?.coupons?.length < 1 ? s.disabled: ''}`}
                     data-modal-type={'coupons'}
                     data-item-id={form.coupons?.memberCouponId}
                     onClick={event.onActiveModal}
+                    disabled={form?.coupons?.length < 1}
                   >
                     쿠폰 선택
                   </button>

@@ -26,6 +26,7 @@ import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import DeleteIcon from '/public/img/mypage/dog_info_delete.svg';
 import { SubscribeStatusTag } from '../../../components/subscribe/SubscribeStatusTag';
 import { postData } from '../../api/reqData';
+import {getCookie} from "../../../../util/func/cookie";
 
 export default function MypageDogInfoPage({ data }) {
   // console.log(data);
@@ -245,7 +246,8 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
 
   const nextPageHandler = (e) => {
     const dogId = e.currentTarget.dataset.id;
-    const apiUrl = `api/orders/sheet/subscribe/dog/${dogId}`;
+    const alliance = getCookie('alliance');
+    const apiUrl = `api/orders/sheet/subscribe/dog?alliance=${alliance ? alliance : ''}`;
 
     (async () => {
       try {

@@ -20,6 +20,8 @@ import { subscribePlanType } from '../../../../../store/TYPE/subscribePlanType';
 import { FullScreenRunningDog } from '../../../../components/atoms/FullScreenLoading';
 import { useRouter } from 'next/router';
 import { redirectTo } from 'util/func/redirectTo';
+import {getCookie} from "/util/func/cookie";
+import {calcOrdersheetPrices} from "../../../../components/order/calcOrdersheetPrices";
 
 const initInfo = {};
 
@@ -36,6 +38,8 @@ export default function SubscribeOrderSheetPage() {
     coupon: false,
   });
 
+  const alliance = getCookie('alliance');
+  const hasAllianceDiscount = alliance === 'cb';
   useEffect(() => {
     if (window && typeof window !== 'undefined') {
       setIsRendered(true);
@@ -80,18 +84,17 @@ export default function SubscribeOrderSheetPage() {
         }
 
         const subscribeId = router.query.subscribeId;
-        const apiUrl = `/api/orders/sheet/subscribe/${subscribeId}`;
+        const apiUrl = `/api/orders/sheet/subscribe/${subscribeId}${alliance ? `?alliance=${alliance}` : ''}`;
         const body = {
           id: subscribeId,
         };
         const res = await getData(apiUrl, body);
-        // console.log("/api/orders/sheet/subscribe/${subscribeId} = ",res.data)
+        console.log("/api/orders/sheet/subscribe/${subscribeId} = ",res.data)
         if (res.status !== 200) {
           alert('주문 정보를 확인할 수 없습니다.');
           return (window.location.href = '/');
         }
         const data = res.data;
-        // console.log(data);
 
         //! [추가] 계산된 등급할인 (discountGrade)
         // discountGrade =nextPaymentPrice * gradeDiscountPercent / 100
@@ -134,8 +137,9 @@ export default function SubscribeOrderSheetPage() {
           deliveryPrice: 0, // 정기구독 배송비: 무료
           reward: data.reward,
           brochure: data.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
+          newSubscribe: data.newSubscribe,
         };
-        // FormDatas
+
         const initForm = {
           selfInfo: {
             reward: data.reward,
@@ -178,6 +182,7 @@ export default function SubscribeOrderSheetPage() {
           ), // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
           agreePrivacy: false, // 개인정보 제공 동의
           brochure: false, // 브로슈어 수령여부
+          discountSubscribeAlliance: 0,
         };
         setInfo(initInfo);
         setForm(initForm);
@@ -253,6 +258,7 @@ export default function SubscribeOrderSheetPage() {
               setForm={setForm}
               formErrors={formErrors}
               setFormErrors={setFormErrors}
+              hasAllianceDiscount={hasAllianceDiscount}
             />
             <OrdersheetMethodOfPayment
               id={'paymentMethod'}
@@ -269,6 +275,7 @@ export default function SubscribeOrderSheetPage() {
               setForm={setForm}
               event={{ onActiveModal: onActivleModalHandler }}
               formErrors={formErrors}
+              hasAllianceDiscount={hasAllianceDiscount}
             />
             <section className={s.final_btn}>
               <p>
@@ -281,6 +288,7 @@ export default function SubscribeOrderSheetPage() {
                 form={form}
                 setFormErrors={setFormErrors}
                 orderType={'subscribe'}
+                hasAllianceDiscount={hasAllianceDiscount}
               />
               {/* 결제버튼 */}
             </section>

@@ -4,6 +4,7 @@ export const calcOrdersheetPrices = (
   form,
   orderType = 'general',
   deliveryInfo = { deliveryFreeConditionPrice: null },
+  hasAllianceDiscount = false,
 ) => {
   const userTotalReward = form.selfInfo?.reward; // 유저 적립금 총액
   let discountReward = Number(form.discountReward); // 적립금 할인
@@ -14,7 +15,9 @@ export const calcOrdersheetPrices = (
   let overDiscountCoupon = 0; // 쿠폰의 초과할인금
   let discountGrade = Number(form.selfInfo?.discountGrade); // 등급 할인 ( ONLY 정기결제: 0 ~ 7%)
 
-  // console.log(discountReward, discountGrade, orderPrice);
+  const hasAllianceGeneralDiscount = orderType === 'general' && hasAllianceDiscount && form?.orderItemDtoList?.some(item => item.deliveryFree === true);
+  const hasAllianceSubscribeDiscount = orderType !== 'general' && hasAllianceDiscount;
+
   if (
     isNaN(discountReward) ||
     isNaN(discountGrade) ||
@@ -41,12 +44,29 @@ export const calcOrdersheetPrices = (
     deliveryPrice = 0; // 정기결제는 항상 무료배송
   }
 
-  const discountTotal = discountCoupon + discountReward + discountGrade;
+  // 기존 할인 총합 (쿠폰 + 적립금 + 등급 할인)
+  const discountBaseTotal = discountCoupon + discountReward + discountGrade;
+
+  // 정기결제 + 제휴 할인인 경우 추가 할인 (orderPrice - (기존 할인 총합 * 0.5))
+  const discountRate = 0.5;
+  const discountSubscribeAlliance = hasAllianceSubscribeDiscount
+    ? Math.round(orderPrice - (discountBaseTotal * discountRate))
+    : 0;
+
+  console.log('discountSubscribeAlliance', discountSubscribeAlliance);
+
+  // 전체 할인 총액 (기존 할인 + discountSubscribeAlliance)
+  const discountTotal = discountBaseTotal + discountSubscribeAlliance;
+
+  // 결제 금액 계산
   const calcedPaymentPrice = orderPrice + deliveryPrice - discountTotal;
+
   if (calcedPaymentPrice < minPaymentPrice) {
     overDiscountCoupon = minPaymentPrice - calcedPaymentPrice;
   }
-  const paymentPrice = Math.max(calcedPaymentPrice, minPaymentPrice); // 23.02. 고객사 요청: 초과할인이 발생하더라도 결제 가능함.
+
+  // 최종 결제 금액 설정 (최소 결제 금액 보장)
+  const paymentPrice = Math.max(calcedPaymentPrice, minPaymentPrice);
 
   const availableMaxDiscount = paymentPrice - minPaymentPrice; // 결제금액
   const availableMaxReward = Math.min(
@@ -55,7 +75,6 @@ export const calcOrdersheetPrices = (
   );
   const availableMaxCoupon = availableMaxDiscount;
 
-  // // console.log("---------------",'\n적립금할인: ',discountReward, '\n쿠폰할인: ',discountCoupon, '\n등급할인: ',discountGrade, '\n할인총합:', discountTotal, '\n배송비:',deliveryPrice, "\nORIGIN-결제금액: ",orderPrice, "\nCALCED-주문금액: ",calcedPaymentPrice,  '\nFINAL-결제금액: ', paymentPrice, "\n쿠폰 초과할인금액:",overDiscountCoupon, "\n------ availableMaxDiscount: ", availableMaxDiscount,  "\navailableMaxReward:",availableMaxReward,  "\navailableMaxCoupon:",availableMaxCoupon);
   return {
     discountReward,
     discountCoupon,
@@ -67,6 +86,7 @@ export const calcOrdersheetPrices = (
       coupon: availableMaxCoupon,
     },
     overDiscount: overDiscountCoupon,
-    deliveryPrice: deliveryPrice, // 일반결제 페이지에서만 사용
+    deliveryPrice: hasAllianceGeneralDiscount ? 0 : deliveryPrice, // 일반결제 페이지에서만 사용
+    discountSubscribeAlliance,
   };
 };

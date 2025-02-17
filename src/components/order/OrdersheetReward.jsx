@@ -7,12 +7,18 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import {calcOrdersheetPrices} from "./calcOrdersheetPrices";
 import {IAMPORT_MIN_PAYMENT_PRICE} from "/store/TYPE/order/priceType";
 
-export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormErrors, orderType='general' }) => {
-
+export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormErrors, orderType='general', hasAllianceDiscount }) => {
+  const hasAllianceSubscribeDiscount = hasAllianceDiscount && info.newSubscribe;
   useEffect( () => {
 
     const usedReward = Number(form[id]);
-    const calcResult = calcOrdersheetPrices(form, orderType,{deliveryFreeConditionPrice: info.freeCondition});
+    const calcResult = calcOrdersheetPrices(
+      form,
+      orderType,
+      {deliveryFreeConditionPrice: info.freeCondition},
+      orderType === 'general' ? hasAllianceDiscount : hasAllianceSubscribeDiscount
+    );
+
     const availableMaxDiscount = calcResult?.availableMaxDiscount.reward;
     const overDiscount = calcResult?.overDiscount;
     const userTotalReward = info.reward;

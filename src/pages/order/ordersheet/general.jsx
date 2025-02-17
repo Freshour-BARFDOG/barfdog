@@ -4,7 +4,7 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './ordersheet.module.scss';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
 import { Modal_coupon } from '/src/components/modal/Modal_coupon';
-import { postUserObjData } from '/src/pages/api/reqData';
+import {getDataSSRWithCookies, postUserObjData} from '/src/pages/api/reqData';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartAction } from '/store/cart-slice';
 import { useRouter } from 'next/router';
@@ -35,6 +35,9 @@ export default function GeneralOrderSheetPage() {
     termsOfService: false,
     coupon: false,
   });
+
+  // 콕뱅크 제휴사 할인 적용 검증
+  const hasAllianceDiscount = getCookie('alliance') === 'cb';
 
   useEffect(() => {
     let curItem = '';
@@ -67,6 +70,7 @@ export default function GeneralOrderSheetPage() {
       })),
       // allianceType: allianceType,
     };
+    console.log('requestBody', requestBody)
     if (Object.keys(info).length > 0) return; // 최초 data fetching 후 Re-rendering 방지
     (async () => {
       setIsLoading((prevState) => ({
@@ -75,7 +79,8 @@ export default function GeneralOrderSheetPage() {
       }));
       try {
         // API: 상품 주문정보
-        const postItemInfoApiUrl = `/api/orders/sheet/general`;
+        const alliance = getCookie('alliance');
+        const postItemInfoApiUrl = `/api/orders/sheet/general${alliance ? `?alliance=${alliance}` : ''}`;
         const res = await postUserObjData(postItemInfoApiUrl, requestBody);
         // 요청 파라미터가 복잡하여 GET이 아닌 POST 사용
         // console.log(res);
@@ -84,7 +89,7 @@ export default function GeneralOrderSheetPage() {
           return (window.location.href = '/cart');
         }
         const info = res.data.data;
-        // console.log("/api/orders/sheet/general", info);
+        console.log("/api/orders/sheet/general", res);
         // 주문에 대한 모든 데이터
         // console.log('info:  ',info)
         const calcedReward = Number(info.reward) > 0 ? info.reward : 0;
@@ -115,7 +120,7 @@ export default function GeneralOrderSheetPage() {
             })) || [], //////////// ! DUMMY DATA
           orderPrice: info.orderPrice, //  장바구니 또는 결제 전 상품의 "최종 가격" (기본 어드민 설정할인율 적용 / 결제페이지의 쿠폰 및 적립금 적용 전 가격)
           reward: calcedReward, // 적립금
-          deliveryPrice: getDeliveryPrice(info), // 배송비 : 장바구니에서, 최종 배송비
+          deliveryPrice: alliance ? 0 : getDeliveryPrice(info), // 배송비 : 장바구니에서, 최종 배송비
           freeCondition: info.freeCondition, // 사이트 > 배송비 무료 조건
           brochure: info.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
           totalOrderPrice: info.orderPrice,
@@ -252,6 +257,7 @@ export default function GeneralOrderSheetPage() {
               setForm={setForm}
               event={{ onActiveModal: onActivleModalHandler }}
               formErrors={formErrors}
+              hasAllianceDiscount={hasAllianceDiscount}
             />
             <section className={s.final_btn}>
               <p>
@@ -259,6 +265,7 @@ export default function GeneralOrderSheetPage() {
               </p>
               {/* 결제버튼 */}
               <Payment
+                hasAllianceDiscount={hasAllianceDiscount}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
                 info={info}

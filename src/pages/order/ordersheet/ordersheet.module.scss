@@ -220,6 +220,9 @@ section.final_btn {
         font-size: rem(15);
         font-weight: 500;
         background-color: #fff;
+        &:disabled {
+          cursor: default;
+        }
         &.applied{
           transition: border .2s var(--transition-cubic);
           transition-padding: border, color,;

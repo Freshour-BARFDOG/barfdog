@@ -145,7 +145,7 @@ export const ShopBoard = ({
               </div>
               <div
                 className={`${s.selector} ${
-                  optionDataList.length === 0 ? `${s.disabled_select}` : ''
+                  optionDataList?.length === 0 ? `${s.disabled_select}` : ''
                 }`}
               >
                 <CustomSelect
@@ -153,7 +153,7 @@ export const ShopBoard = ({
                   // value={''}
                   setFormValues={onSelectOptionHandler}
                   dataType={'number'}
-                  disabled={optionDataList.length === 0}
+                  disabled={optionDataList?.length === 0}
                 />
               </div>
             </div>
@@ -211,7 +211,7 @@ export const ShopBoard = ({
               </div>
             </div>
 
-            {item.inStock ? (
+            {item?.inStock ? (
               <section className={s['shop-btn-section']}>
                 {/* 장바구니 버튼 */}
                 <div className={s['grid-box']}>

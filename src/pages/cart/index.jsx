@@ -22,11 +22,14 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { postUserObjData } from '../api/reqData';
 import useNaverAnalytics from "../../../util/hook/useNaverAnalytics";
+import {getCookie} from "../../../util/func/cookie";
 
 const calculateCartDeliveryPrice = ({
   selectedItemDto,
   deliveryConstant = { price: 0, freeCondition: 0 },
 }) => {
+  const alliance = getCookie('alliance');
+
   if (
     !deliveryConstant ||
     !Array.isArray(selectedItemDto) ||
@@ -39,7 +42,7 @@ const calculateCartDeliveryPrice = ({
   const totalPrice = selectedItemDto
     .map((item) => item.totalPrice)
     ?.reduce((acc, cur) => acc + cur);
-  return totalPrice >= deliveryConstant.freeCondition || allItemDeliveryFree
+  return totalPrice >= deliveryConstant.freeCondition || allItemDeliveryFree || alliance
     ? 0
     : deliveryConstant.price;
 };
