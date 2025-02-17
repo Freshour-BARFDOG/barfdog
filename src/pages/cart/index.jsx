@@ -22,12 +22,13 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { postUserObjData } from '../api/reqData';
 import useNaverAnalytics from "../../../util/hook/useNaverAnalytics";
-import {getCookie} from "../../../util/func/cookie";
+import {getCookie} from "/util/func/cookie";
 
 const calculateCartDeliveryPrice = ({
   selectedItemDto,
   deliveryConstant = { price: 0, freeCondition: 0 },
 }) => {
+  // 제휴사의 경우 무료배송 처리
   const alliance = getCookie('alliance');
 
   if (
@@ -42,7 +43,8 @@ const calculateCartDeliveryPrice = ({
   const totalPrice = selectedItemDto
     .map((item) => item.totalPrice)
     ?.reduce((acc, cur) => acc + cur);
-  return totalPrice >= deliveryConstant.freeCondition || allItemDeliveryFree || alliance
+
+  return totalPrice >= deliveryConstant.freeCondition || allItemDeliveryFree || alliance !== null
     ? 0
     : deliveryConstant.price;
 };
@@ -55,6 +57,7 @@ export default function CartPage({ data, error }) {
     freeCondition: data?.deliveryConstant.freeCondition,
   };
   const [storedItem, setStoredItem] = useState();
+
   // 비로그인 시 담은 아이템을 장바구니에 등록
   const { triggerConversion } = useNaverAnalytics();
   useEffect(() => {

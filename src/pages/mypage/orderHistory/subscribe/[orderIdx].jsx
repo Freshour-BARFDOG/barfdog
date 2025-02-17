@@ -18,7 +18,6 @@ import { paymentMethodType } from '/store/TYPE/paymentMethodType';
 import { roundedOneMealGram } from '/util/func/subscribe/roundedOneMealGram';
 import { seperateStringViaComma } from '/util/func/seperateStringViaComma';
 import { postPaymentDataToApiServer } from '../../../api/postPaymentDataToApiServer';
-import { redirectBySSR } from '../../../../../util/func/redirectBySSR';
 import { CancelReasonName } from '../../../../../store/TYPE/order/CancelReasonName';
 
 /*! 참고)
@@ -431,11 +430,10 @@ export async function getServerSideProps(ctx) {
   const getApiUrl = `/api/orders/${orderIdx}/subscribe`;
 
   const res = await getDataSSR(req, getApiUrl);
-  // // console.log('SERVER REPONSE: ', res);
   const data = res?.data;
   // console.log('REPONSE DATA:',data);
   if (!data || data.status === 500) {
-    return redirectBySSR('/mypage/orderHistory');
+    // return redirectBySSR('/mypage/orderHistory');
   } else if (data) {
     DATA = {
       recipeDto: {

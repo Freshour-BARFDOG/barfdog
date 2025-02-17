@@ -4,7 +4,7 @@ import ModalWrapper from './ModalWrapper';
 import transformDate from '/util/func/transformDate';
 import { discountUnitType } from '/store/TYPE/discountUnitType';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import { calcOrdersheetPrices } from '../order/calcOrdersheetPrices';
+import { calcOrderSheetPrices } from '../order/calcOrderSheetPrices';
 import EmptyMessage from '../atoms/AmdinErrorMessage';
 import { useMediaQuery } from 'react-responsive';
 
@@ -36,7 +36,7 @@ export const Modal_coupon = ({
       const radioId = radio.id;
       const couponId = Number(radio.dataset.couponId);
       const couponDiscountAmount = Number(radio.dataset.discountAmount);
-      const availableCouponMaxDiscount = calcOrdersheetPrices(form, orderType, {
+      const availableCouponMaxDiscount = calcOrderSheetPrices(form, orderType, {
         deliveryFreeConditionPrice: info.freeCondition,
       })?.availableMaxDiscount.coupon;
       if (availableCouponMaxDiscount <= 0) {

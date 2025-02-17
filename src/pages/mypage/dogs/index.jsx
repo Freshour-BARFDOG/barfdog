@@ -22,11 +22,10 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import { useRouter } from 'next/router';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
-import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import DeleteIcon from '/public/img/mypage/dog_info_delete.svg';
 import { SubscribeStatusTag } from '../../../components/subscribe/SubscribeStatusTag';
 import { postData } from '../../api/reqData';
-import {getCookie} from "../../../../util/func/cookie";
+import { getCookie } from "/util/func/cookie";
 
 export default function MypageDogInfoPage({ data }) {
   // console.log(data);
@@ -246,8 +245,10 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
 
   const nextPageHandler = (e) => {
     const dogId = e.currentTarget.dataset.id;
+
+    // 제휴사 쿼리 파라미터 추가
     const alliance = getCookie('alliance');
-    const apiUrl = `api/orders/sheet/subscribe/dog?alliance=${alliance ? alliance : ''}`;
+    const apiUrl = `api/orders/sheet/subscribe/dog/${dogId}?alliance=${alliance || ''}`;
 
     (async () => {
       try {

@@ -73,8 +73,10 @@ export const OrdersheetDeliveryForm = ({
       detailAddress: bundle
         ? null
         : sameUserInfo
-        ? info.address?.detailAddress
-        : '', // 상세주소 (묶음 배송일 경우, null)
+        ? info.defaultAddress?.detailAddress
+          ? info.defaultAddress?.detailAddress
+            : info.address?.detailAddress
+          : '', // 상세주소 (묶음 배송일 경우, null)
       request: bundle ? null : sameUserInfo ? info.defaultAddress?.request : '', // 배송 요청사항 (묶음 배송일 경우, null)
     }));
     if (bundle) {

@@ -7,7 +7,7 @@ import { valid_hasFormErrors } from 'util/func/validation/validationPackage';
 import { postObjData } from 'src/pages/api/reqData';
 import s from '/src/pages/order/ordersheet/ordersheet.module.scss';
 import Spinner from '@src/components/atoms/Spinner';
-import { calcOrdersheetPrices } from './calcOrdersheetPrices';
+import { calcOrderSheetPrices } from './calcOrderSheetPrices';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { availablePaymentState } from 'util/func/availablePaymentState';
@@ -64,8 +64,6 @@ export function Payment({
       document.head.removeChild(iamport);
     };
   }, []);
-  console.log('info', info)
-  console.log('form', form)
 
   const onSubmit = async () => {
     if (isSubmitted) return console.error('이미 제출된 양식입니다.');
@@ -91,7 +89,7 @@ export function Payment({
       detailAddress: form.deliveryDto.detailAddress,
       paymentMethod: form.paymentMethod,
       agreePrivacy: form.agreePrivacy,
-      paymentPrice: calcOrdersheetPrices(form, orderType, {deliveryFreeConditionPrice: info.freeCondition,}).paymentPrice,
+      paymentPrice: calcOrderSheetPrices(form, orderType, {deliveryFreeConditionPrice: info.freeCondition,}).paymentPrice,
     };
 
     // ! bundle일 경우, validation항목 다르게 변경해주기.
@@ -122,7 +120,7 @@ export function Payment({
       paymentPrice,
       discountGrade,
       discountSubscribeAlliance,
-    } = calcOrdersheetPrices(
+    } = calcOrderSheetPrices(
       form,
       orderType,
       {deliveryFreeConditionPrice: info.freeCondition},
@@ -130,10 +128,6 @@ export function Payment({
     );
 
     const customerUid = generateCustomerUid(); // ! [client '결제실패' / Webhook 'paid'] CASE 처리를 위해, 주문서 생성 시에도 cutomerUid 전송.
-
-    // // @YYL 콕뱅크 주문인지 확인
-    // let allianceType = "NONE"
-    // if(getCookie("alliance") === "cb") allianceType = "COKBANK"
 
     const body =
       orderType === 'general'
@@ -171,8 +165,6 @@ export function Payment({
             // nextDeliveryDate: form.nextDeliveryDate, // ! 일반주문 시, request field에 없는 값.
             agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
             brochure: form.brochure, // 브로슈어 수령여부
-
-            // allianceType: allianceType, // 콕뱅크 주문인지 확인
           }
         : {
             customerUid: customerUid, // ! 클라이언트 주문 실패 후, webhook 'paid' 대응하기 위한 필드
@@ -197,14 +189,11 @@ export function Payment({
             nextDeliveryDate: form.nextDeliveryDate, // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
             agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
             brochure: form.brochure, // 브로슈어 수령여부
-            // allianceType: allianceType, // 콕뱅크 주문인지 확인
           };
+
         if (hasAllianceSubscribeDiscount) {
           body.discountSubscribeAlliance = discountSubscribeAlliance;
-          // body.paymentPrice = paymentPrice;
         }
-
-    console.log('----- request body:\n', body);
 
     try {
       setIsLoading((prevState) => ({
@@ -213,13 +202,14 @@ export function Payment({
       }));
 
       // send DATA to api server after successful payment
+      // 제휴사 쿼리 파라미터 추가
+      const alliance = getCookie('alliance');
       const subscribeId = router.query?.subscribeId;
       const apiUrl =
         orderType === 'general'
-          ? `/api/orders/general`
+          ? `/api/orders/general?alliance=${alliance || ''}`
           : `/api/orders/subscribe/${subscribeId}`;
       const res = await postObjData(apiUrl, body);
-      console.log('res!!!!!!', res)
 
       if (res.isDone) {
         const merchantUid = res.data.data.merchantUid;

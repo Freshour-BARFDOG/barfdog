@@ -1,6 +1,6 @@
 import { IAMPORT_MIN_PAYMENT_PRICE } from '/store/TYPE/order/priceType';
 
-export const calcOrdersheetPrices = (
+export const calcOrderSheetPrices = (
   form,
   orderType = 'general',
   deliveryInfo = { deliveryFreeConditionPrice: null },
@@ -47,33 +47,37 @@ export const calcOrdersheetPrices = (
   // 기존 할인 총합 (쿠폰 + 적립금 + 등급 할인)
   const discountBaseTotal = discountCoupon + discountReward + discountGrade;
 
+  // 첫 정기구독 50% 할인
   // 정기결제 + 제휴 할인인 경우 추가 할인 (orderPrice - (기존 할인 총합 * 0.5))
   const discountRate = 0.5;
   const discountSubscribeAlliance = hasAllianceSubscribeDiscount
-    ? Math.round(orderPrice - (discountBaseTotal * discountRate))
+    ? Math.round((orderPrice - discountBaseTotal) * discountRate)
     : 0;
-
-  console.log('discountSubscribeAlliance', discountSubscribeAlliance);
 
   // 전체 할인 총액 (기존 할인 + discountSubscribeAlliance)
   const discountTotal = discountBaseTotal + discountSubscribeAlliance;
 
   // 결제 금액 계산
-  const calcedPaymentPrice = orderPrice + deliveryPrice - discountTotal;
+  const calcePaymentPrice = orderPrice + deliveryPrice - discountTotal;
 
-  if (calcedPaymentPrice < minPaymentPrice) {
-    overDiscountCoupon = minPaymentPrice - calcedPaymentPrice;
+  if (calcePaymentPrice < minPaymentPrice) {
+    overDiscountCoupon = minPaymentPrice - calcePaymentPrice;
   }
 
   // 최종 결제 금액 설정 (최소 결제 금액 보장)
-  const paymentPrice = Math.max(calcedPaymentPrice, minPaymentPrice);
+  const paymentPrice = Math.max(calcePaymentPrice, minPaymentPrice);
 
-  const availableMaxDiscount = paymentPrice - minPaymentPrice; // 결제금액
-  const availableMaxReward = Math.min(
+  let availableMaxDiscount = paymentPrice - minPaymentPrice; // 결제금액
+  let availableMaxReward = Math.min(
     availableMaxDiscount,
     userTotalReward - discountReward,
   );
-  const availableMaxCoupon = availableMaxDiscount;
+
+  // 정기구독 50% 할인 적용 - 적립금 사용 처리시 적용 가능한 금액 toggle 설정
+  if (hasAllianceSubscribeDiscount && paymentPrice === discountSubscribeAlliance && discountReward !== 0) {
+    availableMaxDiscount = 0;
+    availableMaxReward = 0;
+  }
 
   return {
     discountReward,
@@ -83,7 +87,7 @@ export const calcOrdersheetPrices = (
     paymentPrice,
     availableMaxDiscount: {
       reward: availableMaxReward,
-      coupon: availableMaxCoupon,
+      coupon: availableMaxDiscount,
     },
     overDiscount: overDiscountCoupon,
     deliveryPrice: hasAllianceGeneralDiscount ? 0 : deliveryPrice, // 일반결제 페이지에서만 사용

@@ -156,12 +156,11 @@ export const SubscribeItems = ({itemList}) => {
                     {isLoading.cancelOrder[item.subscribeOrderDto.orderId] ?
                       <Spinner style={{color: "#fff"}}/> : "결제 취소"}
                   </button>
-                  : <Link
+                  : <a
                     href={`/mypage/orderHistory/subscribe/${item.subscribeOrderDto.orderId}`}
-                    passHref
                   >
-                    <a className={s.btn}>주문상세 </a>
-                  </Link>
+                    <span className={s.btn}>주문상세 </span>
+                  </a>
                 }
                 <a
                   href={`/mypage/subscribe/${item.subscribeOrderDto.subscribeId}`}

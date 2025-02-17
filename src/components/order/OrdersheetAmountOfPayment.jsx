@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from 'react';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import { calcOrdersheetPrices } from './calcOrdersheetPrices';
+import { calcOrderSheetPrices } from './calcOrderSheetPrices';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
 import { getCookie } from "../../../util/func/cookie";
 
@@ -19,7 +19,7 @@ export const OrdersheetAmountOfPayment = ({
   // 첫 정기구독 50% 할인 적용 검증
   const hasAllianceSubscribeDiscount = hasAllianceDiscount && info.newSubscribe;
   const calcResult = useCallback(
-    calcOrdersheetPrices(
+    calcOrderSheetPrices(
       form,
       orderType,
       {deliveryFreeConditionPrice: info.freeCondition,},

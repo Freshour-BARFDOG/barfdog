@@ -21,11 +21,9 @@ import { setPreviousPath } from '/store/navigation-slice';
 import axios from 'axios';
 import { useModalContext } from '/store/modal-context';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
-import { getData } from '/src/pages/api/reqData';
-import { deleteCookie, getCookie, setCookie } from '@util/func/cookie';
 import { cookieType } from '@store/TYPE/cookieType';
 import { ShopFloatingTab } from '../../../components/shop/ShopFloatingTab';
-import useNaverAnalytics from "../../../../util/hook/useNaverAnalytics";
+import useNaverAnalytics from "/util/hook/useNaverAnalytics";
 
 export default function SingleItemDetailPage({ data }) {
   const mct = useModalContext();
@@ -46,7 +44,6 @@ export default function SingleItemDetailPage({ data }) {
     itemPrice: validation_itemPrice(data?.item), // 장바구니항목에서 제외
     totalPrice: 0, // 장바구니 항목 아님
   };
-  console.log(data)
 
   const contentRef = useRef();
   const [isLoading, setIsLoading] = useState({ fetching: true });

@@ -4,30 +4,30 @@ import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import ErrorMessage from '../atoms/ErrorMessage';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import {calcOrdersheetPrices} from "./calcOrdersheetPrices";
+import {calcOrderSheetPrices} from "./calcOrderSheetPrices";
 import {IAMPORT_MIN_PAYMENT_PRICE} from "/store/TYPE/order/priceType";
 
 export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormErrors, orderType='general', hasAllianceDiscount }) => {
+  // 첫 정기구독 50% 할인 적용 검증
   const hasAllianceSubscribeDiscount = hasAllianceDiscount && info.newSubscribe;
+  const calcResult = calcOrderSheetPrices(
+    form,
+    orderType,
+    {deliveryFreeConditionPrice: info.freeCondition},
+    orderType === 'general' ? hasAllianceDiscount : hasAllianceSubscribeDiscount
+  );
   useEffect( () => {
 
     const usedReward = Number(form[id]);
-    const calcResult = calcOrdersheetPrices(
-      form,
-      orderType,
-      {deliveryFreeConditionPrice: info.freeCondition},
-      orderType === 'general' ? hasAllianceDiscount : hasAllianceSubscribeDiscount
-    );
 
     const availableMaxDiscount = calcResult?.availableMaxDiscount.reward;
     const overDiscount = calcResult?.overDiscount;
     const userTotalReward = info.reward;
 
-    // console.log(usedReward, availableMaxDiscount, overDiscount);
     let error= "";
     if ( usedReward && userTotalReward === 0 ) {
       error = "사용가능한 적립금이 없습니다."
-    } else if (overDiscount) {
+    } else if (availableMaxDiscount === 0 && overDiscount) {
       error = `최소 결제금액(${IAMPORT_MIN_PAYMENT_PRICE}원) 이상의 적립금 할인을 적용할 수 없습니다.`;
     } else if(usedReward > userTotalReward) {
       error ="보유 적립금을 초과하여 사용할 수 없습니다.";
@@ -54,8 +54,6 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
 
   }, [form[id]] );
 
-
-
   const onChangeRewardHandler = (e) => {
     const { value } = e.currentTarget;
     let enteredReward = filter_emptyValue(value);
@@ -69,10 +67,11 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
   };
 
   const onClickDisCountReward = () => {
-    const discountAmount = calcOrdersheetPrices( form, orderType, {deliveryFreeConditionPrice: info.freeCondition} )?.availableMaxDiscount.reward;
+    const discountAmount = calcResult?.availableMaxDiscount.reward;
+    const isReset = discountAmount === form.discountReward;
     setForm((prevState) => ({
       ...prevState,
-      [id]:  discountAmount > 0 ? discountAmount : 0,
+      [id]: isReset ? 0 : discountAmount > 0 ? discountAmount : 0,
     }));
   };
 
