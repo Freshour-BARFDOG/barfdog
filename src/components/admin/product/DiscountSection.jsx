@@ -166,7 +166,7 @@ const DiscountSettings = ({ formValues, setFormValues, formErrors, allianceList 
 				items={[formValues]}
 				setItems={(updated) => setFormValues(updated[0])}
 				formErrors={formErrors}
-				initialActive={isUpdate ? formValues.salePrice !== formValues.originPrice && formValues.discountDegree === 0 : false}
+				initialActive={isUpdate ? formValues.salePrice !== formValues.originPrice && Number(formValues.discountDegree) !== 0 : false}
 			/>
 			<DiscountSection
 				title='제휴사 할인설정'
