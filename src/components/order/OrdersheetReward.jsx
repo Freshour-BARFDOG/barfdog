@@ -25,12 +25,14 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
     const userTotalReward = info.reward;
 
     let error= "";
-    if ( usedReward && userTotalReward === 0 ) {
-      error = "사용가능한 적립금이 없습니다."
-    } else if (availableMaxDiscount === 0 && overDiscount) {
-      error = `최소 결제금액(${IAMPORT_MIN_PAYMENT_PRICE}원) 이상의 적립금 할인을 적용할 수 없습니다.`;
-    } else if(usedReward > userTotalReward) {
-      error ="보유 적립금을 초과하여 사용할 수 없습니다.";
+    if (form.paymentPrice !== 0) {
+      if ( usedReward && userTotalReward === 0 ) {
+        error = "사용가능한 적립금이 없습니다."
+      } else if (overDiscount) {
+        error = `최소 결제금액(${IAMPORT_MIN_PAYMENT_PRICE}원) 이상의 적립금 할인을 적용할 수 없습니다.`;
+      } else if(usedReward > userTotalReward) {
+        error ="보유 적립금을 초과하여 사용할 수 없습니다.";
+      }
     }
 
 

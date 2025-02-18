@@ -77,9 +77,9 @@ export const OrdersheetSubscribeItemList = ({
               <div className={s.title_col}>총 주문금액</div>
               <div className={s.price_col}>
                 <div className={s.price_inner}>
-                  {transformLocalCurrency(info.subscribeDto?.originPrice)}원
+                  {transformLocalCurrency(info.subscribeDto?.originPrice || 0)}원
                 </div>
-                <span>{transformLocalCurrency(info.subscribeDto?.nextPaymentPrice)}원</span>
+                <span>{transformLocalCurrency(info.subscribeDto?.nextPaymentPrice || 0)}원</span>
               </div>
 
               <div
