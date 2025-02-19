@@ -34,7 +34,7 @@ const ItemList = ({item, onDeleteItem, isLoading}) => {
     salePrice: transformLocalCurrency( item.salePrice ) + '원',
     remaining: transformLocalCurrency( item.remaining ) === '0' ? '품절' : transformLocalCurrency( item.remaining ),
     discount: item.discount === '0원' || item.discount === '0%' ? '-' : item.discount, // - REST API server에서 할인 단위(% 또는 원) 적용되어서 전달됨
-    allianceDiscount: item?.allianceDiscount === 'none' ? '-' : item.allianceDiscount, // 값이 없을 경우 'none'
+    allianceDiscount: item?.allianceDiscount === null ? '-' : item.allianceDiscount, // 값이 없을 경우 'none'
     status: item.status === 'LEAKED' ? 'Y' : "N",
     reg_date: transformDate( item.createdDate ) || '-',
     apiurl: {
