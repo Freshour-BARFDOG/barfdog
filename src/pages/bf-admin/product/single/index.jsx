@@ -149,7 +149,8 @@ function SingleItemPage() {
                   <li className={s.table_th}>원가</li>
                   <li className={s.table_th}>판매가</li>
                   <li className={s.table_th}>재고수량</li>
-                  <li className={s.table_th}>할인</li>
+                  <li className={s.table_th}>일반할인</li>
+                  <li className={s.table_th}>제휴사할인</li>
                   <li className={s.table_th}>노출여부</li>
                   <li className={s.table_th}>생성일</li>
                   <li className={s.table_th}>수정</li>

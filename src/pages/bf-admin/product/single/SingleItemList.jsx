@@ -33,7 +33,8 @@ const ItemList = ({item, onDeleteItem, isLoading}) => {
     originalPrice: transformLocalCurrency( item.originalPrice ) + '원',
     salePrice: transformLocalCurrency( item.salePrice ) + '원',
     remaining: transformLocalCurrency( item.remaining ) === '0' ? '품절' : transformLocalCurrency( item.remaining ),
-    discount: item.discount, // - REST API server에서 할인 단위(% 또는 원) 적용되어서 전달됨
+    discount: item.discount === '0원' || item.discount === '0%' ? '-' : item.discount, // - REST API server에서 할인 단위(% 또는 원) 적용되어서 전달됨
+    allianceDiscount: item?.allianceDiscount === 'none' ? '-' : item.allianceDiscount, // 값이 없을 경우 'none'
     status: item.status === 'LEAKED' ? 'Y' : "N",
     reg_date: transformDate( item.createdDate ) || '-',
     apiurl: {
@@ -41,7 +42,7 @@ const ItemList = ({item, onDeleteItem, isLoading}) => {
       delete: item._links?.delete_item?.href,
     },
   };
-  
+
   const onDelete = (e) => {
     if ( submittedDeleteApi ) return console.error( "이미 제출된 양식입니다." );
     if ( !confirm( `선택된 항목(${item.name || ''})을 정말 삭제하시겠습니까?` ) ) return;
@@ -69,6 +70,7 @@ const ItemList = ({item, onDeleteItem, isLoading}) => {
       </span>
       <span className={`${DATA.remaining === '품절' ? 'pointColor' : ""}`}>{DATA.remaining}</span>
       <span>{DATA.discount}</span>
+      <span>{DATA.allianceDiscount}</span>
       <span>{DATA.status}</span>
       <span>{DATA.reg_date}</span>
       <span>

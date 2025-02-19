@@ -72,6 +72,9 @@
     .desc {
       color: var(--color-font-light);
     }
+    &.allianceDiscount {
+      grid-template-columns: rem(210) 1fr;
+    }
   }
 }
 

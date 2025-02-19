@@ -265,7 +265,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
               <div className={s.body_title}>결제정보</div>
 
               <div className={s.body_content_2}>
-                <div className={s.grid_box}>
+                <div className={`${s.grid_box} ${data?.orderDto.discountSubscribeAlliance ? s.allianceDiscount : ''}`}>
                   <span>주문금액</span>
                   <span>
                     {transformLocalCurrency(data?.orderDto.orderPrice)}원
@@ -301,6 +301,16 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                     {data?.orderDto.discountCoupon > 0 && '-'}
                     {transformLocalCurrency(data?.orderDto.discountCoupon)}원
                   </span>
+
+                  {data?.orderDto.discountSubscribeAlliance !== 0 &&
+                    <>
+                    <span>ㄴ 제휴사 첫 구독 50% 할인</span>
+                    <span>
+                      {data?.orderDto.discountSubscribeAlliance > 0 && '-'}
+                      {transformLocalCurrency(data?.orderDto.discountSubscribeAlliance)}원
+                    </span>
+                    </>
+                  }
 
                   {data?.orderDto.overDiscount > 0 && (
                     <>
@@ -465,6 +475,7 @@ export async function getServerSideProps(ctx) {
         discountTotal: data.orderDto.discountTotal,
         discountReward: data.orderDto.discountReward,
         discountCoupon: data.orderDto.discountCoupon,
+        discountSubscribeAlliance: data.orderDto.discountSubscribeAlliance,
         overDiscount: data.orderDto.overDiscount || null, // 쿠폰 할인 소멸  // api-server field 변경에 대응 -> 추후 null 대응 제외해도 됨
         paymentPrice: data.orderDto.paymentPrice,
         paymentMethod: data.orderDto.paymentMethod,
