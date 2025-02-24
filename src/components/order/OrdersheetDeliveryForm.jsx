@@ -53,14 +53,30 @@ export const OrdersheetDeliveryForm = ({
     }));
   }, [deliveryInfo]);
 
+  // useEffect(() => {
+  //   // !bundle && form.sameUserInfo ? info.phoneNumber : deliveryInfo.phone || ''
+  //   // // console.log('배송정버 뱐걍 ')
+  //   // {!bundle && form.sameUserInfo ? info.name : deliveryInfo.name || ''}
+  //   if (!info.nextSubscribeDeliveryDate && bundle) {
+  //     alert('묶음배송은 정기배송 중인 상품이 있을 경우에만 가능합니다.');
+  //     setBundle(false);
+  //   }
+
+
   useEffect(() => {
-    // !bundle && form.sameUserInfo ? info.phoneNumber : deliveryInfo.phone || ''
-    // // console.log('배송정버 뱐걍 ')
-    // {!bundle && form.sameUserInfo ? info.name : deliveryInfo.name || ''}
-    if (!info.nextSubscribeDeliveryDate && bundle) {
-      alert('묶음배송은 정기배송 중인 상품이 있을 경우에만 가능합니다.');
-      setBundle(false);
+    if (bundle) {
+      // orderStatus(묶음 배송 관련 상태값): UNSUBSCRIBE_ORDER - 구독중 아님(묶음 배송 불가), TODAY_IS_NEXT_DELIVERY - 배송예정일 당일(묶음 배송 불가), SUBSCRIBE_ORDER 묶음 배송 가능
+      if (info.orderStatus === 'UNSUBSCRIBE_ORDER') {
+        alert('묶음배송은 정기 배송중인 상품이 있을 경우에만 가능합니다.');
+        setBundle(false);
+        return; // 이후 처리 중단
+      } else if (info.orderStatus === 'TODAY_IS_NEXT_DELIVERY') {
+        alert('배송예정일 당일에는 묶음배송이 불가능 합니다.');
+        setBundle(false);
+        return;
+      }
     }
+  console.log('묶음 배송 상태 값',info.orderStatus);
 
     setDeliveryInfo((prevState) => ({
       ...prevState,

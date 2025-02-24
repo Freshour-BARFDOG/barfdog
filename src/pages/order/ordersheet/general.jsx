@@ -101,6 +101,7 @@ export default function GeneralOrderSheetPage() {
             detailAddress: info.defaultAddress.detailAddress, // 상세주소
             zipcode: info.defaultAddress.zipcode, // 우편번호
           },
+          orderStatus: info.orderStatus, // 묶음 배송 관련 상태값: UNSUBSCRIBE_ORDER 구독중이 아닌 경우, TODAY_IS_NEXT_DELIVERY 오늘이 배송예정일인 경우, SUBSCRIBE_ORDER 묶음 배송이 가능한 경우
           deliveryId: info.deliveryId || Math.floor(Math.random() * 100), // ! IMPORTANT : 묶음 배송할 정기구독 배송 ID (묶음배송 불가능할 경우 null / 묶음 배송 불가할 경우, 배송정보의 묶음배송 Radio input 비활성화)
           nextSubscribeDeliveryDate: info.nextSubscribeDeliveryDate, // ! IMPORTANT: 묶음배송할 배송 예정일 . 묶음배송 불가능한 경우 null
           coupons:
