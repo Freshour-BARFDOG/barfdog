@@ -84,16 +84,16 @@ export default function ShopPage() {
       newPageNumber: pageData.number + 1,
       newItemList: newItemList || [],
     };
-    return newPageInfo;
   };
 
-  const onChagneItemType = (e) => {
+  const onChangeItemType = (e) => {
     const button = e.currentTarget;
     const itemType = button.dataset.itemType;
     const searchKey = searchQueryType.ITEMTYPE;
     const convertTypeToQuery = itemType; // 객체로 searchValue에 넣는다.
     setSearchValues((prevState) => ({
       ...prevState,
+      page: 1,
       [searchKey]: convertTypeToQuery,
     }));
   };
@@ -102,6 +102,7 @@ export default function ShopPage() {
     const { id, value } = e.currentTarget;
     setSearchValues((prevState) => ({
       ...prevState,
+      page: 1,
       [id]: value,
     }));
   };
@@ -162,7 +163,7 @@ export default function ShopPage() {
                   >
                     <button
                       type={'button'}
-                      onClick={onChagneItemType}
+                      onClick={onChangeItemType}
                       data-item-type={general_itemType.ALL}
                     >
                       {general_itemType.KOR.ALL}
@@ -180,7 +181,7 @@ export default function ShopPage() {
                   >
                     <button
                       type={'button'}
-                      onClick={onChagneItemType}
+                      onClick={onChangeItemType}
                       data-item-type={general_itemType.RAW}
                     >
                       {general_itemType.KOR.RAW}
@@ -198,7 +199,7 @@ export default function ShopPage() {
                   >
                     <button
                       type={'button'}
-                      onClick={onChagneItemType}
+                      onClick={onChangeItemType}
                       data-item-type={general_itemType.TOPPING}
                     >
                       {general_itemType.KOR.TOPPING}
@@ -216,7 +217,7 @@ export default function ShopPage() {
                   >
                     <button
                       type={'button'}
-                      onClick={onChagneItemType}
+                      onClick={onChangeItemType}
                       data-item-type={general_itemType.GOODS}
                     >
                       {general_itemType.KOR.GOODS}

@@ -33,12 +33,33 @@ const Pagination = ({
     option.initialize === true ? 1 : pageFromQuery,
   );
 
+  const [queryObject, setQueryObject] = useState(Object.fromEntries(new URLSearchParams(urlQuery)));
+
+  // Page 1 추가: itemType, sortBy 변경시 queryString 의 page = 1 적용을 위함
+  useEffect(() => {
+    if (urlQuery.includes('page')) {
+      setQueryObject(Object.fromEntries(new URLSearchParams(urlQuery)))
+    }
+  }, [urlQuery])
+
+  // Page 1 적용: 페이지 초기화
+  useEffect(() => {
+    if (queryObject.page === undefined) return;
+    setCurPage(Number(queryObject.page))
+  }, [queryObject.page])
+
+  // Page 1 제거: 페이지 변경시 queryString 의 page 제거
+  const changedQueryParams = () => {
+    const searchParams = new URLSearchParams(urlQuery);
+    searchParams.delete('page');
+    setQueryObject(Object.fromEntries(searchParams.entries()))
+  }
+
   useEffect(() => {
     if (option.initialize === true) {
       setCurPage(1);
     }
   }, [option.initialize]);
-  //
 
   useEffect(() => {
     setCurrentPage && setCurrentPage(curPage);
@@ -54,7 +75,12 @@ const Pagination = ({
       }
       const calcedPageIndex = (curPage - 1).toString();
       const defQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
-      let urlQueries = urlQuery ? `${defQuery}&${urlQuery}` : defQuery;
+
+      // URLQuery 재구성 - page 쿼리 중복 방지를 위함
+      const { page, ...queryWithoutPage } = queryObject;
+      const newUrlQuery = new URLSearchParams(queryWithoutPage).toString();
+
+      let urlQueries = urlQuery ? `${defQuery}&${newUrlQuery}` : defQuery;
       let res;
       if (method === 'GET') {
         //res = await getData(`${url}${urlQueries}`);
@@ -128,6 +154,7 @@ const Pagination = ({
     option.body,
     isSubmitted,
     onSearch,
+    queryObject,
   ]);
 
   const Num = ({ pagenum }) => {
@@ -135,6 +162,7 @@ const Pagination = ({
     const onChangeCurPage = (e) => {
       const targetPage = Number(e.currentTarget.dataset.page);
       setCurPage(targetPage);
+      changedQueryParams();
     };
 
     return (
@@ -222,21 +250,25 @@ const Pagination = ({
   const onPrevPage = () => {
     if (curPage <= 1) return;
     const prevPage = curPage - 1;
+    changedQueryParams();
     setCurPage(prevPage);
   };
   const onNextPage = () => {
     if (curPage >= lastPageNum) return;
     const NextPage = curPage + 1;
+    changedQueryParams();
     setCurPage(NextPage);
   };
 
   const onFirstPage = () => {
     const firstPage = 1;
+    changedQueryParams();
     setCurPage(firstPage);
   };
 
   const onLastPage = () => {
     const lastPage = numberOfPages;
+    changedQueryParams();
     setCurPage(lastPage);
   };
 
