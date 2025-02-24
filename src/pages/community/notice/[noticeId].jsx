@@ -10,6 +10,7 @@ import transformDate from '/util/func/transformDate';
 import {useRouter} from "next/router";
 import 'react-quill/dist/quill.snow.css';
 import {MoveToNextPrevPage} from "/src/components/common/MoveToNextPrevPage";
+import {setCookie} from "/util/func/cookie";
 
 
 export default function NoticePostPage({ noticeId }) {
@@ -17,6 +18,17 @@ export default function NoticePostPage({ noticeId }) {
   const [isLoading, setIsLoading] = useState({});
   const [itemInfo, setItemInfo] = useState({});
   const [pageInfo, setPageInfo] = useState({});
+  const router = useRouter();
+
+  useEffect(() => {
+    const alliance = router.query.alliance;
+    if (alliance) {
+      if (alliance === 'cb') {
+        setCookie('alliance', 'cb', 'hour', 1);
+        router.push(`/community/notice/${noticeId}`);
+      }
+    }
+  }, [])
   
   useEffect(() => {
     const getFormValuesApiUrl = `/api/notices/${curPageId}`;
