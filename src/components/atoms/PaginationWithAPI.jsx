@@ -35,11 +35,9 @@ const Pagination = ({
 
   const [queryObject, setQueryObject] = useState(Object.fromEntries(new URLSearchParams(urlQuery)));
 
-  // Page 1 추가: itemType, sortBy 변경시 queryString 의 page = 1 적용을 위함
+  // itemType, sortBy 변경시 queryString 의 page = 1 추가 적용
   useEffect(() => {
-    if (urlQuery.includes('page')) {
-      setQueryObject(Object.fromEntries(new URLSearchParams(urlQuery)))
-    }
+    setQueryObject(Object.fromEntries(new URLSearchParams(urlQuery)))
   }, [urlQuery])
 
   // Page 1 적용: 페이지 초기화
