@@ -1,7 +1,7 @@
 import ModalWrapper from './ModalWrapper';
 import s from './modal_orderCancelReason.module.scss';
 import CloseButton from '../atoms/CloseButton';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import { getData } from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
@@ -79,12 +79,37 @@ export const Modal_orderConfirm = ({
   // ! 영한씨 > 판매취소 로직 확인 > 이후에 작업 진행
   // ! 한 주문 내에 상품에 대한 각각의 id가 필요할 경우,
 
-  // // console.log(allData);
+  // 전체 선택/해제 기능 추가
+  const allSelectableIds = useMemo(() => {
+    if (orderType === productType.GENERAL) {
+      return allData.flatMap((data) =>
+        data.orderItemInfoList?.map((item) => item.orderItemId) || []
+      );
+    } else if (orderType === productType.SUBSCRIBE) {
+      return allData.map((data) => data.id);
+    }
+    return [];
+  }, [allData, orderType]);
+
+  const isAllSelected = useMemo(() => {
+    return allSelectableIds.length > 0 && allSelectableIds.every((id) => selectedIdList.includes(id));
+  }, [allSelectableIds, selectedIdList]);
+
+  const toggleSelectAll = (id, checked) => {
+    setSelectedIdList(checked ? [] : allSelectableIds);
+  };
   return (
     <ModalWrapper id={s['modal-cancle']} background positionCenter>
       <CloseButton onClick={onHideModal} className={s['close-button']} />
-      <section className={s['title-section']}>
+      <section className={`${s['title-section']} ${s.orderConfirmTitle}`}>
         <h4 className={s.title}>주문확인</h4>
+        <PureCheckbox
+          id='selectAll'
+          onClick={toggleSelectAll}
+          value={isAllSelected}
+        >
+          <p>{isAllSelected ? '전체 해제' : '전체 선택'}</p>
+        </PureCheckbox>
       </section>
       {isLoading.fetching ? (
         <AmdinErrorMessage>
@@ -105,6 +130,7 @@ export const Modal_orderConfirm = ({
                             <PureCheckbox
                               id={`orderItemId-${orderIteminfo.orderItemId}`}
                               onClick={onClickCheckbox}
+                              value={selectedIdList.includes(orderIteminfo.orderItemId)}
                             >
                               (상품번호: {orderIteminfo.orderItemId}) 상품명:{' '}
                               {orderIteminfo.itemName}
@@ -115,7 +141,11 @@ export const Modal_orderConfirm = ({
                   </>
                 )}
                 {orderType === productType.SUBSCRIBE && (
-                  <PureCheckbox id={`orderId-${data.id}`} onClick={onClickCheckbox}>
+                  <PureCheckbox
+                    id={`orderId-${data.id}`}
+                    onClick={onClickCheckbox}
+                    value={selectedIdList.includes(data?.id)}
+                  >
                     <p>주문ID: {data.merchantUid}</p>
                   </PureCheckbox>
                 )}
