@@ -13,7 +13,7 @@ import Tooltip from '/src/components/atoms/Tooltip';
 import popupWindow from '/util/func/popupWindow';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import FileInput from '/src/components/admin/form/FileInput';
-import s from '/src/pages/mypage/inquiry/createInquiry.module.scss';
+import s from '/styles/legacy/createInquiry.module.scss';
 import { getDtataSSR_inquiryAuthorType } from '/util/func/getDtataSSR_inquiryAuthorType';
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 
