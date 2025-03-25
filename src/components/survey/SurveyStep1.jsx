@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import s from '/src/pages/survey/survey.module.scss';
+import s from '/styles/legacy/survey.module.scss';
 import SurveyInputRadio from '/src/components/survey/SurveyInputRadio';
 import { CustomSelectWithCustomOptions } from './CustomSelectWithCustomOptions';
 import { DogTypeCustomSelectWithCustomOptions } from './DogTypeCustomSelectWithCustomOptions';

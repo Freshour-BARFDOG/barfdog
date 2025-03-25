@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import s from '/src/pages/account/signup/signup.module.scss';
+import s from '/styles/legacy/signup.module.scss';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_date from "/util/func/filter_date";

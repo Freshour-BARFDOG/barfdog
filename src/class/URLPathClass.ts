@@ -143,7 +143,7 @@ export class URLPathClass {
     } else if (this.VALIDATION.ADMIN_PATH && !this.VALIDATION.ADMIN_PUBLIC_PATH && usertype !== USERTYPE.ADMIN) {
       document.documentElement.remove();
       alert('일반 사용자에게 접근 권한이 없는 페이지입니다.');
-      window.location.href = '/bf-admin/login';
+      window.location.href = '/login';
     }
   }
 }

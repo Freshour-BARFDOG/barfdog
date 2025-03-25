@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Checkbox from '/src/components/atoms/Checkbox';
-import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import AdminErrorMessage from '/src/components/atoms/AdminErrorMessage';
 import dynamic from 'next/dynamic';
-import UserList from '/src/pages/bf-admin/popup/searchUser/UserList';
-import s from '/src/pages/bf-admin/popup/searchUser/searchUser.module.scss';
+import UserList from '/src/pages/popup/searchUser/UserList';
+import s from '/src/pages/popup/searchUser/searchUser.module.scss';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import Spinner from '/src/components/atoms/Spinner';
@@ -132,7 +132,7 @@ export default function SearchPersonalForm({ id, setFormValues, formErrors }) {
         <div className="search-box">
           <div className="controls">
             <WindowOpener
-              url={'/bf-admin/popup/searchUser'}
+              url={'/popup/searchUser'}
               bridge={onReceivePopupData}
               options={{ width: 825, height: 642 }}
             >
@@ -197,9 +197,9 @@ export default function SearchPersonalForm({ id, setFormValues, formErrors }) {
                   selectedItems={selectedItemList}
                 />
               ) : isLoading ? (
-                <AmdinErrorMessage loading={<Spinner />} />
+                <AdminErrorMessage loading={<Spinner />} />
               ) : (
-                <AmdinErrorMessage text={'발급대상인 회원이 없습니다.'} />
+                <AdminErrorMessage text={'발급대상인 회원이 없습니다.'} />
               )}
             </div>
           </div>

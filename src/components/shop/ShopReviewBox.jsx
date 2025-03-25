@@ -62,7 +62,7 @@ export const ShopReviewBox = ({ data }) => {
         <div className={s.button_box}>
           <a
             className={s.write_button}
-            href={`/bf-admin/review/create?itemId=${data?.itemId}`}
+            href={`/review/create?itemId=${data?.itemId}`}
             target={'_blank'}
             rel={'noreferrer'}
           >

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import Spinner from '/src/components/atoms/Spinner';
-import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import AdminErrorMessage from '/src/components/atoms/AdminErrorMessage';
 import useDeviceState from '/util/hook/useDeviceState';
 
 import dynamic from 'next/dynamic';
@@ -36,7 +36,7 @@ export default function SubscriberByRecipePieChart({ chartData }) {
     <>
       <div data-title={'chart-container'}>
         {isLoading ? (
-          <AmdinErrorMessage loading={<Spinner />} />
+          <AdminErrorMessage loading={<Spinner />} />
         ) : (
           <div style={{ height: '28rem' }}>
             <ResponsivePie

@@ -68,8 +68,8 @@ export default function PromotionCouponList({
         y: elem.y,
       },
       url: {
-        edit: `/bf-admin/promotion/${id}/update`, // Client PATH
-        detail: `/bf-admin/popup/promotion/${id}`, // Client PATH
+        edit: `/promotion/${id}/update`, // Client PATH
+        detail: `/popup/promotion/${id}`, // Client PATH
         delete: `/api/admin/promotions/${id}/delete`, // SERVER API
       },
     }));

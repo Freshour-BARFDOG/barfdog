@@ -1,4 +1,4 @@
-import s from 'src/pages/bf-admin/community/inquiry/[id]/adminInquiry[id].module.scss';
+import s from 'src/pages/community/inquiry/[id]/adminInquiry[id].module.scss';
 import { FiPaperclip } from 'react-icons/fi';
 import React from 'react';
 import { getData } from '/src/pages/api/reqData';

@@ -1,5 +1,5 @@
 import transformDate from "../../../../util/func/transformDate";
-import s from "../../../pages/bf-admin/community/inquiry/adminInquiryItems.module.scss";
+import s from "../../../pages/community/inquiry/adminInquiryItems.module.scss";
 import PureCheckbox from "../../atoms/PureCheckbox";
 import {inquiryStatusIcon} from "../../../../store/TYPE/inquiry/InquiryStatusIcon";
 import {InquiryAnswerItem} from "./InquiryAnswerItem";
@@ -36,7 +36,7 @@ export const InquiryItem = ({item, onSelectedItem, selectedIdList}) => {
         </span>
         <span className={`${s.title}`}>
           <a
-            href={`/bf-admin/community/inquiry/${DATA.id}/question`}
+            href={`/community/inquiry/${DATA.id}/question`}
             className={'overflow-x-scroll'}
           >
             <em className={`overflow-x-scroll`}>{DATA.title}</em>

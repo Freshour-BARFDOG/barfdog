@@ -1,0 +1,72 @@
+@import '../../../../styles/global/rem';
+
+
+.cont.hasColorPicker{
+  overflow: initial !important;
+}
+
+
+.miniEditor-container{
+  display: flex;align-items: center;
+  form{
+    display: flex; align-items: center;gap: rem(6);
+  }
+  button{
+    padding: rem(14) rem(10) !important;
+    font-weight: 700;
+    aspect-ratio: 1;
+    font-size: rem(16);
+    &[data-cmd='italic']{
+    font-size: rem(17);
+      font-style: italic;
+      padding-right:rem(12) !important;
+    }
+  }
+}
+
+
+.miniEditor{
+  height: rem(38);
+  border: rem(1) solid #ddd;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  &:focus{
+    border-color:var(--color-main);
+  }
+  * {color:inherit !important;}
+}
+
+
+.miniEditor-buttons{
+  button{min-width: rem(20); height: rem(20);
+  }
+}
+
+.preview-color{
+  position:absolute;
+  right:rem(-6);
+  top: calc(50% - #{rem(1)});
+  transform:translate(100%, -50%);
+  border-radius:50%;
+  width:rem(10);
+  height: rem(10);
+  border: rem(1) solid var(--color-line-02);
+  box-sizing: border-box;
+  aspect-ratio: 1;
+}
+
+
+.colorPicker-container {
+  position: relative;
+  .colorPicker {
+    z-index: 1;
+    position: absolute;
+    min-width: rem(200);
+    width: 100% !important;
+    top:0;
+    right: rem(-10);
+    transform: translate(100%, 0%);
+    input{min-width: initial !important;}
+    }
+}
+

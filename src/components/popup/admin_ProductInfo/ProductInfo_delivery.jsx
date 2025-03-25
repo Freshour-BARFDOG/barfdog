@@ -1,5 +1,5 @@
 import s from './popup_sell.module.scss';
-import m from '/src/pages/account/signup/signup.module.scss';
+import m from '/styles/legacy/signup.module.scss';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import transformDate from '/util/func/transformDate';
 import React, { useEffect, useState } from 'react';

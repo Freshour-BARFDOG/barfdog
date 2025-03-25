@@ -1,0 +1,22 @@
+@import '/styles/global/rem';
+.icon {
+  border: rem(1) solid var(--color-main);
+  border-radius: rem(20);
+  padding: rem(1) rem(10) rem(0);
+  font-size: rem(12);
+  font-weight: 500;
+
+  &.UNANSWERED {
+    color: var(--color-main);
+    background-color: #fff;
+  }
+  &.ANSWERED {
+    color: #fff;
+    background-color: var(--color-main);
+  }
+
+  &.MULTIPLE_ANSWERED {
+    color: var(--color-main);
+    background-color: #fff;
+  }
+}

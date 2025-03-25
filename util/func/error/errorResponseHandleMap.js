@@ -10,9 +10,9 @@ export const errorResponseHandleMap = (pureErrorMap) => {
 
 
 const errorHandleMap = {
-  UNAUTHORIZED: ()=> window.location.href = "/account/login",
-  EXPIRED_TOKEN: ()=> window.location.href = "/account/login",
-  FORBIDDEN: ()=> window.location.href = "/account/login"
+  UNAUTHORIZED: ()=> window.location.href = "/login",
+  EXPIRED_TOKEN: ()=> window.location.href = "/login",
+  FORBIDDEN: ()=> window.location.href = "/login"
 }
 
 

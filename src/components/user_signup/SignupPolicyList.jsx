@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import s from '/src/pages/account/signup/signup.module.scss';
+import s from '/styles/legacy/signup.module.scss';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import { IoChevronForwardOutline } from 'react-icons/io5';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';

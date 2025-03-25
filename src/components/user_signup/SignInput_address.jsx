@@ -1,5 +1,5 @@
 import React from 'react';
-import s from '/src/pages/account/signup/signup.module.scss';
+import s from '/styles/legacy/signup.module.scss';
 import SignupInput from './SignupInput';
 import Tooltip from '/src/components/atoms/Tooltip';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';

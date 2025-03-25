@@ -4,7 +4,7 @@ import ModalWrapper from './ModalWrapper';
 import transformDate from '/util/func/transformDate';
 import {discountUnitType} from '/store/TYPE/discountUnitType';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import EmptyMessage from '/src/components/atoms/AmdinErrorMessage';
+import EmptyMessage from '/src/components/atoms/AdminErrorMessage';
 import Spinner from '/src/components/atoms/Spinner';
 import calculateSalePrice, {calculateAndConvertToMinimumSalePrice} from '/util/func/calculateSalePrice';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';

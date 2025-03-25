@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 
 import Spinner from '/src/components/atoms/Spinner';
-import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import AdminErrorMessage from '/src/components/atoms/AdminErrorMessage';
 import useDeviceState from '/util/hook/useDeviceState';
 import { PieChart, Pie, Sector, ResponsiveContainer } from 'recharts';
 // import {
@@ -128,7 +128,7 @@ export default function SelectPieChart(props) {
     <>
       {/* <div data-title={'chart-container'}> */}
       {isLoading ? (
-        <AmdinErrorMessage loading={<Spinner />} />
+        <AdminErrorMessage loading={<Spinner />} />
       ) : (
         <ResponsiveContainer width="100%" height={400}>
           <PieChart width={400} height={400}>

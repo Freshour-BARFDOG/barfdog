@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import s from '/src/pages/bf-admin/banner/mypage-banner/mypageBanner.module.scss'
+import s from '/src/pages/banner/mypage-banner/mypageBanner.module.scss'
 import React, { useEffect, useState } from 'react';
 import { getData } from '/src/pages/api/reqData';
 import Spinner from './Spinner';

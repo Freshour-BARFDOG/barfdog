@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import Spinner from '/src/components/atoms/Spinner';
-import AdminErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import AdminErrorMessage from '/src/components/atoms/AdminErrorMessage';
 import useDeviceState from '/util/hook/useDeviceState';
 
 import {

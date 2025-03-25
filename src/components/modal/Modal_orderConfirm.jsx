@@ -5,7 +5,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import { getData } from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
-import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import AdminErrorMessage from '/src/components/atoms/AdminErrorMessage';
 import { productType } from '/store/TYPE/itemType';
 
 export const Modal_orderConfirm = ({
@@ -112,9 +112,9 @@ export const Modal_orderConfirm = ({
         </PureCheckbox>
       </section>
       {isLoading.fetching ? (
-        <AmdinErrorMessage>
+        <AdminErrorMessage>
           <Spinner />
-        </AmdinErrorMessage>
+        </AdminErrorMessage>
       ) : (
         <section className={s['body-section']}>
           <ul className={s['item-wrap']}>

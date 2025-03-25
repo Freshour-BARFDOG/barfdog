@@ -1,98 +1,16 @@
-@import '/styles/global/guide';
-
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
-
-.notice-wrap{
-  padding: 0 0 rem(146);
-}
-
-section.title{padding : rem(40) 0 rem(30);}
-section.notice_board_box {padding : 0 0 rem(40);}
-section.page_no {padding: 0 0 rem(128)}
-
-.title {
-  .text {
-    @include char(t24);
-    display: flex; align-items: center;
-    gap: rem(10);
-  }
-}
-
-.notice_board_box {
-  text-align: center;
-  align-items: center;
+@import '/styles/module/itemList.module';
 
 
-  .grid_box {
-    display: grid;
-    grid-template-columns: rem(160) 1fr rem(160); 
-    border-bottom: rem(1) solid var(--color-line-01);
-    > * {
-      @include char(l18);
-      padding : rem(18) 0 rem(18);
-    }
-    >p {
-      // padding-left: rem(20);
-      text-align: start;
+.cont_viewer {
+  .table {
+    .table_header, .item {
+      grid-template-columns:
+        rem(80)
+        minmax(rem(300), rem(1200))
+        rem(120)
+        rem(120)
+        rem(70)
+        rem(70);
     }
   }
-
-  .content_box {
-    display: grid;
-    grid-template-columns: rem(160) 1fr rem(160); 
-    border-bottom: rem(1) solid var(--color-line-03);
-    align-items: center;
-    > * {
-      @include char(l15);
-      padding : rem(18) 0 rem(18);
-      color: var(--color-font-medium);
-    }
-    >p {
-      // padding-left: rem(20);
-      text-align: start;
-      color: var(--color-font-strong);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
-}
-
-.pagination_box {
-  display: flex;
-  justify-content: center;
-  .content {
-    width: 23%;
-    display: flex;
-    justify-content: space-between;
-    @include char(l16);
-    color: var(--color-font-sub);
-  }
-}
-
-@media (max-width: rem(600)) {
-
-  section.title{padding : rem(70) 0 rem(20);}
-
-  .notice_board_box {
-    .grid_box {
-      display: none;
-    }
-
-    .content_box {
-      grid-template-columns: 1fr rem(90); 
-      .counter_num{
-        display: none;
-      }
-      
-      >p {
-        // padding-left: rem(5);
-        padding-right: rem(5);
-      }
-    }
-  }
-
 }

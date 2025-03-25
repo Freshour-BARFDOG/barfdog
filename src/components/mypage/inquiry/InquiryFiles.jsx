@@ -1,6 +1,6 @@
 import React, {useRef, useState} from "react";
 import slideToggle from "/util/func/slideToggle";
-import s from "/src/pages/bf-admin/community/inquiry/[id]/adminInquiry[id].module.scss";
+import s from "/src/pages/community/inquiry/[id]/adminInquiry[id].module.scss";
 import {TiArrowSortedDown} from "react-icons/ti";
 import {InquiryFile} from "./InquiryFile";
 

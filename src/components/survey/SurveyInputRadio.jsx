@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import s from '/src/pages/survey/survey.module.scss';
+import s from '/styles/legacy/survey.module.scss';
 import {dogInedibleFoodType} from "../../../store/TYPE/dogInedibleFoodType";
 import {dogCautionType} from "../../../store/TYPE/dogCautionType";
 

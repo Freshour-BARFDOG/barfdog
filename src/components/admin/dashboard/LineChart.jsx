@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Line } from '@nivo/line';
 
 import Spinner from '/src/components/atoms/Spinner';
-import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import AdminErrorMessage from '/src/components/atoms/AdminErrorMessage';
 import useDeviceState from '/util/hook/useDeviceState';
 
 // make sure parent container have a define height when using
@@ -58,7 +58,7 @@ export default function LineChart({ chartData }) {
     <>
       <div data-title={'chart-container'}>
         {isLoading ? (
-          <AmdinErrorMessage loading={<Spinner />} />
+          <AdminErrorMessage loading={<Spinner />} />
         ) : (
           <Line
             data={data}

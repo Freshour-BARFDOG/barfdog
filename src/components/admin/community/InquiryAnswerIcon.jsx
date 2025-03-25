@@ -1,4 +1,4 @@
-import s from "../../../pages/bf-admin/community/inquiry/adminInquiryItems.module.scss";
+import s from "../../../pages/community/inquiry/adminInquiryItems.module.scss";
 import React from "react";
 
 export const InquiryAnswerIcon = () => {

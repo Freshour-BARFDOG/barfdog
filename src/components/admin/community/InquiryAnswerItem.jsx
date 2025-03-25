@@ -1,4 +1,4 @@
-import s from "../../../pages/bf-admin/community/inquiry/adminInquiryItems.module.scss";
+import s from "../../../pages/community/inquiry/adminInquiryItems.module.scss";
 import React from "react";
 import PureCheckbox from "../../atoms/PureCheckbox";
 import {InquiryAnswerIcon} from "./InquiryAnswerIcon";
@@ -16,7 +16,7 @@ export const InquiryAnswerItem = ({data, onSelectedItem, selectedIdList}) => {
       </span>
       <span className={`${s.title}`}>
         <a
-          href={`/bf-admin/community/inquiry/${id}/answer`}
+          href={`/community/inquiry/${id}/answer`}
           className={'overflow-x-scroll'}
         >
           <InquiryAnswerIcon/>

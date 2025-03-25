@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import Layout from '/src/components/common/Layout';
-import Wrapper from '/src/components/common/Wrapper';
-import MetaTitle from '@src/components/atoms/MetaTitle';
 import s from './loading.module.scss';
 import IconLeft from '/public/img/survey/survey_loading_left.svg';
 import IconRight from '/public/img/survey/survey_loading_right.svg';
-import { useRouter } from 'next/router';
 
 export default function Loading() {
   // - 강아지 등록 후에, 설문조사 ID (강아지 ID값을 받아야함)

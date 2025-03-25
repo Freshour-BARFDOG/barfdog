@@ -1,4 +1,4 @@
-import s from "@src/pages/bf-admin/dashboard/dashboard.module.scss";
+import s from "@src/pages/dashboard/dashboard.module.scss";
 import React from "react";
 import Styled from "styled-components";
 import rem from "@util/func/rem";

@@ -5,7 +5,7 @@ import transformDate from '/util/func/transformDate';
 import { discountUnitType } from '/store/TYPE/discountUnitType';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { calcOrderSheetPrices } from '../order/calcOrderSheetPrices';
-import EmptyMessage from '../atoms/AmdinErrorMessage';
+import EmptyMessage from '../atoms/AdminErrorMessage';
 import { useMediaQuery } from 'react-responsive';
 
 export const Modal_coupon = ({

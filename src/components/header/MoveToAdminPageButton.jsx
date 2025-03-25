@@ -8,7 +8,7 @@ export const MoveToAdminPageButton = () => {
   // const [adminPath2, setAdminPath2] = useState( "" );
 
   // useEffect( () => {
-  //   const ADMIN_INDEX_PATH = "/bf-admin/dashboard";
+  //   const ADMIN_INDEX_PATH = "/dashboard";
   //   const p = new URLPathClass();
   //   const path = p.lastVisitedAdminPath || ADMIN_INDEX_PATH;
   //   setAdminPath( path );
@@ -21,7 +21,7 @@ export const MoveToAdminPageButton = () => {
   
   return (
     <>
-      <li><Link href="/bf-admin/dashboard">관리자 페이지</Link></li>
+      <li><Link href="/dashboard">관리자 페이지</Link></li>
       {/*<li> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; </li>*/}
       {/*<li><Link href="/bf-admin2">관리자 페이지2</Link></li>*/}
     </>

@@ -1,9 +1,11 @@
 import {inquiryStatusType} from "./inquiryStatusType";
-import s from "../../../src/pages/mypage/inquiry/inquiry.module.scss";
+import * as s from './InquiryStatusIcon.module.scss';
 import React from "react";
+
 
 export const inquiryStatusIcon = {
   [inquiryStatusType.UNANSWERED]: (
+
     <i className={`${s.icon} ${s.UNANSWERED}`}>{inquiryStatusType.KOR.UNANSWERED}</i>
   ),
   [inquiryStatusType.ANSWERED]: (

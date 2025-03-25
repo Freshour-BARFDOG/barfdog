@@ -220,10 +220,10 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
                   {info?._percentDATA?.ageAnalysis.length &&
                     info?._percentDATA?.ageAnalysis.map((data, index) => (
                       <span
-                        key={`ageAnanysis-${index}`}
-                        className={`${data.inGroup ? s.stick_red : s.stick}`}
-                        style={{ height: data.degree }}
-                      ></span>
+  key={`ageAnanysis-${index}`}
+  className={`${data.inGroup ? s.stick_red : s.stick}`}
+  style={{height: data.degree}}
+  />
                     ))}
                 </div>
 
@@ -251,10 +251,10 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
                   {info?._percentDATA?.weightAnalysis.length &&
                     info?._percentDATA?.weightAnalysis.map((data, index) => (
                       <span
-                        key={`ageAnanysis-${index}`}
-                        className={`${data.inGroup ? s.stick_red : s.stick}`}
-                        style={{ height: data.degree }}
-                      ></span>
+  key={`ageAnanysis-${index}`}
+  className={`${data.inGroup ? s.stick_red : s.stick}`}
+  style={{height: data.degree}}
+  />
                     ))}
                 </div>
 
@@ -278,10 +278,10 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
                   {info?._percentDATA?.activityAnalysis.length &&
                     info?._percentDATA?.activityAnalysis.map((data, index) => (
                       <span
-                        key={`ageAnanysis-${index}`}
-                        className={`${data.inGroup ? s.stick_red : s.stick}`}
-                        style={{ height: data.degree }}
-                      ></span>
+  key={`ageAnanysis-${index}`}
+  className={`${data.inGroup ? s.stick_red : s.stick}`}
+  style={{height: data.degree}}
+  />
                     ))}
                 </div>
 
@@ -358,17 +358,17 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
               <div className={s.content_box}>
                 <div className={s.left_stick_box}>
                   <span
-                    className={s.stick}
-                    style={{
-                      height: `${info?._percentDATA?.walkingAnalysis.inCity}`,
-                    }}
-                  ></span>
+  className={s.stick}
+  style={{
+    height: `${info?._percentDATA?.walkingAnalysis.inCity}`,
+  }}
+  />
                   <span
-                    className={s.stick_red}
-                    style={{
-                      height: `${info?._percentDATA?.walkingAnalysis.myDog}`,
-                    }}
-                  ></span>
+  className={s.stick_red}
+  style={{
+    height: `${info?._percentDATA?.walkingAnalysis.myDog}`,
+  }}
+  />
                 </div>
                 우리지역에서
               </div>
@@ -376,17 +376,17 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
               <div className={s.content_box}>
                 <div className={s.left_stick_box}>
                   <span
-                    className={s.stick}
-                    style={{
-                      height: `${info?._percentDATA?.walkingAnalysis.inAge}`,
-                    }}
-                  ></span>
+  className={s.stick}
+  style={{
+    height: `${info?._percentDATA?.walkingAnalysis.inAge}`,
+  }}
+  />
                   <span
-                    className={s.stick_red}
-                    style={{
-                      height: `${info?._percentDATA?.walkingAnalysis.myDog}`,
-                    }}
-                  ></span>
+  className={s.stick_red}
+  style={{
+    height: `${info?._percentDATA?.walkingAnalysis.myDog}`,
+  }}
+  />
                 </div>
                 또래 중에서
               </div>
@@ -394,17 +394,17 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
               <div className={s.content_box}>
                 <div className={s.left_stick_box}>
                   <span
-                    className={s.stick}
-                    style={{
-                      height: `${info?._percentDATA?.walkingAnalysis.inDogSize}`,
-                    }}
-                  ></span>
+  className={s.stick}
+  style={{
+    height: `${info?._percentDATA?.walkingAnalysis.inDogSize}`,
+  }}
+  />
                   <span
-                    className={s.stick_red}
-                    style={{
-                      height: `${info?._percentDATA?.walkingAnalysis.myDog}`,
-                    }}
-                  ></span>
+  className={s.stick_red}
+  style={{
+    height: `${info?._percentDATA?.walkingAnalysis.myDog}`,
+  }}
+  />
                 </div>
                 {info.dogSize} 중에서
               </div>
@@ -417,32 +417,32 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
             <div className={s.t_right_grid_box}>
               <div>대형견</div>
               <span
-                className={s.horizon_stick}
-                style={{
-                  width: `${info?._percentDATA?.snackAnalysis.avgSnackCountInLargeDog}`,
-                }}
-              ></span>
+  className={s.horizon_stick}
+  style={{
+    width: `${info?._percentDATA?.snackAnalysis.avgSnackCountInLargeDog}`,
+  }}
+  />
               <div>중형견</div>
               <span
-                className={s.horizon_stick}
-                style={{
-                  width: `${info?._percentDATA?.snackAnalysis.avgSnackCountInMiddleDog}`,
-                }}
-              ></span>
+  className={s.horizon_stick}
+  style={{
+    width: `${info?._percentDATA?.snackAnalysis.avgSnackCountInMiddleDog}`,
+  }}
+  />
               <div>소형견</div>
               <span
-                className={s.horizon_stick}
-                style={{
-                  width: `${info?._percentDATA?.snackAnalysis.avgSnackCountInSmallDog}`,
-                }}
-              ></span>
+  className={s.horizon_stick}
+  style={{
+    width: `${info?._percentDATA?.snackAnalysis.avgSnackCountInSmallDog}`,
+  }}
+  />
               <div className={s.hero_name}>{info.myDogName}</div>
               <span
-                className={s.horizon_stick_red}
-                style={{
-                  width: `${info?._percentDATA?.snackAnalysis.mySnackCount}`,
-                }}
-              ></span>
+  className={s.horizon_stick_red}
+  style={{
+    width: `${info?._percentDATA?.snackAnalysis.mySnackCount}`,
+  }}
+  />
             </div>
           </section>
 

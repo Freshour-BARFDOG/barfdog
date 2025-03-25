@@ -1,4 +1,4 @@
-import s from '/src/pages/survey/survey.module.scss';
+import s from '/styles/legacy/survey.module.scss';
 import SurveyInputRadio from './SurveyInputRadio';
 import React from 'react';
 import {dogActivityLevelType} from "/store/TYPE/dogActivityLevelType";

@@ -27,11 +27,11 @@ export default async function getGoogleOauthToken(req, res) {
       // console.log('googleResonse: ', googleResonse);
       const token = googleResonse.data.access_token;
       const expires_in = googleResonse.data.expires_in;
-      res.redirect(`/bf-admin/dashboard?token=${token}&expires_in=${expires_in}`);
+      res.redirect(`/dashboard?token=${token}&expires_in=${expires_in}`);
     }).catch(err => {
       // console.log(err);
       if(err.status === 400){
-        res.redirect(`/bf-admin/dashboard`);
+        res.redirect(`/dashboard`);
       }
     });
     
@@ -43,14 +43,14 @@ export default async function getGoogleOauthToken(req, res) {
     errMessage = {
       error: 'access_denied'
     }
-    res.writeHead(403, { Location: '/bf-admin/login' });
+    res.writeHead(403, { Location: '/login' });
     res.status(403).end(JSON.stringify(errMessage));
   } else {
     // 구글 응답 > auth 코드가 없을 경우
     errMessage = {
       error: 'there is no auth code'
     }
-    res.writeHead(500, { Location: '/bf-admin/login' });
+    res.writeHead(500, { Location: '/login' });
     res.status(500).end(JSON.stringify(errMessage));
   }
 }

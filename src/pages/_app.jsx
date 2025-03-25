@@ -10,7 +10,6 @@ import { getDataSSR, getTokenFromServerSide } from '/src/pages/api/reqData';
 import { userType } from '/store/TYPE/userAuthType';
 import React, { useEffect } from 'react';
 import { AlertLayer } from '@src/layers/AlertLayer';
-import SiteMaintenance from '/src/pages/siteMaintenance';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import useNaverAnalytics from "@util/hook/useNaverAnalytics";

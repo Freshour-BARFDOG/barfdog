@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import s from "/src/pages/account/signup/signup.module.scss";
+import s from "/styles/legacy/signup.module.scss";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import Spinner from "/src/components/atoms/Spinner";
 import SignupInput from "./SignupInput";

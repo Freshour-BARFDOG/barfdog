@@ -1,282 +1,141 @@
-import React, { useEffect, useState } from 'react';
-import Wrapper from '/src/components/common/Wrapper';
-import Layout from '/src/components/common/Layout';
+import React, {useEffect, useState} from 'react';
 import s from './blog.module.scss';
-import Image from 'next/image';
-import Link from 'next/link';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import Spinner from '/src/components/atoms/Spinner';
+import AdminLayout from '/src/components/admin/AdminLayout';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import BlogList from './BlogList';
+import AdminErrorMessage from '/src/components/atoms/AdminErrorMessage';
+import AdminBtn_moveToPage from '/src/components/atoms/AdminBtn_moveToPage';
+import Modal_AdminRecommendArticle from '/src/components/modal/Modal_AdminRecommendArticle';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
-import transformDate from '/util/func/transformDate';
-import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
-import { blogCategoryType } from '/store/TYPE/blogCategoryType';
-import { filter_HTMLStrings } from '/util/func/filter_HTMLStrings';
-import { useRouter } from 'next/router';
-import { getData } from '/src/pages/api/reqData';
+import Spinner from '/src/components/atoms/Spinner';
+import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
+import {useModalContext} from "/store/modal-context";
+import Modal_global_alert from "../../../components/modal/Modal_global_alert";
+import {deleteData} from "../../api/reqData";
 
-export default function BlogIndexPage() {
-  const router = useRouter();
-  const searchPageSize = 10;
-  const getListApiUrl = '/api/blogs';
-  const apiDataQueryString = 'queryBlogsDtoList';
-
+function BlogIndexPage() {
+  
+  const pageSize = 10;
+  const getListApiUrl = '/api/admin/blogs';
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
+  const [itemList, setItemList] = useState([]);
   const [isLoading, setIsLoading] = useState({});
-  const [blogList, setBlogList] = useState([]);
-  const [searchApiUrl, setSearchApiUrl] = useState(getListApiUrl);
-  const [selectedCategory, setSelectedCategory] = useState('ALL');
-  const [articles, setArticles] = useState([]);
+  const [activeModal, setActiveModal] = useState(false);
+  
+  useEffect( () => {
+    MirrorTextOnHoverEvent(window);
+  }, [itemList] );
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setIsLoading((prevState) => ({
-          ...prevState,
-          fetching: true,
-        }));
-        const getArticleListApiUrl = `/api/blogs/articles`;
-        const res = await getData(getArticleListApiUrl);
-        // // console.log(res);
-        let DATAList;
-        if (res.data._embedded) {
-          const dataQuery = 'articlesDtoList';
-          const tempDataList = res.data._embedded[dataQuery];
-          DATAList = tempDataList.map((data) => ({
-            id: data.id,
-            number: data.number,
-            url: data.url,
-            category: data.category,
-            title: data.title,
-            createdDate: transformDate(data.createdDate),
-          }));
-        }
-        setArticles(DATAList);
-      } catch (err) {
-        console.error(err);
-        alert('데이터를 가져올 수 없습니다.');
-      }
-      setIsLoading((prevState) => ({
+  const onShowRecommendArticleModal = async (returnVal) => {
+    setActiveModal(returnVal);
+  };
+  
+  const onDeleteItem = async (apiUrl, targetId) => {
+    // console.log(apiUrl, targetId);
+    try {
+      setIsLoading(prevState => ({
         ...prevState,
-        fetching: false,
+        delete:{
+          [targetId]: true
+        }
       }));
-    })();
-  }, []);
-
-  useEffect(() => {
-    changeQuery(selectedCategory);
-  }, [blogList]);
-
-  const changeQuery = (category) => {
-    const query = router.query;
-    const allQuery = { ...query, category: category };
-    let newQuery = [];
-    for (const key in allQuery) {
-      const val = allQuery[key];
-      const tempObj = `${key}=${val}`;
-      newQuery.push(tempObj);
+      const res = await deleteData(apiUrl);
+      // console.log(res);
+      if(res.isDone){
+        mct.alertShow( "게시글을 삭제하였습니다.", onSuccessCallback );
+      } else {
+        const serverErrorMessage =res.error;
+        mct.alertShow(serverErrorMessage || '삭제에 실패하였습니다.');
+      }
+    } catch (err) {
+      mct.alertShow('삭제 요청 중 에러가 발생하였습니다.');
+      console.error(err);
+    } finally {
+      setIsLoading(prevState => ({
+        ...prevState,
+        delete:{
+          [targetId]: false
+        }
+      }));
     }
-    window.history.replaceState(
-      window.history.state,
-      '',
-      `${window.location.pathname}?${newQuery.join('&')}`,
-    );
+  };
+  const onSuccessCallback = () => {
+    window.location.reload();
   };
 
-  const pageInterCeptor = async (res) => {
-    // // console.log(res);
-    let newPageInfo = {
-      totalPages: 0,
-      size: 0,
-      totalItems: 0,
-      currentPageIndex: null,
-      newPageNumber: null,
-      newItemList: [],
-    };
-    if (res?.data?._embedded) {
-      const pageData = res.data.page;
-      const newItemList = res.data._embedded[apiDataQueryString];
-      newPageInfo = {
-        totalPages: pageData.totalPages,
-        size: pageData.size,
-        totalItems: pageData.totalElements,
-        currentPageIndex: pageData.number,
-        newPageNumber: pageData.number + 1,
-        newItemList: newItemList || [],
-      };
-    }
-    return newPageInfo;
-  };
-
-  const onFilteringItemList = (e) => {
-    const button = e.currentTarget;
-    const selected = button.dataset.filterCategory;
-    const endPoint = selected.toLowerCase();
-    const url = selected === blogCategoryType.ALL ? `${getListApiUrl}` :`${getListApiUrl}/category/${endPoint}`;
-    setSearchApiUrl(url); // api 요청
-    setSelectedCategory(selected); // for url update
+  const onClickModalButton = () => {
+    mct.alertHide();
   };
 
   return (
     <>
-      <MetaTitle title="블로그" />
-      <Layout>
-        <Wrapper>
-          <section className={s.title}>
-            <div className={s.text1}>
+      <MetaTitle title="블로그" admin={true} />
+      <AdminLayout>
+        <AdminContentWrapper>
+          <div className="title_main">
+            <h1>
               블로그
-              {isLoading.fetching && <Spinner />}
-            </div>
-            <div className={s.text2}>
-              바프독과 반려견의 모든 정보를 <br />
-              이곳에서 확인하세요
-            </div>
-          </section>
-        </Wrapper>
-
-        <section className={s.article_box}>
-          <Wrapper className={'animation-show-all-child'}>
-            <div className={s.article}>
-              <p>추천 아티클</p>
-              <ul className={s.flex_box}>
-                {articles?.length > 0 ? (
-                  articles.map((atc) => (
-                    <li key={`article-${atc.id}`} className={s.box}>
-                      <Link href={`/community/blog/${atc.id}?category=${atc.category}`} passHref>
-                        <a>
-                          <div className={`${s.image} img-wrap`}>
-                            <Image
-                              priority
-                              src={atc.url}
-                              objectFit="cover"
-                              layout="fill"
-                              alt="카드 이미지"
-                            />
-                          </div>
-                          <div className={s.subject}>
-                            <p>{atc.category}</p>
-                            <div className={s.article_title}>{atc.title}</div>
-                            <div className={s.day}>{atc.createdDate}</div>
-                          </div>
-                        </a>
-                      </Link>
-                    </li>
-                  ))
-                ) : (
-                  <EmptyContMessage message={'추천아티클이 없습니다.'} />
-                )}
-              </ul>
-            </div>
-          </Wrapper>
-        </section>
-
-        <Wrapper className={'animation-show-all-child'}>
-          <section className={s.menu_box}>
-            <ul className={s.menu}>
-              <li className={`${selectedCategory === blogCategoryType.ALL ? s.active : ''}`}>
-                <button
-                  type={'button'}
-                  data-filter-category={blogCategoryType.ALL}
-                  onClick={onFilteringItemList}>
-                  {blogCategoryType.KOR.ALL}
-                </button>
-              </li>
-              <li className={`${selectedCategory === blogCategoryType.NUTRITION ? s.active : ''}`}>
-                <button
-                  type={'button'}
-                  data-filter-category={blogCategoryType.NUTRITION}
-                  onClick={onFilteringItemList}
-                >
-                  {blogCategoryType.KOR.NUTRITION}
-                </button>
-              </li>
-              <li className={`${selectedCategory === blogCategoryType.HEALTH ? s.active : ''}`}>
-                <button
-                  type={'button'}
-                  data-filter-category={blogCategoryType.HEALTH}
-                  onClick={onFilteringItemList}
-                >
-                  {blogCategoryType.KOR.HEALTH}
-                </button>
-              </li>
-              <li className={`${selectedCategory === blogCategoryType.LIFE ? s.active : ''}`}>
-                <button
-                  type={'button'}
-                  data-filter-category={blogCategoryType.LIFE}
-                  onClick={onFilteringItemList}
-                >
-                  {blogCategoryType.KOR.LIFE}
-                </button>
-              </li>
-            </ul>
-          </section>
-
-          <section className={s.content_box}>
-            <ul className="cont_list">
-              {blogList?.length > 0 ? (
-                blogList.map((item, index) => {
-                  return (
-                    <li key={`blog-${item.id}-${index}`}>
-                      <Link href={`/community/blog/${item.id}?category=${item.category}`} passHref>
-                        <a>
-                          <div className={s.line}>
-                            <div className={s.flex_box}>
-                              <div className={s.left_box}>
-                                <p>{blogCategoryType.KOR[item.category]}</p>
-                                <div className={s.article_title}>{item.title}</div>
-                                <div
-                                  className={`${s.text} ${s['HTML-container']}`}
-                                  dangerouslySetInnerHTML={{
-                                    __html: filter_contentImages(item.contents),
-                                  }}
-                                ></div>
-                                <div className={s.day}>{transformDate(item.createdDate)}</div>
-                              </div>
-                              <div className={s.right_box}>
-                                <div className={`${s.image} img-wrap`}>
-                                  <Image
-                                    src={item.url}
-                                    objectFit="cover"
-                                    layout="fill"
-                                    alt="카드 이미지"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </a>
-                      </Link>
-                    </li>
-                  );
-                })
-              ) : (
-                <EmptyContMessage message={'등록된 블로그가 없습니다.'} />
-              )}
-            </ul>
-          </section>
-          <div className={s.pagination_box}>
-            <PaginationWithAPI
-              apiURL={searchApiUrl}
-              size={searchPageSize}
-              setItemList={setBlogList}
-              queryItemList={apiDataQueryString}
-              setIsLoading={setIsLoading}
-              pageInterceptor={pageInterCeptor}
-              // routerDisabled={true}
-            />
+            </h1>
           </div>
-        </Wrapper>
-      </Layout>
+          <section className="cont">
+            <div className="cont_header clearfix">
+              <p className="cont_title cont-left">목록</p>
+              <div className="cont-right">
+                <AdminBtn_moveToPage
+                  text="블로그 작성"
+                  href="/community/blog/create"
+                  className="admin_btn confirm_m solid"
+                  animation="show"
+                />
+              </div>
+              <div className="controls cont-left">
+                <button
+                  type="button"
+                  id="set_order"
+                  className="admin_btn line basic_m autoWidth"
+                  onClick={onShowRecommendArticleModal}
+                >
+                  추천 아티클
+                </button>
+              </div>
+            </div>
+            <div className={`${s.cont_viewer} ${s.fullWidth}`}>
+              <div className={s.table}>
+                <ul className={s.table_header}>
+                  <li className={s.table_th}>글번호</li>
+                  <li className={s.table_th}>제목</li>
+                  <li className={s.table_th}>작성일</li>
+                  <li className={s.table_th}>노출여부</li>
+                  <li className={s.table_th}>수정</li>
+                  <li className={s.table_th}>삭제</li>
+                </ul>
+                {itemList.length
+                  ? <BlogList items={itemList}  onDeleteItem={onDeleteItem} isLoading={isLoading}/>
+                  : isLoading.fetching
+                    ? <AdminErrorMessage loading={<Spinner />} />
+                    : <AdminErrorMessage text="조회된 데이터가 없습니다." />
+                }
+              </div>
+            </div>
+            <div className={s['pagination-section']}>
+              <PaginationWithAPI
+                apiURL={getListApiUrl}
+                size={pageSize}
+                theme={'square'}
+                setItemList={setItemList}
+                queryItemList={'queryBlogsAdminDtoList'}
+                setIsLoading={setIsLoading}
+              />
+            </div>
+          </section>
+        </AdminContentWrapper>
+      </AdminLayout>
+      {activeModal && <Modal_AdminRecommendArticle setActiveModal={setActiveModal} />}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background />}
     </>
   );
 }
 
-const filter_contentImages = (innerHTML) => {
-  if (typeof innerHTML !== 'string') {
-    console.error('* required string type of HTML value');
-    return innerHTML;
-  }
-  let filteredHTML = innerHTML;
-  filteredHTML = filter_HTMLStrings(filteredHTML, ' class="', '"'); // filter Class
-  filteredHTML = filter_HTMLStrings(filteredHTML, ' style="', '"'); // filter style
-  filteredHTML = filter_HTMLStrings(filteredHTML, '<img src="', '>'); // filter Image
-  return filteredHTML;
-};
+export default BlogIndexPage;

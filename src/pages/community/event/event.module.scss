@@ -1,93 +1,16 @@
-@import '/styles/global/rem';
-@import '/styles/global/guide';
+@import '/styles/module/itemList.module';
 
-section.title { padding : rem(40) 0 rem(30);}
-
-
-.title {
-  > p {
-    @include char(t24);
-  }
-}
-
-.event_box {
-  margin-bottom: rem(10);
-  ul li:not(:last-child){margin-bottom: rem(10);}
-
-  a {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 5.45/1;
-
-    .text_box {
-      position: absolute;
-      left: calc(100% / 5.8);
-      top: rem(52);
-      color: #fff;
-      @include char(d32);
-      font-weight: 300;
-      line-height: 120%;
-
-      > p {
-        font-weight: 600;
-        line-height: 120%;
-      }
+.cont_viewer {
+  .table{
+    .table_header, .item{
+      grid-template-columns:
+        rem(80)
+        minmax(rem(300), rem(1200))
+        rem(120)
+        rem(120)
+        rem(70)
+        rem(70);
     }
-  }
-  @supports not (aspect-ratio: 5.45/1) {
-    a {
-      padding-top: 18.349%;
-    }
-  }
-}
-.page_no{
-  padding-top: rem(40);
-  padding-bottom: rem(40);
-}
 
-
-@media (max-width: rem(800)) {
-
-  .event_box {
-    ul{
-      li{
-        aspect-ratio: 3.63/1;
-        a{
-          aspect-ratio: 3.63/1;
-          height: auto;
-          span{
-              aspect-ratio: 3.63/1;
-          }
-        }
-      }
-    }
-    a {
-      .text_box {
-        position: absolute;
-        top: rem(26);
-        left: calc(100% / 10.8);
-      }
-    }
-  }
-
-}
-
-@media (max-width: rem(600)) {
-
-  section.title { padding : rem(78) 0 rem(30);}
-
-  .title {
-    p{
-      font-size: rem(20);
-    }
-  }
-
-  .event_box {
-    a {
-      .text_box {
-        top: rem(32);
-        font-size: rem(28);
-      }
-    }
   }
 }

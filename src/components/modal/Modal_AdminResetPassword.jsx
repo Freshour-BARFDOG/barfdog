@@ -158,7 +158,7 @@ const AuthNumber = ({ displayedTime, authNum, data }) => {
   const onSuccessCallback = async () => {
     mct.onHide();
     mct.alertHide();
-    await router.push(`/bf-admin/login/resetPassword?authnum=${authNum}`);
+    await router.push(`/login/resetPassword?authnum=${authNum}`);
   };
 
   const onChangeHandler = (e) => {

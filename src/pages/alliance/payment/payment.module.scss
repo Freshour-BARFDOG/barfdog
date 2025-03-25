@@ -1,0 +1,22 @@
+@import '/styles/module/itemList.module';
+
+.cont_viewer {
+  .table {
+    .table_header,
+    .item {
+      grid-template-columns:
+        rem(60)
+        rem(95)
+        rem(160)
+        rem(220)
+        rem(220)
+        minmax(rem(180), rem(240))
+        rem(160)
+        minmax(rem(120), rem(240))
+        rem(120);
+      span {
+        justify-content: center !important;
+      }
+    }
+  }
+}

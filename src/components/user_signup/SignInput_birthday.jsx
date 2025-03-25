@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import s from '/src/pages/account/signup/signup.module.scss';
+import s from '/styles/legacy/signup.module.scss';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { subYears, endOfYear, getYear, getMonth, format } from 'date-fns';

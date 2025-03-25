@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import s from '/src/pages/account/signup/signup.module.scss';
+import s from '/styles/legacy/signup.module.scss';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 
 export const policy_KEYS = [
