@@ -14,7 +14,6 @@ export default function AdminIndex() {
 export async function getServerSideProps({ req }) {
   let token = null;
   let USER_TYPE = null;
-  console.log('req!!!', req)
 
   if (req?.headers?.cookie) {
     token = getTokenFromServerSide( req );
