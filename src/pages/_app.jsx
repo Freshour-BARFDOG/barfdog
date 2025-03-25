@@ -11,7 +11,6 @@ import { userType } from '/store/TYPE/userAuthType';
 import React, { useEffect } from 'react';
 import { AlertLayer } from '@src/layers/AlertLayer';
 import { useRouter } from 'next/router';
-import Script from 'next/script';
 import useNaverAnalytics from "@util/hook/useNaverAnalytics";
 
 // Server Only File (client에서 사용하는 로직 사용불가)

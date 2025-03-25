@@ -1,4 +1,3 @@
-import axios from 'axios';
 const https = require('https');
 
 export default async function getToken(req, res) {

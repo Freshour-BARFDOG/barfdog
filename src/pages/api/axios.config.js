@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { getCookie } from '@util/func/cookie';
-import { cookieType } from '@store/TYPE/cookieType';
+import { getCookie } from '/util/func/cookie';
+import { cookieType } from '/store/TYPE/cookieType';
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL =

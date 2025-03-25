@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ChannelTalkService from './ChannelTalkService';
-import axios from 'axios';
 
 export default function ChannelTalkProvider ({ children }) {
 

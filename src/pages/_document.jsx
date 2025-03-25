@@ -1,17 +1,14 @@
-import Document, {
+import {
   Html,
   Head,
   Main,
   NextScript,
-  DocumentContext,
-  DocumentInitialProps,
 } from 'next/document';
 import MetaTags from './_metaTags';
 // eslint-disable-next-line @next/next/no-script-in-document
 import {
   GA_TRACKING_ID,
   TAGMANAGER_CONTAINER,
-  TAGMANAGER_KEY,
   UA_TRACKING_ID,
 } from '/src/pages/api/googleAnalytics/gtag';
 
