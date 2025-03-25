@@ -35,23 +35,21 @@ const Pagination = ({
 
   const [queryObject, setQueryObject] = useState(Object.fromEntries(new URLSearchParams(urlQuery)));
 
-  // itemType, sortBy 변경시 queryString 의 page = 1 추가 적용
+  // itemType, sortBy 변경시 queryString 의 page = 1 추가 적용 밀 fetch
   useEffect(() => {
-    setQueryObject(Object.fromEntries(new URLSearchParams(urlQuery)))
-  }, [urlQuery])
+    const searchParams = new URLSearchParams(urlQuery);
+      fetchData(apiURL, option.apiMethod, option.body)
+      .then(res => {
+        searchParams.set('page', '1'); // 변경 시 항상 page=1 적용
+        setQueryObject(Object.fromEntries(searchParams.entries()));
+      });
+  }, [urlQuery]);
 
   // Page 1 적용: 페이지 초기화
   useEffect(() => {
     if (queryObject.page === undefined) return;
     setCurPage(Number(queryObject.page))
   }, [queryObject.page])
-
-  // Page 1 제거: 페이지 변경시 queryString 의 page 제거
-  const changedQueryParams = () => {
-    const searchParams = new URLSearchParams(urlQuery);
-    searchParams.delete('page');
-    setQueryObject(Object.fromEntries(searchParams.entries()))
-  }
 
   useEffect(() => {
     if (option.initialize === true) {
@@ -62,6 +60,27 @@ const Pagination = ({
   useEffect(() => {
     setCurrentPage && setCurrentPage(curPage);
   }, [curPage]);
+
+  useEffect(() => {
+    fetchData(apiURL, option.apiMethod, option.body);
+    if (isSubmitted) setIsSubmitted(false);
+  }, [
+    curPage,
+    urlQuery,
+    apiURL,
+    option.apiMethod,
+    option.body,
+    isSubmitted,
+    onSearch,
+    queryObject,
+  ]);
+
+  // Page 1 제거: 페이지 변경시 queryString 의 page 제거
+  const changedQueryParams = () => {
+    const searchParams = new URLSearchParams(urlQuery);
+    searchParams.delete('page');
+    setQueryObject(Object.fromEntries(searchParams.entries()))
+  }
 
   const fetchData = async (url, method, query) => {
     try {
@@ -118,13 +137,8 @@ const Pagination = ({
         }
 
         if (routerDisabled === false) {
-          const convertedSearchQueryStrings =
-            convertSearchQueryStrings(urlQueries);
-          window.history.replaceState(
-            window.history.state,
-            '',
-            `${window.location.pathname}${convertedSearchQueryStrings}`,
-          );
+          const convertedSearchQueryStrings = convertSearchQueryStrings(urlQueries);
+          router.push(`${convertedSearchQueryStrings}`, undefined, { shallow: false });
         }
       } else {
         setItemList([]);
@@ -141,19 +155,6 @@ const Pagination = ({
     }
   };
 
-  useEffect(() => {
-    fetchData(apiURL, option.apiMethod, option.body);
-    if (isSubmitted) setIsSubmitted(false);
-  }, [
-    curPage,
-    urlQuery,
-    apiURL,
-    option.apiMethod,
-    option.body,
-    isSubmitted,
-    onSearch,
-    queryObject,
-  ]);
 
   const Num = ({ pagenum }) => {
     const calcedPageNum = pagenum + 1;
