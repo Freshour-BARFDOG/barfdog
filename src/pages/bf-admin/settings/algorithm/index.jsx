@@ -7,7 +7,7 @@ import AlgorithmInput from '/src/components/admin/settings/AlgorithmInput';
 import { useModalContext } from '/store/modal-context';
 import { validate } from '/util/func/validation/validation_siteSettings';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { getData, putObjData } from '/src/pages/api/reqData';
+import { getData, postObjData } from '/src/pages/api/reqData';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import Spinner from '/src/components/atoms/Spinner';
 import Tooltip from '/src/components/atoms/Tooltip';
@@ -42,8 +42,6 @@ export default function AlgorithmSettingPage() {
           snackMuch: DATA.snackConstant.snackMuch,
           snackNormal: DATA.snackConstant.snackNormal,
           snackLittle: DATA.snackConstant.snackLittle,
-          price: DATA.deliveryConstant.price,
-          freeCondition: DATA.deliveryConstant.freeCondition,
           youngDog: DATA.standardVar.youngDog,
           oldDog: DATA.standardVar.oldDog,
           neutralizationFalse: DATA.standardVar.neutralizationFalse,
@@ -79,8 +77,7 @@ export default function AlgorithmSettingPage() {
         [key]: Number(val),
       };
     }
-    // // console.log('formValues: ',formValues);
-    // // console.log('convertedFormValues: ',convertedFormValues);
+
     const errObj = validate(convertedFormValues);
     setFormErrors(errObj);
 
@@ -95,8 +92,8 @@ export default function AlgorithmSettingPage() {
         ...prevState,
         submit: true,
       }));
-      const apiUrl = `/api/admin/setting`;
-      const res = await putObjData(apiUrl, convertedFormValues);
+      const apiUrl = `/api/admin/algorithm/setting`;
+      const res = await postObjData(apiUrl, convertedFormValues);
 
       if (res.isDone) {
         mct.alertShow(
