@@ -7,7 +7,7 @@ import filter_onlyNumber from "/util/func/filter_onlyNumber";
 import filter_extraIntegerNumberZero from "/util/func/filter_extraIntegerNumberZero";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import {useModalContext} from "/store/modal-context";
-import {getData, putObjData} from "/src/pages/api/reqData";
+import { getData, postObjData } from "/src/pages/api/reqData";
 import {validate} from "/util/func/validation/validation_siteSettings";
 import {valid_hasFormErrors} from "/util/func/validation/validationPackage";
 import Spinner from "/src/components/atoms/Spinner";
@@ -18,13 +18,9 @@ import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import Tooltip from "/src/components/atoms/Tooltip";
 import s from "/src/components/admin/settings/adminSettings.module.scss";
 
-
-
-
-
 function DeliverySettingPage() {
   const getFormValuesApiUrl = `/api/admin/setting`;
-  const postFormValuesApiUrl = `/api/admin/setting`;
+  const postFormValuesApiUrl = `/api/admin/delivery/setting`;
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [settingModifiedDate, setSettingModifiedDate] = useState('');
@@ -33,9 +29,6 @@ function DeliverySettingPage() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // // console.log(formValues);
-  
-  
   useEffect(() => {
     (async () => {
       try {
@@ -44,20 +37,9 @@ function DeliverySettingPage() {
           fetching: true,
         }));
         const res = await getData(getFormValuesApiUrl);
-        // console.log(res);
         const DATA = res.data;
         
         const initialFormValues = {
-          activityVeryMuch: DATA.activityConstant.activityVeryMuch,
-          activityMuch: DATA.activityConstant.activityMuch,
-          activityNormal: DATA.activityConstant.activityNormal,
-          activityLittle: DATA.activityConstant.activityLittle,
-          activityVeryLittle: DATA.activityConstant.activityVeryLittle,
-          // snackVeryMuch: DATA.snackConstant.snackVeryMuch, // ! API parameter 추가 필요함
-          snackMuch: DATA.snackConstant.snackMuch,
-          snackNormal: DATA.snackConstant.snackNormal,
-          snackLittle: DATA.snackConstant.snackLittle,
-          // snackVeryLittle: DATA.snackConstant.snackVeryLittle, // ! API parameter 추가 필요함
           price: transformLocalCurrency(DATA.deliveryConstant.price),
           freeCondition: transformLocalCurrency(DATA.deliveryConstant.freeCondition),
         };
@@ -112,12 +94,12 @@ function DeliverySettingPage() {
       const val = formValues[key];
       convertedFormValues = {
         ...convertedFormValues,
-        [key]: key === 'freeCondition' || key === 'price' ? transformClearLocalCurrency(val) : val,
+        [key]: transformClearLocalCurrency(val)
       }
     }
     const errObj = validate(convertedFormValues);
     setFormErrors(errObj);
-    
+
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
     
@@ -128,16 +110,15 @@ function DeliverySettingPage() {
         ...prevState,
         submit: true,
       }));
-      
-      const res = await putObjData(postFormValuesApiUrl, convertedFormValues);
-      // console.log(res);
+
+      const res = await postObjData(postFormValuesApiUrl, convertedFormValues);
       if (res.isDone) {
         mct.alertShow('사이트 설정이 성공적으로 저장되었습니다.', onSuccessCallback);
         setIsSubmitted(true);
       } else {
         mct.alertShow('데이터 전송에 실패하였습니다.');
       }
-      
+
     } catch (err) {
       mct.alertShow('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
       console.error(err);
