@@ -91,6 +91,7 @@ function SignInput_address(props) {
             {(!formValues.address.detailAddress || formValues.address.detailAddress === "") && formErrors.detailAddress && <ErrorMessage>{formErrors.detailAddress}</ErrorMessage>}
           </label>
         )}
+        <span className={s.addressInfo}>⚠️ 회원 정보의 주소는 배송지 주소와 다르므로 배송지 변경을 원하시는 경우 고객센터로 문의 바랍니다.</span>
       </SignupInput>
     </>
   );
