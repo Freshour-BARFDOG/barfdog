@@ -27,11 +27,7 @@ export const calcOrderSheetPrices = (
     return null;
 
   if (orderType === 'general') {
-    discountCoupon = form.orderItemDtoList?.length
-      ? form.orderItemDtoList
-          .map((item) => item.discountAmount)
-          .reduce((acc, cur) => acc + cur)
-      : 0;
+    discountCoupon = Number(form.discountCoupon) || 0;
     discountGrade = 0; // 일반결제는 등급할인 없음
 
     const deliveryFreeCondition =

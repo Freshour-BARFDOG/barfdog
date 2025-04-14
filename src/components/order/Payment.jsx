@@ -140,9 +140,6 @@ export function Payment({
                   itemOptionId: op.itemOptionId, // 옵션 ID
                   amount: op.amount, // 옵션 수량
                 })) || [],
-              memberCouponId: item.memberCouponId, // 사용한 쿠폰 ID // 데이터뿌릴떄
-              discountAmount: item.discountAmount, // 쿠폰할인 총계
-              finalPrice: item.orderLinePrice, // ! 주문금액 = (상품 원가-상품 기본할인)*상품수량-쿠폰할인금액
             })),
             deliveryDto: {
               name: form.deliveryDto.name, // 수령자 이름
@@ -163,6 +160,7 @@ export function Payment({
             paymentPrice: paymentPrice, // 최종 결제 금액
             paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
             // nextDeliveryDate: form.nextDeliveryDate, // ! 일반주문 시, request field에 없는 값.
+            memberCouponId: form.memberCouponId,
             agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
             brochure: form.brochure, // 브로슈어 수령여부
           }
@@ -205,6 +203,9 @@ export function Payment({
       // 제휴사 쿼리 파라미터 추가
       const alliance = getCookie('alliance');
       const subscribeId = router.query?.subscribeId;
+
+      console.log('request body', body);
+      
       const apiUrl =
         orderType === 'general'
           ? `/api/orders/general?alliance=${alliance || ''}`

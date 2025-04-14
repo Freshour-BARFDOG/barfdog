@@ -16,6 +16,7 @@ import { OrdersheetReward } from '/src/components/order/OrdersheetReward';
 import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMethodOfPayment';
 import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
 import { getCookie } from '/util/func/cookie';
+import OrdersheetCouponSelector from '../../../components/order/OrdersheetCouponSelector';
 
 export default function GeneralOrderSheetPage() {
   const router = useRouter();
@@ -65,7 +66,7 @@ export default function GeneralOrderSheetPage() {
       })),
       // allianceType: allianceType,
     };
-    console.log('requestBody', requestBody)
+    console.log('requestBody', requestBody);
     if (Object.keys(info).length > 0) return; // 최초 data fetching 후 Re-rendering 방지
     (async () => {
       setIsLoading((prevState) => ({
@@ -76,7 +77,9 @@ export default function GeneralOrderSheetPage() {
         // API: 상품 주문정보
         // 제휴사 쿼리 파라미터 추가
         const alliance = getCookie('alliance');
-        const postItemInfoApiUrl = `/api/orders/sheet/general?alliance=${alliance || ''}`;
+        const postItemInfoApiUrl = `/api/orders/sheet/general?alliance=${
+          alliance || ''
+        }`;
 
         const res = await postUserObjData(postItemInfoApiUrl, requestBody);
         // 요청 파라미터가 복잡하여 GET이 아닌 POST 사용
@@ -86,7 +89,7 @@ export default function GeneralOrderSheetPage() {
           return (window.location.href = '/cart');
         }
         const info = res.data.data;
-        console.log("/api/orders/sheet/general", res);
+        console.log('/api/orders/sheet/general', res);
         // 주문에 대한 모든 데이터
         // console.log('info:  ',info)
         const calcedReward = Number(info.reward) > 0 ? info.reward : 0;
@@ -96,7 +99,7 @@ export default function GeneralOrderSheetPage() {
           phone: info.phoneNumber,
           defaultAddress: {
             city: info.defaultAddress.city, // 시도
-            deliveryName: "",
+            deliveryName: '',
             street: info.defaultAddress.street, // 도로명 주소
             detailAddress: info.defaultAddress.detailAddress, // 상세주소
             zipcode: info.defaultAddress.zipcode, // 우편번호
@@ -234,6 +237,13 @@ export default function GeneralOrderSheetPage() {
               formErrors={formErrors}
               setFormErrors={setFormErrors}
             />
+            <OrdersheetCouponSelector
+              info={info}
+              form={form}
+              setForm={setForm}
+              itemInfo={{ orderPrice: info.orderPrice }}
+              event={{ onActiveModal: onActivleModalHandler }}
+            />
             <OrdersheetReward
               id={'discountReward'}
               info={info}
@@ -283,7 +293,7 @@ export default function GeneralOrderSheetPage() {
       {activeModal.coupons && (
         <Modal_coupon
           onModalActive={setActiveModal}
-          itemInfo={{ id: selectedItemId }}
+          itemInfo={{ orderPrice: info.orderPrice }}
           info={info}
           form={form}
           setForm={setForm}

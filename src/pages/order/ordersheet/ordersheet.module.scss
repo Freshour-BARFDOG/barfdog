@@ -3,6 +3,63 @@
 
 $inputHeight: rem(46);
 
+.coupon_button {
+  display: flex;
+  width: 105px;
+  min-width: 105px;
+  height: 44px;
+  padding: 20px 10px;
+  justify-content: center;
+  align-items: center;
+  background-color: #BE1A21;
+  color: #FFFFFF;
+  border-radius: 8px;
+}
+.coupon_cancel_button {
+  display: flex;
+  width: 105px;
+  min-width: 105px;
+  height: 44px;
+  padding: 20px 10px;
+  justify-content: center;
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid #BE1A21;
+  color: #BE1A21;
+  border-radius: 8px;
+}
+
+.coupon_wrapper {
+  display: flex;
+  align-items: center;
+  max-width: rem(500);
+  width: 100%;
+  gap: 8px;
+}
+
+.coupon_box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: rem(12) rem(16);
+  border-radius: 8px;
+  width: 100%;
+  height: rem(46);
+  border: 1px solid #DDD;
+}
+
+.unusable_coupon_text_ {
+  color: #7C7C7C;
+}
+.coupon_text {
+  color: #454545;
+  font-weight: 500;
+}
+.coupon_text_point {
+  color: #BE1A21;
+  font-weight: 700;
+}
+
 section.title_box {
   padding: rem(60) 0 rem(35);
 }
@@ -136,7 +193,8 @@ section.final_btn {
 
   .flex_title_box {
     display: grid;
-    grid-template-columns: 1fr rem(60) repeat(3, rem(100));
+    // grid-template-columns: 1fr rem(60) repeat(3, rem(100));
+    grid-template-columns: 1fr rem(60) rem(100);
     border-bottom: rem(1) solid var(--color-line-01);
     > div {
       text-align: center;
@@ -153,7 +211,7 @@ section.final_btn {
 
   .flex_box {
     display: grid;
-    grid-template-columns: 1fr rem(60) repeat(3, rem(100));
+    grid-template-columns: 1fr rem(60) rem(100);
     border-bottom: rem(1) solid var(--color-line-04);
     align-items: center;
     text-align: center;
@@ -557,7 +615,7 @@ section.final_btn {
       display: inline-grid;
       place-items: center;
       width: rem(105);
-      border-radius: rem(2);
+      border-radius: rem(8);
 
       background-color: var(--color-main);
       color: #fff;
@@ -773,6 +831,8 @@ section.payment {
     padding: rem(30) 0 rem(30);
   }
 
+
+
  .content_box {
     .title {
       border-bottom: rem(1) solid var(--color-line-02);
@@ -786,8 +846,7 @@ section.payment {
       position: relative;
       grid: 
       "info_col info_col info_col count_col"
-      "price_col price_col price_col price_col"
-      "coupon_col_red coupon_col_red coupon_col_red apply_coupon_col"/1fr 1fr 1fr 1fr;
+      "price_col price_col price_col price_col"/1fr 1fr;
       row-gap: rem(20);
       padding-bottom: rem(30);
 
@@ -798,7 +857,7 @@ section.payment {
         left: 0;
         width: 100%;
         height: rem(90);
-        background-color: #F1F1F4;
+        // background-color: #F1F1F4;
         z-index: -99;
       }
 
@@ -813,13 +872,6 @@ section.payment {
           left: rem(20);
           font-weight: 400;
         }
-        &::before {
-          content: "쿠폰할인";
-          position: absolute;
-          bottom: rem(-88);
-          left: rem(20);
-          font-weight: 400;
-        }
       }
 
       .count_col {
@@ -831,9 +883,13 @@ section.payment {
         grid-column: 1/span 4;
         text-align: right;
         display: flex;
+        align-items: center;
         justify-content: flex-end;
-        padding-top: rem(10);
-        padding-right: rem(20);
+        padding: rem(12);
+        background-color: #F1F2F4;
+        border-radius: rem(8);
+        // padding-top: rem(10);
+        // padding-right: rem(20);
 
         .price_inner {
           padding-right: rem(10);

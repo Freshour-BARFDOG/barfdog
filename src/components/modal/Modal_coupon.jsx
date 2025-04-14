@@ -19,16 +19,16 @@ export const Modal_coupon = ({
   const [selectedRadioInfo, setSelectedRadioInfo] = useState(null);
   const isMobile = useMediaQuery({ maxWidth: 600 });
   // Selected Item Info
-  let selectedItemPrice;
-  const selectedItemId = Number(itemInfo.id);
+  // let selectedItemPrice;
+  // cons = Number(itemInfo.id);
 
-  if (orderType === 'general') {
-    selectedItemPrice = form.orderItemDtoList.filter(
-      (item) => item.itemId === selectedItemId,
-    )[0].orderLinePrice;
-  } else if (orderType === 'subscribe') {
-    selectedItemPrice = itemInfo.nextPaymentPrice;
-  }
+  // if (orderType === 'general') {
+  //   selectedItemPrice = form.orderItemDtoList.filter(
+  //     (item) => item.itemId ==,
+  //   )[0].orderLinePrice;
+  // } else if (orderType === 'subscribe') {
+  //   selectedItemPrice = itemInfo.nextPaymentPrice;
+  // }
 
   const onChangeHandler = useCallback(
     (e) => {
@@ -61,24 +61,21 @@ export const Modal_coupon = ({
     if (orderType === 'general') {
       setForm((prevState) => ({
         ...prevState,
-        orderItemDtoList: prevState.orderItemDtoList.map((item) => {
-          const updatedState = {
-            ...item,
-            memberCouponId: couponId,
-            discountAmount: couponDiscountAmount,
-            orderLinePrice: item.orderLinePrice - couponDiscountAmount,
-          };
-          return item.itemId === selectedItemId ? updatedState : item;
-        }),
+        // 전역 쿠폰 정보 저장
+        coupon: {
+          memberCouponId: couponId,
+          discountAmount: couponDiscountAmount,
+        },
+        memberCouponId: couponId,
+        // 계산 함수(calcOrderSheetPrices)에서 전역 coupon 할인 금액을 참조하도록 함
+        discountCoupon: couponDiscountAmount,
+        // 선택한 쿠폰은 전체 쿠폰 리스트에서 사용 처리 (remaining 감소)
         coupons: prevState.coupons.map((coupon) =>
           coupon.memberCouponId === couponId
-            ? {
-                ...coupon,
-                remaining: --coupon.remaining,
-              }
-            : coupon,
-        ), 
-      })); 
+            ? { ...coupon, remaining: coupon.remaining - 1 }
+            : coupon
+        ),
+      }));
     } else if (orderType === 'subscribe') {
       setForm((prevState) => ({
         ...prevState,
@@ -95,7 +92,7 @@ export const Modal_coupon = ({
       }));
     }
     onHideModal();
-  }, [selectedRadioInfo, orderType, selectedItemId]);
+  }, [selectedRadioInfo, orderType]);
 
   const onHideModal = () => {
     onModalActive((prevState) => ({
@@ -123,12 +120,12 @@ export const Modal_coupon = ({
       } else if (item.discountType === discountUnitType.FIXED_RATE) {
         couponDiscountInfo = `(${item.discountDegree}%)`;
         couponDiscountAmount = Math.floor(
-          (selectedItemPrice * item.discountDegree) / 100,
+          (itemInfo.orderPrice * item.discountDegree) / 100,
         );
       }
 
       const isDisabled =
-        selectedItemPrice < item.availableMinPrice ||
+      itemInfo.orderPrice < item.availableMinPrice ||
         couponDiscountAmount > item.availableMaxDiscount;
 
       return {

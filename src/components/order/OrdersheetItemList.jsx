@@ -6,30 +6,23 @@ import ErrorMessage from "../atoms/ErrorMessage";
 
 export const OrdersheetItemList = ({form, setForm, isLoading, event = {onActiveModal}}) => {
   
-  const onCancleCoupon = (e)=>{
-    const btn = e.currentTarget;
-    const itemId = Number(btn.dataset.itemId);
-    const appliedCouponId = Number(btn.dataset.appliedCouponId);
-    setForm(prevState => ({
-      ...prevState,
-      orderItemDtoList: prevState.orderItemDtoList.map((item)=>{
-        const restoredOrderLinePrice =  item.orderLinePrice + item.discountAmount;
-        const updatedState = {
-          ...item,
-          memberCouponId: null,
-          discountAmount: 0,
-          orderLinePrice: restoredOrderLinePrice
-        }
-        return item.itemId ===  itemId ? updatedState : item
-      }),
-      coupons: prevState.coupons.map((coupon)=>{
-        return coupon.memberCouponId === appliedCouponId ? {
-          ...coupon,
-          remaining: ++coupon.remaining
-        } : coupon
-      })
-    }));
-  }
+  const onCancleCoupon = () => {
+    setForm((prevState) => {
+      const appliedCouponId = prevState.coupon?.memberCouponId;
+  
+      return {
+        ...prevState,
+        coupon: null,
+        memberCouponId: null,
+        discountCoupon: 0,
+        coupons: prevState.coupons.map((coupon) =>
+          coupon.memberCouponId === appliedCouponId
+            ? { ...coupon, remaining: coupon.remaining + 1 }
+            : coupon,
+        ),
+      };
+    });
+  };
   
   
   const onMouseEnterHandler = (e)=>{
@@ -54,8 +47,8 @@ export const OrdersheetItemList = ({form, setForm, isLoading, event = {onActiveM
           <div>상품정보</div>
           <div>수량</div>
           <div>총 주문금액</div>
-          <div>쿠폰할인</div>
-          <div>쿠폰적용</div>
+          {/* <div>쿠폰할인</div>
+          <div>쿠폰적용</div> */}
         </div>
         <ul className={s['item-container']}>
           {isLoading.item ? (
@@ -83,13 +76,13 @@ export const OrdersheetItemList = ({form, setForm, isLoading, event = {onActiveM
                 <span>{transformLocalCurrency( item.orderLinePrice )}원</span>
               </div>
   
-              <div
+              {/* <div
                 className={`${s.coupon_col_red}`}
                 style={{color: item.discountAmount ? '' : 'var(--color-disabled)'}}
               >
                 {item.discountAmount && '-' + transformLocalCurrency( item.discountAmount )}원
-              </div>
-              <div className={s.apply_coupon_col}>
+              </div> */}
+              {/* <div className={s.apply_coupon_col}>
     
                 {item.discountAmount ? <button
                   type={'button'}
@@ -112,7 +105,7 @@ export const OrdersheetItemList = ({form, setForm, isLoading, event = {onActiveM
                   쿠폰 선택
                 </button>
                 }
-              </div>
+              </div> */}
             </li>)
           )}
         </ul>
