@@ -143,6 +143,7 @@ export const postData = async (url, data, callback, contType) => {
       // console.log(err);
       if (callback && typeof callback === 'function') callback(err);
       alert('데이터 전송에 실패하였습니다.');
+      throw err;
     });
 };
 

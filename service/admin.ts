@@ -29,8 +29,12 @@ const getAllianceEventList = async (req): Promise<AllianceEventItem[]> => {
 }
 
 const createAllianceCoupon = async (body: CreateCouponFormValues) => {
-	const response = await postData('/api/admin/coupons/alliance/create', body);
-	return response;
+	try {
+		const response = await postData('/api/admin/coupons/alliance/create', body);
+		return response;
+	} catch (err) {
+		throw err.response.data.errors[0];
+	}
 }
 
 const downloadExcelAllianceCoupon = async (body: ExcelDownloadAllianceCoupon ) => {
