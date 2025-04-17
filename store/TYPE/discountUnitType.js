@@ -8,3 +8,7 @@ export const discountUnitType = {
   }
 }
 
+export const unitSettings = [
+  { label: '%', value: discountUnitType.FIXED_RATE },
+  { label: '원', value: discountUnitType.FLAT_RATE },
+];

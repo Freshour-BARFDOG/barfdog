@@ -8,7 +8,7 @@ const Wrap = styled.em`
   align-items: center;
 `;
 
-const Icon = styled.i`
+export const Icon = styled.i`
   position: relative;
   background: #fff;
   z-index: 9;
@@ -48,7 +48,7 @@ const MessageBody = styled.pre`
   animation: show var(--ani-default);
 
   &[data-wordbreaking] {
-    white-space: pre-wrap;
+    white-space: pre;
     min-width: ${rem(200)};
   }
   &[data-align='right'] {
@@ -80,7 +80,7 @@ const MessageBody = styled.pre`
 const ToolTip = ({
   message,
   style,
- iconStyle,
+  iconStyle,
   messagePosition,
   device,
   theme,

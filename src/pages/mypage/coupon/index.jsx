@@ -24,6 +24,28 @@ const initInfo = {
   totalCount: 0,
 }
 
+// 제휴사 쿠폰 추가됨에 따라 couponResponse items, page 합친 형태로 변환
+const transformCouponResponse = (raw) => {
+  const generalCouponItems = raw.couponsPageDto?._embedded?.queryCouponsDtoList ?? [];
+  const allianceCouponItems = raw.allianceCouponsPageDto?._embedded?.queryAllianceCouponsDtoList ?? [];
+
+  const combinedItems = [...generalCouponItems, ...allianceCouponItems];
+  const totalElements = (raw.couponsPageDto?.page?.totalElements || 0) + (raw.allianceCouponsPageDto?.page?.totalElements || 0);
+  const size = raw.couponsPageDto?.page?.size || 10;
+  const number = raw.couponsPageDto?.page?.number || 0;
+  const totalPages = Math.ceil(combinedItems.length / size);
+
+  return {
+    items: combinedItems,
+    page: {
+      size,
+      totalElements,
+      totalPages,
+      number,
+    },
+    totalCount: combinedItems.length
+  };
+}
 
 export default function CouponPage () {
   
@@ -37,7 +59,7 @@ export default function CouponPage () {
   const [submitted, setSubmitted] = useState( false );
   const [form, setForm] = useState( {} );
   const couponCodeRef = useRef( null );
-  
+
   
   const [info, setInfo] = useState( initInfo );
   
@@ -56,12 +78,12 @@ export default function CouponPage () {
       newPageNumber: 1,
       newItemList: [],
     }
-    
-    const data = res?.data?.couponsPageDto;
+
+    const data = transformCouponResponse(res.data);
     if ( data ) {
-      
+
       const pageData = data.page;
-      const curItemList = data._embedded.queryCouponsDtoList || [];
+      const curItemList = data.items;
       
       const availableCouponList = curItemList.filter((item) =>
         getRemainingDaysNumberUntilExpired( item.expiredDate ) >= 0 && item.status === couponActiveType.ACTIVE
@@ -78,7 +100,7 @@ export default function CouponPage () {
       
       const newCouponInfo = {
         availableCount: availableCouponList.length,
-        totalCount: res.data.totalCount,
+        totalCount: data.totalCount,
       };
       setInfo( newCouponInfo );
     }
@@ -239,7 +261,7 @@ export default function CouponPage () {
                             <div className={s.line}>
                                 <hr/>
                             </div>
-                            <b>{item.amount}회</b>
+                            <b>{item.amount || 1}회</b>
                           </em>
                           <em>사용기한
                             <div className={s.line}>
