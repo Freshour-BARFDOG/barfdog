@@ -149,6 +149,8 @@ export default function CouponPage () {
         let errorMessage = res.data.data.errors[0].defaultMessage;
         errorMessage = errorMessage === "이미 사용된 쿠폰 입니다." ? '이미 등록되었거나, 사용된 쿠폰입니다.' : errorMessage;
         mct.alertShow( errorMessage || defErrorMessage );
+      } else {
+        mct.alertShow('쿠폰코드를 등록할 수 없습니다.')
       }
     } catch (err) {
       mct.alertShow( err );
