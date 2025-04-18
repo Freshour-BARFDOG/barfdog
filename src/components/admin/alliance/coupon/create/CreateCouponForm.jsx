@@ -36,7 +36,7 @@ const CreateCouponForm = ({
 			<InputItem
 				type='select'
 				label='행사'
-				id='eventName'
+				id='allianceEventId'
 				formValues={formValues}
 				formErrors={formErrors}
 				options={[{label: '선택', value: null}, ...allianceEventList]}

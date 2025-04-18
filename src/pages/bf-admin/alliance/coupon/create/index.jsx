@@ -1,9 +1,10 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import Spinner from "/src/components/atoms/Spinner";
 import CreateCouponForm from "/src/components/admin/alliance/coupon/create/CreateCouponForm";
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 import { valid_currency, valid_hasFormErrors, valid_isEmpty, valid_isNumberEmpty } from "/util/func/validation/validationPackage";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
@@ -86,7 +87,7 @@ const transformFormValuesToRequestBody = (formValues) => ({
 // 쿠폰 발급 form 초기값 설정
 const initialFormValues = {
   allianceId: 0, // 제휴사 id
-  eventName: '', // 행사명
+  allianceEventId: 0, // 행사 id
   name: '', // 쿠폰 이름
   description: '', // 쿠폰 설명
   couponTarget: 'ALL', // 사용처 (전체/정기구독/일반상품)
@@ -102,15 +103,14 @@ const initialFormValues = {
 
 const Index = ({ allianceList }) => {
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   // 제휴사별 이벤트 리스트 추출
   const allianceEventList = formValues.allianceId && allianceList
-    .find(alliance => Number(alliance.value) === Number(formValues.allianceId))?.eventNameList
-    .map(event =>
-      ({ label: event, value: event }))
+    .find(alliance => Number(alliance.value) === Number(formValues.allianceId))?.eventInfos
     || [];
 
   // discountType unitBox 변경시 discountDegree 제어
@@ -231,9 +231,9 @@ const Index = ({ allianceList }) => {
             <button
               type="button"
               id="btn-create"
-              className={`admin_btn confirm_l solid ${!formValues.eventName ? 'disabled' : ''}`}
+              className={`admin_btn confirm_l solid ${!formValues.allianceEventId ? 'disabled' : ''}`}
               onClick={handleSubmit}
-              disabled={!formValues.eventName}
+              disabled={!formValues.allianceEventId}
             >
               {isLoading ? (
                 <Spinner style={{ color: '#fff' }} />
@@ -244,6 +244,9 @@ const Index = ({ allianceList }) => {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
+      {hasAlert && (
+        <Modal_global_alert onClick={() => mct.alertHide()} background />
+      )}
     </div>
   );
 };

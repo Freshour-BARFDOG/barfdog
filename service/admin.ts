@@ -3,16 +3,26 @@ import {
 	AllianceItem,
 	AllianceEventItem,
 	ExcelDownloadAllianceCoupon,
-	CreateCouponFormValues
+	CreateCouponFormValues, CreateAllianceFormValues
 } from "../type/admin/alliance/alliance";
 import { AxiosResponse } from "axios";
 
-export { getAllianceList, getAllianceEventList, createAllianceCoupon, downloadExcelAllianceCoupon };
+export { createAlliance, getAllianceList, getAllianceEventList, createAllianceCoupon, downloadExcelAllianceCoupon };
+
+const createAlliance = async (body: CreateAllianceFormValues) => {
+	try {
+		const response = await postData('/api/alliance/create', body);
+		return response;
+	} catch (err) {
+		console.log(err)
+		throw err.response;
+	}
+}
 
 const getAllianceList = async (req): Promise<AllianceItem[]> => {
 	const { data } = await getDataSSR(req, '/api/alliance');
 	// select - options 로 관리하기 위한 데이터 가공
-	return data._embedded.allianceResponseDtoList.map(item => ({
+	return data._embedded.allianceResponseList.map(item => ({
 		label: item.allianceName,
 		value: item.allianceId,
 		inStock: true,
@@ -24,7 +34,7 @@ const getAllianceEventList = async (req): Promise<AllianceEventItem[]> => {
 	return data?._embedded?.allianceEventResponseList.map(item => ({
 		label: item.allianceName,
 		value: item.allianceId,
-		eventNameList: item?.eventNameList || [],
+		eventInfos: item?.eventInfos.map(event => ({ label: event.eventName, value: event.allianceEventId })) || [],
 	})) || [];
 }
 

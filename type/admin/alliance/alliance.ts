@@ -2,11 +2,18 @@ import { couponUseType } from "@store/TYPE/couponType";
 import { discountUnitType } from "@store/TYPE/discountUnitType";
 
 export type {
+	CreateAllianceFormValues,
 	AllianceItem,
 	AllianceEventItem,
 	ExcelDownloadAllianceCoupon,
 	CreateCouponFormValues,
 };
+
+interface CreateAllianceFormValues {
+	allianceName: string;
+	allianceCode: string;
+	eventNameList: string[];
+}
 
 interface AllianceItem {
 	label: string;
