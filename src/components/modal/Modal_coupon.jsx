@@ -30,20 +30,33 @@ export const Modal_coupon = ({
   //   selectedItemPrice = itemInfo.nextPaymentPrice;
   // }
 
+  // const calcResult = calcOrderSheetPrices(
+  //   form,
+  //   orderType,
+  //   {deliveryFreeConditionPrice: info.freeCondition},
+  //   orderType === 'general' ? false : true
+  // );
+
   const onChangeHandler = useCallback(
     (e) => {
       const radio = e.currentTarget;
       const radioId = radio.id;
       const couponId = Number(radio.dataset.couponId);
       const couponDiscountAmount = Number(radio.dataset.discountAmount);
-      const availableCouponMaxDiscount = calcOrderSheetPrices(form, orderType, {
-        deliveryFreeConditionPrice: info.freeCondition,
-      })?.availableMaxDiscount.coupon;
-      if (availableCouponMaxDiscount <= 0) {
-        return alert(
-          '최소결제금액에 도달하여, 할인 쿠폰을 적용할 수 없습니다.',
-        );
-      }
+    // calcOrderSheetPrices의 결과를 변수로 저장 (동일한 값을 두 번 호출하지 않음)
+    const calcPriceResult = calcOrderSheetPrices(form, orderType, {
+      deliveryFreeConditionPrice: info.freeCondition,
+    });
+
+    // overDiscount가 발생했으면(0보다 크면) 선택 불가능하게 처리
+    if (calcPriceResult.overDiscount > 0) {
+      return alert('할인 금액 초과로 쿠폰을 적용할 수 없습니다.');
+    }
+
+    const availableCouponMaxDiscount = calcPriceResult.availableMaxDiscount.coupon;
+    if (availableCouponMaxDiscount <= 0) {
+      return alert('최소 결제 금액에 도달하여, 할인 쿠폰을 적용할 수 없습니다.');
+    }
       setSelectedRadioInfo((prevState) => ({
         ...prevState,
         id: radioId,

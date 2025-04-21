@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import s from '../../pages/order/ordersheet/ordersheet.module.scss';
 
 export default function OrdersheetCouponSelector({
@@ -7,6 +7,16 @@ export default function OrdersheetCouponSelector({
   itemInfo,
   event = { onActiveModal },
 }) {
+
+  const usableCouponsCount = useMemo(() => {
+    if (!form.coupons) return 0;
+    return form.coupons.filter(coupon => 
+      itemInfo.orderPrice >= coupon.availableMinPrice
+    ).length;
+  }, [form.coupons, itemInfo.orderPrice]);
+
+
+
 
   const handleCancelCoupon = () => {
     setForm((prevState) => {
@@ -37,9 +47,9 @@ export default function OrdersheetCouponSelector({
               <span className={s.coupon_text}>
                 <span className={s.coupon_text_point}>{form.discountCoupon}원</span> 할인 적용중
               </span>
-            ) : form.coupons?.length ? (
+            ) : usableCouponsCount > 0 ? (
               <span className={s.coupon_text}>
-                사용가능한 쿠폰이 <span className={s.coupon_text_point}>{form.coupons?.length}</span>장 있어요
+                사용가능한 쿠폰이 <span className={s.coupon_text_point}>{usableCouponsCount}</span>장 있어요
               </span>
             ) : (
               <span className={s.unusable_coupon_text_}>사용가능한 쿠폰이 없어요</span>

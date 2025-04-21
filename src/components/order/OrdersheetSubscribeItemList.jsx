@@ -57,8 +57,8 @@ export const OrdersheetSubscribeItemList = ({
           <div>상품정보</div>
           <div>수량</div>
           <div>총 주문금액</div>
-          <div>쿠폰할인</div>
-          <div>쿠폰적용</div>
+          {/* <div>쿠폰할인</div>
+          <div>쿠폰적용</div> */}
         </div>
         <ul className={`${s['item-container']} ${s.subscribe}`}>
           {isLoading.item ? (
@@ -82,13 +82,13 @@ export const OrdersheetSubscribeItemList = ({
                 <span>{transformLocalCurrency(info.subscribeDto?.nextPaymentPrice || 0)}원</span>
               </div>
 
-              <div
+              {/* <div
                 className={`${s.coupon_col_red}`}
                 style={{ color: !form.discountCoupon && 'var(--color-disabled)' }}
               >
                 {form.discountCoupon && '-' + transformLocalCurrency(form.discountCoupon)}원
-              </div>
-              <div className={s.apply_coupon_col}>
+              </div> */}
+              {/* <div className={s.apply_coupon_col}>
                 {form.discountCoupon ? (
                   <button
                     type={'button'}
@@ -114,7 +114,7 @@ export const OrdersheetSubscribeItemList = ({
                     쿠폰 선택
                   </button>
                 )}
-              </div>
+              </div> */}
             </li>
           )}
         </ul>

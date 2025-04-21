@@ -20,7 +20,8 @@ import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
 import { useRouter } from 'next/router';
 import { redirectTo } from 'util/func/redirectTo';
-import { getCookie } from "/util/func/cookie";
+import { getCookie } from '/util/func/cookie';
+import OrdersheetCouponSelector from '../../../../components/order/OrdersheetCouponSelector';
 
 const initInfo = {};
 
@@ -86,7 +87,9 @@ export default function SubscribeOrderSheetPage() {
 
         // 제휴사 쿼리 파라미터 추가
         const subscribeId = router.query.subscribeId;
-        const apiUrl = `/api/orders/sheet/subscribe/${subscribeId}?alliance=${alliance || ''}`;
+        const apiUrl = `/api/orders/sheet/subscribe/${subscribeId}?alliance=${
+          alliance || ''
+        }`;
         const body = {
           id: subscribeId,
         };
@@ -134,7 +137,7 @@ export default function SubscribeOrderSheetPage() {
             street: data.address.street, // 도로명 주소
             detailAddress: data.address.detailAddress, // 상세주소
             zipcode: data.address.zipcode, // 우편번호
-            deliveryName: "",
+            deliveryName: '',
           },
           deliveryPrice: 0, // 정기구독 배송비: 무료
           reward: data.reward,
@@ -252,6 +255,13 @@ export default function SubscribeOrderSheetPage() {
                 setFormErrors={setFormErrors}
               />
             )}
+            <OrdersheetCouponSelector
+              info={info}
+              form={form}
+              setForm={setForm}
+              itemInfo={{ orderPrice: info.subscribeDto.nextPaymentPrice }}
+              event={{ onActiveModal: onActivleModalHandler }}
+            />
             <OrdersheetReward
               orderType={'subscribe'}
               id={'discountReward'}
@@ -307,7 +317,7 @@ export default function SubscribeOrderSheetPage() {
         <Modal_coupon
           orderType={'subscribe'}
           onModalActive={setActiveModal}
-          itemInfo={info.subscribeDto}
+          itemInfo={{ orderPrice: info.subscribeDto.nextPaymentPrice }}
           info={info}
           form={form}
           setForm={setForm}

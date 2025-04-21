@@ -77,9 +77,10 @@ export default function GeneralOrderSheetPage() {
         // API: 상품 주문정보
         // 제휴사 쿼리 파라미터 추가
         const alliance = getCookie('alliance');
-        const postItemInfoApiUrl = `/api/orders/sheet/general?alliance=${
-          alliance || ''
-        }`;
+        const postItemInfoApiUrl = `/api/orders/sheet/general`;
+        // const postItemInfoApiUrl = `/api/orders/sheet/general?alliance=${
+        //   alliance || ''
+        // }`;
 
         const res = await postUserObjData(postItemInfoApiUrl, requestBody);
         // 요청 파라미터가 복잡하여 GET이 아닌 POST 사용
