@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {filter_dateAndTime} from "/util/func/filter_dateAndTime";
 
 
-export function DateTimeInput({id, form, setForm, setErrors, defaultStringValueOfSeconds = "00"}) {
+export function DateTimeInput({id, form, setForm, setErrors, defaultStringValueOfSeconds = "00", minDate}) {
 
 
   const {date, time} = filter_dateAndTime(form[id]);
@@ -45,6 +45,7 @@ export function DateTimeInput({id, form, setForm, setErrors, defaultStringValueO
                 type="date"
                 value={dateTime.date || ""}
                 onChange={onChange}
+                min={minDate || undefined}
             />
             <input
                 type="time"

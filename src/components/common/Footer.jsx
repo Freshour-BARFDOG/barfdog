@@ -149,7 +149,7 @@ export default function Footer() {
             <li>
               <span className={s.info_title}>유선번호: </span>
               <span className={s.info_cont}>043-855-4995</span>
-              <a href='tel:070-7770-7916' className={s.info_cont_mobile}>043-855-4995</a>
+              <a href='tel:043-855-4995' className={s.info_cont_mobile}>043-855-4995</a>
             </li>
           </ul>
         </div>
