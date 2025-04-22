@@ -8,13 +8,21 @@ export default function OrdersheetCouponSelector({
   event = { onActiveModal },
 }) {
 
-  const usableCouponsCount = useMemo(() => {
-    if (!form.coupons) return 0;
-    return form.coupons.filter(coupon => 
-      itemInfo.orderPrice >= coupon.availableMinPrice
-    ).length;
-  }, [form.coupons, itemInfo.orderPrice]);
+  const allCoupons = useMemo(
+    () => [
+      ...(form.coupons || []),
+      ...(form.allianceCoupons || []),
+    ],
+    [form.coupons, form.allianceCoupons]
+  );
 
+  // 사용 가능 쿠폰 개수 계산
+  const usableCouponsCount = useMemo(
+    () => allCoupons.filter(coupon => itemInfo.orderPrice >= coupon.availableMinPrice).length,
+    [allCoupons, itemInfo.orderPrice]
+  );
+
+  const totalAvailableCount = allCoupons.length;
 
 
 
@@ -43,7 +51,7 @@ export default function OrdersheetCouponSelector({
         <div className={s.title}>쿠폰 적용</div>
         <div className={s.coupon_wrapper}>
           <div className={s.coupon_box}>
-          {form.coupons?.length > 0 && form.memberCouponId ? (
+          {totalAvailableCount > 0 && form.memberCouponId ? (
               <span className={s.coupon_text}>
                 <span className={s.coupon_text_point}>{form.discountCoupon}원</span> 할인 적용중
               </span>

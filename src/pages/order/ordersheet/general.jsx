@@ -87,7 +87,7 @@ export default function GeneralOrderSheetPage() {
           return (window.location.href = '/cart');
         }
         const info = res.data.data;
-        console.log('/api/orders/sheet/general', res);
+        console.log('/api/orders/sheet/general', info);
         // 주문에 대한 모든 데이터
         // console.log('info:  ',info)
         const calcedReward = Number(info.reward) > 0 ? info.reward : 0;
@@ -117,6 +117,16 @@ export default function GeneralOrderSheetPage() {
               remaining: cp.remaining,
               expiredDate: transformDate(cp.expiredDate),
             })) || [], //////////// ! DUMMY DATA
+            allianceCoupons:
+            info.allianceCoupons?.map((cp) => ({
+              memberCouponId: cp.memberCouponId,
+              name: cp.name,
+              discountType: cp.discountType,
+              discountDegree: cp.discountDegree,
+              availableMaxDiscount: cp.availableMaxDiscount,
+              availableMinPrice: cp.availableMinPrice,
+              expiredDate: transformDate(cp.expiredDate),
+            })) || [],
           orderPrice: info.orderPrice, //  장바구니 또는 결제 전 상품의 "최종 가격" (기본 어드민 설정할인율 적용 / 결제페이지의 쿠폰 및 적립금 적용 전 가격)
           reward: calcedReward, // 적립금
           deliveryPrice: alliance ? 0 : getDeliveryPrice(info), // 배송비 : 장바구니에서, 최종 배송비
@@ -142,6 +152,16 @@ export default function GeneralOrderSheetPage() {
               availableMaxDiscount: cp.availableMaxDiscount,
               availableMinPrice: cp.availableMinPrice,
               remaining: cp.remaining,
+              expiredDate: transformDate(cp.expiredDate),
+            })) || [],
+            allianceCoupons:
+            info.allianceCoupons?.map((cp) => ({
+              memberCouponId: cp.memberCouponId,
+              name: cp.name,
+              discountType: cp.discountType,
+              discountDegree: cp.discountDegree,
+              availableMaxDiscount: cp.availableMaxDiscount,
+              availableMinPrice: cp.availableMinPrice,
               expiredDate: transformDate(cp.expiredDate),
             })) || [],
           orderItemDtoList: info.orderItemDtoList?.map((item) => ({

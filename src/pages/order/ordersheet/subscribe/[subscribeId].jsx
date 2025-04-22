@@ -162,6 +162,16 @@ export default function SubscribeOrderSheetPage() {
               remaining: cp.remaining,
               expiredDate: transformDate(cp.expiredDate),
             })) || [],
+          allianceCoupons:
+            data.allianceCoupons?.map((cp) => ({
+              memberCouponId: cp.memberCouponId,
+              name: cp.name,
+              discountType: cp.discountType,
+              discountDegree: cp.discountDegree,
+              availableMaxDiscount: cp.availableMaxDiscount,
+              availableMinPrice: cp.availableMinPrice,
+              expiredDate: transformDate(cp.expiredDate),
+            })) || [],
           deliveryDto: {
             name: null, // 수령자 이름 ("정기배송과" 묶음 배송일 경우, null => 정기배송 수령자를 따름)
             phone: null, // 수령자 전화번호 (묶음 배송일 경우, null)

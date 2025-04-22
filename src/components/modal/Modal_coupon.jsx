@@ -18,6 +18,12 @@ export const Modal_coupon = ({
 }) => {
   const [selectedRadioInfo, setSelectedRadioInfo] = useState(null);
   const isMobile = useMediaQuery({ maxWidth: 600 });
+
+    // coupons + allianceCoupons 결합
+    const allCoupons = [
+      ...(form.coupons || []).map(cp => ({ ...cp, remaining: cp.remaining ?? 1 })),
+      ...(form.allianceCoupons || []).map(cp => ({ ...cp, remaining: cp.remaining ?? 1 })),
+    ];
   // Selected Item Info
   // let selectedItemPrice;
   // cons = Number(itemInfo.id);
@@ -118,7 +124,7 @@ export const Modal_coupon = ({
     return <EmptyMessage text="사용 가능한 쿠폰이 없습니다." />;
   }
 
-  const processedCoupons = form.coupons
+  const processedCoupons = allCoupons
     .filter((item) => item.remaining > 0)
     .map((item) => {
       item.couponId = `coupon-${item.memberCouponId}`;

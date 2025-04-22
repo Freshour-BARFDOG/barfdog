@@ -78,7 +78,7 @@ export const OrdersheetDeliveryForm = ({
     }
   console.log('묶음 배송 상태 값',info.orderStatus);
     console.log('묶음 배송 deliveryId',info.deliveryId);
-    console.log('주문 정보 조회 info',info);
+    // console.log('주문 정보 조회 info',info);
     
     setDeliveryInfo((prevState) => ({
       ...prevState,
