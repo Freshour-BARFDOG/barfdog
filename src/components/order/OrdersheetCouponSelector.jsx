@@ -57,8 +57,7 @@ export default function OrdersheetCouponSelector({
               </span>
             ) : usableCouponsCount > 0 ? (
               <span className={s.coupon_text}>
-                사용가능한 쿠폰이 <span className={s.coupon_text_point}>{usableCouponsCount}</span>장 있어요
-              </span>
+                사용가능 쿠폰 <span className={s.coupon_text_point}>{usableCouponsCount}</span>장</span>
             ) : (
               <span className={s.unusable_coupon_text_}>사용가능한 쿠폰이 없어요</span>
             )}
