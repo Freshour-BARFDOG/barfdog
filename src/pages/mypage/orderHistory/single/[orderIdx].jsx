@@ -55,7 +55,7 @@ const filter_availableConfirmItemList = (itemList) =>
   });
 
 export default function SingleItem_OrderHistoryPage({ data }) {
-  // console.log(data);
+  console.log(data);
 
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
@@ -254,7 +254,6 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                   <span className={s.col_1}>상품 정보</span>
                   <span className={s.col_2}>수량</span>
                   <span className={s.col_3}>총 주문금액</span>
-                  <span className={s.col_4}>쿠폰할인</span>
                   <span className={s.col_5}>주문상태</span>
                 </div>
 
@@ -303,14 +302,6 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                       </span>
                       <span className={`${s.col_3} ${s.price}`}>
                         {transformLocalCurrency(item.finalPrice)}원
-                      </span>
-                      <span
-                        className={`${s.col_4} ${s.discountAmount} ${
-                          item.discountAmount > 0 ? s.discount : ''
-                        }`}
-                      >
-                        {item.discountAmount > 0 && '-'}
-                        {transformLocalCurrency(item.discountAmount)}원
                       </span>
                       <span className={`${s.col_5} ${s.orderStatus}`}>
                         <span className={s.text}>
