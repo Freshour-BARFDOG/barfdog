@@ -1,133 +1,142 @@
-import Arrow from '@public/img/icon/pagination-arrow.svg';
-import DoubleArrow from '@public/img/icon/pagination-double-arrow.svg';
-import { useState } from 'react';
+import Arrow from '/public/img/icon/pagination-arrow.svg';
+import DoubleArrow from '/public/img/icon/pagination-double-arrow.svg';
 import s from './pagination.module.scss';
+import { usePagination } from "/util/hook/usePagination";
 
-const Pagination = ({ itemCountPerGroup, itemTotalCount, theme }) => {
-  const [curPage, setCurPage] = useState(1);
-  const numberOfPages = Math.ceil(itemTotalCount / itemCountPerGroup);
+const Pagination = ({ size, totalElements, onChange, initialPage = 0 }) => {
+  const { currentPage, setCurrentPage, totalPages } = usePagination({
+    size, totalElements, onChange, initialPage
+  })
 
-  const onChangeCurPage = (e) => {
+
+  const onChangeCurrentPage = (e) => {
     const targetPage = Number(e.currentTarget.dataset.page);
-    setCurPage(targetPage);
+
+    setCurrentPage(targetPage-1);
+    if (onChange) {
+      onChange(targetPage-1);
+    }
   };
 
-  let Paginations = [];
-  const Num = ({ pagenum }) => {
-    const calcedPageNum = pagenum + 1;
+  let paginationArray = [];
+  const Num = ({ pageNum }) => {
+    const calcPageNum = pageNum + 1;
     return (
-      <li key={pagenum} data-theme={theme}>
+      <li key={pageNum} data-theme='square'>
         <span
           className={s['btn-page']}
-          data-cur-page={curPage === calcedPageNum}
-          data-page={calcedPageNum}
-          onClick={onChangeCurPage}
+          data-cur-page={currentPage === pageNum}
+          data-page={calcPageNum}
+          onClick={onChangeCurrentPage}
         >
-          {calcedPageNum}
+          {calcPageNum}
         </span>
       </li>
     );
   };
 
-  const PaginationLeftTail = ({ pagenum }) => {
+  const PaginationLeftTail = ({ pageNum }) => {
     return (
       <>
-        <Num pagenum={pagenum} />
+        <Num pagenum={pageNum} />
         <li>
           <span className={`${s['btn-page']} ${s['dots']}`}>...</span>
         </li>
       </>
     );
   };
-  const PaginationRightTail = ({ pagenum }) => {
+  const PaginationRightTail = ({ pageNum }) => {
     return (
       <>
         <li>
           <span className={`${s['btn-page']} ${s['dots']}`}>...</span>
         </li>
-        <Num pagenum={pagenum} />
+        <Num pagenum={pageNum} />
       </>
     );
   };
 
-  const NumberOfPaginations = 5;
-  const leftSideNumber = curPage - 2;
-  const rightSideNumber = curPage + 2;
-  const fistPageindex = 0;
-  const lastPageNum = numberOfPages;
-  const calcedLastPageNumber = lastPageNum - 1;
+  const NumberOfPagination = 5;
+  const leftSideNumber = currentPage - 2;
+  const rightSideNumber = currentPage + 2;
+  const firstPageIndex = 0;
+  const lastPageNum = totalPages;
+  const calcLastPageNumber = lastPageNum - 1;
 
-  if (numberOfPages > NumberOfPaginations) {
+  if (totalPages > NumberOfPagination) {
     if (leftSideNumber <= 0) {
-      for (let i = 0; i < NumberOfPaginations; i++) {
-        Paginations.push(<Num pagenum={i} key={i} />);
+      for (let i = 0; i < NumberOfPagination; i++) {
+        paginationArray.push(<Num pageNum={i} key={i} />);
       }
-      Paginations.push(
-        <PaginationRightTail pagenum={calcedLastPageNumber} key={calcedLastPageNumber} />,
+      paginationArray.push(
+        <PaginationRightTail pageNum={calcLastPageNumber} key={calcLastPageNumber} />,
       );
     } else if (leftSideNumber > 0 && rightSideNumber < lastPageNum) {
       for (let i = leftSideNumber - 1; i < rightSideNumber; i++) {
-        Paginations.push(<Num pagenum={i} key={i} />);
+        paginationArray.push(<Num pageNum={i} key={i} />);
       }
 
-      if (numberOfPages > NumberOfPaginations) {
-        Paginations.push(
-          <PaginationRightTail pagenum={calcedLastPageNumber} key={calcedLastPageNumber} />,
+      if (totalPages > NumberOfPagination) {
+        paginationArray.push(
+          <PaginationRightTail pageNum={calcLastPageNumber} key={calcLastPageNumber} />,
         );
       }
-    } else if (curPage <= lastPageNum) {
-      Paginations.push(<PaginationLeftTail pagenum={fistPageindex} key={fistPageindex} />);
-      for (let i = lastPageNum - NumberOfPaginations; i < lastPageNum; i++) {
-        Paginations.push(<Num pagenum={i} key={i} />);
+    } else if (currentPage <= lastPageNum) {
+      paginationArray.push(<PaginationLeftTail pageNum={firstPageIndex} key={firstPageIndex} />);
+      for (let i = lastPageNum - NumberOfPagination; i < lastPageNum; i++) {
+        paginationArray.push(<Num pageNum={i} key={i} />);
       }
     }
-  } else if (numberOfPages <= NumberOfPaginations) {
-    // console.log();
+  } else if (totalPages <= NumberOfPagination) {
     for (let i = 0; i < lastPageNum; i++) {
-      Paginations.push(<Num pagenum={i} key={i} />);
+      paginationArray.push(<Num pageNum={i} key={i} />);
     }
   }
-
-  const onPrevPage = () => {
-    if (curPage <= 1) return;
-    const prevPage = curPage - 1;
-    setCurPage(prevPage);
-  };
-  const onNextPage = () => {
-    if (curPage >= lastPageNum) return;
-    const NextPage = curPage + 1;
-    setCurPage(NextPage);
-  };
-
-  const onFirstPage = () => {
-    const firstPage = 1;
-    setCurPage(firstPage);
-  };
-
-  const onLastPage = () => {
-    const lastPage = numberOfPages;
-    setCurPage(lastPage);
-  };
+  const handleChangeArrow = (type) => {
+    let newPage;
+    switch (type) {
+      case 'prev': {
+        newPage = currentPage - 1;
+        break;
+      }
+      case 'next': {
+        newPage = currentPage + 1;
+        break;
+      }
+      case 'first': {
+        newPage = 0;
+        break;
+      }
+      case 'last': {
+        newPage = totalPages - 1;
+        break;
+      }
+      default: break;
+    }
+    setCurrentPage(newPage);
+    if (onChange) {
+      onChange(newPage);
+    }
+  }
 
   return (
     <div
       className={s['pagination']}
-      // page-counter-per-group={itemCountPerGroup}
-      data-cur-page={curPage}
+      data-cur-page={currentPage}
     >
-      <span className={`${s['arrow']} ${s['first-page']}`} onClick={onFirstPage}>
+      <button className={`${s['arrow']} ${s['first-page']}`} onClick={() => handleChangeArrow('first')} disabled={currentPage === 0}>
         <DoubleArrow />
-      </span>
-      <span className={`${s['arrow']} ${s['prev-page']}`} onClick={onPrevPage}>
+      </button>
+      <button className={`${s['arrow']} ${s['prev-page']}`} onClick={() => handleChangeArrow('prev')} disabled={currentPage === 0}>
         <Arrow />
-      </span>
-      <ul className={s.pages}>{Paginations}</ul>
-      <span className={`${s['arrow']} ${s['next-page']}`} onClick={onNextPage}>
+      </button>
+      <ul className={s.pages}>{paginationArray}</ul>
+      <button className={`${s['arrow']} ${s['next-page']}`} onClick={() => handleChangeArrow('next')} disabled={currentPage+1 === totalPages}>
         <Arrow />
-      </span>
-      <span className={`${s['arrow']} ${s['last-page']}`} onClick={onLastPage}>
+      </button>
+      <button className={`${s['arrow']} ${s['last-page']}`} onClick={() => handleChangeArrow('last')} disabled={currentPage+1 === totalPages}>
         <DoubleArrow />
-      </span>
+      </button>
     </div>
   );
 };

@@ -84,9 +84,8 @@ function AdminGnb() {
         </List>
         <List title="제휴사 쿠폰 관리">
           <SubmenuList title="난수 쿠폰 생성" link="/bf-admin/alliance/coupon/create" />
-          <SubmenuList title="제휴사 등록" link="/bf-admin/alliance/setting/create" />
-          {/*<SubmenuList title="쿠폰 내역" link="/bf-admin/alliance/coupon" />*/}
-          {/*<SubmenuList title="제휴사 관리" link="/bf-admin/alliance/setting" />*/}
+          <SubmenuList title="쿠폰 내역" link="/bf-admin/alliance/coupon" />
+          <SubmenuList title="제휴사 관리" link="/bf-admin/alliance/setting" />
         </List>
         <List title="제휴사 매출">
           <SubmenuList

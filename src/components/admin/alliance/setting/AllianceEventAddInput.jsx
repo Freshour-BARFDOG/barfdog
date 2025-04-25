@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import * as s from "../coupon/allianceCoupon.module.scss";
 import CloseButton from "/src/components/atoms/CloseButton";
 import enterKey from "/util/func/enterKey";
@@ -7,18 +7,19 @@ import ErrorMessage from "/src/components/atoms/ErrorMessage";
 const AllianceEventAddInput = ({
   eventNameList,
   setEventNameList,
-  eventErrorMessage = '',
+  eventError,
+  setEventError,
 }) => {
   const [eventValue, setEventValue] = useState('');
-  const [eventError, setEventError] = useState(eventErrorMessage);
-
-  useEffect(() => {
-    if (eventErrorMessage) setEventError(eventErrorMessage);
-  }, [eventErrorMessage])
 
   const handleChange = (e) => {
     setEventError('');
     setEventValue(e.target.value);
+  }
+
+  const handleRemoveItem = (event) => {
+    setEventNameList(eventNameList.filter(name => name !== event));
+    setEventError('');
   }
 
   const handleAddEventName = () => {
@@ -56,7 +57,7 @@ const AllianceEventAddInput = ({
             <i>
               <CloseButton
                 style={{ height: '100%'}}
-                onClick={() => setEventNameList(eventNameList.filter(name => name !== event))}
+                onClick={() => handleRemoveItem(event)}
               />
             </i>
           </div>

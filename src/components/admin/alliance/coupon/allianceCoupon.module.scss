@@ -1,56 +1,16 @@
-@import '/styles/module/itemList.module';
-
-.settingCon {
-  overflow: visible !important;
-}
 
 .pointCaption {
   font-size: 14px !important;
   color: var(--color-primary04) !important;
 }
 
-.cont_viewer {
-  .table.settingTable {
-    overflow: visible;
-    .table_header, .table_body, .item {
-      min-width: 100%;
-      width: 100%;
-    }
-    .table_header,
-    .item {
-      grid-template-columns:
-        minmax(40px, 5%)
-        minmax(40px, 5%)
-        minmax(100px, 30%)
-        minmax(80px, 15%)
-        minmax(60px, 11%)
-        minmax(50px, 8%)
-        minmax(50px, 8%)
-        minmax(50px, 8%)
-        minmax(70px, 10%);
-      span {
-        &.eventNameBox {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          transition: all .35s;
-          overflow: visible;
-          .eventName {
-            position: relative;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-          }
-          .eventNameList {
-            width: 100%;
-            border-top: 1px solid #9c9c9c;
-            text-align: left;
-            padding-top: 10px;
-            margin-top: 10px;
-          }
-        }
-      }
-    }
+.eventNameListInputBox {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  input {
+    width: 100%;
   }
 }
 
@@ -61,10 +21,25 @@
   flex-wrap: wrap;
   margin-top: 8px;
   .eventNameChip {
+    font-size: 15px;
     display: flex;
     gap: 4px;
     border-radius: 100px;
     padding: 7.5px 12px;
     background: #EDEDED;
+  }
+}
+
+.couponListTabNav {
+  display: flex;
+  .couponListTabBtn {
+    font-size: 14px;
+    padding: 8.5px 24.5px;
+    background: #F1F2F4;
+    color: #7c7c7c;
+    &.active {
+      background: #fff;
+      color: #BE1A21;
+    }
   }
 }

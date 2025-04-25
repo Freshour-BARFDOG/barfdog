@@ -1,0 +1,106 @@
+@import '/styles/module/itemList.module';
+
+.settingCon {
+  overflow: visible !important;
+}
+
+.cont_viewer {
+  .table {
+    overflow: scroll;
+
+    .table_header, .table_body, .item {
+      min-width: 100%;
+      overflow-y: unset;
+    }
+
+    &.settingDetailTable {
+      .table_header, .item {
+        grid-template-columns:
+          minmax(40px, 5%)
+          minmax(40px, 5%)
+          minmax(100px, 10%)
+          minmax(80px, 30%)
+          minmax(60px, 10%)
+          minmax(50px, 10%)
+          minmax(50px, 10%)
+          minmax(50px, 10%)
+          minmax(70px, 10%);
+      }
+      .item {
+        &.inactive {
+          background: #f8f8f9;
+        }
+      }
+    }
+
+    &.settingTable {
+      .table_header, .item {
+        grid-template-columns:
+          minmax(40px, 5%)
+          minmax(40px, 5%)
+          minmax(100px, 30%)
+          minmax(80px, 15%)
+          minmax(60px, 11%)
+          minmax(50px, 8%)
+          minmax(50px, 8%)
+          minmax(50px, 8%)
+          minmax(70px, 10%);
+        span {
+          &.eventNameBox {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: all .35s;
+            overflow: visible;
+            .eventName {
+              position: relative;
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+            }
+            .eventNameList {
+              width: 100%;
+              border-top: 1px solid #9c9c9c;
+              text-align: left;
+              padding-top: 10px;
+              margin-top: 10px;
+            }
+          }
+        }
+      }
+    }
+
+    &.couponListTable {
+      .table_body {
+        //overflow-x: scroll;
+      }
+      .table_header, .item {
+        grid-template-columns:
+          minmax(40px, 3%)
+          minmax(60px, 3%)
+          minmax(85px, 7%)
+          minmax(100px, 10%)
+          minmax(140px, 13%)
+          minmax(170px, 15%)
+          minmax(85px, 7%)
+          minmax(90px, 7%)
+          minmax(150px, 13%)
+          minmax(60px, 5%)
+          minmax(60px, 5%)
+          minmax(150px, 13%);
+        span {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+}
+
+
+
+
+.allianceTableActions {
+  display: flex;
+  gap: 8px;
+}

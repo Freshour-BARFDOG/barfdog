@@ -1,0 +1,62 @@
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  .modalTitle, .modalSubTitle {
+    line-height: 150%;
+    letter-spacing: -0.4px;
+  }
+  .modalTitle {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 12px;
+    margin-bottom: 8px;
+  }
+  .modalSubTitle {
+    font-size: 16px;
+    font-weight: 400;
+  }
+  .modalContent {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .modalActions {
+    width: 100%;
+    margin-top: 48px;
+    display: flex;
+    gap: 8px;
+    button {
+      display: block;
+      width: 50%;
+    }
+  }
+}
+.detailContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  .detailTitle {
+    font-size: 28px;
+    font-weight: 700;
+  }
+  .detailTable {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    .detailTableRow {
+      display: flex;
+      flex-wrap: wrap;
+      .detailTableRowBox {
+        width: 50%;
+        &.fullWidth {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

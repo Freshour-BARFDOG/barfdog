@@ -89,6 +89,9 @@ $defaultColor: var(--color-font-sub);
     path {
       stroke: $defaultColor;
     }
+    &:disabled svg {
+      cursor: default;
+    }
   }
   .arrow.first-page,
   .arrow.prev-page {
@@ -96,6 +99,9 @@ $defaultColor: var(--color-font-sub);
     transition: transform .5s;
     &:hover{
       transform: rotate(0) translateX(rem(-2));
+    }
+    &:disabled {
+      transform: none;
     }
   }
 
@@ -105,6 +111,9 @@ $defaultColor: var(--color-font-sub);
     transition: transform .5s;
     &:hover{
       transform: rotate(180deg) translateX(rem(-2));
+    }
+    &:disabled {
+      transform: rotate(180deg);
     }
   }
 }

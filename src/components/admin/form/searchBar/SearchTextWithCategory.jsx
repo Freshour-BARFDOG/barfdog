@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import s from "./searchBar.module.scss";
 
 
@@ -16,37 +16,45 @@ const SearchTextWithCategory = ({
   events={
     onSelect: null,
     onKeydown:null,
-  }
+  },
+  searchInputName,
 }) => {
 
   const initialCategory = options[0].value || '';
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [selectedCategory, setSelectedCategory] = useState(searchInputName || initialCategory);
 
 
   const onSelectChangeHandler = (e) => {
     const thisSelect = e.currentTarget;
     const selectedVal = thisSelect.value;
-    setSelectedCategory(selectedVal);
-    if(events.onSelect && typeof events.onSelect === 'function' ){
-      events.onSelect(selectedVal);
-    }
-    const searchQuery = selectedVal;
-    setSearchValue((prevState) => {
-      let tobeInitializedValueObj = {}
-      options.forEach(option=> {
-        if(option.value !== searchQuery){
-          tobeInitializedValueObj = {
-            ...tobeInitializedValueObj,
-            [option.value]: ''
+    if (searchInputName) {
+      setSearchValue((prevState) => ({
+        ...prevState,
+        [name]: selectedVal,
+      }));
+    } else {
+      setSelectedCategory(selectedVal);
+      if(events.onSelect && typeof events.onSelect === 'function' ){
+        events.onSelect(selectedVal);
+      }
+      const searchQuery = selectedVal;
+      setSearchValue((prevState) => {
+        let tobeInitializedValueObj = {}
+        options.forEach(option=> {
+          if(option.value !== searchQuery){
+            tobeInitializedValueObj = {
+              ...tobeInitializedValueObj,
+              [option.value]: ''
+            }
           }
+        });
+        return {
+        ...prevState,
+          [searchQuery]: '',
+          ...tobeInitializedValueObj,
         }
       });
-      return {
-      ...prevState,
-        [searchQuery]: '',
-        ...tobeInitializedValueObj,
-      }
-    });
+    }
   };
 
   const onInputChangeHandler = (e) => {
@@ -74,7 +82,7 @@ const SearchTextWithCategory = ({
             name={name}
             id={id || name}
             onChange={onSelectChangeHandler}
-            value={selectedCategory}
+            value={!searchInputName ? selectedCategory : searchValue[name]}
           >
             {options.map((option, i) => {
               return i === 0 ? (

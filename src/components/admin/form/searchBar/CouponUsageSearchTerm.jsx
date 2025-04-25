@@ -9,6 +9,8 @@ const CouponUsageSearchTerm = ({
   setSearchValue,
   title,
   tooltip,
+  fromInputName = 'createdDateFrom',
+  toInputName = 'createdDateTo',
 }) => {
   const { createdDateFrom, createdDateTo } = searchValue;
   const optionalRef = useRef();
@@ -27,8 +29,8 @@ const CouponUsageSearchTerm = ({
 
     setSearchValue((prevState) => ({
       ...prevState,
-      createdDateFrom: from,
-      createdDateTo: to,
+      [fromInputName]: from,
+      [toInputName]: to,
     }));
   }, []);
 
@@ -69,18 +71,20 @@ const CouponUsageSearchTerm = ({
           <div>
             <input
               type="date"
-              id="createdDateFrom"
+              id={fromInputName}
+              name={fromInputName}
               onChange={onDriectTermHandler}
               onKeyUp={onDriectTermHandler}
-              value={searchValue.createdDateFrom || ''}
+              value={searchValue[fromInputName] || ''}
             />
             <i> ~ </i>
             <input
               type="date"
-              id="createdDateTo"
+              id={toInputName}
+              name={toInputName}
               onChange={onDriectTermHandler}
               onKeyUp={onDriectTermHandler}
-              value={searchValue.createdDateTo || ''}
+              value={searchValue[toInputName] || ''}
             />
           </div>
         </div>
