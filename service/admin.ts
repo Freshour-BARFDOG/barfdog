@@ -1,4 +1,4 @@
-import { getData, getDataSSR, postData, postDataBlob } from "@src/pages/api/reqData";
+import { getData, getDataSSR, postData } from "@src/pages/api/reqData";
 import {
 	AllianceItem,
 	AllianceEventItem,
@@ -11,9 +11,12 @@ import {
 	AllianceCouponListQueryParams,
 	AllianceCouponResponse,
 	ExcelDownloadIssuedAllianceCoupon,
-	AllianceCouponDetail, AllianceDetail, CreateAllianceEvent
+	AllianceCouponDetail, CreateAllianceEvent
 } from "../type/admin/alliance/alliance";
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
+import axiosConfig from "@src/pages/api/axios/axios.config";
+import { getCookie } from "@util/func/cookie";
+import { cookieType } from "@store/TYPE/cookieType";
 
 export {
 	createAlliance,
@@ -63,7 +66,10 @@ const getAllianceEventList = async (req): Promise<AllianceEventItem[]> => {
 
 const createAllianceCoupon = async (body: CreateCouponFormValues) => {
 	try {
-		const response = await postData('/api/admin/coupons/alliance/create', body);
+		const response = await axios.post('/api/admin/coupons/alliance/create', body, {
+			...axiosConfig(),
+			timeout: 50000
+		});
 		return response;
 	} catch (err) {
 		throw err.response.data.errors[0];
@@ -78,7 +84,18 @@ const downloadExcelAllianceCoupon = async (body: ExcelDownloadAllianceCoupon ) =
 		useExpiredDate: useExpiredDate,
 		useStartDate,
 	}).toString();
-	const response = await postDataBlob(`/api/admin/coupons/excel-download?${query}`) as AxiosResponse<Blob> | undefined;
+
+	const accessToken = getCookie(cookieType.LOGIN_COOKIE);
+
+	const response = await axios.post(`/api/admin/coupons/excel-download?${query}`, undefined, {
+		withCredentials: true,
+		headers: {
+			authorization: accessToken,
+			'content-Type': 'application/json',
+		},
+		responseType: 'blob',
+		timeout: 50000
+	}) as AxiosResponse<Blob> | undefined;
 
 	if (response?.data && response?.data instanceof Blob) {
 		return response?.data;
