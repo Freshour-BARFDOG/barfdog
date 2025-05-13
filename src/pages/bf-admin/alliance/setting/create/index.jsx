@@ -25,6 +25,7 @@ const Index = () => {
   });
   const [formErrors, setFormErrors] = useState({});
   const [eventNameList, setEventNameList] = useState([]);
+  const [eventError, setEventError] = useState('');
 
   const isPassed = formValues.allianceName && formValues.allianceCode;
 
@@ -122,6 +123,8 @@ const Index = () => {
                   <AllianceEventAddInput
                     eventNameList={eventNameList}
                     setEventNameList={setEventNameList}
+                    eventError={eventError}
+                    setEventError={setEventError}
                   />
                 </div>
               </InputWrapper>
