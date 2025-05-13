@@ -234,7 +234,7 @@ const Index = () => {
               itemList={allianceCouponList}
               className={s.couponListTable}
               tableTitle='목록'
-              buttons={<Button onClick={() => setOpenDeleteModal(true)}>쿠폰 삭제</Button>}
+              buttons={tab === 'ACTIVE' && <Button onClick={() => setOpenDeleteModal(true)}>쿠폰 삭제</Button>}
               tableHeader={
                 <>
                   <li className={s.table_th}>
