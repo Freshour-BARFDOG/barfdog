@@ -120,7 +120,7 @@ export const Modal_coupon = ({
     }));
   };
 
-  if (!form.coupons?.length) {
+  if (!allCoupons.length) {
     return <EmptyMessage text="사용 가능한 쿠폰이 없습니다." />;
   }
 
