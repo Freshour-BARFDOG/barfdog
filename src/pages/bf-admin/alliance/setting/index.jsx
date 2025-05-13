@@ -102,7 +102,10 @@ const Index = () => {
           <h1 className="title_main">제휴사 관리</h1>
           <section className="cont">
             <SearchBar
-              onReset={() => setSearchValues({ allianceName: '' })}
+              onReset={() => {
+                setSearchValues({allianceName: ''})
+                deleteParams(['page', 'allianceName']);
+              }}
               onSearch={handleSearch}
             >
               <SearchPlainInput

@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
-import Spinner from "/src/components/atoms/Spinner";
 import CreateCouponForm from "/src/components/admin/alliance/coupon/create/CreateCouponForm";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
+import { FullScreenLoading } from "/src/components/atoms/FullScreenLoading";
 import { valid_currency, valid_hasFormErrors, valid_isEmpty, valid_isNumberEmpty } from "/util/func/validation/validationPackage";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import transformClearLocalCurrency from "/util/func/transformClearLocalCurrency";
@@ -161,11 +161,10 @@ const Index = ({ allianceList }) => {
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed) return mct.alertShow('입력하지 않은 항목이 있습니다.\n모든 항목을 입력해 주세요');
 
+    setIsLoading(true);
     try {
       const response = await createAllianceCoupon(body);
       const couponBundle = response?.data?.allianceCouponBundle;
-
-      setIsLoading(true);
       if (couponBundle) {
         // 난수 쿠폰 엑셀 다운로드
         try {
@@ -213,6 +212,7 @@ const Index = ({ allianceList }) => {
       <MetaTitle title="난수 쿠폰 발급" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
+          {isLoading && <FullScreenLoading opacity={0.3} />}
           <h1 className="title_main">
             난수 쿠폰 발급
           </h1>
@@ -235,11 +235,7 @@ const Index = ({ allianceList }) => {
               onClick={handleSubmit}
               disabled={!formValues.allianceEventId}
             >
-              {isLoading ? (
-                <Spinner style={{ color: '#fff' }} />
-              ) : (
-                '쿠폰 생성하기'
-              )}
+              쿠폰 생성하기
             </button>
           </div>
         </AdminContentWrapper>
