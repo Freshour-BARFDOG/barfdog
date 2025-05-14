@@ -32,6 +32,7 @@ import {
   getAllianceCouponList
 } from "/service/admin";
 import { downloadBlobFile } from "/util/func/downloadBlobFile";
+import { useSearchParams } from "/util/hook/useSearchParams";
 
 const initialSearchValue = {
   page: 0,
@@ -73,6 +74,12 @@ const Index = () => {
     search: getParam('search') || '',
   }
 
+  const { handleSearch, handlePageChange, handleResetSearchValue } = useSearchParams({
+    initialSearchValue,
+    searchValues,
+    setSearchValues
+  });
+
   const fetchData = async () => {
     setIsLoading(true);
     const response = await getAllianceCouponList(params, tab);
@@ -83,42 +90,6 @@ const Index = () => {
   useEffect(() => {
     fetchData();
   }, [tab, params.page, params.from, params.to, params.couponTarget, params.searchType, params.search])
-
-  const handleResetSearchValue = () => {
-    setParams(initialSearchValue)
-    setSearchValues(initialSearchValue);
-  }
-
-  const handleSearch = (isReset = false, currentPage = 0) => {
-    // 초기화시 초기값 query, searchValues 적용
-    if(isReset) {
-      handleResetSearchValue();
-    } else {
-
-      // 검색 버튼 클릭 및 검색어 Enter keyDown event 발생시
-      // 초기 page 0 적용 및 page 를 제외한 값들과 대한 queryParams 생성 및 적용
-      const paramsToSet= {};
-      paramsToSet.page = 0;
-
-      const { page, ...rest } = searchValues;
-      Object.entries(rest).forEach(([key, value]) => {
-        paramsToSet[key] = value;
-      });
-      if (currentPage) {
-        paramsToSet.page = currentPage;
-      } else {
-        setSearchValues({...searchValues, page: 0});
-      }
-      setParams(paramsToSet)
-    }
-  }
-
-  const handlePageChange = (page) => {
-    // 페이지네이션 변동시 searchValues 값에 바뀐 page 적용 및 params 적용을 위한 handleSearch 호출
-    const currentPage = page;
-    setSearchValues({...searchValues, page: currentPage});
-    handleSearch(false, currentPage);
-  }
 
   const handleTabChange = (tab) => {
     // 활성, 삭제 쿠폰 tab 변동시 searchValues 값 초기화 및 page 0 처리
