@@ -236,7 +236,9 @@ const Index = () => {
                           value={selectedIds.includes(item.bundle)}
                         />
                       </span>
-                      <span>{index + 1}</span>
+                      <span>
+                        {data.page.totalElements - (data.page.number * data.page.size + index)}
+                      </span>
                       <span>
                          <button
                            className='admin_btn autoWidth solid basic_s'

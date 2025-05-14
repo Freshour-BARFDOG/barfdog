@@ -150,7 +150,9 @@ const Index = () => {
                           value={selectedIds.includes(item.allianceId)}
                         />
                       </span>
-                      <span>{index + 1}</span>
+                      <span>
+                        {data.page.totalElements - (data.page.number * data.page.size + index)}
+                      </span>
                       <span>{item.allianceName}</span>
                       <span className={s.eventNameBox}>
                           <div className={s.eventName}>
