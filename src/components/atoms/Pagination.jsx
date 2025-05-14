@@ -8,7 +8,6 @@ const Pagination = ({ size, totalElements, onChange, initialPage = 0 }) => {
     size, totalElements, onChange, initialPage
   })
 
-
   const onChangeCurrentPage = (e) => {
     const targetPage = Number(e.currentTarget.dataset.page);
 
@@ -20,7 +19,7 @@ const Pagination = ({ size, totalElements, onChange, initialPage = 0 }) => {
 
   let paginationArray = [];
   const Num = ({ pageNum }) => {
-    const calcPageNum = pageNum + 1;
+    const calcPageNum = Number(pageNum) + 1;
     return (
       <li key={pageNum} data-theme='square'>
         <span
@@ -38,7 +37,7 @@ const Pagination = ({ size, totalElements, onChange, initialPage = 0 }) => {
   const PaginationLeftTail = ({ pageNum }) => {
     return (
       <>
-        <Num pagenum={pageNum} />
+        <Num pageNum={pageNum} />
         <li>
           <span className={`${s['btn-page']} ${s['dots']}`}>...</span>
         </li>
@@ -51,7 +50,7 @@ const Pagination = ({ size, totalElements, onChange, initialPage = 0 }) => {
         <li>
           <span className={`${s['btn-page']} ${s['dots']}`}>...</span>
         </li>
-        <Num pagenum={pageNum} />
+        <Num pageNum={pageNum} />
       </>
     );
   };

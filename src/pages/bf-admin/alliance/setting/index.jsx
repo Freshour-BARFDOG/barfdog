@@ -19,7 +19,13 @@ import enterKey from "/util/func/enterKey";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import { useItemSelection } from "/util/hook/useItemSelection";
 import { useQueryParams } from "/util/hook/useQueryParams";
+import { useSearchParams } from "/util/hook/useSearchParams";
 import { deleteAlliance, getAllianceManagementList } from "/service/admin";
+
+const initialSearchValue = {
+  page: 0,
+  allianceName: ''
+};
 
 const Index = () => {
   const router = useRouter();
@@ -29,10 +35,7 @@ const Index = () => {
   const [data, setData] = useState({});
   const allianceManagementList = data.allianceManagementList || [];
 
-  const [searchValues, setSearchValues] = useState({
-    page: 0,
-    allianceName: '',
-  });
+  const [searchValues, setSearchValues] = useState(initialSearchValue);
 
   const {
     allIds,
@@ -41,12 +44,18 @@ const Index = () => {
     toggleSelect,
   } = useItemSelection(allianceManagementList, (alliance) => alliance.allianceId);
 
-  const { getParam, setParams, deleteParams } = useQueryParams();
+  const { getParam } = useQueryParams();
   const params = {
     page: Number(getParam('page') || 0),
     size: 10,
     allianceName: getParam('allianceName') || ''
   }
+
+  const { handleSearch, handlePageChange } = useSearchParams({
+    initialSearchValue,
+    searchValues,
+    setSearchValues
+  });
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -61,20 +70,6 @@ const Index = () => {
 
   const handleGoToDetail = (allianceId) => {
     router.push(`/bf-admin/alliance/setting/${allianceId}`);
-  }
-
-  const handleSearch = () => {
-    if (searchValues.allianceName) {
-      setParams({ page: 0, allianceName: searchValues.allianceName });
-    } else {
-      deleteParams(['page', 'allianceName']);
-    }
-  }
-
-  const handleChangePage = (page) => {
-    // 페이지네이션 변동시 searchValues 값에 바뀐 page 적용 및 params 적용을 위한 handleSearch 호출
-    setSearchValues({...searchValues, page: page});
-    handleSearch();
   }
 
   const handleDeleteAlliance = async () => {
@@ -102,10 +97,7 @@ const Index = () => {
           <h1 className="title_main">제휴사 관리</h1>
           <section className="cont">
             <SearchBar
-              onReset={() => {
-                setSearchValues({allianceName: ''})
-                deleteParams(['page', 'allianceName']);
-              }}
+              onReset={() => handleSearch(true)}
               onSearch={handleSearch}
             >
               <SearchPlainInput
@@ -113,7 +105,7 @@ const Index = () => {
                 name='allianceName'
                 onChange={setSearchValues}
                 searchValue={searchValues || ''}
-                onKeydown={(e) => enterKey(e, handleSearch)}
+                onKeydown={(e) => enterKey(e, () => handleSearch())}
               />
             </SearchBar>
           </section>
@@ -201,7 +193,7 @@ const Index = () => {
               <Pagination
                 totalElements={data?.page?.totalElements || 0}
                 size={10}
-                onChange={handleChangePage}
+                onChange={handlePageChange}
                 initialPage={searchValues.page}
               />
             </div>
