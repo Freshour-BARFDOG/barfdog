@@ -212,7 +212,7 @@ const Index = () => {
               <SearchRadio
                 searchValue={searchValues}
                 setSearchValue={setSearchValues}
-                title="회원 유형"
+                title="사용처"
                 name="couponTarget"
                 idList={[
                   productType.ALL,
