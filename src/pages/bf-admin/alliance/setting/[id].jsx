@@ -183,6 +183,7 @@ const Index = ({ data, allianceId }) => {
                         <>
                           {allianceDetail?.allianceEventInfos?.map((event, index) => {
                             const deletedEvent = event?.eventStatus === 'INACTIVE' || false;
+                            const seq = allianceDetail?.allianceEventInfos.length - index;
                             return (
                               <li className={`${s.item} ${deletedEvent ? s.inactive : ''}`} key={event.eventName}>
                               <span>
@@ -192,7 +193,7 @@ const Index = ({ data, allianceId }) => {
                                   disabled={deletedEvent}
                                 />
                               </span>
-                                <span>{index + 1}</span>
+                                <span>{seq}</span>
                                 <span>{format(new Date(event.createdEventDate), 'yy.MM.dd')}</span>
                                 <span>{event.eventName}</span>
                                 <span>{transformLocalCurrency(event.eventCouponCreatedCount)}</span>
