@@ -160,7 +160,7 @@ export function Payment({
             paymentPrice: paymentPrice, // 최종 결제 금액
             paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
             // nextDeliveryDate: form.nextDeliveryDate, // ! 일반주문 시, request field에 없는 값.
-            memberCouponId: form.memberCouponId,
+            // memberCouponId: form.memberCouponId,
             agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
             brochure: form.brochure, // 브로슈어 수령여부
           }
@@ -287,7 +287,7 @@ export function Payment({
       buyer_email: info.email, // 구매자 이메일
       buyer_addr: `${info.defaultAddress.street}, ${info.defaultAddress.detailAddress}`, // 구매자 주소
       buyer_postcode: info.defaultAddress.zipcode, // 구매자 우편번호
-      m_redirect_url: `${window.location.origin}/order/loading/${id}`,
+      m_redirect_url: `${window.location.origin}/order/loading/${id}/${form.memberCouponId}`,
     };
     // 네이버 페이 추가
     if (body.paymentMethod === paymentMethodType.NAVER_PAY) {
@@ -320,6 +320,7 @@ export function Payment({
           impUid: imp_uid,
           merchantUid: merchant_uid,
           discountReward: callbackData.discountReward, // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
+          memberCouponId: form.memberCouponId,
         });
         // console.log(r);
         if (r.isDone) {

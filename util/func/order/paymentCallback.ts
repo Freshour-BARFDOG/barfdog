@@ -68,7 +68,7 @@ export async function successSubscribePayment(orderId, data) {
     impUid: data.impUid, // impUid는 두 번째 결제에 값이 있어야, webhook에서 해당 주문을 찾을 수 있음.
     merchantUid: data.merchantUid, // merchantUid는 첫 번째, 두 번째 결제 모두 동일
     customerUid: data.customerUid,
-    discountReward: data.discountReward
+    discountReward: data.discountReward,
   }
   const r = await postObjData(`/api/orders/${orderId}/subscribe/success`, body);
   // console.log(r);
@@ -84,7 +84,7 @@ export async function invalidSuccessSubscribePayment({orderId, data, error_msg, 
     impUid: data.impUid, // impUid는 두 번째 결제에 값이 있어야, webhook에서 해당 주문을 찾을 수 있음.
     merchantUid: data.merchantUid, // merchantUid는 첫 번째, 두 번째 결제 모두 동일
     customerUid: data.customerUid,
-    discountReward: data.discountReward
+    discountReward: data.discountReward,
   }
   const fail = await postObjData(`/api/orders/${orderId}/subscribe/success/invalidPayment`, body);
   // console.log(fail);

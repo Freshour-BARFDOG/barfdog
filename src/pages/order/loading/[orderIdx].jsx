@@ -6,7 +6,7 @@ import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
 
 function OrderGeneralLoading(props) {
   const router = useRouter();
-  const { orderIdx , imp_uid, merchant_uid, imp_success, error_msg} = router.query;
+  const { orderIdx , memberCouponId, imp_uid, merchant_uid, imp_success, error_msg} = router.query;
   
   useEffect(() => {
     (async ()=>{
@@ -15,7 +15,8 @@ function OrderGeneralLoading(props) {
         // console.log(imp_success);
         const r = await postData(`/api/orders/${orderIdx}/general/success`, {
           impUid : imp_uid,
-          merchantUid : merchant_uid
+          merchantUid : merchant_uid,
+          memberCouponId : memberCouponId,
         });
 
         // console.log(r);
