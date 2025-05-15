@@ -181,7 +181,9 @@ const Index = ({ data, allianceId }) => {
                       }
                       tableBody={
                         <>
-                          {allianceDetail?.allianceEventInfos?.map((event, index) => {
+                          {allianceDetail?.allianceEventInfos?.sort((a, b) =>
+                            new Date(b.createdEventDate).getTime() - new Date(a.createdEventDate).getTime()
+                          ).map((event, index) => {
                             const deletedEvent = event?.eventStatus === 'INACTIVE' || false;
                             const seq = allianceDetail?.allianceEventInfos.length - index;
                             return (
