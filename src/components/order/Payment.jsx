@@ -160,7 +160,7 @@ export function Payment({
             paymentPrice: paymentPrice, // 최종 결제 금액
             paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
             // nextDeliveryDate: form.nextDeliveryDate, // ! 일반주문 시, request field에 없는 값.
-            // memberCouponId: form.memberCouponId,
+            memberCouponId: form.memberCouponId,
             agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
             brochure: form.brochure, // 브로슈어 수령여부
           }
