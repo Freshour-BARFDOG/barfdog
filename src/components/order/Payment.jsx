@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   validate,
   validateInBundleDelivery,
@@ -32,7 +32,6 @@ import { getAmountOfPaymentRegisterationByPaymentMethod } from '../../../util/fu
 import { FullScreenLoading } from '../atoms/FullScreenLoading';
 import { getCookie } from '@util/func/cookie';
 
-
 export function Payment({
   info,
   form,
@@ -48,6 +47,35 @@ export function Payment({
   const isMobile = ds.isMobile;
 
   const hasAllianceSubscribeDiscount = hasAllianceDiscount && info.newSubscribe;
+
+  // 1) 컴포넌트 마운트 시, 남아 있는 pendingId가 있으면 바로 취소
+  useEffect(() => {
+    const pending = sessionStorage.getItem('pendingOrderId');
+    if (pending) {
+      void postObjData(`/api/orders/${pending}/general/cancel`);
+      sessionStorage.removeItem('pendingOrderId');
+      router.replace('/order/orderFailed');
+    }
+  }, [router]);
+
+  // 2) beforeunload / pagehide 이벤트로 sendBeacon 취소 시도
+  useEffect(() => {
+    const handleUnload = () => {
+      const pending = sessionStorage.getItem('pendingOrderId');
+      if (pending) {
+        navigator.sendBeacon(
+          `/api/orders/${pending}/general/cancel`,
+          new Blob([], { type: 'application/json' }),
+        );
+      }
+    };
+    window.addEventListener('beforeunload', handleUnload);
+    window.addEventListener('pagehide', handleUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload);
+      window.removeEventListener('pagehide', handleUnload);
+    };
+  }, []);
 
   useEffect(() => {
     const jquery = document.createElement('script');
@@ -89,7 +117,9 @@ export function Payment({
       detailAddress: form.deliveryDto.detailAddress,
       paymentMethod: form.paymentMethod,
       agreePrivacy: form.agreePrivacy,
-      paymentPrice: calcOrderSheetPrices(form, orderType, {deliveryFreeConditionPrice: info.freeCondition,}).paymentPrice,
+      paymentPrice: calcOrderSheetPrices(form, orderType, {
+        deliveryFreeConditionPrice: info.freeCondition,
+      }).paymentPrice,
     };
 
     // ! bundle일 경우, validation항목 다르게 변경해주기.
@@ -123,8 +153,10 @@ export function Payment({
     } = calcOrderSheetPrices(
       form,
       orderType,
-      {deliveryFreeConditionPrice: info.freeCondition},
-      orderType === 'general' ? hasAllianceDiscount : hasAllianceSubscribeDiscount
+      { deliveryFreeConditionPrice: info.freeCondition },
+      orderType === 'general'
+        ? hasAllianceDiscount
+        : hasAllianceSubscribeDiscount,
     );
 
     const customerUid = generateCustomerUid(); // ! [client '결제실패' / Webhook 'paid'] CASE 처리를 위해, 주문서 생성 시에도 cutomerUid 전송.
@@ -147,7 +179,7 @@ export function Payment({
               zipcode: form.deliveryDto.zipcode, // 우편번호
               street: form.deliveryDto.street, // 도로명 주소
               detailAddress: form.deliveryDto.detailAddress, // 상세주소
-              deliveryName: "", // 배송지 이름
+              deliveryName: '', // 배송지 이름
               request: form.deliveryDto.request, // 배송 요청사항
             },
             deliveryId: form.deliveryId || null, // 묶음 배송 할 배송 id . 묶음배송 아닐 경우 null
@@ -189,9 +221,9 @@ export function Payment({
             brochure: form.brochure, // 브로슈어 수령여부
           };
 
-        if (hasAllianceSubscribeDiscount) {
-          body.discountSubscribeAlliance = discountSubscribeAlliance;
-        }
+    if (hasAllianceSubscribeDiscount) {
+      body.discountSubscribeAlliance = discountSubscribeAlliance;
+    }
 
     try {
       setIsLoading((prevState) => ({
@@ -205,7 +237,7 @@ export function Payment({
       const subscribeId = router.query?.subscribeId;
 
       console.log('request body', body);
-      
+
       const apiUrl =
         orderType === 'general'
           ? `/api/orders/general?alliance=${alliance || ''}`
@@ -217,7 +249,6 @@ export function Payment({
 
         const orderId = res.data.data.id;
         if (orderType === 'general') {
-
           // 일반 주문 결제
           await generalPayment({
             body: body,
@@ -263,6 +294,7 @@ export function Payment({
   }
 
   async function generalPayment({ body, id, merchantUid }) {
+    sessionStorage.setItem('pendingOrderId', String(id));
     /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
@@ -275,7 +307,7 @@ export function Payment({
 
     /* 2. 결제 데이터 정의하기  1원 결제 -> 실패 , 100원 결제 -> 성공 */
     // TODO: name(주문명) test 지우기
-    
+
     const data = {
       pg: pgType.GENERAL[body.paymentMethod], // PG사
       pay_method: paymethodFilter(body.paymentMethod), // 결제수단
@@ -298,7 +330,6 @@ export function Payment({
     }
 
     // console.log(" - IMP.request_pay(data)\n", data);
-
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
     const callbackData = {
       discountReward: body.discountReward,
@@ -315,7 +346,7 @@ export function Payment({
       if (success) {
         // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
         // TODO: 결제 정보 전달
-
+        sessionStorage.removeItem('pendingOrderId');
         const r = await postObjData(`/api/orders/${id}/general/success`, {
           impUid: imp_uid,
           merchantUid: merchant_uid,
@@ -327,13 +358,10 @@ export function Payment({
           // alert('결제 성공');
           window.location.href = `/order/orderCompleted/${id}`;
         }
-      } else if (error_msg.includes('결제포기')) {
-        // 사용자가 결제 취소(결제포기)했을때
+      } else {
+        sessionStorage.removeItem('pendingOrderId');
         await postObjData(`/api/orders/${id}/general/cancel`);
         window.location.href = `/order/orderFailed`;
-      } else {
-        // 결제 실패
-        await faliedGeneralPayment(id, error_msg);
       }
     }
   }
@@ -348,7 +376,7 @@ export function Payment({
     /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
-    
+
     /* 2. [결제등록] 결제 데이터 정의하기 */
     const itemName = `${info.recipeNameList.join(', ')}`;
     const mobileItemName = `${info.recipeNameList.join(', ')}`;
