@@ -54,7 +54,7 @@ export function Payment({
     if (pending) {
       void postObjData(`/api/orders/${pending}/general/cancel`);
       sessionStorage.removeItem('pendingOrderId');
-      router.replace('/order/orderFailed');
+      // router.replace('/order/orderFailed');
     }
   }, [router]);
 
@@ -363,7 +363,7 @@ export function Payment({
       } else {
         sessionStorage.removeItem('pendingOrderId');
         await postObjData(`/api/orders/${id}/general/cancel`);
-        // window.location.href = `/order/orderFailed`;
+        window.location.href = `/order/orderFailed`;
       }
     }
   }
