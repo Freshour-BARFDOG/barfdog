@@ -308,6 +308,8 @@ export function Payment({
     /* 2. 결제 데이터 정의하기  1원 결제 -> 실패 , 100원 결제 -> 성공 */
     // TODO: name(주문명) test 지우기
 
+    const couponPath = form.memberCouponId ? `/${form.memberCouponId}` : '';
+
     const data = {
       pg: pgType.GENERAL[body.paymentMethod], // PG사
       pay_method: paymethodFilter(body.paymentMethod), // 결제수단
@@ -319,7 +321,7 @@ export function Payment({
       buyer_email: info.email, // 구매자 이메일
       buyer_addr: `${info.defaultAddress.street}, ${info.defaultAddress.detailAddress}`, // 구매자 주소
       buyer_postcode: info.defaultAddress.zipcode, // 구매자 우편번호
-      m_redirect_url: `${window.location.origin}/order/loading/${id}/${form.memberCouponId}`,
+      m_redirect_url: `${window.location.origin}/order/loading/${id}/${couponPath}`,
     };
     // 네이버 페이 추가
     if (body.paymentMethod === paymentMethodType.NAVER_PAY) {
@@ -361,7 +363,7 @@ export function Payment({
       } else {
         sessionStorage.removeItem('pendingOrderId');
         await postObjData(`/api/orders/${id}/general/cancel`);
-        window.location.href = `/order/orderFailed`;
+        // window.location.href = `/order/orderFailed`;
       }
     }
   }
