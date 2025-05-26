@@ -17,12 +17,13 @@ import { EmptyCart } from '/src/components/cart/EmptyCart';
 import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import Spinner from '/src/components/atoms/Spinner';
 import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
-import { cartAction } from '/store/cart-slice';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { postUserObjData } from '../api/reqData';
-import useNaverAnalytics from "../../../util/hook/useNaverAnalytics";
-import {getCookie} from "/util/func/cookie";
+import useNaverAnalytics from '../../../util/hook/useNaverAnalytics';
+import { getCookie } from '/util/func/cookie';
+import { cartAction } from '/store/cart-slice';
+import { saveOrderItems } from '/store/cart-slice';
 
 const calculateCartDeliveryPrice = ({
   selectedItemDto,
@@ -44,7 +45,9 @@ const calculateCartDeliveryPrice = ({
     .map((item) => item.totalPrice)
     ?.reduce((acc, cur) => acc + cur);
 
-  return totalPrice >= deliveryConstant.freeCondition || allItemDeliveryFree || alliance !== null
+  return totalPrice >= deliveryConstant.freeCondition ||
+    allItemDeliveryFree ||
+    alliance !== null
     ? 0
     : deliveryConstant.price;
 };
@@ -413,7 +416,7 @@ export default function CartPage({ data, error }) {
         ...prevState,
         buy: true,
       }));
-      await dispatch(cartAction.setOrderItemList({ items }));
+      await dispatch(saveOrderItems(items));
       await router.push(`/order/ordersheet/general`);
     } catch (err) {
       // console.log('API통신 오류 : ', err);

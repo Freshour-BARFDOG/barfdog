@@ -17,6 +17,7 @@ import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMetho
 import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
 import { getCookie } from '/util/func/cookie';
 import OrdersheetCouponSelector from '../../../components/order/OrdersheetCouponSelector';
+import { loadOrderItems } from '../../../../store/cart-slice';
 
 export default function GeneralOrderSheetPage() {
   const router = useRouter();
@@ -35,29 +36,44 @@ export default function GeneralOrderSheetPage() {
     coupon: false,
   });
 
+  useEffect(() => {
+    dispatch(loadOrderItems());
+  }, [dispatch]);
+
   // 콕뱅크 제휴사 할인 적용 검증
   const hasAllianceDiscount = getCookie('alliance') === 'cb';
 
   useEffect(() => {
-    let curItem = '';
-    // 비로그인 시 주문한 아이템 가져오기
-    const orderItemData = localStorage.getItem('orderItem');
-    const parsedData = JSON.parse(orderItemData);
+    const raw =
+      typeof window !== 'undefined'
+        ? localStorage.getItem('orderItemList')
+        : null;
+    let curItems = [];
 
-    if (orderItemData) {
-      curItem = parsedData;
-      localStorage.removeItem('orderItem');
-    } else curItem = cart.orderItemList;
+    if (raw) {
+      try {
+        curItems = JSON.parse(raw);
+      } catch {
+        console.error('orderItemList parse error');
+      }
+    }
 
-    if (!curItem?.length) {
-      return router.push('/cart');
+    // 2) Redux 쪽에 값이 있으면 우선 쓰고, 없으면 로컬스토리지 값 사용
+    const itemsToUse = cart.orderItemList.length
+      ? cart.orderItemList
+      : curItems;
+
+    // 3) 둘 다 비어 있으면 /cart 로 리다이렉트
+    if (!itemsToUse.length) {
+      router.push('/cart');
+      return;
     }
 
     const requestBody = {
-      orderItemDtoList: curItem.map((item) => ({
-          itemId: item.itemDto.itemId,
-          amount: item.itemDto.amount,
-          selectOptionDtoList: item.optionDtoList.map((option) => ({
+      orderItemDtoList: curItems.map((item) => ({
+        itemId: item.itemDto.itemId,
+        amount: item.itemDto.amount,
+        selectOptionDtoList: item.optionDtoList.map((option) => ({
           itemOptionId: option.itemOptionId,
           amount: option.amount,
         })),
@@ -117,7 +133,7 @@ export default function GeneralOrderSheetPage() {
               remaining: cp.remaining,
               expiredDate: transformDate(cp.expiredDate),
             })) || [], //////////// ! DUMMY DATA
-            allianceCoupons:
+          allianceCoupons:
             info.allianceCoupons?.map((cp) => ({
               memberCouponId: cp.memberCouponId,
               name: cp.name,
@@ -154,7 +170,7 @@ export default function GeneralOrderSheetPage() {
               remaining: cp.remaining,
               expiredDate: transformDate(cp.expiredDate),
             })) || [],
-            allianceCoupons:
+          allianceCoupons:
             info.allianceCoupons?.map((cp) => ({
               memberCouponId: cp.memberCouponId,
               name: cp.name,

@@ -16,14 +16,14 @@ import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency'
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import sorting from '/util/func/sorting';
 import { useDispatch, useSelector } from 'react-redux';
-import { cartAction } from '/store/cart-slice';
 import { setPreviousPath } from '/store/navigation-slice';
 import axios from 'axios';
 import { useModalContext } from '/store/modal-context';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { cookieType } from '@store/TYPE/cookieType';
 import { ShopFloatingTab } from '../../../components/shop/ShopFloatingTab';
-import useNaverAnalytics from "/util/hook/useNaverAnalytics";
+import useNaverAnalytics from '/util/hook/useNaverAnalytics';
+import { saveOrderItems } from '../../../../store/cart-slice';
 
 export default function SingleItemDetailPage({ data }) {
   const mct = useModalContext();
@@ -268,7 +268,8 @@ export default function SingleItemDetailPage({ data }) {
         },
       ];
       const formStrings = JSON.stringify(items).replace(/\n/g, '');
-      localStorage.setItem('orderItem', formStrings);
+      localStorage.setItem('orderItemList', formStrings);
+      await dispatch(saveOrderItems(items));
       dispatch(setPreviousPath('/order/ordersheet/general'));
 
       return await router.push('/account/login');
@@ -291,7 +292,7 @@ export default function SingleItemDetailPage({ data }) {
         ...prevState,
         buy: true,
       }));
-      await dispatch(cartAction.setOrderItemList({ items }));
+      await dispatch(saveOrderItems(items));
       await router.push(`/order/ordersheet/general`);
     } catch (err) {
       // console.log('API통신 오류 : ', err);
