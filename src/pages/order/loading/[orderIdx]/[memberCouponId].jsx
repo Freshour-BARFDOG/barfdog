@@ -20,9 +20,6 @@ function OrderGeneralLoading(props) {
       if (imp_success == 'true') {
         // console.log(merchant_uid);
         // console.log(imp_success);
-        console.log('imp_uid', imp_uid);
-        console.log('merchant_uid', merchant_uid);
-        console.log('memberCouponId', memberCouponId);
         const r = await postData(`/api/orders/${orderIdx}/general/success`, {
           impUid: imp_uid,
           merchantUid: merchant_uid,
