@@ -6,24 +6,20 @@ import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
 
 function OrderGeneralLoading(props) {
   const router = useRouter();
-  const {
-    orderIdx,
-    memberCouponId,
-    imp_uid,
-    merchant_uid,
-    imp_success,
-    error_msg,
-  } = router.query;
+  const { orderIdx, imp_uid, merchant_uid, imp_success, error_msg } =
+    router.query;
 
   useEffect(() => {
     (async () => {
       if (imp_success == 'true') {
         // console.log(merchant_uid);
         // console.log(imp_success);
+        console.log('imp_uid', imp_uid);
+        console.log('merchant_uid', merchant_uid);
         const r = await postData(`/api/orders/${orderIdx}/general/success`, {
           impUid: imp_uid,
           merchantUid: merchant_uid,
-          memberCouponId: memberCouponId,
+          memberCouponId: null,
         });
 
         // console.log(r);
@@ -46,7 +42,7 @@ function OrderGeneralLoading(props) {
             // window.location.href= '/';
           }
         }
-        await router.push(`/order/orderFailed`);
+        // await router.push(`/order/orderFailed`);
       }
     })();
   }, []);
