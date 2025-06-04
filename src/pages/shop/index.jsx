@@ -22,41 +22,36 @@ const getListApiUrl = '/api/items';
 const apiDataQueryString = 'queryItemsDtoList';
 const searchPageSize = 6; // 화면에 뿌릴 상품수
 
-const initialSearchValues = {
-  sortBy: itemSortQueryType.RECENT,
-  itemType: general_itemType.ALL, // url Query is lowerCase
-};
-
 export default function ShopPage() {
   const router = useRouter();
+  const initialSearchValues = {
+    sortBy: itemSortQueryType.RECENT,
+    itemType: router.query.itemType || 'ALL', // url Query is lowerCase
+  };
+
   const [itemList, setItemList] = useState(null);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState(
-    'sortBy=registration&itemType=ALL',
+    `sortBy=${initialSearchValues.sortBy}&itemType=${initialSearchValues.itemType}`,
   );
   const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
-    // - CASE: Nav GNB에서 shop > submenu Click event
-    // - IMPORTANT : to prevent Inifinite Loop when router query is changed
-    let readyToSetSearchValue = true;
-    for (const key in router.query) {
-      if (key !== searchQueryType.ITEMTYPE) {
-        readyToSetSearchValue = false;
-      }
-    }
-    if (readyToSetSearchValue) {
-      for (const key in router.query) {
-        if (key === searchQueryType.ITEMTYPE) {
-          const val = router.query[key];
-          setSearchValues((prevState) => {
-            // console.log()
-            return { ...prevState, [searchQueryType.ITEMTYPE]: val };
-          });
+    // // - CASE: Nav GNB에서 shop > submenu Click event
+    // // - IMPORTANT : to prevent Inifinite Loop when router query is changed
+    if (Object.keys(router.query).length > 0) {
+      const initialValues = {};
+
+      // 여기서 필요한 query key만 필터링하거나 전체 다 반영
+      Object.entries(router.query).forEach(([key, val]) => {
+        if (typeof val === 'string') {
+          initialValues[key] = val;
         }
-      }
+      });
+
+      setSearchValues((prev) => ({...prev, ...initialValues}));
     }
-  }, [router.query]);
+    }, [router.query]);
 
   useEffect(() => {
     // 검색기능: searchValue를 통하여 query update -> 검색시작
