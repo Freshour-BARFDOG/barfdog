@@ -23,7 +23,7 @@ import Tooltip from '/src/components/atoms/Tooltip';
 import CheckboxGroup from '/src/components/atoms/CheckboxGroup';
 import transformClearLocalCurrencyInEveryObject from '/util/func/transformClearLocalCurrencyInEveryObject';
 import SingleItemOptions from '/src/components/admin/product/SingleItemOptions';
-import { general_itemType } from '/store/TYPE/itemType';
+import { itemTypeOption } from '/store/TYPE/itemType';
 import { itemHealthTypeList } from '/store/TYPE/itemHealthType';
 import pc from '/src/components/atoms/pureCheckbox.module.scss';
 import DiscountSettings from "/src/components/admin/product/DiscountSection";
@@ -286,18 +286,7 @@ export default function UpdateSingleItemPage({ id, allianceList }) {
                           id="itemType"
                           options={[
                             { label: '선택', value: '' },
-                            {
-                              label: '생식 (일반상품)',
-                              value: general_itemType.RAW,
-                            },
-                            {
-                              label: '토핑 (간식 및 토핑류)',
-                              value: general_itemType.TOPPING,
-                            },
-                            {
-                              label: '굿즈 (그 밖의 제품)',
-                              value: general_itemType.GOODS,
-                            },
+                            ...itemTypeOption,
                           ]}
                           value={formValues.itemType}
                           setFormValues={setFormValues}

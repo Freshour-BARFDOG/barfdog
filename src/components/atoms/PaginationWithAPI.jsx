@@ -35,15 +35,24 @@ const Pagination = ({
 
   const [queryObject, setQueryObject] = useState(Object.fromEntries(new URLSearchParams(urlQuery)));
 
-  // itemType, sortBy 변경시 queryString 의 page = 1 추가 적용 밀 fetch
+  // itemType, sortBy 등 urlQuery 변경 감지 및 page = 1 추가 적용
   useEffect(() => {
     const searchParams = new URLSearchParams(urlQuery);
-      fetchData(apiURL, option.apiMethod, option.body)
-      .then(res => {
-        searchParams.set('page', '1'); // 변경 시 항상 page=1 적용
-        setQueryObject(Object.fromEntries(searchParams.entries()));
-      });
+    searchParams.set('page', '1');
+    setQueryObject(Object.fromEntries(searchParams.entries()));
   }, [urlQuery]);
+
+// queryObject 변경 → fetch 실행
+  useEffect(() => {
+    fetchData(apiURL, option.apiMethod, option.body);
+    if (isSubmitted) setIsSubmitted(false);
+  }, [
+    apiURL,
+    option.apiMethod,
+    option.body,
+    isSubmitted,
+    queryObject,
+  ]);
 
   // Page 1 적용: 페이지 초기화
   useEffect(() => {
@@ -61,20 +70,6 @@ const Pagination = ({
     setCurrentPage && setCurrentPage(curPage);
   }, [curPage]);
 
-  useEffect(() => {
-    fetchData(apiURL, option.apiMethod, option.body);
-    if (isSubmitted) setIsSubmitted(false);
-  }, [
-    curPage,
-    urlQuery,
-    apiURL,
-    option.apiMethod,
-    option.body,
-    isSubmitted,
-    onSearch,
-    queryObject,
-  ]);
-
   // Page 1 제거: 페이지 변경시 queryString 의 page 제거
   const changedQueryParams = () => {
     const searchParams = new URLSearchParams(urlQuery);
@@ -90,7 +85,7 @@ const Pagination = ({
           fetching: true,
         }));
       }
-      const calcedPageIndex = (curPage - 1).toString();
+      const calcedPageIndex = (queryObject.page ? queryObject.page - 1 : curPage - 1).toString();
       const defQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
 
       // URLQuery 재구성 - page 쿼리 중복 방지를 위함
@@ -127,11 +122,11 @@ const Pagination = ({
           totalItems: pageData.totalElements,
           currentPageIndex: pageData.number,
           newPageNumber: pageData.number + 1,
-          newItemList: res.data._embedded[queryItemList] || [],
+          newItemList: res?.data?._embedded[queryItemList] || [],
         };
 
         setPageInfo(newPageInfo);
-        setItemList(newPageInfo.newItemList);
+        setItemList(newPageInfo.newItemList || []);
         if (setPageData && typeof setPageData === 'function') {
           setPageData(newPageInfo);
         }
