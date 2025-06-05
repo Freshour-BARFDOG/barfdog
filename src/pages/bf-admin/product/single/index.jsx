@@ -14,6 +14,7 @@ import { deleteData } from '/src/pages/api/reqData';
 import { useModalContext } from '/store/modal-context';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
+import { itemTypeOption } from "/store/TYPE/itemType";
 
 const initalSearchValue = {
   itemType: 'ALL',
@@ -39,19 +40,7 @@ function SingleItemPage() {
     MirrorTextOnHoverEvent(window);
   }, [itemList]);
 
-  const onResetSearchValues = () => {
-    setSearchValue(initalSearchValue);
-  };
-
-  const pageInterceptor = useCallback((res, option = { itemQuery: null }) => {
-    // res = DUMMY_RES; // ! TEST
-    // console.log( res );
-    return getDefaultPagenationInfo(res?.data, apiDataQueryString, {
-      pageSize: searchPageSize,
-    });
-  }, []);
-
-  const onSearchHandler = useCallback(() => {
+  const handleSearchValues = (searchValue) => {
     const tempUrlQuery = [];
     for (const key in searchValue) {
       const val = searchValue[key];
@@ -63,6 +52,23 @@ function SingleItemPage() {
     const resultSearchQuery = tempUrlQuery.join('&');
     setUrlQuery(resultSearchQuery);
     setOnSearch(!onSearch);
+  }
+
+  const onResetSearchValues = () => {
+    setSearchValue(initalSearchValue);
+    handleSearchValues(initalSearchValue);
+  };
+
+  const pageInterceptor = useCallback((res, option = { itemQuery: null }) => {
+    // res = DUMMY_RES; // ! TEST
+    // console.log( res );
+    return getDefaultPagenationInfo(res?.data, apiDataQueryString, {
+      pageSize: searchPageSize,
+    });
+  }, []);
+
+  const onSearchHandler = useCallback(() => {
+    handleSearchValues(searchValue);
   }, [searchValue, onSearch]);
 
   const onDeleteItem = async (apiUrl, targetId) => {
@@ -118,12 +124,7 @@ function SingleItemPage() {
                 title="카테고리"
                 name="itemType"
                 id="itemType"
-                options={[
-                  { label: '전체', value: 'ALL' },
-                  { label: '생식', value: 'RAW' },
-                  { label: '토핑', value: 'TOPPING' },
-                  { label: '기타', value: 'GOODS' },
-                ]}
+                options={itemTypeOption}
                 setSearchValue={setSearchValue}
                 searchValue={searchValue}
               />
