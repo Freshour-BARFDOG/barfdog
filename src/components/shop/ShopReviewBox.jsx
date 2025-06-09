@@ -44,6 +44,8 @@ export const ShopReviewBox = ({ data }) => {
     return newPageInfo;
   };
 
+  if (!data) return null;
+
   return (
     <section className={s.tab_slide_box2}>
       {/* 리뷰별점박스 */}

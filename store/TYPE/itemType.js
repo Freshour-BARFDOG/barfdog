@@ -20,6 +20,8 @@ export const itemTypeOption = Object.entries(general_itemType.KOR).map(([key, la
   value: key
 }));
 
+export const itemTypeOptionWithoutAll = itemTypeOption.filter(option => option.value !== 'ALL');
+
 export const productType = {
   ALL: 'ALL',
   general: 'GENERAL',
