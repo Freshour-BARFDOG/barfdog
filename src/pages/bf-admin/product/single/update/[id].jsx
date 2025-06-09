@@ -23,7 +23,7 @@ import Tooltip from '/src/components/atoms/Tooltip';
 import CheckboxGroup from '/src/components/atoms/CheckboxGroup';
 import transformClearLocalCurrencyInEveryObject from '/util/func/transformClearLocalCurrencyInEveryObject';
 import SingleItemOptions from '/src/components/admin/product/SingleItemOptions';
-import { itemTypeOption } from '/store/TYPE/itemType';
+import { itemTypeOptionWithoutAll } from '/store/TYPE/itemType';
 import { itemHealthTypeList } from '/store/TYPE/itemHealthType';
 import pc from '/src/components/atoms/pureCheckbox.module.scss';
 import DiscountSettings from "/src/components/admin/product/DiscountSection";
@@ -286,7 +286,7 @@ export default function UpdateSingleItemPage({ id, allianceList }) {
                           id="itemType"
                           options={[
                             { label: '선택', value: '' },
-                            ...itemTypeOption,
+                            ...itemTypeOptionWithoutAll,
                           ]}
                           value={formValues.itemType}
                           setFormValues={setFormValues}

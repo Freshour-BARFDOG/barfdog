@@ -28,7 +28,7 @@ import pc from '/src/components/atoms/pureCheckbox.module.scss';
 import DiscountSettings from "/src/components/admin/product/DiscountSection";
 import { getAllianceList } from "/service/admin";
 import { postObjData } from "/src/pages/api/reqData";
-import { itemTypeOption } from "../../../../../store/TYPE/itemType";
+import { itemTypeOptionWithoutAll } from "/store/TYPE/itemType";
 // - 할인적용 후 판매가격 -> N일 경우 그냥 판매가격이랑 동일하게 처리한다.
 // - 아이템 아이콘
 
@@ -229,7 +229,7 @@ export default function CreateSingleItemPage({ allianceList }) {
                           id="itemType"
                           options={[
                             { label: '선택', value: '' },
-                            ...itemTypeOption,
+                            ...itemTypeOptionWithoutAll,
                           ]}
                           value={formValues.itemType}
                           setFormValues={setFormValues}

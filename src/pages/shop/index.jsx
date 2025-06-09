@@ -35,6 +35,7 @@ export default function ShopPage() {
     `sortBy=${initialSearchValues.sortBy}&itemType=${initialSearchValues.itemType}`,
   );
   const auth = useSelector((state) => state.auth);
+  const itemType = router.query.itemType;
 
   useEffect(() => {
     // // - CASE: Nav GNB에서 shop > submenu Click event
@@ -51,7 +52,7 @@ export default function ShopPage() {
 
       setSearchValues((prev) => ({...prev, ...initialValues}));
     }
-    }, [router.query]);
+    }, [itemType]);
 
   useEffect(() => {
     // 검색기능: searchValue를 통하여 query update -> 검색시작
