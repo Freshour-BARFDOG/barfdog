@@ -39,7 +39,6 @@ $mobileMenuHeight: rem(48);
     * {
       font-size: inherit;
     }
-
   }
 
   .mobile-menu-wrap {
@@ -118,6 +117,10 @@ $mobileMenuHeight: rem(48);
         display: flex;
         align-items: center;
         justify-content: space-around;
+        .active{
+          color: var(--color-main);
+          font-weight: 500;
+        }
       }
     }
 
@@ -150,10 +153,5 @@ $mobileMenuHeight: rem(48);
 
     }
   }
-  *[data-current-page='depth2']{
-    color: var(--color-main);
-    font-weight: 500;
-  }
-
 }
 
