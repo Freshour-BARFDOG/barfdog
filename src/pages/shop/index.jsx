@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import s from './shop.module.scss';
 import Link from 'next/link';
-import Image from 'next/image';
 import RatingStars from '/src/components/atoms/RatingStars';
-import { general_itemType } from '/store/TYPE/itemType';
+import { general_itemType, itemTypeOption } from '/store/TYPE/itemType';
 import { itemSortQueryType } from '/store/TYPE/itemSortQueryType';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import { useRouter } from 'next/router';
@@ -23,41 +22,37 @@ const getListApiUrl = '/api/items';
 const apiDataQueryString = 'queryItemsDtoList';
 const searchPageSize = 6; // 화면에 뿌릴 상품수
 
-const initialSearchValues = {
-  sortBy: itemSortQueryType.RECENT,
-  itemType: general_itemType.ALL, // url Query is lowerCase
-};
-
 export default function ShopPage() {
   const router = useRouter();
+  const initialSearchValues = {
+    sortBy: itemSortQueryType.RECENT,
+    itemType: router.query.itemType || 'ALL', // url Query is lowerCase
+  };
+
   const [itemList, setItemList] = useState(null);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState(
-    'sortBy=registration&itemType=ALL',
+    `sortBy=${initialSearchValues.sortBy}&itemType=${initialSearchValues.itemType}`,
   );
   const auth = useSelector((state) => state.auth);
+  const itemType = router.query.itemType;
 
   useEffect(() => {
-    // - CASE: Nav GNB에서 shop > submenu Click event
-    // - IMPORTANT : to prevent Inifinite Loop when router query is changed
-    let readyToSetSearchValue = true;
-    for (const key in router.query) {
-      if (key !== searchQueryType.ITEMTYPE) {
-        readyToSetSearchValue = false;
-      }
-    }
-    if (readyToSetSearchValue) {
-      for (const key in router.query) {
-        if (key === searchQueryType.ITEMTYPE) {
-          const val = router.query[key];
-          setSearchValues((prevState) => {
-            // console.log()
-            return { ...prevState, [searchQueryType.ITEMTYPE]: val };
-          });
+    // // - CASE: Nav GNB에서 shop > submenu Click event
+    // // - IMPORTANT : to prevent Inifinite Loop when router query is changed
+    if (Object.keys(router.query).length > 0) {
+      const initialValues = {};
+
+      // 여기서 필요한 query key만 필터링하거나 전체 다 반영
+      Object.entries(router.query).forEach(([key, val]) => {
+        if (typeof val === 'string') {
+          initialValues[key] = val;
         }
-      }
+      });
+
+      setSearchValues((prev) => ({...prev, ...initialValues}));
     }
-  }, [router.query]);
+    }, [itemType]);
 
   useEffect(() => {
     // 검색기능: searchValue를 통하여 query update -> 검색시작
@@ -134,8 +129,6 @@ export default function ShopPage() {
     }
   };
 
-  // // console.log(itemList);
-
   return (
     <>
       <MetaTitle title="샵" />
@@ -150,75 +143,31 @@ export default function ShopPage() {
             <div className={s.inner}>
               <div className={s.menu_box}>
                 <ul className={s.menu}>
-                  <li
-                    className={
-                      searchValues.itemType === general_itemType.ALL
-                        ? s.active
-                        : ''
-                    }
-                  >
-                    <button
-                      type={'button'}
-                      onClick={onChangeItemType}
-                      data-item-type={general_itemType.ALL}
-                    >
-                      {general_itemType.KOR.ALL}
-                    </button>
-                  </li>
-                  <li>
-                    <hr />
-                  </li>
-                  <li
-                    className={
-                      searchValues.itemType === general_itemType.RAW
-                        ? s.active
-                        : ''
-                    }
-                  >
-                    <button
-                      type={'button'}
-                      onClick={onChangeItemType}
-                      data-item-type={general_itemType.RAW}
-                    >
-                      {general_itemType.KOR.RAW}
-                    </button>
-                  </li>
-                  <li>
-                    <hr />
-                  </li>
-                  <li
-                    className={
-                      searchValues.itemType === general_itemType.TOPPING
-                        ? s.active
-                        : ''
-                    }
-                  >
-                    <button
-                      type={'button'}
-                      onClick={onChangeItemType}
-                      data-item-type={general_itemType.TOPPING}
-                    >
-                      {general_itemType.KOR.TOPPING}
-                    </button>
-                  </li>
-                  <li>
-                    <hr />
-                  </li>
-                  <li
-                    className={
-                      searchValues.itemType === general_itemType.GOODS
-                        ? s.active
-                        : ''
-                    }
-                  >
-                    <button
-                      type={'button'}
-                      onClick={onChangeItemType}
-                      data-item-type={general_itemType.GOODS}
-                    >
-                      {general_itemType.KOR.GOODS}
-                    </button>
-                  </li>
+                  {itemTypeOption.map((type, index) => (
+                    <Fragment key={type.value}>
+                      <li
+                        key={type.value}
+                        className={
+                          searchValues.itemType === type.value
+                            ? s.active
+                            : ''
+                        }
+                      >
+                        <button
+                          type={'button'}
+                          onClick={onChangeItemType}
+                          data-item-type={type.value}
+                        >
+                          {type.label}
+                        </button>
+                      </li>
+                      {index+1 !== itemTypeOption.length &&
+                        <li>
+                          <hr />
+                        </li>
+                      }
+                    </Fragment>
+                  ))}
                 </ul>
                 <div className={s['select-box']}>
                   <select
@@ -235,18 +184,6 @@ export default function ShopPage() {
                     <option value={itemSortQueryType.SALEAMOUNT}>
                       {itemSortQueryType.KOR.SALEAMOUNT}
                     </option>
-                    {/* <option value={itemSortQueryType.LOWPRICE}>
-                      {itemSortQueryType.KOR.LOWPRICE}
-                    </option>
-                    <option value={itemSortQueryType.HIGHPRICE}>
-                      {itemSortQueryType.KOR.HIGHPRICE}
-                    </option>
-                    <option value={itemSortQueryType.MOSTREVIEWED}>
-                      {itemSortQueryType.KOR.MOSTREVIEWED}
-                    </option>
-                    <option value={itemSortQueryType.SCORE}>
-                      {itemSortQueryType.KOR.SCORE}
-                    </option> */}
                   </select>
                 </div>
               </div>

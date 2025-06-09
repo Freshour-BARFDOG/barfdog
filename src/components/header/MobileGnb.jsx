@@ -5,12 +5,31 @@ import { useModalContext } from '/store/modal-context';
 import useDeviceState from '/util/hook/useDeviceState';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/router';
-import { general_itemType } from '/store/TYPE/itemType';
+import { itemTypeOption } from '/store/TYPE/itemType';
 
 const menuNameObj = {
   shop: 'shop',
   community: 'community',
 };
+
+const communityOptions = [
+  {
+    label: '공지사항',
+    value: '/community/notice'
+  },
+  {
+    label: '이벤트',
+    value: '/community/event'
+  },
+  {
+    label: '블로그',
+    value: '/community/blog'
+  },
+  {
+    label: '어바웃',
+    value: '/community/about'
+  },
+]
 
 export default function MobileGnb() {
   const mcx = useModalContext();
@@ -28,6 +47,8 @@ export default function MobileGnb() {
     if (!curMenuRef.current) return;
     currentPageIndicator(curMenuRef.current, curPath, setActiveMenuId);
   }, [curPath]);
+
+  const itemType = router.query.itemType;
 
   const onActiveSubmenuHandler = (menuId) => {
     if (menuId) {
@@ -87,32 +108,30 @@ export default function MobileGnb() {
               activeMenuId === menuNameObj.shop ? s.active : ''
             }`}
           >
-            <MobileMenu
-              title="ALL"
-              link={`/shop?itemType=${general_itemType.ALL}`}
-            />
-            <MobileMenu
-              title="생식"
-              link={`/shop?itemType=${general_itemType.RAW}`}
-            />
-            <MobileMenu
-              title="토핑"
-              link={`/shop?itemType=${general_itemType.TOPPING}`}
-            />
-            <MobileMenu
-              title="굿즈"
-              link={`/shop?itemType=${general_itemType.GOODS}`}
-            />
+            {itemTypeOption.map(option => (
+              <MobileMenu
+                key={option.value}
+                title={option.label}
+                id={option.value}
+                link={`/shop?itemType=${option.value}`}
+                activeValue={itemType}
+              />
+            ))}
           </ul>
           <ul
             className={`${s['mobile-submenu']} ${
               activeMenuId === menuNameObj.community ? s.active : ''
             }`}
           >
-            <MobileMenu title="공지사항" link="/community/notice" />
-            <MobileMenu title="이벤트" link="/community/event" />
-            <MobileMenu title="블로그" link="/community/blog" />
-            <MobileMenu title="어바웃" link="/community/about" />
+            {communityOptions.map(option => (
+              <MobileMenu
+                key={option.value}
+                title={option.label}
+                id={option.value}
+                link={option.value}
+                activeValue={router.pathname}
+              />
+            ))}
           </ul>
           <button className={s.activeWidemodeButton} onClick={onMenuWideMode}>
             <IoIosArrowDown />
@@ -171,14 +190,14 @@ const currentPageIndicator = (ref, curPath, setActivemenu) => {
   });
 };
 
-const MobileMenu = ({ onClick, link, fakeLink, id, title, className }) => {
+const MobileMenu = ({ onClick, link, fakeLink, id, title, className, activeValue }) => {
   const onClickHandler = () => {
     if (onClick && typeof onClick === 'function') {
       onClick(id);
     }
   };
   return (
-    <li onClick={onClick && onClickHandler}>
+    <li onClick={onClick && onClickHandler} className={activeValue === id ? s.active : ''}>
       {link ? (
         <Link href={link} passHref>
           <a id={id}>{title}</a>

@@ -1,10 +1,8 @@
 import React from 'react';
 import s from './header.module.scss';
 import { useRouter } from 'next/router';
-import { useModalContext } from '@store/modal-context';
 import MenuLayout, { SubmenuList } from '/src/components/header/MenuLayout';
-import SVG_subscribe from '/public/img/icon/subscribe.svg';
-import { general_itemType } from '../../../store/TYPE/itemType';
+import { general_itemType, itemTypeOption } from '../../../store/TYPE/itemType';
 import DeadlineTimer from '../atoms/DeadlineTimer';
 
 const PcGnb = () => {
@@ -12,22 +10,13 @@ const PcGnb = () => {
     <>
       <Gnb_survey />
       <MenuLayout title="샵" link={`/shop?itemType=${general_itemType.ALL}`}>
-        <SubmenuList
-          title="ALL"
-          link={`/shop?itemType=${general_itemType.ALL}`}
-        />
-        <SubmenuList
-          title="생식"
-          link={`/shop?itemType=${general_itemType.RAW}`}
-        />
-        <SubmenuList
-          title="토핑"
-          link={`/shop?itemType=${general_itemType.TOPPING}`}
-        />
-        <SubmenuList
-          title="굿즈"
-          link={`/shop?itemType=${general_itemType.GOODS}`}
-        />
+        {itemTypeOption.map(type => (
+          <SubmenuList
+            key={type.value}
+            title={type.label}
+            link={`/shop?itemType=${type.value}`}
+          />
+        ))}
       </MenuLayout>
       <MenuLayout title="레시피" link="/recipes" />
       <MenuLayout title="커뮤니티" link="/community/notice">
