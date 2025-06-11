@@ -42,8 +42,13 @@ export const ShopFloatingTab = ({
     setIsOpenBtn(!isOpenBtn);
   };
 
+  const isSoldOut = !data?.item?.inStock || data?.item?.remaining <= 0;
+
   return (
-    <div id={s['shop-optionBar']} className={`${active ? s.active : ''} ${isOpenBtn ? s.open : ''}`}>
+    <div
+      id={s['shop-optionBar']}
+      className={`${active ? s.active : ''} ${isOpenBtn ? s.open : ''}`}
+    >
       <Wrapper>
         <div className={s.product_info}>
           <div className={`${s.image}`}>
@@ -69,7 +74,7 @@ export const ShopFloatingTab = ({
             </div>
           </div>
 
-          {isOpenBtn ? (
+          {/* {isOpenBtn ? (
             <IoCloseOutline onClick={handleButtonToggle} />
           ) : (
             <button
@@ -79,11 +84,26 @@ export const ShopFloatingTab = ({
             >
               구매하기
             </button>
+          )} */}
+          {isSoldOut ? (
+            <button type="button" className={`${s.soldOut} ${s.btn}`} disabled>
+              품절
+            </button>
+          ) : isOpenBtn ? (
+            <IoCloseOutline onClick={handleButtonToggle} />
+          ) : (
+            <button
+              onClick={handleButtonToggle}
+              type="button"
+              className={`${s.open_buy} ${s.btn}`}
+            >
+              구매하기
+            </button>
           )}
         </div>
 
         {/* 구매하기 버튼 클릭 시 나타남 */}
-        {isOpenBtn && (
+        {isOpenBtn && !isSoldOut && (
           <div className={s.container}>
             <div className={s.container_info}>
               <div className={s.container_select_wrapper}>
@@ -186,7 +206,9 @@ export const ShopFloatingTab = ({
                     ) : (
                       <>
                         택배배송 {transformLocalCurrency(data?.delivery?.price)}
-                        원 ({transformLocalCurrency(data?.delivery?.freeCondition)}원 이상 구매 시 무료)
+                        원 (
+                        {transformLocalCurrency(data?.delivery?.freeCondition)}
+                        원 이상 구매 시 무료)
                       </>
                     )}
 

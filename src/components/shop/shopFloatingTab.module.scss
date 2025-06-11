@@ -249,6 +249,12 @@
       color: #fff;
       width: rem(240);
     }
+    &.soldOut {
+      color: #fff;
+      background-color: black;
+      border: none;
+      cursor: default;
+    }
   }
 
   .cart-shortcut {

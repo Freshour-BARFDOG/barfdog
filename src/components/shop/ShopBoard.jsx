@@ -211,7 +211,7 @@ export const ShopBoard = ({
               </div>
             </div>
 
-            {item?.inStock ? (
+            {item?.inStock && item?.remaining > 0 ? (
               <section className={s['shop-btn-section']}>
                 {/* 장바구니 버튼 */}
                 <div className={s['grid-box']}>
