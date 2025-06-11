@@ -321,7 +321,7 @@ export function Payment({
       buyer_email: info.email, // 구매자 이메일
       buyer_addr: `${info.defaultAddress.street}, ${info.defaultAddress.detailAddress}`, // 구매자 주소
       buyer_postcode: info.defaultAddress.zipcode, // 구매자 우편번호
-      m_redirect_url: `${window.location.origin}/order/loading/${id}/${couponPath}`,
+      m_redirect_url: `${window.location.origin}/order/loading/${id}${couponPath}`,
     };
     // 네이버 페이 추가
     if (body.paymentMethod === paymentMethodType.NAVER_PAY) {
