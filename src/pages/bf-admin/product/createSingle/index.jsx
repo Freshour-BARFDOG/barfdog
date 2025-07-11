@@ -575,7 +575,8 @@ export default function CreateSingleItemPage({ allianceList }) {
 }
 
 
-export async function getServerSideProps(req) {
+export async function getServerSideProps(ctx) {
+  const { req } = ctx;
   const allianceList = await getAllianceList(req);
   return {
     props: {
