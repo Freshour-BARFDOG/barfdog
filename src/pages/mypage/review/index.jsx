@@ -156,6 +156,9 @@ export default function ReviewPage() {
         <Wrapper>
           <MypageWrapper>
             <section className={s.title}>상품 후기</section>
+            <section className={s.text}>
+              상품 후기는 구매확정 후 <span>30일 이내</span>에만 작성 가능합니다.
+            </section>
             <Tabmenu_TwoButton
               leftMenuName={'후기 작성'}
               rightMenuName={'작성한 후기'}
