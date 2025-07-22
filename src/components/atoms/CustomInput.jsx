@@ -53,7 +53,6 @@ const CustomInput = ({
         type="radio"
         name={name}
         onChange={onRadioInputHandler}
-        value={selectedRadio === id}
         checked={selectedRadio === id}
       />
     );
@@ -90,7 +89,6 @@ const CustomInput = ({
   return (
     <>
       <label
-        htmlFor={id}
         data-id={id}
         className={`${s.custom_input_wrapper} ${isChecked && s.checked} ${
           selectedRadio === id && s.checked
