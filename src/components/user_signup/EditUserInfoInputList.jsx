@@ -1,35 +1,40 @@
-import React, {useEffect, useState} from 'react';
-import s from "/src/pages/account/signup/signup.module.scss";
-import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import Spinner from "/src/components/atoms/Spinner";
-import SignupInput from "./SignupInput";
-import SignInput_address from "./SignInput_address";
-import CustomRadio from "/src/components/atoms/CustomRadio";
-import getAuthNumberForPhoneNumber from "/util/func/getAuthNumberForPhoneNumber";
-import {valid_authNumber, valid_phoneNumber} from "/util/func/validation/validationPackage";
-import rem from "/util/func/rem";
-import {genderType} from "/store/TYPE/genderType";
-import {transformBirthDay} from "/util/func/transformBirthDay";
+import React, { useEffect, useState } from 'react';
+import s from '/src/pages/account/signup/signup.module.scss';
+import ErrorMessage from '/src/components/atoms/ErrorMessage';
+import Spinner from '/src/components/atoms/Spinner';
+import SignupInput from './SignupInput';
+import SignInput_address from './SignInput_address';
+import CustomRadio from '/src/components/atoms/CustomRadio';
+import getAuthNumberForPhoneNumber from '/util/func/getAuthNumberForPhoneNumber';
+import {
+  valid_authNumber,
+  valid_phoneNumber,
+} from '/util/func/validation/validationPackage';
+import rem from '/util/func/rem';
+import { genderType } from '/store/TYPE/genderType';
+import { transformBirthDay } from '/util/func/transformBirthDay';
 
-
-
-export default function SignInputList({formValues, setFormValues, formErrors, setFormErrors, inputRef}) {
-
+export default function SignInputList({
+  formValues,
+  setFormValues,
+  formErrors,
+  setFormErrors,
+  inputRef,
+}) {
   const initialLoadingState = {
     email: false,
     phoneNumber: false,
-    address: false
-  }
+    address: false,
+  };
 
   const [isLoading, setIsLoading] = useState(initialLoadingState);
   const [authPhoneNumber, setAuthPhoneNumber] = useState({
     authNumber: '',
-    authNumberEnteredByTheUser:'',
+    authNumberEnteredByTheUser: '',
     authenticated: false,
     messageOnPhoneNumberInput: '',
-    messageOnAuthNumberInput: ''
+    messageOnAuthNumberInput: '',
   });
-
 
   const onGetAuthNumberHandler = async () => {
     const error = valid_phoneNumber(formValues.phoneNumber);
@@ -37,65 +42,60 @@ export default function SignInputList({formValues, setFormValues, formErrors, se
       ...prevState,
       phoneNumber: error,
       authNumber: error,
-      isValidPhoneNumber: ''
+      isValidPhoneNumber: '',
     }));
-    setAuthPhoneNumber((prevState)=>( {
+    setAuthPhoneNumber((prevState) => ({
       ...prevState,
-      authNumber:'',
+      authNumber: '',
       authenticated: false,
-    }))
-    if(error) {
-      setAuthPhoneNumber((prevState)=>( {
+    }));
+    if (error) {
+      setAuthPhoneNumber((prevState) => ({
         ...prevState,
         messageOnPhoneNumberInput: error,
         messageOnAuthNumberInput: error && '',
-      }))
+      }));
       return;
     }
 
-    setIsLoading(prevState => ({
+    setIsLoading((prevState) => ({
       ...prevState,
-      phoneNumber: true
-    }))
+      phoneNumber: true,
+    }));
 
     const response = await getAuthNumberForPhoneNumber(formValues.phoneNumber);
     // console.log('AuthNumber from SERVER\n',response);
-    setAuthPhoneNumber((prevState)=> ({
+    setAuthPhoneNumber((prevState) => ({
       ...prevState,
       authNumber: response.authNumber,
-      messageOnPhoneNumberInput: response.error || response.message
-    }))
-    setIsLoading(prevState => ({
+      messageOnPhoneNumberInput: response.error || response.message,
+    }));
+    setIsLoading((prevState) => ({
       ...prevState,
-      phoneNumber: false
-    }))
+      phoneNumber: false,
+    }));
   };
-
-
-
-
-
 
   const onCheckAuthNumberHandler = () => {
     // console.log('인증번호 검증: ',authPhoneNumber.authNumberEnteredByTheUser, ' (유저입력)  ===  ', authPhoneNumber.authNumber, ' (인증번호)')
-    const result = valid_authNumber(authPhoneNumber.authNumberEnteredByTheUser, authPhoneNumber.authNumber);
+    const result = valid_authNumber(
+      authPhoneNumber.authNumberEnteredByTheUser,
+      authPhoneNumber.authNumber,
+    );
     const error = result.error;
     const isMatched = result.isMatched;
     // // console.log(isMatched, '<---매치드 // --> 에러: ', error)
     setFormErrors((prevState) => ({
       ...prevState,
       authNumber: error,
-      isValidPhoneNumber: isMatched ? "" : error
+      isValidPhoneNumber: isMatched ? '' : error,
     }));
-    setAuthPhoneNumber((prevState)=>({
+    setAuthPhoneNumber((prevState) => ({
       ...prevState,
       authenticated: true,
-      messageOnAuthNumberInput: isMatched || error
+      messageOnAuthNumberInput: isMatched || error,
     }));
-  }
-
-
-
+  };
 
   return (
     <>
@@ -109,7 +109,11 @@ export default function SignInputList({formValues, setFormValues, formErrors, se
         formValue={formValues.name}
         setFormValues={setFormValues}
         errorMessage={
-          formErrors.name && <ErrorMessage className={`${s.msg}`}>{formErrors.name}</ErrorMessage>
+          formErrors.name && (
+            <ErrorMessage className={`${s.msg}`}>
+              {formErrors.name}
+            </ErrorMessage>
+          )
         }
       />
       <SignupInput
@@ -119,8 +123,7 @@ export default function SignInputList({formValues, setFormValues, formErrors, se
         formValue={formValues.email}
         setFormValues={setFormValues}
         disabled={true}
-      >
-      </SignupInput>
+      ></SignupInput>
       <SignupInput
         type={'password'}
         required={true}
@@ -128,7 +131,11 @@ export default function SignInputList({formValues, setFormValues, formErrors, se
         title={'비밀번호'}
         placeholder={'현재 비밀번호를 입력하세요.'}
         setFormValues={setFormValues}
-        errorMessage={formErrors.password && <ErrorMessage>{formErrors.password}</ErrorMessage>}
+        errorMessage={
+          formErrors.password && (
+            <ErrorMessage>{formErrors.password}</ErrorMessage>
+          )
+        }
         inputref={inputRef}
       />
       <SignupInput
@@ -144,11 +151,13 @@ export default function SignInputList({formValues, setFormValues, formErrors, se
           (formErrors.phoneNumber ||
             authPhoneNumber.authNumber ||
             authPhoneNumber.messageOnPhoneNumberInput ||
-            (formValues.phoneNumber &&formErrors.isValidPhoneNumber)) && (
+            (formValues.phoneNumber && formErrors.isValidPhoneNumber)) && (
             <ErrorMessage
               style={{ maxWidth: `${rem(200)}` }}
               className={`${s.msg} ${
-                !formErrors.phoneNumber && authPhoneNumber.authNumber && s.loading
+                !formErrors.phoneNumber &&
+                authPhoneNumber.authNumber &&
+                s.loading
               }`}
             >
               {formErrors.phoneNumber ||
@@ -186,7 +195,9 @@ export default function SignInputList({formValues, setFormValues, formErrors, se
             (formErrors.phoneAuthNumber || authPhoneNumber.authenticated) && (
               <ErrorMessage
                 className={`${s.msg} ${
-                  !formErrors.authNumber && authPhoneNumber.authenticated && s.valid
+                  !formErrors.authNumber &&
+                  authPhoneNumber.authenticated &&
+                  s.valid
                 }`}
               >
                 {authPhoneNumber.messageOnAuthNumberInput}
@@ -194,7 +205,11 @@ export default function SignInputList({formValues, setFormValues, formErrors, se
             )
           }
         >
-          <button type={'button'} className={`${s.btn}`} onClick={onCheckAuthNumberHandler}>
+          <button
+            type={'button'}
+            className={`${s.btn}`}
+            onClick={onCheckAuthNumberHandler}
+          >
             확인
           </button>
         </SignupInput>
@@ -204,6 +219,7 @@ export default function SignInputList({formValues, setFormValues, formErrors, se
         setFormValues={setFormValues}
         formErrors={formErrors}
         setFormErrors={setFormErrors}
+        isEdit={true}
       />
 
       <SignupInput
@@ -214,12 +230,18 @@ export default function SignInputList({formValues, setFormValues, formErrors, se
         disabled={true}
         formValue={transformBirthDay(formValues.birthday)}
         setFormValues={setFormValues}
-        errorMessage={formErrors.birthday && <ErrorMessage>{formErrors.birthday}</ErrorMessage>}
+        errorMessage={
+          formErrors.birthday && (
+            <ErrorMessage>{formErrors.birthday}</ErrorMessage>
+          )
+        }
       />
       <div className={`${s['join__wrap']} ${s['align-items-center']}`}>
         <div className={s['input-title-wrap']}>
           <label htmlFor={'radios-gender'}>
-            <span className={`${s['inp-title']} ${s['required']}`}>{'성별(견주님)'}</span>
+            <span className={`${s['inp-title']} ${s['required']}`}>
+              {'성별(견주님)'}
+            </span>
           </label>
         </div>
         <div className={`${s['input-wrap']}`}>

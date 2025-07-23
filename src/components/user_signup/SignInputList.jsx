@@ -20,7 +20,13 @@ import { genderType } from '/store/TYPE/genderType';
 
 let isFirstRendering = true;
 
-export default function SignInputList({ formValues, setFormValues, formErrors, setFormErrors, inputrefs }) {
+export default function SignInputList({
+  formValues,
+  setFormValues,
+  formErrors,
+  setFormErrors,
+  inputrefs,
+}) {
   const snsSignupMode = !!formValues.providerId;
   const initialLoadingState = {
     email: false,
@@ -45,7 +51,8 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
     (async () => {
       const inValidEmailErrorMessage = valid_email(formValues.email);
       const response =
-        !inValidEmailErrorMessage && (await valid_email_duplication(formValues.email));
+        !inValidEmailErrorMessage &&
+        (await valid_email_duplication(formValues.email));
       const message = response.message;
       const error = response.error;
 
@@ -72,7 +79,7 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
   }, [formValues.password, formValues.confirmPassword, setFormErrors]);
 
   const onCheckEmailDuplication = async () => {
-    if(isLoading.email) return console.error('Loading email duplicate check');
+    if (isLoading.email) return console.error('Loading email duplicate check');
     const error = valid_email(formValues.email);
     if (error) {
       return setFormErrors((prevState) => ({
@@ -83,13 +90,12 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
       }));
     }
 
-
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         email: '이메일 중복확인 중입니다.',
       }));
-      
+
       const response = await valid_email_duplication(formValues.email);
       // // console.log(response);
       setFormErrors((prevState) => ({
@@ -98,24 +104,19 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
         isEmailDuplicated: response.error,
         _messageOnEmail: response.message,
       }));
-      
     } catch (err) {
-      
       setFormErrors((prevState) => ({
         ...prevState,
         isEmailDuplicated: !!err,
       }));
       alert('이메일 중복확인 중 에러가 발생하였습니다.');
       console.error(err);
-      
     } finally {
-  
       setIsLoading((prevState) => ({
         ...prevState,
         email: false,
       }));
     }
-
   };
 
   const onGetAuthNumberHandler = async () => {
@@ -185,7 +186,6 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
     }));
   };
 
-
   // // console.log("formErrors.email: ",formErrors, "\nemailValdationMessage: ",emailValdationMessage);
   return (
     <>
@@ -196,9 +196,13 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
         title={'이름(견주님)'}
         formValue={formValues.name}
         setFormValues={setFormValues}
-        inputref={inputrefs.name} 
+        inputref={inputrefs.name}
         errorMessage={
-          formErrors.name && <ErrorMessage className={`${s.msg}`}>{formErrors.name}</ErrorMessage>
+          formErrors.name && (
+            <ErrorMessage className={`${s.msg}`}>
+              {formErrors.name}
+            </ErrorMessage>
+          )
         }
       />
       <SignupInput
@@ -210,17 +214,19 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
         formValue={formValues.email}
         setFormValues={setFormValues}
         setFormErrors={setFormErrors}
-        inputref={inputrefs.email} 
+        inputref={inputrefs.email}
         errorMessage={
           (isLoading.email ||
             formErrors.email ||
             (formValues.email && formErrors.isEmailDuplicated) ||
-            emailValdationMessage)
-            && (
+            emailValdationMessage) && (
             <ErrorMessage
               className={`${s.msg} ${isLoading.email ? s.loading : ''} ${
-                (!formErrors.email && !formErrors.isEmailDuplicated && emailValdationMessage)
-                 ? s.valid : ""
+                !formErrors.email &&
+                !formErrors.isEmailDuplicated &&
+                emailValdationMessage
+                  ? s.valid
+                  : ''
               }`}
             >
               {isLoading.email ||
@@ -250,20 +256,22 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
             id={'password'}
             title={'비밀번호'}
             setFormValues={setFormValues}
-            inputref={inputrefs.password} 
+            inputref={inputrefs.password}
             errorMessage={
               formErrors.password && (
                 <>
-                  {valid_password(formValues.password).message.map((msg, index) => (
-                    <ErrorMessage
-                      key={`pw-msg-${index}`}
-                      className={`${s.msg} ${msg.valid ? s.valid : ''} ${
-                        index !== 0 && s.siblings
-                      }`}
-                    >
-                      {msg.label}
-                    </ErrorMessage>
-                  ))}
+                  {valid_password(formValues.password).message.map(
+                    (msg, index) => (
+                      <ErrorMessage
+                        key={`pw-msg-${index}`}
+                        className={`${s.msg} ${msg.valid ? s.valid : ''} ${
+                          index !== 0 && s.siblings
+                        }`}
+                      >
+                        {msg.label}
+                      </ErrorMessage>
+                    ),
+                  )}
                 </>
               )
             }
@@ -274,13 +282,15 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
             id={'confirmPassword'}
             title={'비밀번호 확인'}
             setFormValues={setFormValues}
-            inputref={inputrefs.passwordConfirm} 
+            inputref={inputrefs.passwordConfirm}
             errorMessage={
               (formErrors.confirmPassword || confirmPasswordMessage) && (
                 <>
                   <ErrorMessage
                     className={`${s.msg} ${
-                      (!formErrors.confirmPassword || confirmPasswordMessage.isValid) && s.valid
+                      (!formErrors.confirmPassword ||
+                        confirmPasswordMessage.isValid) &&
+                      s.valid
                     }`}
                   >
                     {formErrors.confirmPassword || confirmPasswordMessage.label}
@@ -300,7 +310,7 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
         addedClassName={['add-btn-section']}
         formValue={formValues.phoneNumber}
         setFormValues={setFormValues}
-        inputref={inputrefs.phoneNumber} 
+        inputref={inputrefs.phoneNumber}
         errorMessage={
           (formErrors.phoneNumber ||
             authPhoneNumber.authNumber ||
@@ -309,7 +319,9 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
             <ErrorMessage
               style={{ maxWidth: `${rem(200)}` }}
               className={`${s.msg} ${
-                !formErrors.phoneNumber && authPhoneNumber.authNumber && s.loading
+                !formErrors.phoneNumber &&
+                authPhoneNumber.authNumber &&
+                s.loading
               }`}
             >
               {formErrors.phoneNumber ||
@@ -319,7 +331,11 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
           )
         }
       >
-        <button type={'button'} className={`${s.btn}`} onClick={onGetAuthNumberHandler}>
+        <button
+          type={'button'}
+          className={`${s.btn}`}
+          onClick={onGetAuthNumberHandler}
+        >
           {isLoading.phoneNumber ? (
             <Spinner
               style={{ color: 'var(--color-main)', width: '15', height: '15' }}
@@ -339,12 +355,14 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
           title={'인증 번호'}
           addedClassName={['add-btn-section']}
           setFormValues={setAuthPhoneNumber}
-          inputref={inputrefs.phoneNumber} 
+          inputref={inputrefs.phoneNumber}
           errorMessage={
             (formErrors.phoneAuthNumber || authPhoneNumber.authenticated) && (
               <ErrorMessage
                 className={`${s.msg} ${
-                  !formErrors.authNumber && authPhoneNumber.authenticated && s.valid
+                  !formErrors.authNumber &&
+                  authPhoneNumber.authenticated &&
+                  s.valid
                 }`}
               >
                 {authPhoneNumber.messageOnAuthNumberInput}
@@ -352,7 +370,11 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
             )
           }
         >
-          <button type={'button'} className={`${s.btn}`} onClick={onCheckAuthNumberHandler}>
+          <button
+            type={'button'}
+            className={`${s.btn}`}
+            onClick={onCheckAuthNumberHandler}
+          >
             확인
           </button>
         </SignupInput>
@@ -362,9 +384,15 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
         setFormValues={setFormValues}
         formErrors={formErrors}
         setFormErrors={setFormErrors}
-        inputrefs={inputrefs} 
+        inputrefs={inputrefs}
+        isEdit={false}
         errorMessage={
-          formErrors.detailAddress && formErrors.street && <ErrorMessage className={`${s.msg}`}>{formErrors.detailAddress}</ErrorMessage>
+          formErrors.detailAddress &&
+          formErrors.street && (
+            <ErrorMessage className={`${s.msg}`}>
+              {formErrors.detailAddress}
+            </ErrorMessage>
+          )
         }
       />
 
@@ -389,14 +417,20 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
         title={'생년월일(견주님)'}
         formValue={formValues.birthday}
         setFormValues={setFormValues}
-        inputrefs={inputrefs} 
-        errorMessage={formErrors.birthday && <ErrorMessage>{formErrors.birthday}</ErrorMessage>}
+        inputrefs={inputrefs}
+        errorMessage={
+          formErrors.birthday && (
+            <ErrorMessage>{formErrors.birthday}</ErrorMessage>
+          )
+        }
       />
-     
+
       <div className={s['join__wrap']}>
         <div className={s['input-title-wrap']}>
           <label htmlFor={'radios-gender'}>
-            <span className={`${s['inp-title']} ${s['required']}`}>{'성별(견주님)'}</span>
+            <span className={`${s['inp-title']} ${s['required']}`}>
+              {'성별(견주님)'}
+            </span>
           </label>
         </div>
         <div className={`${s['input-wrap']}`}>
@@ -424,7 +458,7 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
         title={'추천코드'}
         placeholder={'추천코드는 계정 당 한 번만 입력 가능합니다.'}
         setFormValues={setFormValues}
-        inputref={null} 
+        inputref={null}
       />
     </>
   );

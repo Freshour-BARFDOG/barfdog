@@ -4,13 +4,21 @@ import SignupInput from './SignupInput';
 import Tooltip from '/src/components/atoms/Tooltip';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import dynamic from 'next/dynamic';
-import filter_specialCharacter from "/util/func/filter_specialCharacter";
-const WindowOpener = dynamic(() => import('/util/func/window-opener'), { ssr: false });
+import filter_specialCharacter from '/util/func/filter_specialCharacter';
+const WindowOpener = dynamic(() => import('/util/func/window-opener'), {
+  ssr: false,
+});
 
 function SignInput_address(props) {
-  
-  const { formValues, setFormValues, formErrors, setFormErrors, inputrefs, errorMessage } = props;
-
+  const {
+    formValues,
+    setFormValues,
+    formErrors,
+    setFormErrors,
+    inputrefs,
+    errorMessage,
+    isEdit,
+  } = props;
   const onReceivePopupData = (err, data) => {
     // MEMO DATA from POSTCODE API
     // MEMO ERROR CASE- 'data type string': popup window close event & popup window open event
@@ -19,12 +27,17 @@ function SignInput_address(props) {
     if (err) {
       return setFormErrors((prevState) => ({
         ...prevState,
-        address: err
+        address: err,
       }));
     }
     setFormValues((prevState) => ({
       ...prevState,
-      address: { street:address, zipcode:zonecode, city:sido, detailAddress:"" },
+      address: {
+        street: address,
+        zipcode: zonecode,
+        city: sido,
+        detailAddress: '',
+      },
     }));
   };
 
@@ -36,11 +49,10 @@ function SignInput_address(props) {
       ...prevState,
       address: {
         ...prevState.address,
-        detailAddress: detailAddress
+        detailAddress: detailAddress,
       },
     }));
   };
-
 
   return (
     <>
@@ -77,21 +89,32 @@ function SignInput_address(props) {
             {formValues.address.city ? '재검색' : '주소검색'}
           </span>
         </WindowOpener>
-        {formErrors.address && <ErrorMessage>{formErrors.address}</ErrorMessage>}
+        {formErrors.address && (
+          <ErrorMessage>{formErrors.address}</ErrorMessage>
+        )}
         {formValues.address.street && (
           <label>
             <input
               type="text"
               id={'address-detailAddress'}
               placeholder={'상세주소'}
-              value={formValues.address.detailAddress || ""}
+              value={formValues.address.detailAddress || ''}
               onChange={onDetailAddressHandler}
               ref={inputrefs?.detailAddress}
             />
-            {(!formValues.address.detailAddress || formValues.address.detailAddress === "") && formErrors.detailAddress && <ErrorMessage>{formErrors.detailAddress}</ErrorMessage>}
+            {(!formValues.address.detailAddress ||
+              formValues.address.detailAddress === '') &&
+              formErrors.detailAddress && (
+                <ErrorMessage>{formErrors.detailAddress}</ErrorMessage>
+              )}
           </label>
         )}
-        <span className={s.addressInfo}>⚠️ 회원 정보의 주소는 배송지 주소와 다르므로 배송지 변경을 원하시는 경우 고객센터로 문의 바랍니다.</span>
+        {isEdit && (
+          <span className={s.addressInfo}>
+            ⚠️ 회원 정보의 주소는 배송지 주소와 다르므로 배송지 변경을 원하시는
+            경우 고객센터로 문의 바랍니다.
+          </span>
+        )}
       </SignupInput>
     </>
   );
