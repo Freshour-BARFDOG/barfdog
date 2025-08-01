@@ -55,18 +55,19 @@ export default function CouponPage () {
   const searchPageSize = 100;
   const [isLoading, setIsLoading] = useState( {} );
   const [itemList, setItemList] = useState([]);
-  const [activeUseCouponModal, setActiveUseCouponModal] = useState( false );
   const [submitted, setSubmitted] = useState( false );
   const [form, setForm] = useState( {} );
   const couponCodeRef = useRef( null );
 
-  
+
   const [info, setInfo] = useState( initInfo );
-  
-  const onActiveModalHandler = useCallback( () => {
-    setActiveUseCouponModal( true );
-  }, [] );
-  
+
+  // 쿠폰사용 버튼 제거 요청 반영 (25.08.01)
+  // const [activeUseCouponModal, setActiveUseCouponModal] = useState( false );
+  // const onActiveModalHandler = useCallback( () => {
+  //   setActiveUseCouponModal( true );
+  // }, [] );
+
   const pageInterceptor = useCallback( (res, option = {itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
     // console.log( res );
@@ -235,12 +236,12 @@ export default function CouponPage () {
                             }
                         </div>
                         <div className={s.right_top}>
-                          <button
-                            type={'button'}
-                            className={`${s.useCoupon} ${expired && 'disabled'}`}
-                            onClick={onActiveModalHandler}>
-                            {expired ? "사용기한 만료" : "쿠폰 사용"}
-                          </button>
+                          {/*<button*/}
+                          {/*  type={'button'}*/}
+                          {/*  className={`${s.useCoupon} ${expired && 'disabled'}`}*/}
+                          {/*  onClick={onActiveModalHandler}>*/}
+                          {/*  {expired ? "사용기한 만료" : "쿠폰 사용"}*/}
+                          {/*</button>*/}
                         </div>
                         <div className={s.left_bot}>
                           <div className={s.left_bot_text}>
@@ -292,12 +293,12 @@ export default function CouponPage () {
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      {activeUseCouponModal && (
-        <Modal_useCoupon
-          isActiveModal={activeUseCouponModal}
-          setIsActiveModal={setActiveUseCouponModal}
-        />
-      )}
+      {/*{activeUseCouponModal && (*/}
+      {/*  <Modal_useCoupon*/}
+      {/*    isActiveModal={activeUseCouponModal}*/}
+      {/*    setIsActiveModal={setActiveUseCouponModal}*/}
+      {/*  />*/}
+      {/*)}*/}
       {hasAlert && <Modal_global_alert onClick={onGlobalModalCallback} background/>}
     </>
   );
