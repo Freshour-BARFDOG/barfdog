@@ -14,10 +14,11 @@ axios.defaults.timeout = 10000;
 // CLIENT에서 아래와 같이 처리할 필요가 없다
 // 아래 코드 중에서 아무거나 골라써도 무방하다.
 
-export default function axiosConfig(contType = 'application/json') {
+export default function axiosConfig(contType = 'application/json', timeout = 10000) {
   const accessToken = getCookie(cookieType.LOGIN_COOKIE);
   return {
     withCredentials: true,
+    timeout: timeout,
     headers: {
       authorization: accessToken,
       'content-Type': contType,

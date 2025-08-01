@@ -199,16 +199,13 @@ function ReleaseCouponPage() {
         submit: true,
       }));
 
-      const res = await postObjData(postFormValuesApiUrl, body);
+      const res = await postObjData(postFormValuesApiUrl, body, 'application/json', 60000);
       // console.log(res);
       if (res.isDone) {
         mct.alertShow('쿠폰이 성공적으로 발행되었습니다.', onSucessCallback);
         setIsSubmitted(true);
       } else {
-        mct.alertShow(
-          res.error,
-          '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.',
-        );
+        mct.alertShow('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
       }
     } catch (err) {
       mct.alertShow('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');

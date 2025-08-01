@@ -206,7 +206,7 @@ export const deleteData = async (url, config = { data: {} }) => {
   return result;
 };
 
-export const postObjData = async (url, data, contType) => {
+export const postObjData = async (url, data, contType, timeout) => {
   const result = {
     isDone: false,
     error: '',
@@ -215,12 +215,12 @@ export const postObjData = async (url, data, contType) => {
   };
 
   await axios
-    .post(url, data, axiosConfig(contType))
+    .post(url, data, axiosConfig(contType, timeout))
     .then((res) => {
       // console.log('postObjDataResponse:\n', res);
       result.data = res;
       result.status = res.status;
-      result.isDone = res.status === 200 || res.status === 201;
+      result.isDone = (res.status === 200 || res.status === 201) && (res.data.success ?? true);
     })
     .catch((err) => {
       errorResponseHandleMap(err);
