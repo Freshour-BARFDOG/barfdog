@@ -59,12 +59,7 @@ export default function ManageSubscribePage() {
                 />
               ) : (
                 <ul>
-                  {itemList
-                    .sort(
-                      (a, b) =>
-                        b.subscribeDto.subscribeId - a.subscribeDto.subscribeId,
-                    )
-                    .map((item, index) => (
+                  {itemList.map((item, index) => (
                       <li key={`subscribe-item-${index}`} className={s.content}>
                         <div className={s.flex_box}>
                           <div className={s.col_1}>
