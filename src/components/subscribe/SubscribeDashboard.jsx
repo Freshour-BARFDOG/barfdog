@@ -143,11 +143,13 @@ export const SubscribeDashboard = ({ subscribeInfo }) => {
                   <span className={s.row_1_sub}>(등급할인 포함)</span>
                 </div>
                 <div className={s.row_2}>{transformLocalCurrency(info.nextPaymentPrice)}원</div>
-                <div className={s.row_3}>
-                  <button type={'button'} className={s['coupon-btn']} onClick={onActiveCouponModal}>
-                    쿠폰적용
-                  </button>
-                </div>
+                {info.subscribeStatus === 'SUBSCRIBING' &&
+                  <div className={s.row_3}>
+                    <button type={'button'} className={s['coupon-btn']} onClick={onActiveCouponModal}>
+                      쿠폰적용
+                    </button>
+                  </div>
+                }
               </div>
               <div className={s.inner_right_box}>
                 <div className={`${s.image} img-wrap`}>

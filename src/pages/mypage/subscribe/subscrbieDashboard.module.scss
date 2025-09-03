@@ -90,12 +90,11 @@
           display: block;
           margin-top: 5px;
         }
-
         .row_2 {
           @include char(l20);
-          padding-bottom: rem(10);
         }
         .row_3 {
+          padding-top: rem(10);
           display: flex;
           justify-content: center;
           align-items: center;
