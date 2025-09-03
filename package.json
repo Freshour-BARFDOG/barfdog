@@ -11,6 +11,9 @@
     "analyze": "cross-env ANALYZE=true next build",
     "lint": "next lint"
   },
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "@next/bundle-analyzer": "^14.0.0",
     "@nivo/core": "^0.79.0",
