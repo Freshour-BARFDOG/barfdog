@@ -46,14 +46,6 @@ const valid_CancelableOrder = (itemList) => {
   return result;
 };
 
-const filter_availableConfirmItemList = (itemList) =>
-  itemList.filter((item) => {
-    return (
-      item.status === orderStatus.DELIVERY_DONE &&
-      item.status !== orderStatus.CONFIRM
-    );
-  });
-
 export default function SingleItem_OrderHistoryPage({ data }) {
   console.log(data);
 
@@ -94,7 +86,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
   };
 
   const onStartConfirm = () => {
-    const availableItemList = filter_availableConfirmItemList(originItemList);
+    const availableItemList = originItemList.filter(item => item.status === orderStatus.DELIVERY_DONE);
     if (!availableItemList.length)
       return mct.alertShow('구매확정 가능한 상품이 없습니다.');
     setFilteredItemList(availableItemList);
@@ -204,7 +196,11 @@ export default function SingleItem_OrderHistoryPage({ data }) {
         <Modal_changeItemOrderState
           onHideModal={initializeModalState}
           confirmType={confirmType}
-          items={originItemList}
+          items={
+            activeModal?.confirm
+              ? filteredItemList
+              : originItemList
+          }
           hasForm={!activeModal?.confirm}
         />
       )}

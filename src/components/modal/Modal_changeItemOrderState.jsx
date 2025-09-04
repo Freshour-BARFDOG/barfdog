@@ -221,7 +221,8 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
       let body;
       if ( confirmType === orderStatus.CONFIRM ) {
         body = {
-          orderItemIdList: form.selectedItemIdList
+          orderItemIdList: form.selectedItemIdList,
+          orderId
         }
       } else {
         body = {
