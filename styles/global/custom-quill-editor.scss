@@ -24,3 +24,17 @@ $browser-context:16;
     color: #b5b5b5;
   }
 }
+.ql-editor {
+  p{
+    cursor: default;
+    padding: 1rem 0;
+  }
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+  a {
+    display: inline-block;
+    text-decoration: underline;
+  }
+}
