@@ -3,11 +3,19 @@
 
 .contents-wrap{
   padding: rem(120) 0 rem(140);
-  .ql-editor{
+  .ql-editor {
     padding:0;
-
     p{
       cursor: default;
+      padding: 1rem 0;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    a {
+      display: inline-block;
+      text-decoration: underline;
     }
   }
 }

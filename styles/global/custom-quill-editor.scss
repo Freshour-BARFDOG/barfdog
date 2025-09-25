@@ -18,9 +18,24 @@ $browser-context:16;
   .ql-container{height: calc(#{$editorHeight} - #{$toolbarHeight});}
 
   img{width:initial; display:initial;}
+ 
   .ql-editor.ql-blank::before {
     font-size: rem(14);
     font-style:normal;
     color: #b5b5b5;
+  }
+}
+.ql-editor {
+  p{
+    cursor: default;
+    padding: 1rem 0;
+  }
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+  a {
+    display: inline-block;
+    text-decoration: underline;
   }
 }
