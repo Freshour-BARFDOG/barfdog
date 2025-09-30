@@ -11,7 +11,10 @@ section.title { padding : rem(5) 0 rem(20) }
 
   .inquiry_title{
     @include char(t24);
-     padding : rem(5) 0 rem(20);
+  }
+  .inquiry-info {
+    color: var(--color-main);
+    font-size: rem(14);
   }
 }
 .item-section {
@@ -36,8 +39,10 @@ section.title { padding : rem(5) 0 rem(20) }
 
 // styles
 .title-section {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 5px;
   > * {
     // height: 100% !important;
   }

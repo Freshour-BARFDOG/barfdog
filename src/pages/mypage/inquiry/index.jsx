@@ -88,6 +88,12 @@ export default function InquiryPage() {
     mct.alertHide();
   };
 
+  const openChatChannelIO = () => {
+	if (typeof window !== 'undefined' && window.ChannelIO) {
+		window.ChannelIO('openChat');
+	}
+};
+
   return (
     <>
       <MetaTitle title="마이페이지 1:1 문의내역" />
@@ -108,13 +114,18 @@ export default function InquiryPage() {
                   </p>
                 </div>
                 <div className={s['create-btn']}>
-                  <Link href={'/mypage/inquiry/create'} passHref>
-                    <a className={`custom_btn solid basic_l ${s['inquiry-btn']}`}>
-                      문의 작성하기
-                    </a>
-                  </Link>
+                  <button 
+                    className={`custom_btn solid basic_l ${s['inquiry-btn']}`} 
+                    onClick={openChatChannelIO}
+                  >
+                    실시간 상담하기
+                  </button>
                 </div>
               </ul>
+              <p className={s['inquiry-info']}>
+                더 빠르고 편리한 답변을 위해, 앞으로 모든 문의는 상담톡에서 도와드립니다.<br/>
+                [실시간 상담하기] 버튼을 눌러 바로 상담을 시작해 주세요.
+              </p>
             </div>
 
             <section className={s['item-section']}>
