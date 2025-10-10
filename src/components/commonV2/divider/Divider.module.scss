@@ -1,0 +1,62 @@
+// Divider Base Styles
+.horizontal {
+  width: 100%;
+}
+
+.vertical {
+  height: 70%;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+// Horizontal Thickness Variants
+.horizontal1 {
+  height: 1px;
+  background-color: var(--color-gray-50);
+}
+
+.horizontal2 {
+  height: 2px;
+  background-color: var(--color-gray-50);
+}
+
+.horizontal4 {
+  height: 4px;
+  background-color: var(--color-gray-50);
+}
+
+.horizontal8 {
+  height: 8px;
+  background-color: var(--color-gray-50);
+}
+
+.horizontal12 {
+  height: 12px;
+  background-color: var(--color-gray-50);
+}
+
+// Vertical Thickness Variants
+.vertical1 {
+  width: 1px;
+  background-color: var(--color-gray-50);
+}
+
+.vertical2 {
+  width: 2px;
+  background-color: var(--color-gray-50);
+}
+
+.vertical4 {
+  width: 4px;
+  background-color: var(--color-gray-50);
+}
+
+.vertical8 {
+  width: 8px;
+  background-color: var(--color-gray-50);
+}
+
+.vertical12 {
+  width: 12px;
+  background-color: var(--color-gray-50);
+}

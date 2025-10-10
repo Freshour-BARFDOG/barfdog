@@ -1,0 +1,48 @@
+// InfoBox.module.scss
+
+.infoBoxBase {
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.infoBoxStyle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.infoTextStyle {
+  width: 100%;
+  white-space: pre-line;
+}
+
+.red {
+  background-color: var(--color-red-pinkWhite);
+  border: 1px solid var(--color-red-pastelPink);
+}
+
+.blue {
+  background-color: var(--color-gray-50);
+  border: 1px solid var(--color-blue-500);
+}
+
+.gray {
+  background-color: var(--color-gray-100);
+  border: 1px solid var(--color-gray-400);
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.default {
+  cursor: default;
+}
+
+.fullWidth {
+  width: 100%;
+}

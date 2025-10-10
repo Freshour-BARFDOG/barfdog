@@ -1,0 +1,168 @@
+// Card Base Styles
+.cardBase {
+  display: flex;
+}
+
+// Flex Direction
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+// Justify Content
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+// Align Items
+.align-start {
+  align-items: flex-start;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-end {
+  align-items: flex-end;
+}
+
+.align-between {
+  align-items: space-between;
+}
+
+// Width
+.w-full {
+  width: 100%;
+}
+
+.w-auto {
+  width: auto;
+}
+
+// Height
+.h-full {
+  height: 100%;
+}
+
+// Card Color Variants
+.gray0 {
+  background-color: var(--color-gray-0);
+}
+
+.gray50 {
+  background-color: var(--color-gray-50);
+}
+
+.gray100 {
+  background-color: var(--color-gray-100);
+}
+
+// Card Shadow Variants
+.light {
+  box-shadow: var(--shadow-light);
+}
+
+.normal {
+  box-shadow: var(--shadow-normal);
+}
+
+.strong {
+  box-shadow: var(--shadow-strong);
+}
+
+.none {
+  box-shadow: none;
+}
+
+// Card Background Variants
+.white {
+  background-color: var(--color-gray-0);
+}
+
+// Card Padding Variants
+.padding0 {
+  padding: 0;
+}
+
+.padding12 {
+  padding: 12px;
+}
+
+.padding16 {
+  padding: 16px;
+}
+
+.padding20 {
+  padding: 20px;
+}
+
+.padding20_16 {
+  padding: 20px 16px;
+}
+
+// Card Gap Variants
+.gap0 {
+  gap: 0;
+}
+
+.gap4 {
+  gap: 4px;
+}
+
+.gap8 {
+  gap: 8px;
+}
+
+.gap12 {
+  gap: 12px;
+}
+
+.gap16 {
+  gap: 16px;
+}
+
+.gap20 {
+  gap: 20px;
+}
+
+// Card Align Variants
+.left {
+  text-align: left;
+}
+
+.center {
+  text-align: center;
+}
+
+// Card Border Radius Variants
+.borderRadiusDefault {
+  border-radius: 8px;
+}
+
+.borderRadiusNone {
+  border-radius: 0;
+}
+
+.borderRadius12 {
+  border-radius: 12px;
+}
+
+.borderRadius16 {
+  border-radius: 16px;
+}

@@ -1,0 +1,151 @@
+// Button.module.scss
+
+.base {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.text {
+  font-family: var(--font-Pretendard);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.boxShadow {
+  box-shadow: var(--shadow-light);
+}
+
+// 버튼 크기
+.sm {
+  padding: 6px 16px;
+  height: 36px;
+  border-radius: 8px;
+  font-weight: var(--font-weight-headline4);
+  font-size: var(--font-size-headline4);
+  line-height: var(--line-height-headline4);
+  letter-spacing: var(--letter-spacing-headline4);
+}
+
+.md {
+  padding: 10px 24px;
+  height: 44px;
+  border-radius: 8px;
+  font-weight: var(--font-weight-headline3);
+  font-size: var(--font-size-headline3);
+  line-height: var(--line-height-headline3);
+  letter-spacing: var(--letter-spacing-headline3);
+}
+
+.lg {
+  padding: 12px 28px;
+  height: 48px;
+  border-radius: 8px;
+  font-weight: var(--font-weight-headline3);
+  font-size: var(--font-size-headline3);
+  line-height: var(--line-height-headline3);
+  letter-spacing: var(--letter-spacing-headline3);
+}
+
+.inputButton {
+  padding: 12px 30px;
+  width: 84px;
+  height: 48px;
+  border-radius: 8px;
+  font-weight: var(--font-weight-headline3);
+  font-size: var(--font-size-headline3);
+  line-height: var(--line-height-headline3);
+  letter-spacing: var(--letter-spacing-headline3);
+}
+
+.iconContainer {
+  display: inline-flex;
+  align-items: center;
+  column-gap: 6px;
+}
+
+// 버튼 상태 - Solid
+.solidPrimary {
+  background-color: var(--color-red);
+  color: var(--color-gray-0);
+  border: none;
+  cursor: pointer;
+}
+
+// 버튼 상태 - Outline
+.outlinePrimary {
+  background-color: var(--color-gray-0);
+  border: 1px solid var(--color-red);
+  color: var(--color-red);
+  cursor: pointer;
+}
+
+.outlineSecondary {
+  background-color: var(--color-gray-0);
+  border: 1px solid var(--color-gray-300);
+  color: var(--color-red);
+  cursor: pointer;
+}
+
+.outlineAssistive {
+  background-color: var(--color-gray-0);
+  border: 1px solid var(--color-gray-300);
+  color: var(--color-gray-900);
+  cursor: pointer;
+}
+
+// 버튼 상태 - Text
+.textPrimary {
+  background-color: transparent;
+  color: var(--color-red);
+  cursor: pointer;
+  border: none;
+}
+
+.textAssistive {
+  background-color: transparent;
+  color: var(--color-gray-500);
+  cursor: pointer;
+  border: none;
+}
+
+// 비활성화 상태 - Solid
+.disabledSolidPrimary {
+  background-color: var(--color-gray-300);
+  color: var(--color-gray-0);
+  cursor: not-allowed;
+}
+
+// 비활성화 상태 - Outline
+.disabledOutlinePrimary {
+  border-color: var(--color-gray-300);
+  color: var(--color-gray-300);
+  cursor: not-allowed;
+}
+
+.disabledOutlineSecondary {
+  border-color: var(--color-gray-300);
+  color: var(--color-gray-300);
+  cursor: not-allowed;
+}
+
+.disabledOutlineAssistive {
+  border-color: var(--color-gray-300);
+  color: var(--color-gray-300);
+  cursor: not-allowed;
+}
+
+// 비활성화 상태 - Text
+.disabledTextPrimary {
+  border-color: var(--color-gray-300);
+  cursor: not-allowed;
+}
+
+.disabledTextAssistive {
+  border-color: var(--color-gray-300);
+  cursor: not-allowed;
+}

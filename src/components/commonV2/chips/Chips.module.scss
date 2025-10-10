@@ -1,0 +1,252 @@
+// Chips 기본 스타일
+.solid {
+  position: relative;
+  z-index: 0;
+}
+
+.outlined {
+  border: 1px solid var(--color-red);
+  position: relative;
+  z-index: 0;
+}
+
+// 색상 변형 스타일
+.solidRed {
+  background-color: var(--color-red);
+  color: var(--color-gray-0);
+}
+
+.solidPinkWhite {
+  background-color: var(--color-red-pink-white);
+  color: var(--color-red-pastel);
+}
+
+.solidGray100 {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-700);
+}
+
+.solidGray200 {
+  background-color: var(--color-gray-200);
+  color: var(--color-gray-700);
+}
+
+.solidGray600 {
+  background-color: var(--color-gray-600);
+  color: var(--color-gray-0);
+}
+
+.solidGray700 {
+  background-color: var(--color-gray-700);
+  color: var(--color-gray-0);
+}
+
+.solidGray800 {
+  background-color: var(--color-gray-800);
+  color: var(--color-gray-0);
+}
+
+.solidGray900 {
+  background-color: var(--color-gray-900);
+  color: var(--color-gray-0);
+}
+
+.solidLightPink {
+  background-color: var(--color-red-light-pink);
+  color: var(--color-red-pastel);
+}
+
+.solidBlue50 {
+  background-color: var(--color-blue-50);
+  color: var(--color-blue-400);
+}
+
+.solidBlue500 {
+  background-color: var(--color-blue-500);
+  color: var(--color-gray-0);
+}
+
+.solidBlue600 {
+  background-color: var(--color-blue-600);
+  color: var(--color-gray-0);
+}
+
+.solidGreen500 {
+  background-color: var(--color-green-500);
+  color: var(--color-gray-0);
+}
+
+.solidGreen50 {
+  background-color: var(--color-green-50);
+  color: var(--color-green-600);
+}
+
+.solidYellow500 {
+  background-color: var(--color-yellow-500);
+  color: var(--color-gray-0);
+}
+
+// Outlined 스타일
+.outlinedRed {
+  border: 1px solid var(--color-red);
+  color: var(--color-red);
+  background-color: var(--color-gray-0);
+}
+
+.outlinedGray800 {
+  border: 1px solid var(--color-gray-800);
+  color: var(--color-gray-800);
+  background-color: var(--color-gray-0);
+}
+
+.outlinedGray700 {
+  border: 1px solid var(--color-gray-700);
+  color: var(--color-gray-700);
+  background-color: var(--color-gray-0);
+}
+
+.outlinedBlue50 {
+  border: 1px solid var(--color-blue-300);
+  color: var(--color-blue-500);
+  background-color: var(--color-blue-50);
+}
+
+// Switch Off 스타일
+.solidSwitchOff {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-700);
+  border: none;
+}
+
+.outlinedSwitchOff {
+  background-color: var(--color-gray-0);
+  color: var(--color-gray-300);
+  border: 1px solid var(--color-gray-300);
+}
+
+// Border Radius
+.borderRadiusSm {
+  border-radius: 4px;
+}
+
+.borderRadiusMd {
+  border-radius: 8px;
+}
+
+.borderRadiusLg {
+  border-radius: 280px;
+}
+
+// Size 스타일
+.base {
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: -0.4px;
+  white-space: nowrap;
+  max-width: fit-content;
+}
+
+.sizeSm {
+  font-size: 12px;
+  font-weight: 400;
+  height: 24px;
+  padding: 2px 8px;
+}
+
+.sizeMd {
+  font-size: 14px;
+  font-weight: 500;
+  height: 32px;
+  padding: 4px 12px;
+}
+
+.sizeLg {
+  font-size: 16px;
+  font-weight: 600;
+  height: 32px;
+  padding: 4px 12px;
+}
+
+// Check Icon이 있을 때의 패딩 조정
+.sizeSmWithCheckIcon {
+  padding: 2px 8px 2px 4px;
+}
+
+.sizeMdWithCheckIcon {
+  padding: 4px 12px 4px 6px;
+}
+
+.sizeLgWithCheckIcon {
+  padding: 4px 12px 4px 6px;
+}
+
+// Tail 스타일
+.tailStyle {
+  position: absolute;
+  transform: translateX(-50%);
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  z-index: -1;
+}
+
+.tailPositionTop {
+  // 기본값
+}
+
+.tailPositionBottom {
+  transform: translateX(-50%) rotate(180deg);
+  top: unset;
+}
+
+// Tail 크기
+.tailSizeTopSm {
+  top: -6px;
+}
+
+.tailSizeTopMd {
+  top: -8px;
+}
+
+.tailSizeTopLg {
+  top: -10px;
+}
+
+.tailSizeBottomSm {
+  bottom: -6px;
+}
+
+.tailSizeBottomMd {
+  bottom: -8px;
+}
+
+.tailSizeBottomLg {
+  bottom: -10px;
+}
+
+// Tail 색상
+.tailColorGray800 {
+  background-color: var(--color-gray-800);
+}
+
+.tailColorGray700 {
+  background-color: var(--color-gray-700);
+}
+
+.tailColorRed {
+  background-color: var(--color-red);
+}
+
+.tailColorBlue600 {
+  background-color: var(--color-blue-600);
+}
+
+.tailColorGreen500 {
+  background-color: var(--color-green-500);
+}
+
+// Tail이 있을 때 폰트 크기 고정
+.tailFixedFont {
+  font-size: 12px;
+}
