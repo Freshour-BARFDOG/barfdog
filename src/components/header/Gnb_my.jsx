@@ -7,7 +7,7 @@ import Icon_mypage from '../../../public/img/icon/mypage.svg';
 import DeadlineTimer from '../atoms/DeadlineTimer';
 import React from 'react';
 
-export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
+export const Gnb_my = ({ isMobile, setSidrOpen, authData, showDeadlineTimer = true }) => {
   const userInfo = authData?.userInfo;
   const cart = useSelector((s) => s.cart);
   const router = useRouter();
@@ -61,9 +61,11 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
           </li>
         </ul>
       </div>
-      <i id={'DeadlineTimer-wrapper'} className={'mobile'}>
-        <DeadlineTimer />
-      </i>
+      {showDeadlineTimer && 
+        <i id={'DeadlineTimer-wrapper'} className={'mobile'}>
+          <DeadlineTimer />
+        </i>
+      }
     </>
   );
 };

@@ -2,31 +2,62 @@ import React from 'react';
 import s from './header.module.scss';
 import { useRouter } from 'next/router';
 import MenuLayout, { SubmenuList } from '/src/components/header/MenuLayout';
-import { general_itemType, itemTypeOption } from '../../../store/TYPE/itemType';
 import DeadlineTimer from '../atoms/DeadlineTimer';
+import { menuList } from '../../../constants/menu';
 
-const PcGnb = () => {
+const PcGnb = ({ currentPath }) => {
+
+  const isPathMatch = (currentPath, menuLink) => {
+    // URL에서 쿼리 파라미터 제거하여 경로만 추출
+    const currentPathOnly = currentPath.split('?')[0];
+    const menuPathOnly = menuLink.split('?')[0];
+
+    
+    // 커뮤니티, 샵 메뉴의 경우 하위 경로들도 모두 활성화
+    if (currentPathOnly.startsWith('/community') && menuPathOnly.startsWith('/community')) {
+      return true;
+    }
+    if (currentPathOnly.startsWith('/shop') && menuPathOnly.startsWith('/shop')) {
+      return true;
+    }
+    
+    // 경로가 정확히 일치하는지 확인
+    if (currentPathOnly === menuPathOnly) {
+      // 쿼리 파라미터가 없는 경우 바로 true 반환
+      if (!currentPath.includes('?') && !menuLink.includes('?')) {
+        return true;
+      }
+
+      if (!menuLink.includes('?')) {
+        return true;
+      }
+    }
+    
+    return false;
+  };
+  
   return (
-    <>
+    <div className={s.gnb_nav_box}>
       <Gnb_survey />
-      <MenuLayout title="샵" link={`/shop?itemType=${general_itemType.ALL}`}>
-        {itemTypeOption.map(type => (
-          <SubmenuList
-            key={type.value}
-            title={type.label}
-            link={`/shop?itemType=${type.value}`}
-          />
+      <div className={s.gnb_nav_list}>
+        {menuList.map(menu => (
+          <MenuLayout 
+            key={menu.title} 
+            title={menu.title} 
+            link={menu.link}
+            isActive={isPathMatch(currentPath, menu.link)}
+          >
+            {menu.subMenu && menu.subMenu.map(subMenu => (
+              <SubmenuList
+                key={subMenu.title} 
+                title={subMenu.title}
+                link={subMenu.link}
+              />
+            ))}
+          </MenuLayout>
         ))}
-      </MenuLayout>
-      <MenuLayout title="레시피" link="/recipes" />
-      <MenuLayout title="커뮤니티" link="/community/notice">
-        <SubmenuList title="공지사항" link="/community/notice" />
-        <SubmenuList title="이벤트" link="/community/event" />
-        <SubmenuList title="블로그" link="/community/blog" />
-        <SubmenuList title="어바웃" link="/community/about" />
-      </MenuLayout>
-      <MenuLayout title="리뷰" link="/review" />
-    </>
+      </div>
+    </div>
   );
 };
 
@@ -43,13 +74,11 @@ const Gnb_survey = () => {
     router.push('/surveyGuide');
   };
   return (
-    <>
-      <li className={s.subscribe} onClick={onClickHandler}>
-        <span>{/* <SVG_subscribe /> */}</span>
-        <i id={'DeadlineTimer-wrapper'} className={'pc'}>
-          <DeadlineTimer />
-        </i>
-      </li>
-    </>
+    <div className={`${s.subscribe} ${s.gnb_nav_item}`} onClick={onClickHandler}>
+      <span>{/* <SVG_subscribe /> */}</span>
+      <i id={'DeadlineTimer-wrapper'} className={'pc'}>
+        <DeadlineTimer />
+      </i>
+    </div>
   );
 };

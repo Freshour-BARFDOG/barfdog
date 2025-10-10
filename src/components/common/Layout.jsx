@@ -4,13 +4,13 @@ import Footer from './Footer';
 import TopLineBanner from '/src/components/atoms/TopLineBanner';
 
 
-const Layout = ({ id, className, ...props }) => {
+const Layout = ({ id, className, showFooter = true, showDeadlineTimer = true, ...props }) => {
   return (
     <main id={id} className={className}>
       <TopLineBanner />
-      <Header />
+      <Header showDeadlineTimer={showDeadlineTimer} />
       {props.children}
-      <Footer />
+      {showFooter && <Footer />}
     </main>
   );
 };

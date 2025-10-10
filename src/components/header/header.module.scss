@@ -133,7 +133,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: rem(50) 0 rem(30);
+  padding: 4px 0 rem(30);
   
   a{
     max-width: rem(280);
@@ -142,24 +142,35 @@
 
 .gnb_area {
   position: relative;
-  height: rem(62);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 
   .gnb_nav {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    > ul {
+    .gnb_nav_box {
       display: inline-flex;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: center;
-      > li {
-        &:not(:last-child) {
-          margin-right: rem(58);
+      gap: 10px rem(58);
+
+      .gnb_nav_list {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+
+        &.isSmallScreen {
+          margin-top: 20px;
+          margin-bottom: 10px;
+          .gnb_nav_item {
+            margin-right: 32px;
+          }
         }
+
+      }
+      .gnb_nav_item {
         &.subscribe {
           cursor: pointer;
           position:relative;
@@ -374,6 +385,7 @@
   }
   .gnb_area {
     justify-content: flex-end;
+    height: 3.875rem;
     .gnb_my .shop_wrap .gnb_shop_count {
       top: rem(10);
       left: auto;

@@ -6,30 +6,12 @@ import useDeviceState from '/util/hook/useDeviceState';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/router';
 import { itemTypeOption } from '/store/TYPE/itemType';
+import { communityOptions } from '../../../constants/menu';
 
 const menuNameObj = {
   shop: 'shop',
   community: 'community',
 };
-
-const communityOptions = [
-  {
-    label: '공지사항',
-    value: '/community/notice'
-  },
-  {
-    label: '이벤트',
-    value: '/community/event'
-  },
-  {
-    label: '블로그',
-    value: '/community/blog'
-  },
-  {
-    label: '어바웃',
-    value: '/community/about'
-  },
-]
 
 export default function MobileGnb() {
   const mcx = useModalContext();
@@ -69,9 +51,7 @@ export default function MobileGnb() {
     <>
       <nav className={`${s.mobileNav} mobile`} ref={curMenuRef}>
         <section
-          className={`${s['mobile-menu-wrap']} mobile-menu-wrap ${
-            deviceWidth < 300 ? s['scroll-container'] : ''
-          }`}
+          className={`${s['mobile-menu-wrap']} mobile-menu-wrap`}
         >
           <ul className={`${s['mobile-menu']} `}>
             <MobileMenu
@@ -86,6 +66,7 @@ export default function MobileGnb() {
               id={menuNameObj.shop}
               onClick={onActiveSubmenuHandler}
             />
+            <MobileMenu title={'비만 AI 진단'} link={'/ai-obesity-analysis'} />
             <MobileMenu title={'레시피'} link={'/recipes'} />
             <MobileMenu
               title={'커뮤니티'}

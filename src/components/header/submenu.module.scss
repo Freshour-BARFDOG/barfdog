@@ -15,11 +15,17 @@ $parentWidth : rem(150);
 
   a.submenu_title{cursor: pointer !important;}
   .submenu_title{
-    height: $parentHeight;
+    // height: $parentHeight;
     font-size:rem(18);
     font-weight: bold;
     padding: rem(15) rem(20) ;
+    white-space: nowrap;
     cursor: default;
+    &.active{
+      color: var(--color-main);
+      font-weight: bold;
+      position: relative;
+    }
   }
 
   img{transition: transform 0.3s ease-out .1s;}
@@ -45,7 +51,6 @@ $parentWidth : rem(150);
     transform: translate(-50%,100%);
     background-color: #fff;
     box-shadow: 0 0 0.9375rem rgb(0 0 0 / 15%);
-    min-width: rem(150);
     padding: rem(10) 0 !important;
     transition: opacity var(--ani-default);
     opacity: 0;
@@ -70,6 +75,11 @@ $parentWidth : rem(150);
 
         &:hover{
           color: var(--color-main);
+        }
+
+        &.active{
+          color: var(--color-main);
+          font-weight: bold;
         }
       }
      }

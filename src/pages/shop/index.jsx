@@ -75,6 +75,7 @@ export default function ShopPage() {
       newPageNumber: pageData.number + 1,
       newItemList: newItemList || [],
     };
+    return newPageInfo
   };
 
   const onChangeItemType = (e) => {

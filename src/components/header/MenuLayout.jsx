@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import s from './submenu.module.scss';
+import styles from './header.module.scss';
 import Image from 'next/image';
 
 
@@ -20,8 +21,24 @@ export const Title = ( {children, link, className} ) => {
 
 
 
-export const SubmenuList = ( {link, title, className}) => {
-  return <li>{link ? <Link href={link || '#'} passHref className={className}>{title}</Link> : <p  className={className}>{title}</p>}</li>;
+export const SubmenuList = ( {link, title, className, isActive}) => {
+  return (
+    <li>
+      {link ? 
+        <Link 
+          href={link || '#'} 
+          passHref 
+          className={`${className || ''} ${isActive ? 'active' : ''}`}
+        >
+          {title}
+        </Link> 
+        : 
+        <p className={`${className || ''} ${isActive ? 'active' : ''}`}>
+          {title}
+        </p>
+      }
+    </li>
+  );
 }
 
 
@@ -33,7 +50,8 @@ export const SubmenuList = ( {link, title, className}) => {
 
 
 
-function MenuLayout({title, titleClassName ,className, link, icon,  children}) {
+function MenuLayout({title, isActive ,className, link, icon,  children}) {
+
   const [submenuOpen, setSubmenuOpen] = useState(false);
 
   const mouseEnterEvent = (e) => {
@@ -57,12 +75,12 @@ function MenuLayout({title, titleClassName ,className, link, icon,  children}) {
 
   return (
     <li
-      className={s.menu_wrapper}
+      className={`${s.menu_wrapper} ${styles.gnb_nav_item}`}
       onMouseEnter={mouseEnterEvent}
       // onMouseLeave={mouseLeaveEvent}
     >
       {/* <Title link={link} className={titleClassName}>{title}</Title> */}
-      <Title link={link} className="hover:text-bf-red">{title}</Title>
+      <Title link={link} className={`hover:text-bf-red ${isActive ? s.active : ''}`}>{title}</Title>
       {icon &&
         <Image
           src={icon.src}

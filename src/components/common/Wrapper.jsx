@@ -6,7 +6,7 @@ import s from './wrapper.module.scss';
 // function Wrapper({ children, bgColor , fullWidth, rowStyle, ...props}) {
 function Wrapper({ children, className,  bgColor , fullWidth, rowStyle}) {
   return (
-    <div className={`${s.container_outer} ${className}`} style={{ backgroundColor: bgColor }}>
+    <div className={`${className} ${s.container_outer}`} style={{ backgroundColor: bgColor }}>
       <div
         className={`${s.container} ${fullWidth ? s['fullWidth'] : ''}`}
         // style={{ width: props.fullWidth ? "100%" : "" }}

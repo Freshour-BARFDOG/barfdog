@@ -58,6 +58,140 @@ font-family: 'GmarketSansBold'
 
   /* TRANSITION */
   --transition-cubic:cubic-bezier(0.69, 0.06, 0.38, 0.96);
+
+  /* ---------- v2 버전 ---------- */
+  /* Typography Variables */
+  --font-weight-display1: 700;
+  --font-size-display1: 40px;
+  --line-height-display1: 160%;
+  --letter-spacing-display1: -0.6px;
+
+  --font-weight-display2: 700;
+  --font-size-display2: 32px;
+  --line-height-display2: 150%;
+  --letter-spacing-display2: -0.6px;
+
+  --font-weight-title1: 700;
+  --font-size-title1: 28px;
+  --line-height-title1: 150%;
+  --letter-spacing-title1: -0.6px;
+
+  --font-weight-title2: 700;
+  --font-size-title2: 24px;
+  --line-height-title2: 150%;
+  --letter-spacing-title2: -0.6px;
+
+  --font-weight-title3: 700;
+  --font-size-title3: 22px;
+  --line-height-title3: 150%;
+  --letter-spacing-title3: -0.6px;
+
+  --font-weight-title4: 700;
+  --font-size-title4: 20px;
+  --line-height-title4: 150%;
+  --letter-spacing-title4: -0.6px;
+
+  --font-weight-headline1: 700;
+  --font-size-headline1: 18px;
+  --line-height-headline1: 150%;
+  --letter-spacing-headline1: -0.4px;
+
+  --font-weight-headline2: 700;
+  --font-size-headline2: 16px;
+  --line-height-headline2: 148%;
+  --letter-spacing-headline2: -0.4px;
+
+  --font-weight-headline3: 600;
+  --font-size-headline3: 16px;
+  --line-height-headline3: 148%;
+  --letter-spacing-headline3: -0.4px;
+
+  --font-weight-headline4: 600;
+  --font-size-headline4: 14px;
+  --line-height-headline4: 140%;
+  --letter-spacing-headline4: -0.4px;
+
+  --font-weight-label1: 500;
+  --font-size-label1: 18px;
+  --line-height-label1: 150%;
+  --letter-spacing-label1: -0.4px;
+
+  --font-weight-label2: 500;
+  --font-size-label2: 16px;
+  --line-height-label2: 148%;
+  --letter-spacing-label2: -0.4px;
+
+  --font-weight-label3: 700;
+  --font-size-label3: 14px;
+  --line-height-label3: 140%;
+  --letter-spacing-label3: -0.4px;
+
+  --font-weight-label4: 500;
+  --font-size-label4: 14px;
+  --line-height-label4: 140%;
+  --letter-spacing-label4: -0.4px;
+
+  --font-weight-body1: 400;
+  --font-size-body1: 18px;
+  --line-height-body1: 150%;
+  --letter-spacing-body1: -0.4px;
+
+  --font-weight-body2: 400;
+  --font-size-body2: 16px;
+  --line-height-body2: 148%;
+  --letter-spacing-body2: -0.4px;
+
+  --font-weight-body3: 400;
+  --font-size-body3: 14px;
+  --line-height-body3: 140%;
+  --letter-spacing-body3: -0.4px;
+
+  --font-weight-caption: 400;
+  --font-size-caption: 12px;
+  --line-height-caption: 140%;
+  --letter-spacing-caption: -0.4px;
+
+  --font-weight-caption2: 500;
+  --font-size-caption2: 12px;
+  --line-height-caption2: 140%;
+  --letter-spacing-caption2: -0.4px;
+
+  /* Color Variables */
+  --color-gray-0: #FFFFFF;
+  --color-gray-100: #F1F2F4;
+  --color-gray-200: #EEEEEE;
+  --color-gray-300: #CCCCCC;
+  --color-gray-400: #B3B3B3;
+  --color-gray-500: #959595;
+  --color-gray-600: #7C7C7C;
+  --color-gray-700: #626262;
+  --color-gray-800: #454545;
+  --color-gray-900: #2B2B2B;
+
+  --color-red: #BE1A21;
+  --color-red-pastel: #E5696E;
+  --color-red-pastelPink: #FBD7D8;
+  --color-red-pinkWhite: #FFFAFA;
+
+  --color-blue-50: #ECF5FF;
+  --color-blue-200: #A4CDFF;
+  --color-blue-300: #78B5FF;
+  --color-blue-400: #3992FF;
+  --color-blue-500: #0274FF;
+  --color-blue-600: #006BEE;
+
+  --color-green-400: #5CCC9A;
+  --color-green-500: #24BB77;
+
+  --color-yellow-50: #FFFAF0;
+  --color-yellow-300: #FFE592;
+  --color-yellow-400: #FFDD70;
+  --color-yellow-500: #FFCD2D;
+
+  /* Shadow Variables */
+  --shadow-light: -1px -1px 1px 0px rgba(255, 255, 255, 0.08) inset, 0px 0px 1px 0px rgba(0, 0, 0, 0.12), 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
+  --shadow-normal: -1px -1px 2px 0px rgba(255, 255, 255, 0.08) inset, 0px 1px 4px 0px rgba(0, 0, 0, 0.08), 0px 2px 10px 0px rgba(0, 0, 0, 0.10);
+  --shadow-strong: -1px -1px 2px 0px rgba(255, 255, 255, 0.08) inset, 0px 1px 8px 0px rgba(0, 0, 0, 0.08), 0px 10px 20px 0px rgba(0, 0, 0, 0.10);
 }
 
 /* Selected area Color with mouse */
@@ -303,7 +437,7 @@ input{
 input:not([type='checkbox'], [type='file'], [type='radio']):focus {
   outline: 0;
   box-shadow: none;
-  border: 1px solid var(--color-main) !important;
+  border: 1px solid var(--color-main);
 }
 textarea:focus{border: 1px solid var(--color-main) !important;}
 

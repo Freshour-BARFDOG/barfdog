@@ -86,26 +86,43 @@ const Pagination = ({
         }));
       }
       const calcedPageIndex = (queryObject.page ? queryObject.page - 1 : curPage - 1).toString();
-      const defQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
-
-      // URLQuery 재구성 - page 쿼리 중복 방지를 위함
-      const { page, ...queryWithoutPage } = queryObject;
-      const newUrlQuery = new URLSearchParams(queryWithoutPage).toString();
-
-      let urlQueries = urlQuery ? `${defQuery}&${newUrlQuery}` : defQuery;
-      let res;
-      if (method === 'GET') {
-        //res = await getData(`${url}${urlQueries}`);
-        if (getCookie('alliance') === 'cb') {
-          res = await getData(`${url}${urlQueries}&alliance=cb`);
-        } else {
-          res = await getData(`${url}${urlQueries}`);
+      
+      // URLSearchParams를 사용하여 중복 방지
+      const searchParams = new URLSearchParams();
+      
+      // 기본 파라미터 설정 (page, size는 항상 우선)
+      searchParams.set(searchQueryType.PAGE, calcedPageIndex);
+      searchParams.set(searchQueryType.SIZE, size.toString());
+      
+      // 기존 쿼리 파라미터 추가 (page, size 제외)
+      if (urlQuery) {
+        const existingParams = new URLSearchParams(urlQuery);
+        for (const [key, value] of existingParams.entries()) {
+          if (key !== searchQueryType.PAGE && key !== searchQueryType.SIZE) {
+            searchParams.set(key, value);
+          }
         }
+      }
+      
+      const urlQueries = `?${searchParams.toString()}`;
+      let res;
+      let finalUrlForRouter = urlQueries;
+      
+      if (method === 'GET') {
+        // alliance 파라미터 처리
+        if (getCookie('alliance') === 'cb') {
+          searchParams.set('alliance', 'cb');
+        }
+        
+        const finalUrlQueries = `?${searchParams.toString()}`;
+        finalUrlForRouter = finalUrlQueries;
+        res = await getData(`${url}${finalUrlQueries}`);
       } else if (method === 'POST' && option.body) {
         const body = option.body;
-        res = await postObjData(`${url}${defQuery}`, body);
+        const postQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
+        res = await postObjData(`${url}${postQuery}`, body);
         const result = getUrlQueryFromBody(body);
-        urlQueries = `${urlQueries}&${result}`;
+        finalUrlForRouter = `${urlQueries}&${result}`;
         res = res.data;
       }
       // console.log(res.data);
@@ -132,7 +149,7 @@ const Pagination = ({
         }
 
         if (routerDisabled === false) {
-          const convertedSearchQueryStrings = convertSearchQueryStrings(urlQueries);
+          const convertedSearchQueryStrings = convertSearchQueryStrings(finalUrlForRouter);
           router.push(`${convertedSearchQueryStrings}`, undefined, { shallow: false });
         }
       } else {

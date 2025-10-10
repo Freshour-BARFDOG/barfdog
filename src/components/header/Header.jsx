@@ -29,7 +29,7 @@ import {MoveToAdminPageButton} from "./MoveToAdminPageButton";
 
 const Modal_subscribeWidhSSR = dynamic( () => import('/src/components/modal/Modal_subscribe') );
 
-export default function Header () {
+export default function Header ({ showDeadlineTimer = true }) {
   const auth = useSelector( (state) => state.auth );
   const userData = auth.userInfo;
   
@@ -48,6 +48,7 @@ export default function Header () {
   useEffect( () => {
     checkMypagePath( curPath );
   }, [curPath] );
+
   
   const checkMypagePath = () => {
     const isCurPathMypage = curPath.split( '/' )[1] === 'mypage';
@@ -100,7 +101,12 @@ export default function Header () {
               </span>
               <span className={s['title-wrap']}>{pageTitle}</span>
               <span className={s['gbn-my-wrap']}>
-                <Gnb_my isMobile={isMobile} setSidrOpen={setIsSidrOpen} authData={auth}/>
+                <Gnb_my 
+                  isMobile={isMobile} 
+                  setSidrOpen={setIsSidrOpen} 
+                  authData={auth}
+                  showDeadlineTimer={showDeadlineTimer}
+                />
               </span>
             </section>
           ) : (
@@ -130,18 +136,21 @@ export default function Header () {
                       // <Image src={MobileLogo} srcSet={MobileLogo_2x} alt="사이트 로고" priority />
                       <MobileLogo width='100%' height='100%' viewBox="0 0 146 20" />
                     ) : (
-                      <Image src={Logo} srcSet={Logo_2x} alt="사이트 로고" priority/>
+                      <Image src={Logo} srcSet={Logo_2x} width={240} height={40} alt="사이트 로고" priority/>
                     )}
                   </a>
                 </Link>
               </section>
               <section className={`${s.gnb_area}`}>
                 <nav id="gnb" className={`${s.gnb_nav} pc`}>
-                  <ul>
-                    <PcGnb/>
-                  </ul>
+                  <PcGnb currentPath={curPath} />
                 </nav>
-                <Gnb_my isMobile={isMobile} setSidrOpen={setIsSidrOpen} authData={auth}/>
+                <Gnb_my 
+                  isMobile={isMobile} 
+                  setSidrOpen={setIsSidrOpen} 
+                  authData={auth}
+                  showDeadlineTimer={showDeadlineTimer}
+                />
               </section>
             </div>
           )}
