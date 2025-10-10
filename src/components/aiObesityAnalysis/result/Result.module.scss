@@ -1,0 +1,214 @@
+.resultContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 40px;
+  padding: 40px 0;
+  background-color: var(--color-gray-0);
+  height: 100%;
+
+  .resultInfoContainer {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .resultCard {
+      padding: 24px 20px;
+
+      .resultTitle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        .pointColor  {
+          color: var(--color-red);
+        }
+      }
+      .resultDetail {
+        width: 100%;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 0 12px;
+        height: 60px;
+
+        .resultBcs {
+          min-width: 70px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+      .resultImage {
+        min-width: unset !important;
+        width: auto !important;
+        height: 100% !important;
+        border-radius: 10px !important;
+        object-fit: contain;
+        overflow: hidden;
+        display: block;
+      }
+      .resultImageSaveButton {
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+
+  .bcsInfoContainer {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    .bcsInfoCardList {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .bcsInfoCard {
+        align-items: center;
+        background-color: var(--color-gray-0);
+        border: 1px solid var(--color-gray-200);
+
+        &.danger {
+          background-color: var(--color-red-pinkWhite);
+          border: 1px solid var(--color-red-pastelPink);
+        }
+        &.warning {
+          background-color: var(--color-yellow-50);
+          border: 1px solid var(--color-yellow-300);
+        }
+        &.normal {
+          background-color: var(--color-blue-50);
+          border: 1px solid var(--color-blue-200);
+        }
+
+        .bcsInfoCardContent {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          
+          .bcsInfoCardTitle {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+          }
+        }
+      }
+    }
+
+  }
+
+  .tipsContainer {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+
+    .tipsImage {
+      width: 100%;
+      height: 200px;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+
+    .tipsChips {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+    .tipsCard {
+      .tipsCardTitle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .tipsList {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .tipItem {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+      }
+    }
+  }
+
+  .itemListContainer {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    .itemList {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 8px;
+      width: 100%;
+    }
+
+    .itemLink {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+    
+      .itemImage {
+        width: 276px;
+        height: 276px;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 6px;
+      }
+  
+      .itemInfo {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        .itemPrice {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .originalPrice {
+          text-decoration: line-through;
+        }
+      }
+    }
+  }
+
+  .surveyInfoContainer {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .surveyInfoTitle {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .surveyInfoImage {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+    }
+  }
+
+  .lifetLogoBox {
+    margin: 34px auto 0;
+  }
+}
