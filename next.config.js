@@ -1,4 +1,6 @@
 
+const dev = process.env.NODE_ENV === 'development';
+
 module.exports = {
   // distDir: "build",
   crossOrigin: "anonymous",
@@ -29,7 +31,8 @@ module.exports = {
     domains: [
       'localhost',
       'www.barfdogserver.com',
-      'dev.barfdogserver.com'
+      'dev.barfdogserver.com',
+      'img.lifet.co.kr'
     ],
 
     remotePatterns: [
@@ -56,25 +59,17 @@ module.exports = {
     ]
   },
   async rewrites () {
-    // console.log('Delopy Type is Dev ?',process.env.NODE_ENV !== "production");
     console.log('Default API URL (DEV): ', process.env.NEXT_PUBLIC_API_URL_DEV);
     console.log('Default API URL (PROD): ', process.env.NEXT_PUBLIC_API_URL_PRODUCT);
-    console.log('Deploy Type is Production ? ', process.env.NODE_ENV === 'production');
-    if (process.env.NODE_ENV === 'development') {
-      return [
-        {
-          source: process.env.SOURCE_PATH,
-          destination: process.env.NEXT_PUBLIC_API_URL_DEV
-        },
-      ];
-    } else if (process.env.NODE_ENV === 'production') {
-      return [
-        {
-          source: process.env.SOURCE_PATH,
-          destination: process.env.NEXT_PUBLIC_API_URL_PRODUCT
-        }
-      ];
-    }
+    
+    return [
+    {
+      source: '/api/:path*',
+      destination: dev
+        ? process.env.NEXT_PUBLIC_API_URL_DEV + '/api/:path*'
+        : process.env.NEXT_PUBLIC_API_URL_PRODUCT + '/api/:path*',
+    },
+  ];
   },
   async redirects(){
     return [

@@ -31,6 +31,8 @@
     "date-fns": "^2.29.3",
     "dotenv": "^16.3.1",
     "express": "^4.17.3",
+    "form-data": "^4.0.4",
+    "formidable": "^3.5.4",
     "googleapis": "^108.0.0",
     "gsap": "^3.12.5",
     "http": "0.0.1-security",

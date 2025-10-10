@@ -1,0 +1,36 @@
+.aiObesityAnalysisContainer {
+  width: 100vw;
+  justify-content: center;
+  align-items: flex-start !important;
+  background-color: #F8F9FB;
+  &.isMobile {
+    min-height: calc(100vh - 151px);
+  }
+
+  .aiObesityAnalysis {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    min-width: 320px;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+  }
+}
+@media (min-width:873px){
+  .aiObesityAnalysisContainer {
+    min-height: calc(100vh - 228px);
+  }
+}
+
+@media (max-width:873px){
+  .aiObesityAnalysisContainer {
+    min-height: calc(100vh - 279px);
+  }
+}
+
+@media (max-width:600px){
+  .aiObesityAnalysisContainer > div > div {
+    padding: 0 !important;
+  }
+}
