@@ -1,14 +1,12 @@
 import styles from "../Result.module.scss";
 import { useState } from "react";
 import Image from "next/image";
-import DownloadIcon from '/public/img/aiObesityAnalysis/download.svg';
 import WeightIcon from '/public/img/aiObesityAnalysis/weight-sm.svg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Text from "@src/components/commonV2/text/Text";
-import Button from "@src/components/commonV2/button/Button";
 import SvgIcon from "@src/components/commonV2/svgIcon/SvgIcon";
 import Card from "@src/components/commonV2/card/Card";
 import Divider from "@src/components/commonV2/divider/Divider";
@@ -16,12 +14,10 @@ import { ObesityDetailResponse } from "type/aiObesityAnalysis/aiObesityAnalysis"
 
 interface DefaultInfoProps {
 	data: ObesityDetailResponse;
-	surveyId: number;
 }
 
 export default function DefaultInfo({
 	data,
-	surveyId,
 }: DefaultInfoProps) {
 	const obesityLabelMatch = data.status?.match(/\(([^)]+)\)/);
 	const obesityLabel = obesityLabelMatch ? obesityLabelMatch[1] : '';
@@ -34,16 +30,6 @@ export default function DefaultInfo({
 	);
 
 	const [size, setSize] = useState<{ width: number; height: number } | null>(null);
-
-	const downloadImage = async (url: string) => {
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = `분석결과-${surveyId}.jpg`;
-		document.body.appendChild(a);
-		a.click();
-		a.remove();
-		URL.revokeObjectURL(url);
-	};
 
 	return (
 		<article className={styles.resultInfoContainer}>
@@ -101,15 +87,6 @@ export default function DefaultInfo({
 						</SwiperSlide>
 					))}
 				</Swiper>
-				<div className={styles.resultImageSaveButton}>
-					<Button
-						variant='solid'
-						iconSrc={DownloadIcon}
-						onClick={() => downloadImage(data.oriFileUrl)}
-					>
-						이미지 저장
-					</Button>
-				</div>
 			</Card>
 		</article>
 	);

@@ -65,7 +65,7 @@ export default function Result({ surveyId }: { surveyId: string }) {
 
   return (
     <section className={styles.resultContainer}>
-      <DefaultInfo data={data} surveyId={Number(surveyId)} />
+      <DefaultInfo data={data} />
       <Divider thickness={8} color='gray-100' />
       <BcsInfo bcs={data.bcs} />
       <Divider thickness={8} color='gray-100' />
