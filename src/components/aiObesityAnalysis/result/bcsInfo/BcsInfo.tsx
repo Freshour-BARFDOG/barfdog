@@ -17,7 +17,7 @@ export default function BcsInfo({ bcs }: BcsInfoProps) {
     <article className={styles.bcsInfoContainer}>
       <Text type='title3' align='center'>
         우리 아이가 속한 BCS<br/>
-        7단계 체형의 대표적 특징이에요
+        {bcs}단계 체형의 대표적 특징이에요
       </Text>
       <div className={styles.bcsInfoCardList}>
         {bcsSteps.map((step) => {

@@ -1,4 +1,5 @@
 import styles from "../Result.module.scss";
+import { useState } from "react";
 import Image from "next/image";
 import DownloadIcon from '/public/img/aiObesityAnalysis/download.svg';
 import WeightIcon from '/public/img/aiObesityAnalysis/weight-sm.svg';
@@ -31,6 +32,9 @@ export default function DefaultInfo({
 			filename: index === 0 ? 'fileUrl' : 'oriFileUrl'
 		})
 	);
+
+	const [size, setSize] = useState<{ width: number; height: number } | null>(null);
+
 	const downloadImage = async (url: string) => {
 		const a = document.createElement('a');
 		a.href = url;
@@ -86,7 +90,12 @@ export default function DefaultInfo({
 								src={image.url}
 								alt={image.filename}
 								width={1200}
-								height={1200}
+								// 이미지 비율에 따라 높이 조절 (가로가 더 길 경우 800, 세로가 더 길 경우 1200)
+								height={size?.height < size?.width ? 800 : 1200}
+								layout="intrinsic"
+								onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+									setSize({ width: naturalWidth, height: naturalHeight });
+								}}
 								className={styles.resultImage}
 							/>
 						</SwiperSlide>
