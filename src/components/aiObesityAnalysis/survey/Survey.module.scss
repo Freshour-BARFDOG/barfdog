@@ -135,16 +135,25 @@
       flex-direction: column;
       gap: 16px;
       overflow: hidden;
-  
-      .surveyPreviewImage {
-        min-width: unset !important;
-        width: auto !important;
-        height: 100% !important;
-        border-radius: 10px !important;
-        object-fit: contain;
-        overflow: hidden;
-        display: block;
+      border-radius: 10px;
+
+      .surveyPreviewImageBox {
+        position: relative;
+        min-height: 200px;
+        & > span {
+          width: 100% !important;
+          position: relative !important;
+        }
+        .surveyPreviewImage {
+          position: relative !important;
+          min-width: unset !important;
+          width: auto !important;
+          height: 100% !important;
+          border-radius: 10px !important;
+          object-fit: contain;
+        }
       }
+  
     }
     .surveyGoBackButtonBox {
       display: flex;

@@ -49,7 +49,6 @@ export default function Step4({
 							type="file"
 							multiple
 							accept="image/*"
-							capture="environment"
 							onChange={handleChange}
 							ref={inputRef}
 							style={{ display: 'none' }}
@@ -58,13 +57,14 @@ export default function Step4({
 					</Button>
 				</div>
 				<InfoBox text='촬영 가이드에 맞지 않는 사진은 AI가 인식하기 어려워요. 가이드를 꼭 지켜주세요' />
-				<Image
-					src={previews[0]}
-					alt='uploaded image'
-					width={1200}
-					height={1200}
-					className={`${styles.surveyImage} ${styles.surveyPreviewImage} ${isMobile ? styles.isMobile : ''}`}
-				/>
+				<div className={styles.surveyPreviewImageBox}>
+					<Image
+						src={previews[0]}
+						alt='uploaded image'
+						layout='fill'
+						className={`${styles.surveyImage} ${styles.surveyPreviewImage} ${isMobile ? styles.isMobile : ''}`}
+					/>
+				</div>
 			</div>
 			<SurveyButton
 				nextButtonLabel='제출하기'
