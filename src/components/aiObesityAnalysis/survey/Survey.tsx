@@ -20,7 +20,7 @@ export default function Survey() {
   const router = useRouter();
   const { isMobile } = useDeviceState();
 
-  const [weight, setWeight] = useState<number | null>(null);
+  const [weight, setWeight] = useState<string | null>(null);
 	const [steps, setSteps] = useState<1 | 2 | 3 | 4 | 5>(1);
 	const [loading, setLoading] = useState(false);
 
@@ -41,7 +41,7 @@ export default function Survey() {
 		
 		try {
 			// 1. 이미지 업로드
-			const uploadResult = await uploadObesityImage(files[0], weight);
+			const uploadResult = await uploadObesityImage(files[0], Number(weight));
 			const surveyId = uploadResult?.surveyId;
 
 			if (!surveyId) {
@@ -101,7 +101,7 @@ export default function Survey() {
     <div className={`${styles.surveyContainer} ${isMobile ? styles.isMobile : ''}`}>
       { steps === 1 && 
         <Step1 
-          weight={weight!} 
+          weight={weight} 
           setWeight={setWeight} 
           setSteps={setSteps} 
           isMobile={isMobile} 
