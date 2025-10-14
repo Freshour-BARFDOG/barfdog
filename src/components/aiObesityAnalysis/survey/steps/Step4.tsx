@@ -62,7 +62,7 @@ export default function Step4({
 						src={previews[0]}
 						alt='uploaded image'
 						layout='fill'
-						className={`${styles.surveyImage} ${styles.surveyPreviewImage} ${isMobile ? styles.isMobile : ''}`}
+						className={styles.surveyPreviewImage}
 					/>
 				</div>
 			</div>

@@ -28,7 +28,7 @@ export const useImageUpload = ({ multiple = false }: UseImageUploadOptions = {})
 
 	const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
 		const selected = e.target.files;
-		if (!selected) return;
+		if (!selected.length) return;
 
 		const selectedFiles = Array.from(selected);
 		const newUploads = await generatePreviews(selectedFiles);
