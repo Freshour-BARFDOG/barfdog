@@ -135,18 +135,20 @@
         height: 100%;
         min-height: 200px;
         position: relative;
-
+        display: flex;
+        align-items: center;
+        justify-content: center;
         & > span {
           width: 100% !important;
+          height: 100% !important;
           position: relative !important;
         }
         .surveyPreviewImage {
-          position: relative !important;
-          min-width: unset !important;
-          width: auto !important;
-          height: 100% !important;
           border-radius: 10px !important;
-          object-fit: contain;
+          object-fit: contain !important;
+          width: 100% !important;
+          height: auto !important;
+          position: relative !important;
         }
       }
   
