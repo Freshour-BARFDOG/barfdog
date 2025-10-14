@@ -42,7 +42,7 @@ export default function Step3({
 					type="file"
 					multiple
 					accept="image/*"
-					capture="environment"
+					// capture="environment"
 					onChange={handleChange}
 					ref={inputRef}
 					style={{ display: 'none' }}
