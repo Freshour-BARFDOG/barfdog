@@ -1,5 +1,5 @@
 import styles from '../Survey.module.scss';
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import Image from "next/image";
 import Text from "@src/components/commonV2/text/Text";
 import InfoBox from "@src/components/commonV2/infoBox/InfoBox";
@@ -26,7 +26,16 @@ export default function Step4({
 	isMobile,
 	inputRef,
 }: Step4Props) {
+  const [ratio, setRatio] = useState<number | null>(null);
 
+  const handleLoad = (img: { naturalWidth: number; naturalHeight: number }) => {
+    const { naturalWidth, naturalHeight } = img;
+
+    if (naturalWidth && naturalHeight) {
+      setRatio(naturalHeight / naturalWidth);
+    }
+  };
+	
 	const handleGoBack = () => {
 		resetFiles();
 		setSteps(3);
@@ -57,12 +66,24 @@ export default function Step4({
 					</Button>
 				</div>
 				<InfoBox text='촬영 가이드에 맞지 않는 사진은 AI가 인식하기 어려워요. 가이드를 꼭 지켜주세요' />
-				<div className={styles.surveyPreviewImageBox}>
+				<div 
+					className={styles.surveyPreviewImageBox}
+					style={{	
+						position: 'relative',
+						width: '100%',
+						height: ratio ? `${ratio * 100}%` : '200px',
+					}}
+				>
 					<Image
 						src={previews[0]}
 						alt='uploaded image'
 						layout='fill'
 						className={styles.surveyPreviewImage}
+						style={{
+							objectFit: 'contain',
+							borderRadius: '10px',
+						}}
+						onLoadingComplete={handleLoad}	
 					/>
 				</div>
 			</div>

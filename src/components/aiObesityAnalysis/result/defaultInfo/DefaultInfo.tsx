@@ -28,6 +28,18 @@ export default function DefaultInfo({
 			filename: index === 0 ? 'fileUrl' : 'oriFileUrl'
 		})
 	);
+	
+	const [ratios, setRatios] = useState<{ [key: string]: number }>({});
+
+  const handleImageLoad = (filename: string) => (img: HTMLImageElement) => {
+    const { naturalWidth, naturalHeight } = img;
+    if (naturalWidth && naturalHeight) {
+      setRatios((prev) => ({
+        ...prev,
+        [filename]: naturalHeight / naturalWidth,
+      }));
+    }
+  };
 
 	return (
 		<article className={styles.resultInfoContainer}>
@@ -69,18 +81,29 @@ export default function DefaultInfo({
 					modules={[Pagination]}
 					className={styles.resultImageSwiper}
 				>
-					{imageList?.map(image => (
+					{imageList?.map(image => {
+						const ratio = ratios[image.filename];
+						return  (
 							<SwiperSlide key={image.filename} className={styles.resultImageSwiperSlide}>
-								<div className={styles.imageContainer}>
+								<div 
+									className={styles.imageContainer}
+									style={{
+										position: 'relative',
+										width: '100%',
+										height: ratio ? `${ratio * 100}%` : '200px',
+									}}
+								>
 									<Image 
 										src={image.url}
 										alt={image.filename}
 										layout="fill"
 										className={styles.resultImage}
+										onLoadingComplete={handleImageLoad(image.filename)}
 									/>
 								</div>
 							</SwiperSlide>
-						))}
+						)
+					})}
 				</Swiper>
 			</Card>
 		</article>
