@@ -29,8 +29,6 @@ export default function DefaultInfo({
 		})
 	);
 
-	const [size, setSize] = useState<{ width: number; height: number } | null>(null);
-
 	return (
 		<article className={styles.resultInfoContainer}>
 			<Text type='title3' align='center'>
@@ -69,23 +67,20 @@ export default function DefaultInfo({
 					slidesPerView='auto'
 					pagination
 					modules={[Pagination]}
+					className={styles.resultImageSwiper}
 				>
 					{imageList?.map(image => (
-						<SwiperSlide key={image.filename}>
-							<Image 
-								src={image.url}
-								alt={image.filename}
-								width={1200}
-								// 이미지 비율에 따라 높이 조절 (가로가 더 길 경우 800, 세로가 더 길 경우 1200)
-								height={size?.height < size?.width ? 800 : 1200}
-								layout="intrinsic"
-								onLoadingComplete={({ naturalWidth, naturalHeight }) => {
-									setSize({ width: naturalWidth, height: naturalHeight });
-								}}
-								className={styles.resultImage}
-							/>
-						</SwiperSlide>
-					))}
+							<SwiperSlide key={image.filename} className={styles.resultImageSwiperSlide}>
+								<div className={styles.imageContainer}>
+									<Image 
+										src={image.url}
+										alt={image.filename}
+										layout="fill"
+										className={styles.resultImage}
+									/>
+								</div>
+							</SwiperSlide>
+						))}
 				</Swiper>
 			</Card>
 		</article>
