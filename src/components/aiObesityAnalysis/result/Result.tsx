@@ -75,7 +75,7 @@ export default function Result({ surveyId }: { surveyId: string }) {
       <Divider thickness={8} color='gray-100' />
       <SurveyInfo />
       <article className={styles.lifetLogoBox}>
-        <SvgIcon src={LifetLogo} width={160} height={23} className={styles.lifetLogo} />
+        <SvgIcon src={LifetLogo} width={100} height={14} className={styles.lifetLogo} />
       </article>
     </section>
   );

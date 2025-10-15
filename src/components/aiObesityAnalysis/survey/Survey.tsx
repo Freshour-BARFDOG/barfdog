@@ -92,7 +92,7 @@ export default function Survey() {
           우리 아이의 결과를<br />분석하고 있어요
         </Text>
         <Image src={LoadingImage} alt='loadingImage' width={265} height={425} className={styles.surveyLoadingImage} />
-        <SvgIcon src={LifetLogo} width={160} height={23} className={styles.lifetLogo} />
+        <SvgIcon src={LifetLogo} width={100} height={14} className={styles.lifetLogo} />
 			</section>
 		);
 	}
