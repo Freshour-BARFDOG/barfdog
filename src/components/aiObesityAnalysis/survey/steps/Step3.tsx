@@ -40,7 +40,7 @@ export default function Step3({
 				</div>
 				<input
 					type="file"
-					multiple
+					multiple={false}
 					accept="image/*"
 					onChange={handleChange}
 					ref={inputRef}

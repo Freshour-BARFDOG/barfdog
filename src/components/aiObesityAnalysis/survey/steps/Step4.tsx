@@ -35,7 +35,7 @@ export default function Step4({
       setRatio(naturalHeight / naturalWidth);
     }
   };
-	
+
 	const handleGoBack = () => {
 		resetFiles();
 		setSteps(3);
@@ -56,7 +56,7 @@ export default function Step4({
 					>
 						<input
 							type="file"
-							multiple
+							multiple={false}
 							accept="image/*"
 							onChange={handleChange}
 							ref={inputRef}
