@@ -7,6 +7,15 @@ import Button from "@src/components/commonV2/button/Button";
 
 export default function SurveyInfo() {
   const router = useRouter();
+
+  const handleSurveyGuideClick = () => {
+    // 페이지 이동 후 스크롤 상단으로 이동
+    // body에서 실제 스크롤이 발생하므로 body.scrollTop 제어
+    router.push('/surveyGuide').then(() => {
+      document.body.scrollTop = 0;
+    })
+  };
+
   return (
     <article className={styles.surveyInfoContainer}>
       <div className={styles.surveyInfoTitle}>
@@ -24,7 +33,7 @@ export default function SurveyInfo() {
         height={240} 
         className={styles.surveyInfoImage}
       />
-      <Button onClick={() => router.push('/surveyGuide')}>
+      <Button onClick={handleSurveyGuideClick}>
         식단 추천 받으러 가기
       </Button>
     </article>
