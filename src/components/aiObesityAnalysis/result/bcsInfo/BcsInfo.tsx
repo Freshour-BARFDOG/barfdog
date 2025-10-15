@@ -37,6 +37,7 @@ export default function BcsInfo({ bcs }: BcsInfoProps) {
                 size={120} 
                 color={isActive ? imageColor : OBESITY_DEFAULT_COLOR.imageColor}
                 backgroundColor={isActive ? '#FFF' : OBESITY_DEFAULT_COLOR.backgroundColor}
+                className={styles.bcsInfoCardImage}
               />
               <div className={styles.bcsInfoCardContent}>
                 <Text type='label4' color='gray600'>BCS {step}단계</Text>
