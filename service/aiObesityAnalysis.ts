@@ -19,6 +19,7 @@ const uploadObesityImage = async (file: File, weight: number) => {
 
 	const { data } = await externalAxios.post('/api/obesity-upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
+		timeout: 60000,
   });
 
 	return data;
