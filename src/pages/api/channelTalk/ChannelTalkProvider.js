@@ -16,7 +16,7 @@ export default function ChannelTalkProvider ({ children }) {
   
   useEffect(() => {
     const ADMIN_BASE_PATH_KEY = 'bf-admin';
-    const DISABLED_PATH = ['/popup'];
+    const DISABLED_PATH = ['/popup', '/ai-obesity-analysis'];
     const isAdminPath = router.asPath.split('/')[1] === ADMIN_BASE_PATH_KEY;
     let isDisabledPath;
     DISABLED_PATH.map((path) => {

@@ -31,6 +31,16 @@ export const useImageUpload = ({ multiple = false }: UseImageUploadOptions = {})
 		if (!selected.length) return;
 
 		const selectedFiles = Array.from(selected);
+		
+		// 5MB 용량 제한 체크
+		const maxSize = 5 * 1024 * 1024; // 5MB
+		const oversizedFiles = selectedFiles.filter(file => file.size > maxSize);
+		
+		if (oversizedFiles.length > 0) {
+			const errorMessage = `업로드 용량이 초과되었습니다.\n이미지 업로드는 5MB 이하까지 가능합니다.`;
+			throw new Error(errorMessage);
+		}
+
 		const newUploads = await generatePreviews(selectedFiles);
 
 		setUploads((prev) =>
