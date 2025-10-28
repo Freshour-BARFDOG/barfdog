@@ -199,7 +199,7 @@ const Modal_policy = ({ modalState, setModalState }) => {
           <br />
           - 전화번호 : 010-9466-1984
           <br />
-          - 이메일 : 2weeks@freshour.co.kr
+          - 이메일 : kyeonghoim@freshour.co.kr
           <br />
           귀하께서는 회사의 서비스를 이용하시며 발생하는 모든 개인정보보호 관련 민원을
           개인정보관리책임자 혹은 담당부서로 신고하실 수 있습니다. 회사는 이용자들의 신고사항에 대해

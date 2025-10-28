@@ -200,7 +200,7 @@ function privacy() {
             <br />
             전화번호 : 010-9466-1984
             <br />
-            이메일 : 2weeks@freshour.co.kr
+            이메일 : kyeonghoim@freshour.co.kr
             <br />
             <br />
             귀하께서는 회사의 서비스를 이용하시며 발생하는 모든 개인정보보호
