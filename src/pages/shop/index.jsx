@@ -25,7 +25,9 @@ const searchPageSize = 6; // 화면에 뿌릴 상품수
 export default function ShopPage() {
   const router = useRouter();
   const initialSearchValues = {
-    sortBy: itemSortQueryType.RECENT,
+    // 11-04 : 간식 카테고리 선택시 간식 카테고리 정렬 기준 등록순 적용 (Ro11 Day 이벤트용 -> 11일 롤백 필요)
+    sortBy: router.query.itemType === 'SNACK' ? itemSortQueryType.REGISTRATION : itemSortQueryType.RECENT,
+    // ------------------------------------------------------------
     itemType: router.query.itemType || 'ALL', // url Query is lowerCase
   };
 
@@ -85,6 +87,13 @@ export default function ShopPage() {
     const convertTypeToQuery = itemType; // 객체로 searchValue에 넣는다.
     setSearchValues((prevState) => ({
       ...prevState,
+
+      // 11-04 : 간식 카테고리 선택시 간식 카테고리 정렬 기준 등록순 적용 (Ro11 Day 이벤트용 -> 11일 롤백 필요)
+      sortBy: itemType === 'SNACK' 
+        ? itemSortQueryType.REGISTRATION 
+        : itemSortQueryType.RECENT,
+      // ------------------------------------------------------------
+
       page: 1,
       [searchKey]: convertTypeToQuery,
     }));
