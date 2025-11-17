@@ -4,16 +4,20 @@ import s from './shopOptionBar.module.scss';
 import rem from '/util/func/rem';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Navigation } from 'swiper';
 import { ItemQuantityInput } from '/src/components/atoms/ItemQuantityInput';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import 'swiper/css';
 import 'swiper/css/autoplay';
+import 'swiper/css/navigation';
 import sorting from '/util/func/sorting';
 import Link from 'next/link';
 import CloseButton from '../atoms/CloseButton';
 import Spinner from '../atoms/Spinner';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
 import { ShopBoardItemQuantityInput } from '../atoms/ShopBoardItemQuantityInput';
+
+SwiperCore.use([Navigation]);
 
 export const ShopBoard = ({
   id,
@@ -39,6 +43,10 @@ export const ShopBoard = ({
     centeredSlides: true,
     allowTouchMove: true, // - * 드레그 및 터치 슬라이딩 기능 If false, then the only way to switch the slide is use of external API functions like slidePrev or slideNext
     slidesPerView: 1,
+    navigation: {
+      nextEl: `.${Style.swiperButtonNext}`,
+      prevEl: `.${Style.swiperButtonPrev}`,
+    },
   };
 
   const onHideCartShortcut = () => {
@@ -72,6 +80,8 @@ export const ShopBoard = ({
                     </SwiperSlide>
                   ),
                 )}
+              <div className={Style.swiperButtonPrev}></div>
+              <div className={Style.swiperButtonNext}></div>
             </Swiper>
           </div>
 
