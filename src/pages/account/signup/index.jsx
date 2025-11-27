@@ -330,15 +330,15 @@ export default function SignupPage() {
   const { triggerConversion } = useNaverAnalytics();
   const onSuccessCallback = async (userName) => {
     // await router.push(`/account/signup/success?username=${userName}`);
-
+    router.push('/account/login');
     // 전환 스크립트 설정
-    triggerConversion('2', 1);
-    // // 전환 스크립트가 작동할 시간을 주기 위해 잠시 대기
-    setTimeout(() => {
-      // 회원가입 후 바로 로그인
-      // onLoginHandler();
-      router.push('/account/login');
-    }, 500); // 0.5초 대기
+    // triggerConversion('2', 1);
+    // // // 전환 스크립트가 작동할 시간을 주기 위해 잠시 대기
+    // setTimeout(() => {
+    //   // 회원가입 후 바로 로그인
+    //   // onLoginHandler();
+    //   router.push('/account/login');
+    // }, 500); // 0.5초 대기
   };
 
   const generateRandomString = (num) => {

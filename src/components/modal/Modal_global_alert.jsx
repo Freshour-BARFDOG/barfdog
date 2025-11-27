@@ -76,12 +76,15 @@ export default function Modal_global_alert({ message, onClick, background, ...pr
   
   const executeHandler = () => {
     const mctCallback = mctCallbackObj();
+
+    // 모달 먼저 닫기
+    mct.alertHide();
+
+    // 그 다음 callback 실행
     if(mctCallback.hasCallback){
       mctCallback.callback();
     } else if (onClick && typeof onClick === 'function') {
       onClick();
-    } else {
-      mct.alertHide();
     }
   };
   
