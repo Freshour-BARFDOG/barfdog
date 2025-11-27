@@ -57,6 +57,7 @@ const ModalContextProvider = ({ children, ...props }) => {
   const onAlertHide = () => {
     setHasAlert(false);
     setAlertModalMessage('');
+    setCallback({}); // callback 초기화
   };
 
   const onSubScribeModalShow = () => {
