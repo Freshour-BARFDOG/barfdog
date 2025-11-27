@@ -14,6 +14,7 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import {getDataSSR, putObjData} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import { useRouter } from 'next/router';
+import Modal_confirm from '/src/components/modal/Modal_confirm';
 
 export default function UserInfoPage() {
   const mct = useModalContext();
@@ -51,10 +52,17 @@ export default function UserInfoPage() {
   const [formErrors, setFormErrors] = useState({});
   const [isLoading, setIsLoading] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-   
+  const onShowConfirmModal = () => {
+    setShowConfirmModal(true);
+  }
+  const onHideConfirmModal = () => {
+    setShowConfirmModal(false);
+  }
+
+  const onSubmit = async () => {
+  
     if (isSubmitted) return console.error('이미 제출된 양식입니다.');
     const errObj = validate(form, formErrors);
     setFormErrors(errObj);
@@ -160,7 +168,7 @@ export default function UserInfoPage() {
                 <button
                   type={'button'}
                   className={s.right_box}
-                  onClick={onSubmit}
+                  onClick={onShowConfirmModal}
                   disabled={isSubmitted}
                 >
                   {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '저장'}
@@ -173,6 +181,18 @@ export default function UserInfoPage() {
       {hasAlert && <Modal_global_alert
         message={alertModalMessage}
         onClick={isSubmitted && onModalConfirmButtonClick}
+      />}
+      {showConfirmModal && <Modal_confirm
+        title="⚠︎ 다시 한 번 읽어주세요 ⚠︎"
+        text={`일반·구독 배송지 변경을 원하실 경우\n꼭 실시간 상담톡으로 문의해주세요.`}
+        isConfirm={(isConfirm) => {
+          onHideConfirmModal();
+          if(!isConfirm) {
+            return;
+          }
+
+          onSubmit();
+        }}
       />}
     </>
   );
