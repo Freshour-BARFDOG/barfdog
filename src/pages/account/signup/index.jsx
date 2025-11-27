@@ -25,7 +25,7 @@ import { deleteCookie, getCookie, setCookie } from '@util/func/cookie';
 import { useEffect } from 'react';
 import { cookieType } from '/store/TYPE/cookieType';
 import { authAction } from '/store/auth-slice';
-import useNaverAnalytics from "../../../../util/hook/useNaverAnalytics";
+import useNaverAnalytics from '../../../../util/hook/useNaverAnalytics';
 
 String.prototype.insertAt = function (index, str) {
   return this.slice(0, index) + str + this.slice(index);
@@ -311,7 +311,9 @@ export default function SignupPage() {
         // console.log(res.data);
         if (res.status === 201) {
           const userName = formvalues.name;
-          mct.alertShow(`회원가입에 성공하였습니다.`, () => onSuccessCallback(userName));
+          mct.alertShow(`회원가입에 성공하였습니다.`, () =>
+            onSuccessCallback(userName),
+          );
           // router.push(`/account/signup/success?username=${userName}`);
         } else {
           mct.alertHide(
@@ -334,7 +336,8 @@ export default function SignupPage() {
     // // 전환 스크립트가 작동할 시간을 주기 위해 잠시 대기
     setTimeout(() => {
       // 회원가입 후 바로 로그인
-      onLoginHandler();
+      // onLoginHandler();
+      router.push('/account/login');
     }, 500); // 0.5초 대기
   };
 
