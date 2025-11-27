@@ -109,6 +109,7 @@ export default function SignupPage() {
 
   const [visibility, setVisibility] = useState(false);
   const [alliance, setAlliance] = useState(null);
+  const [afterSignupSuccess, setAfterSignupSuccess] = useState(false);
 
   // console.log('initialFormValues: ', initialFormValues);
   // console.log('snsSignupMode: ', snsSignupMode);
@@ -310,11 +311,10 @@ export default function SignupPage() {
         // console.log(res);
         // console.log(res.data);
         if (res.status === 201) {
-          const userName = formvalues.name;
-          mct.alertShow(`회원가입에 성공하였습니다.`, () =>
-            onSuccessCallback(userName),
-          );
-          // router.push(`/account/signup/success?username=${userName}`);
+          // 회원가입 성공 플래그 설정
+          setAfterSignupSuccess(true);
+          // 모달은 콜백 없이 순수하게 메시지만 표시
+          mct.alertShow(`회원가입에 성공하였습니다.`);
         } else {
           mct.alertHide(
             `회원가입에 실패하였습니다. 잠시 후 다시 시도해주세요.`,
@@ -328,17 +328,8 @@ export default function SignupPage() {
       });
   };
   const { triggerConversion } = useNaverAnalytics();
-  const onSuccessCallback = async (userName) => {
-    // await router.push(`/account/signup/success?username=${userName}`);
+  const onSuccessCallback = () => {
     router.push('/account/login');
-    // 전환 스크립트 설정
-    // triggerConversion('2', 1);
-    // // // 전환 스크립트가 작동할 시간을 주기 위해 잠시 대기
-    // setTimeout(() => {
-    //   // 회원가입 후 바로 로그인
-    //   // onLoginHandler();
-    //   router.push('/account/login');
-    // }, 500); // 0.5초 대기
   };
 
   const generateRandomString = (num) => {
@@ -353,7 +344,14 @@ export default function SignupPage() {
   };
 
   const onClickModalButton = () => {
+    // 1) 모달 닫기
     mct.alertHide();
+
+    // 2) 회원가입 성공 후에 뜬 모달이면 로그인 페이지로 이동
+    if (afterSignupSuccess) {
+      setAfterSignupSuccess(false); // 한 번만 동작하도록 플래그 초기화
+      onSuccessCallback();
+    }
   };
 
   return (
