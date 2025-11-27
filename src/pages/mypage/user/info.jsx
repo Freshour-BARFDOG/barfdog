@@ -61,13 +61,12 @@ export default function UserInfoPage() {
     setShowConfirmModal(false);
   }
 
-  const onSubmit = async () => {
-  
+  const onCheckValidation = () => {
     if (isSubmitted) return console.error('이미 제출된 양식입니다.');
     const errObj = validate(form, formErrors);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
-    // console.log(form);
+    
     if (!isPassed) {
       if(form.password === "" || form.password === null) {
         let element = document.querySelector("#password");
@@ -78,7 +77,10 @@ export default function UserInfoPage() {
       setAlertModalMessage('유효하지 않은 항목이 있습니다.');
       return;
     }
+    onShowConfirmModal(true);
+  }
 
+  const onSubmit = async () => {
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -168,7 +170,7 @@ export default function UserInfoPage() {
                 <button
                   type={'button'}
                   className={s.right_box}
-                  onClick={onShowConfirmModal}
+                  onClick={onCheckValidation}
                   disabled={isSubmitted}
                 >
                   {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '저장'}
