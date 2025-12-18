@@ -106,9 +106,15 @@ export default function SingleItem_OrderHistoryPage({ data }) {
       return mct.alertShow(message);
     }
 
-    setFilteredItemList(availableItemList);
-    setActiveModal({ return: true });
-    setConfirmType(orderStatus.RETURN_REQUEST);
+    // 채널톡 연결
+    if (window.ChannelIO) {
+      window.ChannelIO('show');
+      setTimeout(() => {
+        window.ChannelIO('openChat');
+      }, 300);
+    } else {
+      alert('채널톡을 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+    }
   };
 
   const onStartExchange = () => {
@@ -124,9 +130,15 @@ export default function SingleItem_OrderHistoryPage({ data }) {
       return mct.alertShow(message);
     }
 
-    setFilteredItemList(availableItemList);
-    setActiveModal({ exchange: true });
-    setConfirmType(orderStatus.EXCHANGE_REQUEST);
+    // 채널톡 연결
+    if (window.ChannelIO) {
+      window.ChannelIO('show');
+      setTimeout(() => {
+        window.ChannelIO('openChat');
+      }, 300);
+    } else {
+      alert('채널톡을 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+    }
   };
 
   const onStartCancel = () => {

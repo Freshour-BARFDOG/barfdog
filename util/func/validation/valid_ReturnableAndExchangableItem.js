@@ -33,10 +33,10 @@ export const valid_ReturnableAndExchangableItem = (
   }
 
   /* # Step 3. 반품/교환가능한 시점 계산 (기준: 배송완료 후 n일 이내) */
-  
+
   const ReturnableOrExchangableTerm = 7; // 일반상품 비신선식품: 교환/반품가능 7일
   const NON_ReturnableOrExchangableTerm = 2; // 일반상품 신선식품: 교환/반품가능일 2일
-  
+
   const delvieryDoneDate = transformDate(arrivalDate);
   const today = transformToday();
   const diffDate = getDiffDateNumber(today, delvieryDoneDate);
