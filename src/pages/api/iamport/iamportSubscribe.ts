@@ -32,7 +32,7 @@ export default async function POST(req:NextApiRequest, res:NextApiResponse) {
       method: "post",
       headers: {"Authorization": access_token}, // 인증 토큰을 Authorization header에 추가
       data: req.body,
-      timeout: timeout
+      timeout: 60000,
     })
       .then((res) => res.data)
       .catch((err) => err.response);
