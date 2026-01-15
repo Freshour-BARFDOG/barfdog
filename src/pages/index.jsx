@@ -31,8 +31,8 @@ import { Modal_tempPasswrod } from '/src/components/modal/Modal_tempPasswrod';
 import { Modal_Popup } from '/src/components/modal/Modal_Popup';
 import useDeviceState from '/util/hook/useDeviceState';
 import { getTokenFromServerSide } from '/src/pages/api/reqData';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import ImageWithLoadingSpinner from '/src/components/atoms/ImageWithLoadingSpinner';
 
 import { setCookie } from '@util/func/cookie';
@@ -58,9 +58,40 @@ export default function MainPage({ data }) {
   };
 
   useEffect(() => {
-    AOS.init();
-  });
+    // GSAP ScrollTrigger 플러그인 등록
+    gsap.registerPlugin(ScrollTrigger);
 
+    // fade-up 애니메이션 적용
+    const fadeUpElements = document.querySelectorAll('.fade-up-item');
+    
+    fadeUpElements.forEach((el) => {
+      const delay = parseFloat(el.dataset.delay || '0') / 1000; // ms를 초로 변환
+      
+      gsap.fromTo(
+        el,
+        { 
+          opacity: 0, 
+          y: 50 
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          delay: delay,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: el.dataset.anchor ? document.querySelector(el.dataset.anchor) : el,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      );
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, []);
   // YYL 콕뱅크 쿠키 관련
   useEffect(() => {
     const alliance = router.query.alliance;
@@ -362,39 +393,19 @@ export default function MainPage({ data }) {
               </div>
               <div className={s.textbox} id="trigger">
                 <ul className={s.text}>
-                  <li
-                    data-aos="fade-up"
-                    data-aos-delay="0"
-                    data-aos-anchor="#trigger"
-                  >
+                  <li className="fade-up-item" data-delay="0" data-anchor="#trigger">
                     영양보존 100%
                   </li>
-                  <li
-                    data-aos="fade-up"
-                    data-aos-delay="50"
-                    data-aos-anchor="#trigger"
-                  >
+                  <li className="fade-up-item" data-delay="50" data-anchor="#trigger">
                     100% 휴먼그레이드
                   </li>
-                  <li
-                    data-aos="fade-up"
-                    data-aos-delay="100"
-                    data-aos-anchor="#trigger"
-                  >
+                  <li className="fade-up-item" data-delay="100" data-anchor="#trigger">
                     NO 유전자 변형 원료 (NON-GMO)
                   </li>
-                  <li
-                    data-aos="fade-up"
-                    data-aos-delay="150"
-                    data-aos-anchor="#trigger"
-                  >
+                  <li className="fade-up-item" data-delay="150" data-anchor="#trigger">
                     NO 방부제·보존제
                   </li>
-                  <li
-                    data-aos="fade-up"
-                    data-aos-delay="200"
-                    data-aos-anchor="#trigger"
-                  >
+                  <li className="fade-up-item" data-delay="200" data-anchor="#trigger">
                     NO 중국산재료
                   </li>
                 </ul>
@@ -531,7 +542,7 @@ export default function MainPage({ data }) {
               </p>
               <div className={s.cont_body}>
                 <ul className={s.howtouse_box}>
-                  <li data-aos="fade-up" data-aos-delay="0" id="trigger2">
+                  <li className="fade-up-item" data-delay="0" id="trigger2">
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
                         {/* <Image
@@ -565,11 +576,7 @@ export default function MainPage({ data }) {
                       </div>
                     </figure>
                   </li>
-                  <li
-                    data-aos="fade-up"
-                    data-aos-delay="100"
-                    data-aos-anchor="#trigger2"
-                  >
+                  <li className="fade-up-item" data-delay="100" data-anchor="#trigger2">
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
                         {/* <Image
@@ -603,7 +610,7 @@ export default function MainPage({ data }) {
                       </div>
                     </figure>
                   </li>
-                  <li data-aos="fade-up" data-aos-delay="100">
+                  <li className="fade-up-item" data-delay="100">
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
                         {/* <Image
@@ -637,7 +644,7 @@ export default function MainPage({ data }) {
                       </div>
                     </figure>
                   </li>
-                  <li data-aos="fade-up" data-aos-delay="200">
+                  <li className="fade-up-item" data-delay="200">
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
                         {/* <Image
