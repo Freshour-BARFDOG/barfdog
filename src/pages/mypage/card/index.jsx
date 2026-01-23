@@ -195,12 +195,18 @@ export default function MypageCardPage({ data }) {
   };
 
   //* 주문서 페이지로 이동
-  const moveToOrdersheetHandler = (subscribeId) => {
+  const moveToOrdersheetHandler = (subscribeId, plan) => {
+    if (plan === subscribePlanType.TOPPING.NAME) {
+      return mct.alertShow('토핑 플랜은 서비스가 종료되어 재결제가 불가능합니다. 반려견을 새로 등록하신뒤 이용해 주세요.');
+    }
     router.push(`/order/ordersheet/subscribe/${subscribeId}`);
   };
 
   //* 구독 중단 취소 (재활성화)
-  const onReactiveHandler = async (subscribeId) => {
+  const onReactiveHandler = async (subscribeId, plan) => {
+    if (plan === subscribePlanType.TOPPING.NAME) {
+      return mct.alertShow('토핑 플랜은 서비스가 종료되어 재결제가 불가능합니다. 반려견을 새로 등록하신뒤 이용해 주세요.');
+    }
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -406,6 +412,7 @@ export default function MypageCardPage({ data }) {
                                 onClick={() =>
                                   moveToOrdersheetHandler(
                                     card.subscribeCardDto.subscribeId,
+                                    card.subscribeCardDto.plan,
                                   )
                                 }
                               >
@@ -426,6 +433,7 @@ export default function MypageCardPage({ data }) {
                                 onClick={() =>
                                   onReactiveHandler(
                                     card.subscribeCardDto.subscribeId,
+                                    card.subscribeCardDto.plan,
                                   )
                                 }
                               >

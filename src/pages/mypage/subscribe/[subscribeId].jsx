@@ -11,6 +11,7 @@ import { SubscribeCancle } from '/src/components/subscribe/SubscribeCancle';
 import { SubscribePlan } from '/src/components/subscribe/SubscribePlan';
 import { SubscribeRecipe } from '/src/components/subscribe/SubscribeRecipe';
 import { useSubscribeInfo } from '/util/hook/useSubscribeInfo';
+import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
 import Modal_global_alert from '../../../components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
@@ -39,6 +40,9 @@ export default function SubscribeInfoPage({ data }) {
 
   //* 주문서 페이지로 이동
   const moveToOrdersheetHandler = () => {
+    if (subscribeInfo?.info.planName === subscribePlanType.TOPPING.NAME) {
+      return mct.alertShow('토핑 플랜은 서비스가 종료되어 재결제가 불가능합니다. 반려견을 새로 등록하신뒤 이용해 주세요.');
+    }
     router.push(`/order/ordersheet/subscribe/${subscribeId}`);
   };
 
@@ -48,6 +52,9 @@ export default function SubscribeInfoPage({ data }) {
   };
 
   const onReactiveHandler = async () => {
+    if (subscribeInfo?.info.planName === subscribePlanType.TOPPING.NAME) {
+      return mct.alertShow('토핑 플랜은 서비스가 종료되어 재결제가 불가능합니다. 반려견을 새로 등록하신뒤 이용해 주세요.');
+    }
     try {
       setIsLoading((prevState) => ({
         ...prevState,

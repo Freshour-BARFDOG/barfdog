@@ -63,15 +63,15 @@ export default function MainPage({ data }) {
 
     // fade-up 애니메이션 적용
     const fadeUpElements = document.querySelectorAll('.fade-up-item');
-    
+
     fadeUpElements.forEach((el) => {
       const delay = parseFloat(el.dataset.delay || '0') / 1000; // ms를 초로 변환
-      
+
       gsap.fromTo(
         el,
-        { 
-          opacity: 0, 
-          y: 50 
+        {
+          opacity: 0,
+          y: 50,
         },
         {
           opacity: 1,
@@ -80,16 +80,18 @@ export default function MainPage({ data }) {
           delay: delay,
           ease: 'power2.out',
           scrollTrigger: {
-            trigger: el.dataset.anchor ? document.querySelector(el.dataset.anchor) : el,
+            trigger: el.dataset.anchor
+              ? document.querySelector(el.dataset.anchor)
+              : el,
             start: 'top 85%',
             toggleActions: 'play none none reverse',
           },
-        }
+        },
       );
     });
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
   // YYL 콕뱅크 쿠키 관련
@@ -393,19 +395,39 @@ export default function MainPage({ data }) {
               </div>
               <div className={s.textbox} id="trigger">
                 <ul className={s.text}>
-                  <li className="fade-up-item" data-delay="0" data-anchor="#trigger">
+                  <li
+                    className="fade-up-item"
+                    data-delay="0"
+                    data-anchor="#trigger"
+                  >
                     영양보존 100%
                   </li>
-                  <li className="fade-up-item" data-delay="50" data-anchor="#trigger">
+                  <li
+                    className="fade-up-item"
+                    data-delay="50"
+                    data-anchor="#trigger"
+                  >
                     100% 휴먼그레이드
                   </li>
-                  <li className="fade-up-item" data-delay="100" data-anchor="#trigger">
+                  <li
+                    className="fade-up-item"
+                    data-delay="100"
+                    data-anchor="#trigger"
+                  >
                     NO 유전자 변형 원료 (NON-GMO)
                   </li>
-                  <li className="fade-up-item" data-delay="150" data-anchor="#trigger">
+                  <li
+                    className="fade-up-item"
+                    data-delay="150"
+                    data-anchor="#trigger"
+                  >
                     NO 방부제·보존제
                   </li>
-                  <li className="fade-up-item" data-delay="200" data-anchor="#trigger">
+                  <li
+                    className="fade-up-item"
+                    data-delay="200"
+                    data-anchor="#trigger"
+                  >
                     NO 중국산재료
                   </li>
                 </ul>
@@ -576,7 +598,11 @@ export default function MainPage({ data }) {
                       </div>
                     </figure>
                   </li>
-                  <li className="fade-up-item" data-delay="100" data-anchor="#trigger2">
+                  <li
+                    className="fade-up-item"
+                    data-delay="100"
+                    data-anchor="#trigger2"
+                  >
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
                         {/* <Image
@@ -733,6 +759,8 @@ export async function getServerSideProps({ req }) {
       });
 
     const data = homeApi_res?.data || null;
+    console.log(data);
+
     // const data = DUMMY_DATA;
     if (data) {
       DATA = {

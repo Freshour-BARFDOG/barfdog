@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import s from './dogs.module.scss';
 import { dogGenderType } from '/store/TYPE/dogGenderType';
 import { subscribeStatus } from '/store/TYPE/subscribeStatus';
+import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
@@ -243,12 +244,19 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
     }));
   };
 
+  // ! 토핑플랜 여부 확인
+  const checkIsToppingPlan = async () => {
+    if (!data.subscribeId) return false;
+    try {
+      const res = await getData(`/api/subscribes/${data.subscribeId}`);
+      return res?.data?.subscribeDto?.plan === subscribePlanType.TOPPING.NAME;
+    } catch (err) {
+      return false;
+    }
+  };
+
   const nextPageHandler = (e) => {
     const dogId = e.currentTarget.dataset.id;
-
-    // 제휴사 쿼리 파라미터 추가
-    const alliance = getCookie('alliance');
-    const apiUrl = `api/orders/sheet/subscribe/dog/${dogId}?alliance=${alliance || ''}`;
 
     (async () => {
       try {
@@ -257,14 +265,22 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
           [dogId]: true,
         }));
 
+        // ! 토핑플랜 체크
+        const isTopping = await checkIsToppingPlan();
+        if (isTopping) {
+          setIsLoading((prevState) => ({ ...prevState, [dogId]: false }));
+          return mct.alertShow('토핑 플랜은 서비스가 종료되어 재결제가 불가능합니다. 반려견을 새로 등록하신뒤 이용해 주세요.');
+        }
+
+        // 제휴사 쿼리 파라미터 추가
+        const alliance = getCookie('alliance');
+        const apiUrl = `api/orders/sheet/subscribe/dog/${dogId}?alliance=${alliance || ''}`;
         const res = await getData(apiUrl);
         subscribeId = res.data.subscribeDto.id;
-        // console.log('subscribeId', subscribeId);
 
         if (subscribeId) {
           router.push(`/order/ordersheet/subscribe/${subscribeId}`);
         } else {
-          // console.error('there is no Subscribe ID', info.subscribeId);
           alert('주문정보를 확인할 수 없습니다.');
           window.location.href = '/';
         }
@@ -274,7 +290,13 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
     })();
   };
 
-  const moveToSubscribeShopHandler = (dogId) => {
+  const moveToSubscribeShopHandler = async (e, dogId) => {
+    e.preventDefault();
+    // ! 토핑플랜 체크
+    const isTopping = await checkIsToppingPlan();
+    if (isTopping) {
+      return mct.alertShow('토핑 플랜은 서비스가 종료되어 재결제가 불가능합니다. 반려견을 새로 등록하신뒤 이용해 주세요.');
+    }
     router.push(`/order/subscribeShop?dogId=${dogId}`);
   };
 
@@ -289,6 +311,14 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
         ...prevState,
         reactive: true,
       }));
+
+      // ! 토핑플랜 체크
+      const isTopping = await checkIsToppingPlan();
+      if (isTopping) {
+        setIsLoading((prevState) => ({ ...prevState, reactive: false }));
+        return mct.alertShow('토핑 플랜은 서비스가 종료되어 재결제가 불가능합니다. 반려견을 새로 등록하신뒤 이용해 주세요.');
+      }
+
       const apiUrl = `/api/subscribes/${subscribeId}/reactive`;
       const res = await postData(apiUrl);
       console.log(res);
@@ -382,7 +412,7 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
                 <a
                   className={s.payment}
                   data-id={dogId}
-                  onClick={() => moveToSubscribeShopHandler(dogId)}
+                  onClick={(e) => moveToSubscribeShopHandler(e, dogId)}
                 >
                   {isLoading[dogId] ? (
                     <Spinner style={{ color: '#fff' }} />

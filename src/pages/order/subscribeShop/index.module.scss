@@ -176,9 +176,9 @@ section.regular_delivery {
 .flex_box {
   display: grid;
   column-gap: rem(20);
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   justify-content: center;
-  max-width: rem(1000);
+  max-width: rem(680);
   margin: 0 auto;
 }
 
