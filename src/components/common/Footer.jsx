@@ -149,7 +149,7 @@ export default function Footer() {
               <span className={s.info_cont}>충북 충주시 번영대로 214, 1층</span>
             </li>
             <li>
-              <span className={s.info_title}>유선번호: </span>
+              <span className={s.info_title}>전화번호: </span>
               <span className={s.info_cont}>010-4979-2025</span>
               <a href="tel:010-4979-2025" className={s.info_cont_mobile}>
                 010-4979-2025
