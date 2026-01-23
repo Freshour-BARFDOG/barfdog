@@ -7,7 +7,7 @@ import {
   FaBlogger,
   FaInstagramSquare,
   FaFacebookSquare,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 import Image from 'next/image';
 
 // import FooterLogo from "/public/img/logo_footer.png";
@@ -118,7 +118,7 @@ export default function Footer() {
           {/*    </span>*/}
           {/*  </li>*/}
           {/*</ul>*/}
-          
+
           {/* ! 221130 / 221201 임시 내용 추가 => KSP 사이트키발급관련 검수로 인함   */}
           <ul data-lang={'ko'}>
             <li>
@@ -140,7 +140,9 @@ export default function Footer() {
             <li>
               <span className={s.info_title}>Email.</span>
               <span className={s.info_cont}>info@freshour.co.kr</span>
-              <a href='mailto:MAIL_ADDRESS' className={s.info_cont_mobile}>info@freshour.co.kr</a>
+              <a href="mailto:MAIL_ADDRESS" className={s.info_cont_mobile}>
+                info@freshour.co.kr
+              </a>
             </li>
             <li>
               <span className={s.info_title}>주소:</span>
@@ -148,8 +150,10 @@ export default function Footer() {
             </li>
             <li>
               <span className={s.info_title}>유선번호: </span>
-              <span className={s.info_cont}>043-855-4995</span>
-              <a href='tel:043-855-4995' className={s.info_cont_mobile}>043-855-4995</a>
+              <span className={s.info_cont}>010-4979-2025</span>
+              <a href="tel:010-4979-2025" className={s.info_cont_mobile}>
+                010-4979-2025
+              </a>
             </li>
           </ul>
         </div>
