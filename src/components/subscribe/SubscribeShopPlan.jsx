@@ -174,47 +174,48 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
         ),
       },
     },
-    {
-      id: subscribePlanType.TOPPING.NAME,
-      label: 'new', // best, new, none
-      imageSrc: require('public/img/subscribe/subscribe_half_plan.png'),
-      title: '토핑플랜',
-      titleDescHTML: <p>토핑용으로 바프독으로 섞어서 먹어요</p>,
-      bodyDescHTML: {
-        row1: (
-          <>
-            <span>{'토핑'}</span>
-          </>
-        ),
-        row2: (
-          <>
-            <span>{subscribePlanType.TOPPING.weeklyPaymentCycle}주</span>
-            &nbsp;정기배송
-          </>
-        ),
-        row3: <>{oneMealGramsWithRecipeInfosWithTags}</>,
-        row4: (
-          <>
-            {subscribePlanType.TOPPING.totalNumberOfPacks}팩 x
-            <span>
-              &nbsp;
-              {transformLocalCurrency(
-                calcPrice(subscribePlanType.TOPPING.NAME).perPack,
-              ) + '원'}
-            </span>
-          </>
-        ),
-      },
-      price: {
-        discount: info.planDiscountPercent[subscribePlanType.TOPPING.NAME],
-        origin: transformLocalCurrency(
-          calcPrice(subscribePlanType.TOPPING.NAME).originPrice,
-        ),
-        sale: transformLocalCurrency(
-          calcPrice(subscribePlanType.TOPPING.NAME).salePrice,
-        ),
-      },
-    },
+    // ! 토핑플랜 신규 구독 중단
+    // {
+    //   id: subscribePlanType.TOPPING.NAME,
+    //   label: 'new', // best, new, none
+    //   imageSrc: require('public/img/subscribe/subscribe_half_plan.png'),
+    //   title: '토핑플랜',
+    //   titleDescHTML: <p>토핑용으로 바프독으로 섞어서 먹어요</p>,
+    //   bodyDescHTML: {
+    //     row1: (
+    //       <>
+    //         <span>{'토핑'}</span>
+    //       </>
+    //     ),
+    //     row2: (
+    //       <>
+    //         <span>{subscribePlanType.TOPPING.weeklyPaymentCycle}주</span>
+    //         &nbsp;정기배송
+    //       </>
+    //     ),
+    //     row3: <>{oneMealGramsWithRecipeInfosWithTags}</>,
+    //     row4: (
+    //       <>
+    //         {subscribePlanType.TOPPING.totalNumberOfPacks}팩 x
+    //         <span>
+    //           &nbsp;
+    //           {transformLocalCurrency(
+    //             calcPrice(subscribePlanType.TOPPING.NAME).perPack,
+    //           ) + '원'}
+    //         </span>
+    //       </>
+    //     ),
+    //   },
+    //   price: {
+    //     discount: info.planDiscountPercent[subscribePlanType.TOPPING.NAME],
+    //     origin: transformLocalCurrency(
+    //       calcPrice(subscribePlanType.TOPPING.NAME).originPrice,
+    //     ),
+    //     sale: transformLocalCurrency(
+    //       calcPrice(subscribePlanType.TOPPING.NAME).salePrice,
+    //     ),
+    //   },
+    // },
   ];
 
   return (

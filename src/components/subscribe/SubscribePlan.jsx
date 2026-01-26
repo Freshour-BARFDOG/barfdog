@@ -56,23 +56,24 @@ export const SubscribePlan = ({ subscribeInfo }) => {
         salePrice: subscribeInfo.price[subscribePlanType.HALF.NAME].salePrice,
       },
     },
-    {
-      id: subscribePlanType.TOPPING.NAME,
-      label: "new", // best, new, none
-      imageUrl: require('/public/img/subscribe/subscribe_topping_plan.png'),
-      title: subscribePlanType.TOPPING.KOR,
-      titleDescHTML: <p>토핑용으로 바프독으로 섞어서 먹어요</p>,
-      numberOfPacksPerDay: subscribePlanType.TOPPING.numberOfPacksPerDay,
-      totalNumberOfPacks: subscribePlanType.TOPPING.totalNumberOfPacks,
-      weeklyPaymentCycle: subscribePlanType.TOPPING.weeklyPaymentCycle,
-      discountPercent: subscribePlanInfo.planDiscountPercent[subscribePlanType.TOPPING.NAME],
-      onePackGram: subscribeInfo?.info.oneMealRecommendGram,
-      price: {
-        perPack: subscribeInfo.price[subscribePlanType.TOPPING.NAME].perPack,
-        originPrice: subscribeInfo.price[subscribePlanType.TOPPING.NAME].originPrice,
-        salePrice: subscribeInfo.price[subscribePlanType.TOPPING.NAME].salePrice,
-      },
-    },
+    // ! 토핑플랜 신규 구독 중단
+    // {
+    //   id: subscribePlanType.TOPPING.NAME,
+    //   label: "new", // best, new, none
+    //   imageUrl: require('/public/img/subscribe/subscribe_topping_plan.png'),
+    //   title: subscribePlanType.TOPPING.KOR,
+    //   titleDescHTML: <p>토핑용으로 바프독으로 섞어서 먹어요</p>,
+    //   numberOfPacksPerDay: subscribePlanType.TOPPING.numberOfPacksPerDay,
+    //   totalNumberOfPacks: subscribePlanType.TOPPING.totalNumberOfPacks,
+    //   weeklyPaymentCycle: subscribePlanType.TOPPING.weeklyPaymentCycle,
+    //   discountPercent: subscribePlanInfo.planDiscountPercent[subscribePlanType.TOPPING.NAME],
+    //   onePackGram: subscribeInfo?.info.oneMealRecommendGram,
+    //   price: {
+    //     perPack: subscribeInfo.price[subscribePlanType.TOPPING.NAME].perPack,
+    //     originPrice: subscribeInfo.price[subscribePlanType.TOPPING.NAME].originPrice,
+    //     salePrice: subscribeInfo.price[subscribePlanType.TOPPING.NAME].salePrice,
+    //   },
+    // },
   ];
   
   const mct = useModalContext();
