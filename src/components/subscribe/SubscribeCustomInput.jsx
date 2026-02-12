@@ -95,9 +95,12 @@ export const SubscribeCustomInput = ({
     // : swiper 내에서 input selected됐을 경우, selecgted Input에 auto focusing blocking하기 위함
     e.preventDefault();
     const disabled = e.currentTarget.dataset.disabled === 'true'; // ! String 으로 입력됨 true / false값
-    if (disabled) return console.error('NOTICE: disabled Element');
-
     const id = e.currentTarget.dataset.id;
+    const isCurrentlySelected = isChecked || selectedRadio === id;
+
+    // ! 품절(disabled) 상태: 이미 선택된 항목은 해제 허용, 미선택 항목은 선택 차단
+    if (disabled && !isCurrentlySelected) return console.error('NOTICE: disabled Element');
+
     if (type === 'checkbox') {
       onCheckboxInputHandler(e, id);
     } else {

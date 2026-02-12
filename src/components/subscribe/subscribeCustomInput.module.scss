@@ -16,6 +16,9 @@ $browser-context:16; // html font-size
   transition: border-color , box-shadow $transitionValues;
   &[data-disabled='true']{
     cursor: not-allowed;
+    &.checked {
+      cursor: pointer;
+    }
   }
   &:hover{
     box-shadow: 0 0 rem(30) rgba(0,0,0,0.1);
