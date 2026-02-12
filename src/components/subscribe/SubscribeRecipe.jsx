@@ -195,11 +195,16 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   const onActiveConfirmModal = () => {
     // // console.log(selectedIdList)
 
+    // ! 현재 선택된 레시피 기준으로 품절 여부 확인
+    const hasSelectedSoldOut = allRecipeInfoList
+      .filter((rc) => selectedIdList.includes(rc.id))
+      .some((rc) => !rc.inStock);
+
     const isTheSameArray = valid_isTheSameArray(
       selectedIdList,
       subscribeInfo.recipe.idList,
     );
-    if (subscribeInfo.recipe.soldOut) {
+    if (hasSelectedSoldOut) {
       mct.alertShow('품절된 레시피가 존재합니다.');
     } else if (isTheSameArray) {
       mct.alertShow('기존과 동일한 레시피입니다.');

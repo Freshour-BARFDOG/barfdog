@@ -184,6 +184,14 @@ export default function RegisterSubscribeInfoPage({ data }) {
     // 맞춤레시피 구매하기 (CONDITION: 결제 전)
     if (submitted) return;
 
+    // ! 선택된 레시피 중 품절 여부 확인
+    const hasSelectedSoldOut = info.recipeInfoList
+      .filter((rc) => form.recipeIdList.includes(rc.id))
+      .some((rc) => !rc.inStock);
+    if (hasSelectedSoldOut) {
+      return mct.alertShow('품절된 레시피가 존재합니다.');
+    }
+
     const nextPaymentPrice = calcSubscribePlanPaymentPrice(form.plan).salePrice;
 
     const body = {
